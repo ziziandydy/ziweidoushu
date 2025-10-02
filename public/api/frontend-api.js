@@ -7,8 +7,8 @@ window.RealZiweiAPI = {
         try {
             console.log('🔮 調用真實後端 API:', userInput);
 
-            // 調用後端 API 服務器
-            const response = await fetch('http://localhost:3001/calculate', {
+            // 調用 Vercel API 路由
+            const response = await fetch('/api/calculate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -22,10 +22,9 @@ window.RealZiweiAPI = {
             if (result.success) {
                 return {
                     success: true,
-                    destinyInfo: result.data.destinyInfo,
-                    userInfo: result.data.userInfo,
-                    source: result.source,
-                    timestamp: result.timestamp
+                    palaces: result.palaces,
+                    source: 'vercel-api',
+                    timestamp: new Date().toISOString()
                 };
             } else {
                 return {

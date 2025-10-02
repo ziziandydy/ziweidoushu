@@ -1,24 +1,3 @@
 {
-  "version": 2,
-  "name": "ziweidoushu",
-  "builds": [
-    {
-      "src": "api-server.js",
-      "use": "@vercel/node@3.0.7"
-    },
-    {
-      "src": "public/**/*",
-      "use": "@vercel/static@3.0.2"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "api-server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/$1"
-    }
-  ]
+  "version": 2
 }
