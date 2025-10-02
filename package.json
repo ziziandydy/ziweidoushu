@@ -29,7 +29,8 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "start": "ts-node ./src/main.ts",
+    "start": "node api-server.js",
+    "server": "node api-server.js",
     "dev": "vite",
     "dev:server": "vite",
     "prebuild": "rimraf build",

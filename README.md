@@ -23,9 +23,54 @@ This library is based on 中州派 .
 
 --------
 
-## install
+## 🌐 Live Demo
 
-`npm i fortel-ziweidoushu`
+**線上試用**: [Vercel 部署連結](https://ziweidoushu.vercel.app/)
+
+## 📦 Install
+
+```bash
+npm i fortel-ziweidoushu
+```
+
+## 🎯 專案特色
+
+- ✅ **完整前端介面**: 互動式 HTML/CSS/JavaScript 介面
+- ✅ **真實核心計算**: TypeScript 紫微斗數核心庫整合
+- ✅ **雲端部署**: Vercel 平台支援
+- ✅ **現代化設計**: Tailwind CSS 響應式設計
+
+## 🚀 快速開始
+
+### 本地開發
+
+```bash
+# 克隆專案
+git clone https://github.com/ziziandydy/ziweidoushu.git
+cd ziweidoushu
+
+# 安裝依賴
+npm install
+
+# 啟動後端 API 服務器
+npm run server
+
+# 啟動前端開發服務器
+cd public && python3 -m http.server 8080
+```
+
+### 部署到 Vercel
+
+1. Fork 這個 repository
+2. 在 [Vercel Dashboard](https://vercel.com/dashboard) 新增專案
+3. 連接你的 GitHub repository
+4. Vercel 會自動部署！
+
+## 🔧 API 端點
+
+- `POST /api/calculate` - 計算紫微斗數命盤
+- `GET /api/health` - API 健康檢查
+- `GET /api/status` - API 狀態資訊
 
 ---------
 
