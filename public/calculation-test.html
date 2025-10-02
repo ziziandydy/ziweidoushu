@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紫微斗數計算測試</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./api/destiny-calculator.js"></script>
+</head>
+
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h1 class="text-3xl font-bold text-blue-600 mb-6">🧪 紫微斗數計算資料流程測試</h1>
+
+            <!-- 測試表單 -->
+            <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+                <h2 class="text-xl font-bold mb-4">測試計算資料</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">姓名</label>
+                        <input type="text" id="test-name" class="w-full p-2 border rounded" value="測試使用者">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">性別</label>
+                        <select id="test-gender" class="w-full p-2 border rounded">
+                            <option value="M">男性</option>
+                            <option value="F">女性</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">出生年</label>
+                        <input type="number" id="test-year" class="w-full p-2 border rounded" value="1990">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">出生月</label>
+                        <input type="number" id="test-month" class="w-full p-2 border rounded" value="5">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">出生日</label>
+                        <input type="number" id="test-day" class="w-full p-2 border rounded" value="15">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">出生時辰</label>
+                        <select id="test-hour" class="w-full p-2 border rounded">
+                            <option value="子時">子時</option>
+                            <option value="丑時">丑時</option>
+                            <option value="寅時">寅時</option>
+                            <option value="卯時">卯時</option>
+                            <option value="辰時">辰時</option>
+                            <option value="巳時">巳時</option>
+                            <option value="午時" selected>午時</option>
+                            <option value="未時">未時</option>
+                            <option value="申時">申時</option>
+                            <option value="酉時">酉時</option>
+                            <option value="戌時">戌時</option>
+                            <option value="亥時">亥時</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">曆法類型</label>
+                        <select id="test-calendar" class="w-full p-2 border rounded">
+                            <option value="solar">西曆</option>
+                            <option value="lunar">農曆</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="testCalculation()"
+                            class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 transition-colors w-full">
+                            🧮 測試計算
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 測試結果 -->
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <h2 class="text-xl font-bold mb-4">測試結果</h2>
+                <div id="test-results" class="space-y-4">
+                    <div class="text-gray-500">點擊上方按鈕開始測試...</div>
+                </div>
+            </div>
+
+            <!-- 原始資料顯示 -->
+            <div class="mt-4 bg-yellow-50 p-4 rounded-lg">
+                <h3 class="text-lg font-bold mb-2">📊 原始計算資料</h3>
+                <pre id="raw-data" class="bg-gray-100 p-4 rounded text-sm overflow-auto max-h-96">
+等待測試...
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function testCalculation() {
+            console.log('🧪 開始測試計算流程...');
+
+            // 收集測試資料
+            const testData = {
+                name: document.getElementById('test-name').value,
+                gender: document.getElementById('test-gender').value,
+                birthYear: parseInt(document.getElementById('test-year').value),
+                birthMonth: parseInt(document.getElementById('test-month').value),
+                birthDay: parseInt(document.getElementById('test-day').value),
+                birthHour: document.getElementById('test-hour').value,
+                calendarType: document.getElementById('test-calendar').value,
+                isLeapMonth: false
+            };
+
+            console.log('🔍 測試資料:', testData);
+
+            // 顯示原始資料
+            document.getElementById('raw-data').textContent = JSON.stringify(testData, null, 2);
+
+            // 檢查 API 是否可用
+            const apiAvailable = typeof ZiweiCalculatorAPI !== 'undefined';
+            document.getElementById('test-results').innerHTML = `
+                <div class="p-4 rounded ${apiAvailable ? 'bg-green-100' : 'bg-red-100'}">
+                    <h3 class="font-bold">${apiAvailable ? '✅' : '❌'} API 檢查</h3>
+                    <p>ZiweiCalculatorAPI ${apiAvailable ? '已載入' : '未載入'}</p>
+                </div>
+            `;
+
+            if (!apiAvailable) {
+                console.error('❌ ZiweiCalculatorAPI 不可用');
+                return;
+            }
+
+            try {
+                console.log('🔄 調用計算 API...');
+                const result = ZiweiCalculatorAPI.calculateDestiny(testData);
+
+                console.log('📋 計算結果:', result);
+
+                // 顯示結果
+                if (result && result.success) {
+                    displaySuccessResult(result);
+                } else {
+                    displayFailureResult(result);
+                }
+
+            } catch (error) {
+                console.error('❌ 計算過程出錯:', error);
+                document.getElementById('test-results').innerHTML += `
+                    <div class="p-4 rounded bg-red-100">
+                        <h3 class="font-bold text-red-800">❌ 計算錯誤</h3>
+                        <p class="text-red-700">${error.message}</p>
+                        <details class="mt-2">
+                            <summary class="cursor-pointer text-sm">詳細錯誤資訊</summary>
+                            <pre class="mt-2 p-2 bg-red-50 rounded text-xs">${error.stack}</pre>
+                        </details>
+                    </div>
+                `;
+            }
+        }
+
+        function displaySuccessResult(result) {
+            const destinyInfo = result.destinyInfo;
+            let palaceInfo = '';
+
+            if (destinyInfo.palaces && destinyInfo.palaces.length > 0) {
+                palaceInfo = destinyInfo.palaces.map((palace, index) => {
+                    const palaceName = palace.palaceName || palace.name || `宮位 ${index + 1}`;
+                    const majorStars = Array.isArray(palace.majorStars)
+                        ? palace.majorStars.map(star => star.name || star).join('、')
+                        : palace.majorStars || '紫微';
+                    const energy = palace.energy ||
+                        (Array.isArray(palace.majorStars) && palace.majorStars.length > 0
+                            ? Math.floor(palace.majorStars.reduce((sum, star) => sum + (star.energyLevel || 50), 0) / palace.majorStars.length)
+                            : 50);
+                    return `${palaceName}: ${majorStars} (能量: ${energy}%)`;
+                }).join('\n');
+            } else {
+                palaceInfo = '無宮位資料';
+            }
+
+            document.getElementById('test-results').innerHTML += `
+                <div class="p-4 rounded bg-green-100">
+                    <h3 class="font-bold text-green-800">✅ 計算成功</h3>
+                    <div class="grid grid-cols-2 gap-4 mt-2">
+                        <div>
+                            <p class="text-sm"><strong>姓名:</strong> ${destinyInfo.userInfo?.name || '未知'}</p>
+                            <p class="text-sm"><strong>性別:</strong> ${destinyInfo.userInfo?.gender === 'M' ? '男性' : '女性'}</p>
+                            <p class="text-sm"><strong>生辰:</strong> ${destinyInfo.userInfo?.birthYear || '未知'}年 ${destinyInfo.userInfo?.birthMonth || '未知'}月 ${destinyInfo.userInfo?.birthDay || '未知'}日</p>
+                        </div>
+                        <div>
+                            <p class="text-sm"><strong>命主星:</strong> ${destinyInfo.destinyMaster || '未知'}</p>
+                            <p class="text-sm"><strong>身主星:</strong> ${destinyInfo.bodyMaster || '未知'}</p>
+                            <p class="text-sm"><strong>五行:</strong> ${destinyInfo.element || '未知'}</p>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-sm font-medium">宮位數量: ${destinyInfo.palaces?.length || 0}</p>
+                        <details class="mt-1">
+                            <summary class="cursor-pointer text-sm text-green-700">查看宮位詳情</summary>
+                            <pre class="mt-2 p-2 bg-green-50 rounded text-xs max-h-32 overflow-auto">${palaceInfo}</pre>
+                        </details>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayFailureResult(result) {
+            document.getElementById('test-results').innerHTML += `
+                <div class="p-4 rounded bg-red-100">
+                    <h3 class="font-bold text-red-800">❌ 計算失敗</h3>
+                    <p class="text-red-700">${result?.error || '未知錯誤'}</p>
+                </div>
+            `;
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🧪 紫微斗數計算測試頁面已載入');
+
+            // 檢查 API 狀態
+            if (typeof ZiweiCalculatorAPI !== 'undefined') {
+                console.log('✅ ZiweiCalculatorAPI 已載入');
+            } else {
+                console.log('❌ ZiweiCalculatorAPI 未載入');
+            }
+        });
+    </script>
+</body>
+
+</html>

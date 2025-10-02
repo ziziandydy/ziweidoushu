@@ -2,6 +2,8 @@
 
 紫微斗數排盤 (中州派) Javascript library
 
+**Copyright (c) 2022 Airic Yu | Maintained by iTubai**
+
 -------
 
 ## What is it?
@@ -255,13 +257,17 @@ At the second level,
 
 ----
 
-## Author
+## Maintainer
 
-Airic Yu
+iTubai - Current maintainer
+
+## Original Author
+
+Airic Yu (Original Author)
 - Owner of Myfortel 紫微斗數起盤網站(舊版) ( https://www.myfortel.com/ )
 - Owner of Myfortel 紫微斗數起盤網站(新版) ( https://airicyu.github.io/myfortel/ )
 - Author of 紫微斗數排盤 library for Java ( https://github.com/airicyu/Fortel )
-- Author of 紫微斗數排盤 library for JS ( https://www.npmjs.com/package/fortel-ziweidoushu )
+- Author of 紫微斗數排盤 library for JS ( https://www.npmjs.com/package/fortel-ziweidousju )
 
 ## Special Credit
 

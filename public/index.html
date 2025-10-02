@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紫微斗數命盤 - 修復版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ziwei: {
+                            purple: '#9333ea',
+                            gold: '#f59e0b',
+                            blue: '#3b82f6',
+                            green: '#10b981'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gray-100">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="w-full max-w-2xl bg-white rounded-xl shadow-lg p-6">
+            <!-- 標題 -->
+            <div class="flex items-center justify-center mb-6">
+                <svg class="w-6 h-6 mr-2 text-ziwei-purple" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <h1 class="text-3xl font-bold text-center">紫微斗數命盤</h1>
+            </div>
+
+            <p class="text-center text-gray-600 mb-8">遵循中州派傳統理論 · 主頁整合版本</p>
+
+            <!-- 步驟指示器 -->
+            <div class="flex justify-center mb-8 space-x-8">
+                <div id="step-1" class="flex items-center">
+                    <div
+                        class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">
+                        1</div>
+                    <span class="ml-2 text-blue-600 font-medium">基本資料</span>
+                </div>
+                <div id="step-2" class="flex items-center">
+                    <div
+                        class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-medium">
+                        2</div>
+                    <span class="ml-2 text-gray-400 font-medium">命盤星曜</span>
+                </div>
+                <div id="step-3" class="flex items-center">
+                    <div
+                        class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-medium">
+                        3</div>
+                    <span class="ml-2 text-gray-400 font-medium">詳細解析</span>
+                </div>
+            </div>
+
+            <!-- 步驟一：基本資料輸入 -->
+            <div id="step-content-1" class="animate-fade-in">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 16.171l9.594-9.594L17.172 5.84 11.5 11.512 6.828 6.84 5.406 8.264 11.5 14.358z" />
+                    </svg>
+                    個人基本資料
+                </h2>
+
+                <div class="space-y-6">
+                    <!-- 姓名和性別 -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block mb-2 font-medium">姓名</label>
+                            <input type="text" id="user-name"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                placeholder="請輸入您的姓名" />
+                        </div>
+
+                        <div>
+                            <label class="block mb-2 font-medium">性別</label>
+                            <div class="flex space-x-2">
+                                <button id="gender-male"
+                                    class="flex-1 py-3 rounded-lg border transition-colors font-medium bg-blue-500 text-white border-blue-500">
+                                    男
+                                </button>
+                                <button id="gender-female"
+                                    class="flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
+                                    女
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 曆法類型 -->
+                    <div>
+                        <label class="block mb-2 font-medium">曆法類型</label>
+                        <div class="flex space-x-2">
+                            <button id="calendar-lunar"
+                                class="flex-1 py-3 rounded-lg border transition-colors font-medium bg-green-500 text-white border-green-500">
+                                農曆
+                            </button>
+                            <button id="calendar-solar"
+                                class="flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
+                                西曆
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 出生日期 -->
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block mb-2 font-medium">出生年</label>
+                            <select id="birth-year"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">選擇年份</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block mb-2 font-medium">出生月</label>
+                            <select id="birth-month"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">選擇月份</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block mb-2 font-medium">出生日</label>
+                            <select id="birth-day"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">選擇日期</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 出生時辰 -->
+                    <div>
+                        <label class="block mb-2 font-medium flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                                <polyline points="12,6 12,12 16,14" />
+                            </svg>
+                            出生時辰
+                        </label>
+                        <select id="birth-hour"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">選擇時辰</option>
+                            <option value="子時">子時 (23:00-01:00)</option>
+                            <option value="丑時">丑時 (01:00-03:00)</option>
+                            <option value="寅時">寅時 (03:00-05:00)</option>
+                            <option value="卯時">卯時 (05:00-07:00)</option>
+                            <option value="辰時">辰時 (07:00-09:00)</option>
+                            <option value="巳時">巳時 (09:00-11:00)</option>
+                            <option value="午時">午時 (11:00-13:00)</option>
+                            <option value="未時">未時 (13:00-15:00)</option>
+                            <option value="申時">申時 (15:00-17:00)</option>
+                            <option value="酉時">酉時 (17:00-19:00)</option>
+                            <option value="戌時">戌時 (19:00-21:00)</option>
+                            <option value="亥時">亥時 (21:00-23:00)</option>
+                        </select>
+                    </div>
+
+                    <!-- 閏月選項 -->
+                    <div id="leap-month-option" class="flex items-center space-x-2">
+                        <input type="checkbox" id="leap-month" class="rounded">
+                        <label for="leap-month" class="text-sm text-gray-600">此月為閏月</label>
+                    </div>
+                </div>
+
+                <!-- 計算按鈕 -->
+                <div class="mt-8">
+                    <button onclick="calculateDestiny()"
+                        class="w-full bg-gradient-to-r from-ziwei-purple to-purple-600 text-white py-4 rounded-lg font-medium text-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 shadow-lg">
+                        <span id="sparkles-icon" class="mr-2">⭐</span>
+                        <span id="calculate-text">計算命盤</span>
+                        <div id="loading-spinner" class="hidden inline-block w-5 h-5 ml-2">
+                            <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4" />
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 步驟二：標題行星曜顯示 - 隱藏 -->
+            <div id="step-content-2" class="hidden animate-fade-in">
+                <h2 class="text-2xl font-bold mb-6 text-center">❤️ 命盤星曜分析</h2>
+                <div id="stars-display" class="space-y-4"></div>
+            </div>
+
+            <!-- 步驟三：詳細解析 - 隱藏 -->
+            <div id="step-content-3" class="hidden animate-fade-in">
+                <h2 id="detailed-title" class="text-2xl font-bold mb-6 text-center"></h2>
+                <div id="detailed-info" class="space-y-4"></div>
+            </div>
+
+            <!-- 重製按鈕 -->
+            <div class="mt-4">
+                <button onclick="resetForm()"
+                    class="w-full bg-gray-500 text-white py-2 rounded-lg font-medium hover:bg-gray-600 transition-all duration-200">
+                    重製表單
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="./api/destiny-calculator.js"></script>
+    <script src="./api/frontend-api.js"></script>
+    <script>
+        // === 全域變數 ===
+        let currentStep = 1;
+        let userProfile = {
+            name: '',
+            gender: 'M',
+            birthYear: '',
+            birthMonth: '',
+            birthDay: '',
+            birthHour: '',
+            calendarType: 'lunar',
+            isLeapMonth: false
+        };
+        let destinBoard = null;
+
+        // === 立即執行的初始化函數 ===
+        (function () {
+            console.log('🚀 立即開始初始化...');
+
+            // 初始化選項
+            initializeYears();
+            initializeMonths();
+            initializeDays();
+
+            // 綁定按鈕事件
+            bindEvents();
+
+            console.log('✅ 初始化完成');
+        })();
+
+        // === 初始化函數 ===
+        function initializeYears() {
+            console.log('初始化年份...');
+            const yearSelect = document.getElementById('birth-year');
+            const currentYear = new Date().getFullYear();
+
+            // 清空現有選項
+            yearSelect.innerHTML = '<option value="">選擇年份</option>';
+
+            for (let i = currentYear - 100; i <= currentYear; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i + '年';
+                yearSelect.appendChild(option);
+            }
+            console.log('✅ 年份初始化完成');
+        }
+
+        function initializeMonths() {
+            console.log('初始化月份...');
+            const monthSelect = document.getElementById('birth-month');
+
+            // 清空現有選項
+            monthSelect.innerHTML = '<option value="">選擇月份</option>';
+
+            for (let i = 1; i <= 12; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i + '月';
+                monthSelect.appendChild(option);
+            }
+            console.log('✅ 月份初始化完成');
+        }
+
+        function initializeDays() {
+            console.log('初始化天數...');
+            updateDaysForMonth();
+            console.log('✅ 天數初始化完成');
+        }
+
+        function updateDaysForMonth() {
+            const daySelect = document.getElementById('birth-day');
+            const yearSelect = document.getElementById('birth-year');
+            const monthSelect = document.getElementById('birth-month');
+
+            // 清空現有選項
+            daySelect.innerHTML = '<option value="">選擇日期</option>';
+
+            const selectedYear = parseInt(yearSelect.value);
+            const selectedMonth = parseInt(monthSelect.value);
+
+            if (selectedYear && selectedMonth) {
+                const maxDays = daysInMonth(selectedYear, selectedMonth);
+
+                for (let i = 1; i <= maxDays; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i + '日';
+                    daySelect.appendChild(option);
+                }
+                console.log(`✅ 更新天數選項: ${maxDays} 天`);
+            }
+        }
+
+        function daysInMonth(year, month) {
+            return new Date(year, month, 0).getDate();
+        }
+
+        // === 事件綁定 ===
+        function bindEvents() {
+            console.log('綁定事件監聽器...');
+
+            // 性別按鈕
+            const maleBtn = document.getElementById('gender-male');
+            const femaleBtn = document.getElementById('gender-female');
+
+            if (maleBtn && femaleBtn) {
+                maleBtn.addEventListener('click', () => selectGender('M'));
+                femaleBtn.addEventListener('click', () => selectGender('F'));
+                console.log('✅ 性別按鈕事件已綁定');
+            }
+
+            // 曆法按鈕
+            const lunarBtn = document.getElementById('calendar-lunar');
+            const solarBtn = document.getElementById('calendar-solar');
+
+            if (lunarBtn && solarBtn) {
+                lunarBtn.addEventListener('click', () => selectCalendar('lunar'));
+                solarBtn.addEventListener('click', () => selectCalendar('solar'));
+                console.log('✅ 曆法按鈕事件已綁定');
+            }
+
+            // 年月變化監聽
+            const yearSelect = document.getElementById('birth-year');
+            const monthSelect = document.getElementById('birth-month');
+
+            if (yearSelect && monthSelect) {
+                yearSelect.addEventListener('change', updateDaysForMonth);
+                monthSelect.addEventListener('change', updateDaysForMonth);
+                console.log('✅ 年月變化監聽器已綁定');
+            }
+        }
+
+        // === 業務邏輯函數 ===
+        function selectGender(gender) {
+            console.log('選擇性別:', gender);
+            userProfile.gender = gender;
+
+            const maleBtn = document.getElementById('gender-male');
+            const femaleBtn = document.getElementById('gender-female');
+
+            if (gender === 'M') {
+                maleBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-blue-500 text-white border-blue-500';
+                femaleBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50';
+            } else {
+                femaleBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-blue-500 text-white border-blue-500';
+                maleBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50';
+            }
+            console.log('✅ 性別選擇完成');
+        }
+
+        function selectCalendar(type) {
+            console.log('選擇曆法:', type);
+            userProfile.calendarType = type;
+
+            const lunarBtn = document.getElementById('calendar-lunar');
+            const solarBtn = document.getElementById('calendar-solar');
+            const leapOption = document.getElementById('leap-month-option');
+
+            if (type === 'lunar') {
+                lunarBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-green-500 text-white border-green-500';
+                solarBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50';
+                leapOption.classList.remove('hidden');
+            } else {
+                solarBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-green-500 text-white border-green-500';
+                lunarBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50';
+                leapOption.classList.add('hidden');
+            }
+            console.log('✅ 曆法選擇完成');
+        }
+
+        function goToStep(step) {
+            console.log('切換到步驟:', step);
+
+            // 隱藏所有步驟
+            ['step-content-1', 'step-content-2', 'step-content-3'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.classList.add('hidden');
+            });
+
+            // 更新步驟指示器
+            for (let i = 1; i <= 3; i++) {
+                const stepElement = document.getElementById(`step-${i}`);
+                if (stepElement) {
+                    if (i === step) {
+                        stepElement.className = stepElement.className.replace('text-gray-400', 'text-blue-600');
+                        const divElement = stepElement.querySelector('.w-8');
+                        if (divElement) {
+                            divElement.className = 'w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium';
+                        }
+                    } else {
+                        stepElement.className = stepElement.className.replace('text-blue-600', 'text-gray-400');
+                        const divElement = stepElement.querySelector('.w-8');
+                        if (divElement) {
+                            divElement.className = 'w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-medium';
+                        }
+                    }
+                }
+            }
+
+            // 顯示當前步驟
+            currentStep = step;
+            const currentStepElement = document.getElementById(`step-content-${step}`);
+            if (currentStepElement) {
+                currentStepElement.classList.remove('hidden');
+            }
+
+            // 如果是第三步，更新詳細資訊
+            if (step === 3) {
+                updateDetailedInfo();
+            }
+
+            console.log('✅ 步驟切換完成');
+        }
+
+        async function calculateDestiny() {
+            console.log('開始計算命盤...');
+
+            // 顯示載入狀態
+            showLoadingState();
+
+            try {
+                // 收集表單資料
+                userProfile.name = document.getElementById('user-name').value.trim();
+                userProfile.birthYear = parseInt(document.getElementById('birth-year').value);
+                userProfile.birthMonth = parseInt(document.getElementById('birth-month').value);
+                userProfile.birthDay = parseInt(document.getElementById('birth-day').value);
+                userProfile.birthHour = document.getElementById('birth-hour').value;
+                userProfile.isLeapMonth = document.getElementById('leap-month').checked;
+
+                console.log('用戶資料:', userProfile);
+
+                // 驗證必填欄位
+                const requiredFields = ['name', 'birthYear', 'birthMonth', 'birthDay', 'birthHour'];
+                const missingFields = requiredFields.filter(field => !userProfile[field]);
+
+                if (missingFields.length > 0) {
+                    alert(`請填寫完整資料：${missingFields.join(', ')}`);
+                    hideLoadingState();
+                    return;
+                }
+
+                // 使用真實 API 計算
+                if (typeof RealZiweiAPI !== 'undefined') {
+                    console.log('調用 RealZiweiAPI...');
+                    const result = await RealZiweiAPI.calculateDestiny(userProfile);
+
+                    if (result.success) {
+                        destinBoard = result.destinyInfo;
+                        showDestinyStars(result.destinyInfo);
+                        goToStep(2);
+                    } else {
+                        alert('計算失敗：' + result.error);
+                    }
+                } else {
+                    console.log('ZiweiCalculatorAPI 不可用，使用模擬數據...');
+                    simulateDestinyCalculation();
+                }
+
+            } catch (error) {
+                console.error('API 調用錯誤:', error);
+                alert('系統錯誤，請稍後再試。錯誤詳情：' + error.message);
+            } finally {
+                hideLoadingState();
+            }
+        }
+
+        function showLoadingState() {
+            const calculateText = document.getElementById('calculate-text');
+            const sparklesIcon = document.getElementById('sparkles-icon');
+            const loadingSpinner = document.getElementById('loading-spinner');
+
+            if (calculateText) calculateText.textContent = '計算中...';
+            if (sparklesIcon) sparklesIcon.classList.add('hidden');
+            if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+        }
+
+        function hideLoadingState() {
+            const calculateText = document.getElementById('calculate-text');
+            const sparklesIcon = document.getElementById('sparkles-icon');
+            const loadingSpinner = document.getElementById('loading-spinner');
+
+            if (calculateText) calculateText.textContent = '計算命盤';
+            if (sparklesIcon) sparklesIcon.classList.remove('hidden');
+            if (loadingSpinner) loadingSpinner.classList.add('hidden');
+        }
+
+        function simulateDestinyCalculation() {
+            destinBoard = {
+                mainStar: '紫微星',
+                temples: ['命宮', '兄弟', '夫妻', '子女', '財帛', '疾厄', '遷移', '奴僕', '官祿', '田宅', '福德', '父母'],
+                energy: Math.floor(Math.random() * 100) + 1
+            };
+            showDestinyStars(destinBoard);
+            goToStep(2);
+        }
+
+        function showDestinyStars(destinyData) {
+            const starsDisplay = document.getElementById('stars-display');
+            if (!starsDisplay) return;
+
+            let starsHTML = '';
+
+            if (destinyData.palaces && destinyData.palaces.length > 0) {
+                // 新格式：有宮位資料
+                destinyData.palaces.forEach((palace, index) => {
+                    // 轉換 API 資料格式為前端需要的格式
+                    const palaceName = palace.palaceName || palace.name || `宮位 ${index + 1}`;
+                    const majorStarsDisplay = Array.isArray(palace.majorStars)
+                        ? palace.majorStars.map(star => star.name || star).join('、')
+                        : palace.majorStars || '紫微';
+                    const description = palace.description || `${palaceName}的星曜配置影響個人相關運勢`;
+                    // 計算平均能量或使用預設值
+                    const energy = palace.energy ||
+                        (Array.isArray(palace.majorStars) && palace.majorStars.length > 0
+                            ? Math.floor(palace.majorStars.reduce((sum, star) => sum + (star.energyLevel || 50), 0) / palace.majorStars.length)
+                            : 50);
+
+                    const starColor = getEnergyColor(energy);
+                    starsHTML += `
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 ${starColor.border} p-4 rounded shadow-sm">
+                            <h3 class="font-bold text-lg mb-2">${palaceName}</h3>
+                            <p class="text-gray-700 mb-2">${description}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">主要星曜: ${majorStarsDisplay}</span>
+                                <div class="flex items-center">
+                                    <span class="text-sm font-medium mr-2">能量:</span>
+                                    <div class="w-16 bg-gray-200 rounded-full h-2">
+                                        <div class="${starColor.color} h-2 rounded-full" style="width: ${energy}%"></div>
+                                    </div>
+                                    <span class="text-xs ml-2">${energy}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                // 舊格式或模擬數據
+                const templeNames = ['命宮', '兄弟', '夫妻', '子女', '財帛', '疾厄', '遷移', '奴僕', '官祿', '田宅', '福德', '父母'];
+                templeNames.forEach((temple, index) => {
+                    const energy = Math.floor(Math.random() * 100) + 1;
+                    const starColor = getEnergyColor(energy);
+
+                    starsHTML += `
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 ${starColor.border} p-4 rounded shadow-sm">
+                            <h3 class="font-bold text-lg mb-2">${temple}</h3>
+                            <p class="text-gray-700 mb-2">此宮位的星曜配置影響個人${temple}相關運勢</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">主要星曜: 紫微斗數星曜</span>
+                                <div class="flex items-center">
+                                    <span class="text-sm font-medium mr-2">能量:</span>
+                                    <div class="w-16 bg-gray-200 rounded-full h-2">
+                                        <div class="${starColor.color} h-2 rounded-full" style="width: ${energy}%"></div>
+                                    </div>
+                                    <span class="text-xs ml-2">${energy}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            starsDisplay.innerHTML = starsHTML;
+        }
+
+        function getEnergyColor(energy) {
+            if (energy >= 80) return { color: 'bg-green-400', border: 'border-green-500' };
+            if (energy >= 60) return { color: 'bg-yellow-400', border: 'border-yellow-500' };
+            if (energy >= 40) return { color: 'bg-orange-400', border: 'border-orange-500' };
+            return { color: 'bg-red-400', border: 'border-red-500' };
+        }
+
+        function updateDetailedInfo() {
+            const detailedTitle = document.getElementById('detailed-title');
+            const detailedInfo = document.getElementById('detailed-info');
+
+            if (detailedTitle) detailedTitle.textContent = `${userProfile.name}的命盤詳細解析`;
+
+            if (detailedInfo && destinBoard) {
+                detailedInfo.innerHTML = `
+                    <div class="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-4 text-purple-800">命盤總結</h3>
+                        <div class="space-y-3">
+                            <p><strong>姓名:</strong> ${userProfile.name}</p>
+                            <p><strong>性別:</strong> ${userProfile.gender === 'M' ? '男性' : '女性'}</p>
+                            <p><strong>出生日期:</strong> ${userProfile.birthYear}年${userProfile.birthMonth}月${userProfile.birthDay}日</p>
+                            <p><strong>出生時辰:</strong> ${userProfile.birthHour}</p>
+                            <p><strong>曆法類型:</strong> ${userProfile.calendarType === 'lunar' ? '農曆' : '西曆'}</p>
+                            ${userProfile.isLeapMonth ? '<p><strong>閏月:</strong> 是</p>' : ''}
+                        </div>
+                        <div class="mt-4 p-4 bg-white rounded border">
+                            <p class="text-gray-700 text-center">
+                                基於傳統中州派紫微斗數理論，此命盤展現您的性格特質、運勢走向與人生發展規律。
+                                每個宮位都有其獨特的星曜配置，影響著不同生活面域的發展。
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            goToStep(3);
+        }
+
+        function resetForm() {
+            console.log('重製表單...');
+
+            document.getElementById('user-name').value = '';
+            document.getElementById('birth-year').value = '';
+            document.getElementById('birth-month').value = '';
+            document.getElementById('birth-day').value = '';
+            document.getElementById('birth-hour').value = '';
+            document.getElementById('leap-month').checked = false;
+
+            selectGender('M');
+            selectCalendar('lunar');
+            goToStep(1);
+
+            console.log('✅ 表單重製完成');
+        }
+
+        // === DOM 載入完成後的檢查 ===
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('✅ DOM 載入完成');
+
+            // 強制重新初始化
+            setTimeout(() => {
+                console.log('🔍 強制重新初始化...');
+
+                // 強制初始化
+                initializeYears();
+                initializeMonths();
+                bindEvents();
+
+                // 檢查結果
+                console.log('年份選項數量:', document.getElementById('birth-year').options.length);
+                console.log('月份選項數量:', document.getElementById('birth-month').options.length);
+
+                // 測試按鈕
+                console.log('🔘 測試按鈕功能...');
+                testButtonConnectivity();
+                console.log('✅ 強制初始化完成');
+            }, 100);
+        });
+
+        // 設置按鈕事件監聽器
+        function testButtonConnectivity() {
+            const maleBtn = document.getElementById('gender-male');
+            const femaleBtn = document.getElementById('gender-female');
+            const lunarBtn = document.getElementById('calendar-lunar');
+            const solarBtn = document.getElementById('calendar-solar');
+
+            // 確保按鈕事件正常工作
+            if (maleBtn && femaleBtn) {
+                maleBtn.onclick = function () { selectGender('M'); };
+                femaleBtn.onclick = function () { selectGender('F'); };
+            }
+
+            if (lunarBtn && solarBtn) {
+                lunarBtn.onclick = function () { selectCalendar('lunar'); };
+                solarBtn.onclick = function () { selectCalendar('solar'); };
+            }
+        }
+    </script>
+
+    <!-- 頁腳 -->
+    <div class="mt-4 text-center text-sm text-gray-500">
+        <p>命盤解析基於傳統中州派紫微斗數理論,僅供參考</p>
+        <p>Copyright (c) 2022 Airic Yu | Maintained by iTubai</p>
+        <p>• 紫微斗數命盤計算系統 •</p>
+    </div>
+</body>
+
+</html>

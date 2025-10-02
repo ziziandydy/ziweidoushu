@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>快速功能測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        .pass {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .warn {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🧪 紫微斗數系統快速測試</h1>
+    <div id="results"></div>
+
+    <script src="./public/api/destiny-calculator.js"></script>
+    <script>
+        const results = document.getElementById('results');
+
+        function addResult(test, status, message) {
+            const div = document.createElement('div');
+            div.className = `test-result ${status}`;
+            div.innerHTML = `<strong>${test}</strong>: ${message}`;
+            results.appendChild(div);
+            console.log(`${test}: ${status.toUpperCase()} - ${message}`);
+        }
+
+        // 測試 1: API 載入
+        setTimeout(() => {
+            if (typeof ZiweiCalculatorAPI !== 'undefined') {
+                addResult('API 載入測試', 'pass', 'ZiweiCalculatorAPI 成功載入');
+
+                // 測試 2: 計算功能
+                setTimeout(() => {
+                    try {
+                        const testInput = {
+                            name: '王小明',
+                            gender: 'M',
+                            birthYear: 1990,
+                            birthMonth: 5,
+                            birthDay: 15,
+                            birthHour: '午時',
+                            calendarType: 'solar',
+                            isLeapMonth: false
+                        };
+
+                        const result = ZiweiCalculatorAPI.calculateDestiny(testInput);
+
+                        if (result.success) {
+                            addResult('計算功能測試', 'pass',
+                                `計算成功！獲得 ${result.destinyInfo.palaces.length} 個宮位，命主星: ${result.destinyInfo.destinyMaster.name}`);
+                        } else {
+                            addResult('計算功能測試', 'fail', `計算失敗: ${result.error}`);
+                        }
+
+                        // 測試 3: 資料完整性
+                        setTimeout(() => {
+                            const hasUserInfo = result.userInfo && result.userInfo.name;
+                            const hasCalendarInfo = result.calendarInfo && result.calendarInfo.solar;
+                            const hasDestinyInfo = result.destinyInfo && result.destinyInfo.palaces;
+
+                            if (hasUserInfo && hasCalendarInfo && hasDestinyInfo) {
+                                addResult('資料完整性測試', 'pass', '所有必要的計算結果都存在');
+                            } else {
+                                addResult('資料完整性測試', 'fail', '計算結果資料不完整');
+                            }
+
+                            // 測試 4: 十二月運算測試
+                            setTimeout(() => {
+                                const palaces = result.destinyInfo.palaces;
+                                const hasTwelvePalaces = palaces && palaces.length === 12;
+                                const hasStarData = palaces.some(p => p.majorStars.length > 0);
+
+                                if (hasTwelvePalaces && hasStarData) {
+                                    addResult('十二宮位測試', 'pass',
+                                        `十二宮位配置正確，共 ${palaces.length} 個宮位，星曜分布合理`);
+                                } else {
+                                    addResult('十二宮位測試', 'fail', '十二宮位配置有問題');
+                                }
+
+                                // 最終總結
+                                const testCount = results.children.length;
+                                const passCount = results.querySelectorAll('.pass').length;
+                                const failCount = results.querySelectorAll('.fail').length;
+
+                                setTimeout(() => {
+                                    const summary = document.createElement('div');
+                                    summary.style.cssText = 'margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 5px;';
+                                    summary.innerHTML = `
+                                        <h2>📊 測試總結</h2>
+                                        <p>總測試項目: ${testCount}</p>
+                                        <p>✅ 通過: ${passCount}</p>
+                                        <p>❌ 失敗: ${failCount}</p>
+                                        <p>${failCount === 0 ? '🎉 所有測試通過！系統運行正常。' :
+                                            '⚠️ 有測試未通過，請檢查相關功能。'}</p>
+                                    `;
+                                    results.appendChild(summary);
+                                }, 500);
+
+                            }, 200);
+
+                        }, 200);
+
+                    } catch (error) {
+                        addResult('計算功能測試', 'fail', `計算異常: ${error.message}`);
+                    }
+                }, 200);
+
+            } else {
+                addResult('API 載入測試', 'fail', 'ZiweiCalculatorAPI 未定義');
+                addResult('計算功能測試', 'fail', 'API 未載入，無法測試計算功能');
+            }
+        }, 100);
+
+        // 測試伺服器狀態
+        fetch('./public/api/destiny-calculator.js')
+            .then(response => {
+                if (response.ok) {
+                    addResult('伺服器狀態測試', 'pass', 'API 檔案成功從伺服器載入');
+                } else {
+                    addResult('伺服器狀態測試', 'fail', 'API 檔案載入失敗');
+                }
+            })
+            .catch(error => {
+                addResult('伺服器狀態測試', 'fail', `伺服器連接失敗: ${error.message}`);
+            });
+    </script>
+</body>
+
+</html>

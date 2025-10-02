@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 調試頁面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-yellow-50 p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-3xl font-bold text-red-600 mb-6">🚨 JavaScript 調試頁面</h1>
+
+        <!-- 調試控制台 -->
+        <div class="mb-6 p-4 bg-gray-100 rounded">
+            <h3 class="font-bold mb-2">調試控制台</h3>
+            <div class="space-y-2 text-sm">
+                <div><strong>頁面載入狀態:</strong> <span id="page-status">檢查中...</span></div>
+                <div><strong>userProfile 物件:</strong> <span id="profile-status">檢查中...</span></div>
+                <div><strong>DOM 元素:</strong> <span id="dom-status">檢查中...</span></div>
+                <div><strong>事件監聽器:</strong> <span id="event-status">檢查中...</span></div>
+                <div><strong>初始化函數:</strong> <span id="init-status">檢查中...</span></div>
+            </div>
+        </div>
+
+        <!-- 測試區域 -->
+        <div class="mb-6 p-4 bg-red-50 rounded">
+            <h3 class="font-bold mb-4">功能測試區域</h3>
+
+            <!-- 性別選擇測試 -->
+            <div class="mb-4">
+                <h4 class="font-bold mb-2">🔘 性別選擇測試</h4>
+                <div class="flex space-x-2">
+                    <button id="test-male" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        onclick="testGender('M')">
+                        男 (測試)
+                    </button>
+                    <button id="test-female"
+                        class="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded hover:bg-gray-50"
+                        onclick="testGender('F')">
+                        女 (測試)
+                    </button>
+                </div>
+                <div class="mt-2 text-xs">
+                    預期結果: 按鈕顏色應該改變<br>
+                    <span id="gender-test-result">等待測試...</span>
+                </div>
+            </div>
+
+            <!-- 曆法選擇測試 -->
+            <div class="mb-4">
+                <h4 class="font-bold mb-2">📅 曆法選擇測試</h4>
+                <div class="flex space-x-2">
+                    <button id="test-lunar" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                        onclick="testCalendar('lunar')">
+                        農曆 (測試)
+                    </button>
+                    <button id="test-solar"
+                        class="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded hover:bg-gray-50"
+                        onclick="testCalendar('solar')">
+                        西曆 (測試)
+                    </button>
+                </div>
+                <div class="mt-2 text-xs">
+                    預期結果: 按鈕顏色應該改變<br>
+                    <span id="calendar-test-result">等待測試...</span>
+                </div>
+            </div>
+
+            <!-- 年份下拉測試 -->
+            <div class="mb-4">
+                <h4 class="font-bold mb-2">📅 年份下拉測試</h4>
+                <select id="test-year" class="w-full p-2 border rounded">
+                    <option value="">選擇年份</option>
+                </select>
+                <div class="mt-2 text-xs">
+                    預期結果: 應該有年份選項 (1924-2025)<br>
+                    <span id="year-test-result">等待測試...</span>
+                </div>
+            </div>
+
+            <!-- 月份下拉測試 -->
+            <div class="mb-4">
+                <h4 class="font-bold mb-2">📅 月份下拉測試</h4>
+                <select id="test-month" class="w-full p-2 border rounded">
+                    <option value="">選擇月份</option>
+                </select>
+                <div class="mt-2 text-xs">
+                    預期結果: 應該有月份選項 (1-12月)<br>
+                    <span id="month-test-result">等待測試...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 手動測試區域 -->
+        <div class="p-4 bg-green-50 rounded">
+            <h3 class="font-bold mb-4">🛠️ 手動測試</h3>
+            <div class="space-y-2">
+                <button onclick="initYears()"
+                    class="block w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    1. 初始化年份選項
+                </button>
+                <button onclick="initMonths()"
+                    class="block w-full px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                    2. 初始化月份選項
+                </button>
+                <button onclick="runAllTests()"
+                    class="block w-full px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">
+                    3. 執行所有自動測試
+                </button>
+            </div>
+        </div>
+
+        <!-- 結果輸出 -->
+        <div id="test-results" class="mt-6 p-4 bg-gray-100 rounded" style="display: none;">
+            <h3 class="font-bold mb-2">📊 測試結果</h3>
+            <div id="results-content" class="text-sm"></div>
+        </div>
+    </div>
+
+    <script>
+        let userProfile = {
+            name: '',
+            gender: 'M',
+            birthYear: '',
+            birthMonth: '',
+            birthDay: '',
+            birthHour: '',
+            calendarType: 'lunar',
+            isLeapMonth: false
+        };
+
+        let testResults = [];
+
+        // 初始化診斷
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🚀 調試頁面載入開始...');
+
+            checkPageStatus();
+            checkUserProfile();
+            checkDOMElements();
+            checkEventListeners();
+            checkInitFunctions();
+
+            // 自動初始化
+            setTimeout(() => {
+                initYears();
+                initMonths();
+                setTimeout(() => {
+                    runAllTests();
+                }, 100);
+            }, 200);
+        });
+
+        function checkPageStatus() {
+            document.getElementById('page-status').innerHTML =
+                '<span class="text-green-600">✅ 頁面載入正常</span>';
+        }
+
+        function checkUserProfile() {
+            try {
+                if (typeof userProfile !== 'undefined' && userProfile.gender) {
+                    document.getElementById('profile-status').innerHTML =
+                        '<span class="text-green-600">✅ userProfile 物件存在</span>';
+                } else {
+                    document.getElementById('profile-status').innerHTML =
+                        '<span class="text-red-600">❌ userProfile 物件有問題</span>';
+                }
+            } catch (error) {
+                document.getElementById('profile-status').innerHTML =
+                    '<span class="text-red-600">❌ ' + error.message + '</span>';
+            }
+        }
+
+        function checkDOMElements() {
+            const elements = [
+                'test-male', 'test-female',
+                'test-lunar', 'test-solar',
+                'test-year', 'test-month'
+            ];
+
+            let found = 0;
+            elements.forEach(id => {
+                if (document.getElementById(id)) found++;
+            });
+
+            document.getElementById('dom-status').innerHTML =
+                `<span class="text-blue-600">${found}/${elements.length} 元素找到</span>`;
+        }
+
+        function checkEventListeners() {
+            try {
+                document.getElementById('event-status').innerHTML =
+                    '<span class="text-green-600">✅ onclick 事件配置正常</span>';
+            } catch (error) {
+                document.getElementById('event-status').innerHTML =
+                    '<span class="text-red-600">❌ 事件監聽器有問題</span>';
+            }
+        }
+
+        function checkInitFunctions() {
+            if (typeof initYears === 'function' && typeof initMonths === 'function') {
+                document.getElementById('init-status').innerHTML =
+                    '<span class="text-green-600">✅ 初始化函數存在</span>';
+            } else {
+                document.getElementById('init-status').innerHTML =
+                    '<span class="text-red-600">❌ 初始化函數缺失</span>';
+            }
+        }
+
+        // 測試函數
+        function testGender(gender) {
+            console.log('測試性別選擇:', gender);
+
+            const maleBtn = document.getElementById('test-male');
+            const femaleBtn = document.getElementById('test-female');
+
+            userProfile.gender = gender;
+
+            if (gender === 'M') {
+                maleBtn.className = 'px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600';
+                femaleBtn.className = 'px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded hover:bg-gray-50';
+                updateTestResult('gender', 'PASS', '男性按鈕選中成功');
+            } else {
+                femaleBtn.className = 'px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600';
+                maleBtn.className = 'px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded hover:bg-gray-50';
+                updateTestResult('gender', 'PASS', '女性按鈕選中成功');
+            }
+        }
+
+        function testCalendar(type) {
+            console.log('測試曆法選擇:', type);
+
+            const lunarBtn = document.getElementById('test-lunar');
+            const solarBtn = document.getElementById('test-solar');
+
+            userProfile.calendarType = type;
+
+            if (type === 'lunar') {
+                lunarBtn.className = 'px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600';
+                solarBtn.className = 'px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded hover:bg-gray-50';
+                updateTestResult('calendar', 'PASS', '農曆選中成功');
+            } else {
+                solarBtn.className = 'px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600';
+                lunarBtn.className = 'px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded hover:bg-gray-50';
+                updateTestResult('calendar', 'PASS', '西曆選中成功');
+            }
+        }
+
+        function updateTestResult(test, status, message) {
+            const elementId = test + '-test-result';
+            const element = document.getElementById(elementId);
+            if (element) {
+                const icon = status === 'PASS' ? '✅' : '❌';
+                element.innerHTML = `${icon} ${message}`;
+            }
+
+            testResults.push({ test, status, message, time: new Date().toLocaleTimeString() });
+        }
+
+        // 初始化函數
+        function initYears() {
+            console.log('初始化年份...');
+            try {
+                const yearSelect = document.getElementById('test-year');
+                const currentYear = new Date().getFullYear();
+
+                // 清空現有選項
+                yearSelect.innerHTML = '<option value="">選擇年份</option>';
+
+                for (let i = currentYear - 100; i <= currentYear; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i + '年';
+                    yearSelect.appendChild(option);
+                }
+
+                updateTestResult('year', 'PASS', `成功初始化 ${new Date().getFullYear() - 100} 到 ${currentYear} 年`);
+            } catch (error) {
+                updateTestResult('year', 'FAIL', error.message);
+            }
+        }
+
+        function initMonths() {
+            console.log('初始化月份...');
+            try {
+                const monthSelect = document.getElementById('test-month');
+
+                // 清空現有選項
+                monthSelect.innerHTML = '<option value="">選擇月份</option>';
+
+                for (let i = 1; i <= 12; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i + '月';
+                    monthSelect.appendChild(option);
+                }
+
+                updateTestResult('month', 'PASS', '成功初始化 1 到 12 月');
+            } catch (error) {
+                updateTestResult('month', 'FAIL', error.message);
+            }
+        }
+
+        function runAllTests() {
+            console.log('執行所有測試...');
+
+            testResults = [];
+
+            // 測試檔案更新
+            fetch('http://localhost:8080/')
+                .then(response => response.text())
+                .then(html => {
+                    const hasFunctions = html.includes('function selectGender') && html.includes('function selectCalendar');
+                    updateTestResult('page-js', hasFunctions ? 'PASS' : 'FAIL',
+                        hasFunctions ? '主頁 JavaScript 函數完整' : '主頁 JavaScript 函數缺失');
+                })
+                .catch(error => {
+                    updateTestResult('page-load', 'FAIL', '無法載入主頁: ' + error.message);
+                });
+
+            // 顯示結果
+            setTimeout(() => {
+                showResults();
+            }, 500);
+        }
+
+        function showResults() {
+            const resultsDiv = document.getElementById('test-results');
+            const contentDiv = document.getElementById('results-content');
+
+            if (testResults.length > 0) {
+                contentDiv.innerHTML = testResults.map(result => {
+                    const icon = result.status === 'PASS' ? '✅' : '❌';
+                    return `<div class="mb-1">${icon} ${result.test}: ${result.message}</div>`;
+                }).join('');
+                resultsDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>

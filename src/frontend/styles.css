@@ -1,0 +1,312 @@
+@import './globals.css';
+
+/* 主要 Tailwind CSS 導入 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自定義動畫 */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s ease-in-out;
+}
+
+/* 星曜能量等級指示器 */
+.star-energy-level {
+    position: relative;
+    display: inline-block;
+}
+
+.star-energy-badge {
+    position: absolute;
+    top: -4px;
+    right: -8px;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+/* 命盤進度指示器 */
+.progress-step {
+    transition: all 0.3s ease-in-out;
+}
+
+.progress-step.active {
+    transform: scale(1.1);
+}
+
+/* 命盤卡片特效 */
+.destiny-card {
+    transition: all 0.3s ease-in-out;
+    backdrop-filter: blur(10px);
+}
+
+.destiny-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* 星曜星級指示器 */
+.star-grade-indicator {
+    position: relative;
+    display: inline-block;
+    margin-left: 8px;
+}
+
+.star-grade-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 2px;
+}
+
+/* 五行顏色主題 */
+.element-gold {
+    color: #fbbf24;
+}
+
+.element-gold-bg {
+    background-color: #fef3c7;
+}
+
+.element-wood {
+    color: #10b981;
+}
+
+.element-wood-bg {
+    background-color: #d1fae5;
+}
+
+/* 高級選項的隱藏層 */
+form-section {
+    margin-bottom: 1rem;
+}
+
+form-section.collapsed .section-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+form-section.expanded .section-content {
+    max-height: 500px;
+    transition: max-height 0.3s ease-in;
+}
+
+/* 表單動畫 */
+.input-field {
+    transition: all 0.2s ease-in-out;
+}
+
+.input-field:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+}
+
+/* 按鈕特效 */
+.btn-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-gradient:hover::before {
+    left: 100%;
+}
+
+.btn-gradient:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 紫微斗數特有的介面樣式 */
+.zodiac-star-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+}
+
+.zodiac-star-card:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* 命盤顯示特效 */
+.destiny-board {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(240, 245, 255, 0.9) 100%);
+}
+
+.temple-cell {
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.temple-cell:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 響應式設計優化 */
+@media (max-width: 768px) {
+    .mobile-responsive {
+        padding: 1rem;
+    }
+
+    .grid-responsive {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-responsive {
+        padding: 0.5rem;
+    }
+
+    .text-responsive {
+        font-size: 0.875rem;
+    }
+}
+
+/* 主題色調 */
+:root {
+    --primary-purple: #8b5cf6;
+    --primary-blue: #3b82f6;
+    --accent-gold: #f59e0b;
+    --success-green: #10b981;
+    --warning-orange: #f97316;
+    --danger-red: #ef4444;
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+    .dark-mode {
+        --bg-primary: #1f2937;
+        --bg-secondary: #374151;
+        --text-primary: #f9fafb;
+        --text-secondary: #d1d5db;
+    }
+}
+
+/* 自定義滾動條 */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* 載入動畫 */
+.loading-spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 錯誤和成功狀態 */
+.input-error {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input-success {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* 工具提示 */
+.tooltip {
+    position: relative;
+}
+
+.tooltip::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.tooltip:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 打印友善樣式 */
+@media print {
+    .no-print {
+        display: none;
+    }
+
+    .print-friendly {
+        background: white !important;
+        color: black !important;
+    }
+}
