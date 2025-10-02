@@ -1,14 +1,16 @@
 {
   "version": 2,
   "name": "ziweidoushu",
-  "buildCommand": "npm run build",
-  "outputDirectory": "public",
-  "installCommand": "npm install",
-  "functions": {
-    "api-server.js": {
-      "runtime": "nodejs18.x"
+  "builds": [
+    {
+      "src": "api-server.js",
+      "use": "@vercel/node@3.0.7"
+    },
+    {
+      "src": "public/**/*",
+      "use": "@vercel/static@3.0.2"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/api/(.*)",
