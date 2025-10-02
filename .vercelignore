@@ -1,6 +1,7 @@
 node_modules
 test
 src
+build
 *.log
 .git
 .gitignore
@@ -15,3 +16,4 @@ simple-test.js
 run-tests.sh
 TEST_RESULTS.md
 api-extractor.json
+api-server.js

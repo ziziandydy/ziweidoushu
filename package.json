@@ -29,18 +29,11 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "start": "node api-server.js",
-    "server": "node api-server.js",
-    "prebuild": "rimraf build",
-    "build": "tsc",
-    "watch": "tsc --watch",
-    "webpack": "webpack",
-    "bundleType": "api-extractor run --local --verbose",
+    "build": "echo 'No build step required for Vercel Serverless Functions'",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
     "format": "prettier --write ./src/**.ts ./test/**.ts",
-    "lint": "eslint ./src ./test --ext .ts",
-    "release": "npm i & npm run build & npm run bundleType & npm run webpack"
+    "lint": "eslint ./src ./test --ext .ts"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",

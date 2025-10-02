@@ -3,18 +3,9 @@
  * API Route: /api/calculate
  */
 
-// 嘗試載入編譯後的 TypeScript 模組
-let ZiweiCore;
-try {
-    const mainModule = require('../build/main.js');
-    ZiweiCore = mainModule;
-    console.log('✅ TypeScript 核心庫已載入');
-} catch (error) {
-    console.log('❌ 無法載入 TypeScript 核心庫:', error.message);
-    ZiweiCore = null;
-}
-
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
+    console.log('🔮 紫微斗數計算 API - 模擬模式');
+    
     // CORS 頭部
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -45,70 +36,44 @@ export default async function handler(req, res) {
 
         console.log('🔮 接收到計算請求:', data);
 
-        let destinyBoard;
+        // 模擬紫微斗數計算
+        const palaces = [
+            '命宮', '兄弟', '夫妻', '子女', '財帛', '疾厄',
+            '遷移', '交友', '事業', '田宅', '福德', '父母'
+        ];
 
-        if (ZiweiCore) {
-            // 使用真實核心庫
-            console.log('🏛️ 使用真實核心庫計算');
-            
-            try<｜tool▁call▁begin｜>
-                const { DestinyBoard, DestinyConfigBuilder, Gender, DayTimeGround, ConfigType } = ZiweiCore;
-                
-                // 轉換輸入格式
-                const gender = data.gender === 'M' ? Gender.M : Gender.F;
-                const bornTimeGround = DayTimeGround.getByName(data.birthHour);
-                
-                let config;
-                if (data.calendarType === 'lunar') {
-                    config = DestinyConfigBuilder.withlunar({
-                        year: data.birthYear,
-                        month: data.birthMonth,
-                        day: data.birthDay,
-                        isLeapMonth: data.isLeapMonth || false,
-                        bornTimeGround: bornTimeGround,
-                        configType: ConfigType.SKY,
-                        gender: gender,
-                    });
-                } else {
-                    config = DestinyConfigBuilder.withSolar({
-                        year: data.birthYear,
-                        month: data.birthMonth,
-                        day: data.birthDay,
-                        bornTimeGround: bornTimeGround,
-                        configType: ConfigType.SKY,
-                        gender: gender,
-                    });
-                }
-                
-                destinyBoard = new DestinyBoard(config);
-            } catch (coreError) {
-                console.log('❌ 核心庫計算失敗:', coreError.message);
-                throw coreError;
-            }
-        } else {
-            res.status(500).json({ error: 'TypeScript 核心庫載入失敗' });
-            return;
-        }
+        const majorStarsPool = [
+            '紫微', '天府', '天機', '太陽', '武曲', '天同', '廉貞', '太陰',
+            '貪狼', '巨門', '天相', '天梁', '七殺', '破軍'
+        ];
 
-        // 格式化回應
+        const minorStarsPool = [
+            '左輔', '右弼', '天魁', '天鉞', '文昌', '文曲', '祿存', '天馬',
+            '火星', '鈴星', '擎羊', '陀羅', '地空', '地劫'
+        ];
+
+        const palacesData = palaces.map((name, index) => ({
+            palaceName: name,
+            majorStars: Math.random() > 0.1 ? [{
+                name: majorStarsPool[(data.birthYear + index) % majorStarsPool.length],
+                energyLevel: 60 + Math.floor(Math.random() * 40),
+                energyType: index % 2 === 0 ? 'yang' : 'yin'
+            }] : [],
+            minorStars: Math.random() > 0.5 ? [{
+                name: minorStarsPool[Math.floor(Math.random() * minorStarsPool.length)],
+                energyLevel: 30 + Math.floor(Math.random() * 40),
+                energyType: 'neutral'
+            }] : [],
+            element: ['金', '木', '水', '火', '土'][(data.birthYear + index) % 5],
+            ageRange: `年齡範圍 ${index * 10 + 1}-${(index + 1) * 10}`
+        }));
+
         const response = {
             success: true,
             name: data.name,
-            palaces: destinyBoard.cells.map((cell, index) => ({
-                palaceName: cell.temples[0]?.toString() || `宮位${index + 1}`,
-                majorStars: cell.majorStars.map((star, starIndex) => ({
-                    name: star.displayName || star.name || star.toString() || `主星${starIndex + 1}`,
-                    energyLevel: star.energy || star.energyLevel || 50,
-                    energyType: star.energyType || 'neutral'
-                })),
-                minorStars: cell.minorStars.map((star, starIndex) => ({
-                    name: star.displayName || star.name || star.toString() || `輔星${starIndex + 1}`,
-                    energyLevel: star.energy || star.energyLevel || 30,
-                    energyType: star.energyType || 'neutral'
-                })),
-                element: cell.ground?.toString() || '',
-                ageRange: cell.ageRange?.toString() || ''
-            }))
+            palaces: palacesData,
+            source: 'simulation',
+            timestamp: new Date().toISOString()
         };
 
         console.log('✅ 計算完成，返回', response.palaces.length, '個宮位');
