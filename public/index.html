@@ -493,8 +493,9 @@
                     const result = await RealZiweiAPI.calculateDestiny(userProfile);
 
                     if (result.success) {
-                        destinBoard = result.destinyInfo;
-                        showDestinyStars(result.destinyInfo);
+                        // 新 API 格式：直接包含 palaces
+                        destinBoard = result;
+                        showDestinyStars(result);
                         goToStep(2);
                     } else {
                         alert('計算失敗：' + result.error);
@@ -533,10 +534,26 @@
         }
 
         function simulateDestinyCalculation() {
+            const palaces = [
+                '命宮', '兄弟', '夫妻', '子女', '財帛', '疾厄',
+                '遷移', '交友', '事業', '田宅', '福德', '父母'
+            ];
+
+            const majorStarsPool = [
+                '紫微', '天府', '天機', '太陽', '武曲', '天同', '廉貞', '太陰'
+            ];
+
             destinBoard = {
-                mainStar: '紫微星',
-                temples: ['命宮', '兄弟', '夫妻', '子女', '財帛', '疾厄', '遷移', '奴僕', '官祿', '田宅', '福德', '父母'],
-                energy: Math.floor(Math.random() * 100) + 1
+                palaces: palaces.map((name, index) => ({
+                    palaceName: name,
+                    majorStars: [{
+                        name: majorStarsPool[index % majorStarsPool.length],
+                        energyLevel: 60 + Math.floor(Math.random() * 40),
+                        energyType: index % 2 === 0 ? 'yang' : 'yin'
+                    }],
+                    minorStars: [],
+                    energy: Math.floor(Math.random() * 40) + 50
+                }))
             };
             showDestinyStars(destinBoard);
             goToStep(2);

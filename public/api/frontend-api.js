@@ -69,13 +69,7 @@ window.RealZiweiAPI = {
 
         return {
             success: true,
-            destinyInfo: {
-                element: ['金', '木', '水', '火', '土'][Math.floor(Math.random() * 5)],
-                destinyMaster: majorStarsPool[Math.floor(Math.random() * majorStarsPool.length)],
-                bodyMaster: majorStarsPool[Math.floor(Math.random() * majorStarsPool.length)],
-                palaces: palacesData
-            },
-            userInfo: userInput,
+            palaces: palacesData,
             source: 'mock-fallback',
             timestamp: new Date().toISOString()
         };
