@@ -1,9 +1,6 @@
 {
   "version": 2,
   "name": "ziweidoushu",
-  "buildCommand": "npm run build",
-  "outputDirectory": "public",
-  "installCommand": "npm install",
   "builds": [
     {
       "src": "public/**/*",
@@ -24,9 +21,6 @@
       "dest": "/public/$1"
     }
   ],
-  "env": {
-    "NODE_ENV": "production"
-  },
   "functions": {
     "api-server.js": {
       "runtime": "nodejs18.x"
