@@ -66,6 +66,26 @@ cd public && python3 -m http.server 8080
 3. 連接你的 GitHub repository
 4. Vercel 會自動部署！
 
+### 🔄 GitHub 自動持續部署
+
+✅ **推送自動觸發部署**
+- 每次 `git push origin main` 都會自動重新部署
+- **分支策略**: 只有 `main` 分支的推送觸發生產部署
+- **預覽部署**: 其他分支推送會創建預覽 URL
+
+✅ **即時更新**
+- GitHub 推送 → Webhook 通知 Vercel → 自動構建部署
+- 無需手動操作，代碼更新後即可在生產環境看到
+- 部署狀態會在 GitHub 上顯示為 check mark
+
+```bash
+# 本地開發 → GitHub → Vercel 自動部署流程
+git add .
+git commit -m "✨ 新功能更新"
+git push origin main
+# 🚀 Vercel 自動重新部署開始！
+```
+
 ## 🔧 API 端點
 
 - `POST /api/calculate` - 計算紫微斗數命盤
