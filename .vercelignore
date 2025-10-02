@@ -1,0 +1,17 @@
+node_modules
+test
+src
+*.log
+.git
+.gitignore
+README.md
+PROJECT_SNAPSHOT.md
+DEPLOYMENT_CHECKLIST.md
+jest.config.js
+webpack.config.js
+tsconfig.json
+.eslintrc.js
+simple-test.js
+run-tests.sh
+TEST_RESULTS.md
+api-extractor.json
