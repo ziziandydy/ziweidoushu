@@ -325,7 +325,7 @@ class SimpleZiweiTester {
             
             // 檢查 vercel.json 配置
             const vercelConfig = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
-            const hasCorrectConfig = vercelConfig.buildCommand && vercelConfig.outputDirectory;
+            const hasCorrectConfig = vercelConfig.builds && vercelConfig.builds.length > 0;
             
             const details = `部署檔案存在: ${presentFiles}/${requiredFiles.length}, Vercel 配置: ${hasCorrectConfig ? '有' : '無'}`;
             const status = presentFiles === requiredFiles.length && hasCorrectConfig ? 'PASS' : 'FAIL';
