@@ -283,6 +283,34 @@ open http://localhost:8080/
 npm run dev
 ```
 
+### 🌐 Vercel 雲端部署
+
+#### 🔧 部署配置
+- **Framework Preset**: 混合架構 (HTML + Node.js API)
+- **Build Command**: `npm run build` (TypeScript 編譯)
+- **Output Directory**: `public` (靜態檔案目錄)
+- **Install Command**: `npm install`
+- **Runtime**: Node.js 18.x for API functions
+
+#### 📁 部署檔案結構
+```
+vercel.json           # Vercel 部署配置
+.vercelignore         # 部署忽略檔案
+public/               # 前端靜態檔案
+├── index.html        # 主應用頁面
+├── api/              # 前端 API 代理
+└── *.html           # 其他測試頁面
+api-server.js         # Node.js API 服務器
+build/                # 編譯後的 TypeScript 檔案
+src/                  # TypeScript 源代碼
+```
+
+#### 🚀 自動部署流程
+- **GitHub Push**: 自動觸發 Vercel 重新部署
+- **構建過程**: npm install → npm run build → 部署
+- **路由配置**: API 端點路由到 api-server.js，其他路由到 public
+- **持續集成**: 每次推送 main 分支自動重新部署
+
 #### 🔧 開發和測試
 ```bash
 # 執行自動化測試

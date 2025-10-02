@@ -92,6 +92,19 @@ git push origin main
 - `GET /api/health` - API 健康檢查
 - `GET /api/status` - API 狀態資訊
 
+## 🏗️ 專案架構
+
+**前端 (Static)**:
+- 📁 `public/` - HTML/CSS/JavaScript 靜態檔案
+- 📄 `index.html` - 主應用頁面
+- 🔧 API 整合 - JavaScript 調用後端
+
+**後端 (Serverless)**:
+- 📁 `src/` - TypeScript 紫微斗數核心庫
+- 📁 `build/` - 編譯後的 JavaScript 檔案
+- 🖥️ `api-server.js` - Node.js API 服務器
+- ⚙️ `vercel.json` - Vercel 部署配置
+
 ---------
 
 ## Hello world

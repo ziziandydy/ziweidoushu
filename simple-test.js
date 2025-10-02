@@ -297,6 +297,50 @@ class SimpleZiweiTester {
         }
     }
 
+    // 測試部署準備狀態
+    async testDeployReadiness() {
+        const requiredFiles = [
+            'vercel.json',
+            '.vercelignore',
+            'package.json',
+            'api-server.js',
+            'public/index.html'
+        ];
+        
+        let presentFiles = 0;
+        const missingFiles = [];
+        
+        try {
+            const start = Date.now();
+            // 檢查關鍵部署檔案是否存在
+            const fs = require('fs');
+            
+            for (const file of requiredFiles) {
+                if (fs.existsSync(file)) {
+                    presentFiles++;
+                } else {
+                    missingFiles.push(file);
+                }
+            }
+            
+            // 檢查 vercel.json 配置
+            const vercelConfig = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
+            const hasCorrectConfig = vercelConfig.buildCommand && vercelConfig.outputDirectory;
+            
+            const details = `部署檔案存在: ${presentFiles}/${requiredFiles.length}, Vercel 配置: ${hasCorrectConfig ? '有' : '無'}`;
+            const status = presentFiles === requiredFiles.length && hasCorrectConfig ? 'PASS' : 'FAIL';
+            
+            if (status === 'FAIL') {
+                const detailList = missingFiles.length > 0 ? `缺少檔案: ${missingFiles.join(', ')}` : 'vercel.json 配置不完整';
+                this.addResult('部署準備測試', 'FAIL', `${details}. ${detailList}`, Date.now() - start);
+            } else {
+                this.addResult('部署準備測試', 'PASS', details, Date.now() - start);
+            }
+        } catch (error) {
+            this.addResult('部署準備測試', 'FAIL', error.message, Date.now() - Date.now());
+        }
+    }
+
     // 生成測試報告
     generateReport() {
         const totalTime = Date.now() - this.startTime;
@@ -345,6 +389,7 @@ class SimpleZiweiTester {
         await this.testAPIFile();
         await this.testJavaScriptFunctions();
         await this.testFixStatus();
+        await this.testDeployReadiness();
         await this.testAuxiliaryPages();
 
         this.generateReport();
