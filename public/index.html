@@ -973,7 +973,8 @@
             return palaceMapping[position] >= 0 ? palaceMapping[position] : -1;
         }
 
-        async function updateDetailedInfo() {
+        // 全域函數，供 HTML onclick 調用
+        window.updateDetailedInfo = async function() {
             const detailedTitle = document.getElementById('detailed-title');
             const detailedInfo = document.getElementById('detailed-info');
 
@@ -1047,7 +1048,7 @@
                     `;
                 }
             }
-        }
+        };
 
 
         function resetForm() {
@@ -1074,7 +1075,7 @@
             if (typeof window.AIAnalyzer !== 'undefined') {
                 console.log('✅ AIAnalyzer 已正確載入');
             } else {
-                console.warning('⚠️ AIAnalyzer 尚未載入，等待中...');
+                console.warn('⚠️ AIAnalyzer 尚未載入，等待中...');
                 
                 // 嘗試延遲查詢
                 setTimeout(() => {
@@ -1086,6 +1087,7 @@
                 }, 1000);
             }
             console.log('✅ DOM 載入完成');
+            console.log('🔍 檢查 updateDetailedInfo 是否已定義:', typeof window.updateDetailedInfo);
 
             // 強制重新初始化
             setTimeout(() => {
