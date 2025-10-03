@@ -99,9 +99,23 @@ window.AIAnalyzer = {
                 name: error.name
             });
             
+            // 分析錯誤類型並提供具體建議
+            let errorMessage = 'AI 分析失敗';
+            if (error.message.includes('Failed to fetch') || error.message.includes('network')) {
+                errorMessage = '網路連接失敗，請檢查網路或稍後重試';
+            } else if (error.message.includes('500') || error.message.includes('Internal Server Error')) {
+                errorMessage = 'AI 分析服務暫時無法使用，請稍後重試';
+            } else if (error.message.includes('OpenAI API key') || error.message.includes('配置')) {
+                errorMessage = 'AI 服務配置問題，請聯繫技術支援';
+            } else if (error.message.includes('Unable to reach')) {
+                errorMessage = 'AI 服務暫時無法連接，請稍後重試';
+            }
+            
             return {
                 success: false,
-                error: error.message || '網路連接錯誤'
+                error: errorMessage,
+                originalError: error.message,
+                retryable: !error.message.includes('API key') && !error.message.includes('配置')
             };
         }
     },

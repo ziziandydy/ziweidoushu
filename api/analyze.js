@@ -40,9 +40,18 @@ module.exports = async function handler(req, res) {
 
     } catch (error) {
         console.error('❌ AI 分析失敗:', error);
+        
+        // 詳細的錯誤日誌
+        if (error.message.includes('OpenAI API key')) {
+            console.error('❌ OpenAI API Key 未配置');
+        } else if (error.message.includes('connect') || error.message.includes('fetch')) {
+            console.error('❌ OpenAI API 連接失敗');
+        }
+        
         res.status(500).json({ 
             success: false, 
-            error: error.message || 'AI 分析服務暫時無法使用' 
+            error: error.message || 'AI 分析服務暫時無法使用',
+            debug: process.env.NODE_ENV === 'development' ? error.stack : undefined
         });
     }
 };
