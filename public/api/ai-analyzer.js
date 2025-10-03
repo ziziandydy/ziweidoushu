@@ -115,48 +115,69 @@ window.AIAnalyzer = {
         console.log('🎨 開始格式化 AI 分析:', analysis);
         
         try {
-            // 將分析文字轉換為結構化的 HTML
-            // 支援多種格式：###1.、【格式】、普通段落
-            const sections = analysis.split(/(?:###?\d+\.\s*|【([^】]+)】)/);
+            // 智能解析 AI 分析內容
+            const sections = [];
+            const lines = analysis.trim().split('\n');
+            
+            let currentSection = null;
+            
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                
+                // 檢查是否為標題行 (###數字. 或其他標題格式)
+                if (trimmedLine.match(/^(?:###?\d+\.\s*|【[^】]+】)\s*(.+)$/)) {
+                    // 儲存之前的章節
+                    if (currentSection) {
+                        sections.push(currentSection);
+                    }
+                    
+                    // 開始新章節
+                    const titleMatch = trimmedLine.match(/^(?:###?\d+\.|\d+\.\s*)?\s*(.+)$/);
+                    currentSection = {
+                        title: titleMatch ? titleMatch[1] : trimmedLine.replace(/^(?:###?\d+\.\s*|【[^】]+】)\s*/, ''),
+                        content: []
+                    };
+                } else if (trimmedLine && currentSection) {
+                    // 添加到當前章節內容
+                    currentSection.content.push(trimmedLine);
+                } else if (trimmedLine && !currentSection) {
+                    // 如果沒有章節標題，創建默認章節
+                    currentSection = {
+                        title: '詳細分析',
+                        content: [trimmedLine]
+                    };
+                }
+            }
+            
+            // 添加最後一個章節
+            if (currentSection) {
+                sections.push(currentSection);
+            }
+            
+            console.log('🎨 解析出的章節:', sections);
+            
+            // 生成 HTML
             let html = '<div class="space-y-6">';
             
-            // 如果沒有找到標題分割，直接顯示全文
-            if (sections.length <= 2) {
-                const formattedContent = analysis.trim()
-                    .replace(/###?\d+\.\s*([^#\n]+)/g, '<div class="mb-6"><h3 class="text-xl font-bold mb-3 text-purple-800 flex items-center"><span class="w-3 h-3 bg-purple-500 rounded-full mr-3"></span>$1</h3>')
-                    .replace(/\n(?=[^<\n])/g, '<br>')
-                    .replace(/\n\n/g, '</div><div class="bg-white rounded-lg p-4 shadow-sm">')
-                    + '</div>';
-                
+            sections.forEach(section => {
+                const iconClass = this.getSectionIcon(section.title);
                 html += `
-                    <div class="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 border-2 border-purple-200 p-6 rounded-xl shadow-lg">
-                        <div class="text-gray-800 leading-relaxed">
-                            ${formattedContent}
+                    <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 border-2 border-blue-200 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-center mb-4">
+                            <div class="${iconClass} text-lg mr-3">🌟</div>
+                            <h3 class="text-xl font-bold text-purple-800">${section.title}</h3>
+                        </div>
+                        <div class="text-gray-800 leading-relaxed pl-6 border-l-4 border-purple-300 bg-white rounded-lg p-4 shadow-sm">
+                            ${section.content.map(line => 
+                                line.includes('：') || line.includes(':' ? 
+                                    `<div class="mb-2"><span class="font-semibold text-blue-700">${line}</span></div>` :
+                                    `<div class="mb-2">${line}</div>`
+                                ).join('')
+                            }
                         </div>
                     </div>
                 `;
-            } else {
-                // 有明確分段的情況
-                for (let i = 1; i < sections.length; i += 2) {
-                    const sectionTitle = sections[i];
-                    const sectionContent = sections[i + 1];
-                    
-                    if (sectionTitle && sectionContent) {
-                        const iconClass = this.getSectionIcon(sectionTitle);
-                        html += `
-                            <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 border-2 border-blue-200 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-                                <div class="flex items-center mb-4">
-                                    <div class="${iconClass} text-lg mr-3"></div>
-                                    <h3 class="text-xl font-bold text-purple-800">${sectionTitle}</h3>
-                                </div>
-                                <div class="text-gray-800 leading-relaxed pl-6 border-l-4 border-purple-300 bg-white rounded-lg p-4 shadow-sm">
-                                    ${this.formatSectionContent(sectionContent.trim())}
-                                </div>
-                            </div>
-                        `;
-                    }
-                }
-            }
+            });
             
             html += '</div>';
             console.log('🎨 格式化完成:', html);
