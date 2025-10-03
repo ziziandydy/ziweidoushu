@@ -658,6 +658,14 @@
                 updateDetailedInfo();
             }
 
+            // 🚀 滾動到頁面最上方 - 優化用戶體驗
+            setTimeout(() => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }, 100); // 稍微延遲以確保內容已載入
+
             console.log('✅ 步驟切換完成');
         }
 
