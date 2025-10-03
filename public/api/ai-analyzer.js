@@ -138,17 +138,39 @@ window.AIAnalyzer = {
             for (const line of lines) {
                 const trimmedLine = line.trim();
                 
-                // 檢查是否為標題行 (###數字. 或其他標題格式)
-                if (trimmedLine.match(/^(?:###?\d+\.\s*|【[^】]+】)\s*(.+)$/)) {
+                // 檢查是否為標題行 - 改進的識別邏輯
+                const titlePatterns = [
+                    /^###?\s*(\d+\.?\s*)(.+)$/,           // ### 數字. 標題
+                    /^###?\s*([^.]+)分析\s*[:：]*$/,       // ### 某某分析：
+                    /^###?\s*([^.]+)[:：]\s*$/,           // ### 標題：
+                    /^###?\s*(.+)$/,                      // ### 普通標題
+                    /^【([^】]+)】/,                      // 【標題】
+                    /^\d+\.?\s*(.+)$/,                   // 數字. 標題
+                    /^([^.]+)分析[:：]\s*$/               // 某某分析：格式
+                ];
+                
+                let isTitle = false;
+                let extractedTitle = '';
+                
+                for (const pattern of titlePatterns) {
+                    const match = trimmedLine.match(pattern);
+                    if (match) {
+                        isTitle = true;
+                        // 優先使用捕獲組，否則使用整個匹配
+                        extractedTitle = match[1] || trimmedLine;
+                        break;
+                    }
+                }
+                
+                if (isTitle && extractedTitle) {
                     // 儲存之前的章節
                     if (currentSection) {
                         sections.push(currentSection);
                     }
                     
                     // 開始新章節
-                    const titleMatch = trimmedLine.match(/^(?:###?\d+\.|\d+\.\s*)?\s*(.+)$/);
                     currentSection = {
-                        title: titleMatch ? titleMatch[1] : trimmedLine.replace(/^(?:###?\d+\.\s*|【[^】]+】)\s*/, ''),
+                        title: extractedTitle.trim(),
                         content: []
                     };
                 } else if (trimmedLine && currentSection) {
@@ -169,6 +191,11 @@ window.AIAnalyzer = {
             }
             
             console.log('🎨 解析出的章節:', sections);
+            console.log('🎨 解析統計:', {
+                總行數: lines.length,
+                章節總數: sections.length,
+                章節標題: sections.map(s => s.title)
+            });
             
             // 生成 HTML
             let html = '<div class="space-y-6">';
@@ -242,5 +269,32 @@ window.AIAnalyzer = {
             .replace(/\n/g, '<br>')
             .replace(/^/, '<p class="mb-3">')
             .replace(/$/, '</p>');
+    },
+
+    /**
+     * 測試 Markdown 解析能力
+     * @param {string} testText - 測試文字
+     */
+    testMarkdownParsing($testText = null) {
+        const testContent = $testText || `###1. 主星亮度與吉凶分析
+這裏是分析內容第一行
+這裏是分析內容第二行
+
+###2. 格局分析  
+格局分析的內容
+
+###3. 本命：命宮之各星說明
+命宮的分析內容
+
+### 總結
+總結的內容在這裏`;
+
+        console.log('🧪 測試 Markdown 解析...');
+        console.log('🧪 測試內容:', testContent);
+        
+        const result = this.formatAnalysisHTML(testContent);
+        console.log('🧪 解析結果:', result);
+        
+        return result;
     }
 };
