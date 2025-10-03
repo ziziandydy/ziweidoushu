@@ -1,0 +1,283 @@
+/**
+ * 紫微斗數問答系統
+ * 包含 credit 管理和 AI 問答功能
+ */
+
+window.QASystem = {
+    /**
+     * 初始化問答系統
+     */
+    init() {
+        this.checkCredits();
+        this.initEventListeners();
+    },
+
+    /**
+     * 檢查當前 credit 數量
+     */
+    checkCredits() {
+        const cookieId = this.getCookieId();
+        const creditsKey = `credits_${cookieId}`;
+        const expiryKey = `credits_expiry_${cookieId}`;
+        
+        let credits = parseInt(localStorage.getItem(creditsKey) || '3');
+        const expiry = localStorage.getItem(expiryKey);
+        
+        // 檢查是否過期（一個月）
+        if (expiry && new Date().getTime() > parseInt(expiry)) {
+            credits = 3; // 重置為3個 credit
+            localStorage.setItem(creditsKey, '3');
+            localStorage.setItem(expiryKey, (new Date().getTime() + 30 * 24 * 60 * 60 * 1000).toString());
+        }
+        
+        this.currentCredits = credits;
+        this.updateCreditsDisplay();
+        return credits;
+    },
+
+    /**
+     * 更新 credit 顯示
+     */
+    updateCreditsDisplay(mode = 'normal') {
+        const creditsDisplay = document.getElementById('credits-display');
+        if (creditsDisplay) {
+            if (mode === 'unlimited') {
+                creditsDisplay.innerHTML = `
+                    <span class="text-green-600 font-medium">
+                        💎 付費模式 (無限問答)
+                    </span>
+                `;
+            } else {
+                creditsDisplay.innerHTML = `
+                    <span class="text-purple-600 font-medium">
+                        💎 Credit: ${this.currentCredits} / 3
+                    </span>
+                `;
+            }
+        }
+    },
+
+    /**
+     * 獲取 cookie ID
+     */
+    getCookieId() {
+        let cookieId = localStorage.getItem('cookie_id');
+        if (!cookieId) {
+            cookieId = 'cookie_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+            localStorage.setItem('cookie_id', cookieId);
+        }
+        return cookieId;
+    },
+
+    /**
+     * 消耗一個 credit
+     */
+    consumeCredit() {
+        const cookieId = this.getCookieId();
+        const creditsKey = `credits_${cookieId}`;
+        const paidModeKey = `paid_mode_${cookieId}`;
+        
+        // 檢查是否在付費模式
+        const paidModeExpiry = localStorage.getItem(paidModeKey);
+        if (paidModeExpiry && new Date().getTime() < parseInt(paidModeExpiry)) {
+            // 付費模式中，不消耗 credit
+            this.updateCreditsDisplay('unlimited');
+            return true;
+        }
+        
+        let credits = parseInt(localStorage.getItem(creditsKey) || '3');
+        
+        if (credits <= 0) {
+            return false;
+        }
+        
+        credits--;
+        localStorage.setItem(creditsKey, credits.toString());
+        this.currentCredits = credits;
+        this.updateCreditsDisplay();
+        return true;
+    },
+
+    /**
+     * 初始化事件監聽器
+     */
+    initEventListeners() {
+        // 監聽發送按鈕
+        const sendButton = document.getElementById('send-question');
+        if (sendButton) {
+            sendButton.addEventListener('click', () => this.sendQuestion());
+        }
+
+        // 監聽輸入框 Enter 鍵
+        const questionInput = document.getElementById('question-input');
+        if (questionInput) {
+            questionInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    this.sendQuestion();
+                }
+            });
+        }
+
+        // 監聽預設問題按鈕
+        document.querySelectorAll('.preset-question').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const question = e.target.textContent;
+                questionInput.value = question;
+                questionInput.focus();
+            });
+        });
+    },
+
+    /**
+     * 發送問題
+     */
+    async sendQuestion() {
+        const questionInput = document.getElementById('question-input');
+        const chatContainer = document.getElementById('chat-container');
+        
+        const question = questionInput.value.trim();
+        if (!question) return;
+
+        // 檢查 credit
+        if (this.currentCredits <= 0) {
+            this.showCreditExhaustedModal();
+            return;
+        }
+
+        // 消耗 credit
+        if (!this.consumeCredit()) {
+            this.showCreditExhaustedModal();
+            return;
+        }
+
+        // 添加到聊天記錄
+        this.addMessageToChat('user', question);
+        questionInput.value = '';
+
+        // 顯示載入狀態
+        const loadingMessage = this.addMessageToChat('assistant', '正在分析您的問題，請稍候...', true);
+
+        try {
+            // 調用問答 API
+            const response = await this.askAI(question);
+            
+            if (response.success) {
+                // 移除載入消息，添加 AI 回應
+                this.removeMessageFromChat(loadingMessage);
+                this.addMessageToChat('assistant', response.answer);
+            } else {
+                this.removeMessageFromChat(loadingMessage);
+                this.addMessageToChat('assistant', '抱歉，無法獲取回答。請稍後再試。');
+            }
+        } catch (error) {
+            console.error('問答錯誤:', error);
+            this.removeMessageFromChat(loadingMessage);
+            this.addMessageToChat('assistant', '網路連接錯誤，請檢查網路後重試。');
+        }
+    },
+
+    /**
+     * 調用 AI API
+     */
+    async askAI(question) {
+        const requestData = {
+            question: question,
+            userProfile: window.userProfile,
+            destinyData: window.destinBoard
+        };
+
+        const response = await fetch('/api/question', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        return await response.json();
+    },
+
+    /**
+     * 添加消息到聊天記錄
+     */
+    addMessageToChat(type, message, isLoading = false) {
+        const chatContainer = document.getElementById('chat-container');
+        const messageElement = document.createElement('div');
+        
+        const messageId = 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+        
+        if (type === 'user') {
+            messageElement.innerHTML = `
+                <div class="flex justify-end mb-4">
+                    <div class="bg-blue-500 text-white p-3 rounded-lg max-w-xs">
+                        <p class="text-sm">${message}</p>
+                    </div>
+                </div>
+            `;
+        } else {
+            messageElement.innerHTML = `
+                <div class="flex justify-start mb-4">
+                    <div class="bg-gray-100 text-gray-800 p-3 rounded-lg max-w-md">
+                        <p class="text-sm">${message}</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        messageElement.id = messageId;
+        chatContainer.appendChild(messageElement);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        
+        return messageElement;
+    },
+
+    /**
+     * 從聊天記錄移除消息
+     */
+    removeMessageFromChat(messageElement) {
+        if (messageElement && messageElement.parentNode) {
+            messageElement.parentNode.removeChild(messageElement);
+        }
+    },
+
+    /**
+     * 顯示 credit 用完的彈窗
+     */
+    showCreditExhaustedModal() {
+        const modal = document.getElementById('credit-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+        }
+    },
+
+    /**
+     * 關閉 credit 彈窗
+     */
+    closeCreditModal() {
+        const modal = document.getElementById('credit-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+    },
+
+    /**
+     * 開啟付費模式
+     */
+    enablePaidMode() {
+        const cookieId = this.getCookieId();
+        const paidModeKey = `paid_mode_${cookieId}`;
+        
+        // 設置一小時付費模式
+        localStorage.setItem(paidModeKey, (Date.now() + 60 * 60 * 1000).toString());
+        
+        this.closeCreditModal();
+        this.checkCredits(); // 重新檢查 credit 狀態
+    }
+};
+
+// 初始化問答系統
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.QASystem) {
+        window.QASystem.init();
+    }
+});
