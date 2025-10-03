@@ -300,11 +300,14 @@ class SimpleZiweiTester {
     // 測試部署準備狀態
     async testDeployReadiness() {
         const requiredFiles = [
-            'vercel.json',
             '.vercelignore',
             'package.json',
             'api/calculate.js',
-            'public/index.html'
+            'api/health.js',
+            'api/status.js',
+            'public/index.html',
+            'public/favicon.svg',
+            'public/favicon.ico'
         ];
         
         let presentFiles = 0;
@@ -323,15 +326,15 @@ class SimpleZiweiTester {
                 }
             }
             
-            // 檢查 vercel.json 配置
-            const vercelConfig = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
-            const hasCorrectConfig = vercelConfig.version === 2;
+            // 檢查零配置部署 (不需要 vercel.json)
+            const hasVercelJson = fs.existsSync('vercel.json');
+            const zeroConfigReady = !hasVercelJson; // 沒有 vercel.json = 零配置部署
             
-            const details = `部署檔案存在: ${presentFiles}/${requiredFiles.length}, Vercel 配置: ${hasCorrectConfig ? '有' : '無'}`;
-            const status = presentFiles === requiredFiles.length && hasCorrectConfig ? 'PASS' : 'FAIL';
+            const details = `部署檔案存在: ${presentFiles}/${requiredFiles.length}, 零配置部署: ${zeroConfigReady ? '已啟用' : '需要 vercel.json'}`;
+            const status = presentFiles === requiredFiles.length && zeroConfigReady ? 'PASS' : 'FAIL';
             
             if (status === 'FAIL') {
-                const detailList = missingFiles.length > 0 ? `缺少檔案: ${missingFiles.join(', ')}` : 'vercel.json 配置不完整';
+                const detailList = missingFiles.length > 0 ? `缺少檔案: ${missingFiles.join(', ')}` : '零配置部署未啟用';
                 this.addResult('部署準備測試', 'FAIL', `${details}. ${detailList}`, Date.now() - start);
             } else {
                 this.addResult('部署準備測試', 'PASS', details, Date.now() - start);
@@ -380,6 +383,50 @@ class SimpleZiweiTester {
         });
     }
 
+    // 測試追蹤功能
+    async testTrackingFeatures() {
+        try {
+            const start = Date.now();
+            const fs = require('fs');
+            
+            // 檢查追蹤相關檔案
+            const trackingFiles = [
+                'public/favicon.svg',
+                'public/favicon.ico'
+            ];
+            
+            let trackingReady = true;
+            const missingFiles = [];
+            
+            for (const file of trackingFiles) {
+                if (!fs.existsSync(file)) {
+                    trackingReady = false;
+                    missingFiles.push(file);
+                }
+            }
+            
+            // 檢查 HTML 中的追蹤代碼
+            const indexContent = fs.readFileSync('public/index.html', 'utf8');
+            const hasTrackingCode = indexContent.includes('groundhog') || indexContent.includes('pioneer.ghtinc.com');
+            const hasFavicon = indexContent.includes('favicon.svg') || indexContent.includes('favicon.ico');
+            
+            const details = `追蹤檔案: ${trackingFiles.length - missingFiles.length}/${trackingFiles.length}, 追蹤代碼: ${hasTrackingCode ? '已添加' : '未添加'}, Favicon: ${hasFavicon ? '已配置' : '未配置'}`;
+            const status = trackingReady && hasTrackingCode && hasFavicon ? 'PASS' : 'FAIL';
+            
+            if (status === 'FAIL') {
+                const issues = [];
+                if (!trackingReady) issues.push(`缺少檔案: ${missingFiles.join(', ')}`);
+                if (!hasTrackingCode) issues.push('追蹤代碼未添加');
+                if (!hasFavicon) issues.push('Favicon 未配置');
+                this.addResult('追蹤功能測試', 'FAIL', `${details}. 問題: ${issues.join(', ')}`, Date.now() - start);
+            } else {
+                this.addResult('追蹤功能測試', 'PASS', details, Date.now() - start);
+            }
+        } catch (error) {
+            this.addResult('追蹤功能測試', 'FAIL', error.message, Date.now() - Date.now());
+        }
+    }
+
     // 執行所有測試
     async runAllTests() {
         console.log('🚀 開始執行紫微斗數系統自動化測試...\n');
@@ -391,6 +438,7 @@ class SimpleZiweiTester {
         await this.testFixStatus();
         await this.testDeployReadiness();
         await this.testAuxiliaryPages();
+        await this.testTrackingFeatures();
 
         this.generateReport();
     }

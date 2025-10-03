@@ -27,6 +27,14 @@ This library is based on 中州派 .
 
 **線上試用**: [Vercel 部署連結](https://ziweidoushu.vercel.app/)
 
+**主要功能**:
+- 🔮 完整紫微斗數命盤計算
+- 📊 十二宮位星曜配置顯示
+- 🎨 現代化響應式介面
+- 📱 支援手機、平板、桌面裝置
+- 🔍 詳細宮位星曜分析
+- 📈 用戶行為追蹤分析
+
 ## 📦 Install
 
 ```bash
@@ -97,13 +105,18 @@ git push origin main
 **前端 (Static)**:
 - 📁 `public/` - HTML/CSS/JavaScript 靜態檔案
 - 📄 `index.html` - 主應用頁面
+- 🎨 `favicon.svg` - 專屬品牌圖標
 - 🔧 API 整合 - JavaScript 調用後端
+- 📊 用戶追蹤 - Groundhog 分析系統
 
 **後端 (Serverless)**:
 - 📁 `src/` - TypeScript 紫微斗數核心庫
 - 📁 `build/` - 編譯後的 JavaScript 檔案
-- 🖥️ `api-server.js` - Node.js API 服務器
-- ⚙️ `vercel.json` - Vercel 部署配置
+- 📁 `api/` - Vercel Serverless Functions
+  - `calculate.js` - 命盤計算 API
+  - `health.js` - 健康檢查 API
+  - `status.js` - 狀態查詢 API
+- 🖥️ `api-server.js` - 本地開發 API 服務器
 
 ---------
 
