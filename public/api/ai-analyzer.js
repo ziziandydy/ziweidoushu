@@ -112,27 +112,56 @@ window.AIAnalyzer = {
      * @returns {string} HTML 格式的分析結果
      */
     formatAnalysisHTML(analysis) {
-        // 將分析文字轉換為結構化的 HTML
-        const sections = analysis.split(/\d+\.\s*【([^】]+)】/);
-        let html = '<div class="space-y-6">';
+        console.log('🎨 開始格式化 AI 分析:', analysis);
         
-        for (let i = 1; i < sections.length; i += 2) {
-            const sectionTitle = sections[i];
-            const sectionContent = sections[i + 1];
+        try {
+            // 將分析文字轉換為結構化的 HTML
+            // 支援多種格式：###1.、【格式】、普通段落
+            const sections = analysis.split(/(?:###?\d+\.\s*|【([^】]+)】)/);
+            let html = '<div class="space-y-6">';
             
-            if (sectionTitle && sectionContent) {
+            // 如果沒有找到標題分割，直接顯示全文
+            if (sections.length <= 2) {
                 html += `
                     <div class="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 p-6 rounded-lg">
-                        <h3 class="text-xl font-bold mb-4 text-blue-800">${sectionTitle}</h3>
                         <div class="text-gray-700 leading-relaxed whitespace-pre-line">
-                            ${sectionContent.trim()}
+                            ${analysis.trim().replace(/###?\d+\.\s*/g, '<h3 class="text-lg font-bold mb-2 text-blue-800">').replace(/\n\n/g, '</h3>\n<div class="mt-2 mb-4">').replace(/\n(?=[^<])/g, '<br>')}
                         </div>
                     </div>
                 `;
+            } else {
+                // 有明確分段的情況
+                for (let i = 1; i < sections.length; i += 2) {
+                    const sectionTitle = sections[i];
+                    const sectionContent = sections[i + 1];
+                    
+                    if (sectionTitle && sectionContent) {
+                        html += `
+                            <div class="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-4 text-blue-800">${sectionTitle}</h3>
+                                <div class="text-gray-700 leading-relaxed whitespace-pre-line">
+                                    ${sectionContent.trim()}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
             }
+            
+            html += '</div>';
+            console.log('🎨 格式化完成:', html);
+            return html;
+            
+        } catch (error) {
+            console.error('🎨 格式化錯誤:', error);
+            // 回退方案：簡單顯示
+            return `
+                <div class="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 p-6 rounded-lg">
+                    <div class="text-gray-700 leading-relaxed whitespace-pre-line">
+                        ${analysis.trim()}
+                    </div>
+                </div>
+            `;
         }
-        
-        html += '</div>';
-        return html;
     }
 };

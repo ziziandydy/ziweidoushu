@@ -441,7 +441,7 @@
             // 清空現有選項
             yearSelect.innerHTML = '<option value="">選擇年份</option>';
 
-            for (let i = currentYear - 100; i <= currentYear; i++) {
+            for (let i = currentYear; i >= currentYear - 100; i--) {
                 const option = document.createElement('option');
                 option.value = i;
                 option.textContent = i + '年';
