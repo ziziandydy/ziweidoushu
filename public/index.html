@@ -993,41 +993,28 @@
                 try {
                     // 檢查 AI 分析器是否已載入
                     if (typeof window.AIAnalyzer === 'undefined' || !window.AIAnalyzer) {
-                        console.error('❌ AIAnalyzer 未載入，等待載入...');
+                        console.error('❌ AIAnalyzer 未載入');
                         detailedInfo.innerHTML = `
-                            <div class="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 p-6 rounded-lg">
-                                <div class="flex items-center justify-center">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                                    <span class="text-blue-700">正在載入 AI 分析器...</span>
-                                </div>
-                                <p class="text-gray-600 mt-2 text-center">請稍候，正在初始化分析系統</p>
+                            <div class="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-4 text-red-800">分析器載入失敗</h3>
+                                <p class="text-red-700 mb-4">AI 分析器未能正確載入，請重新整理頁面</p>
+                                <button onclick="updateDetailedInfo()" 
+                                    class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                    重新嘗試
+                                </button>
                             </div>
                         `;
-                        
-                        // 延遲重試
-                        setTimeout(() => {
-                            if (typeof window.AIAnalyzer !== 'undefined') {
-                                updateDetailedInfo();
-                            } else {
-                                detailedInfo.innerHTML = `
-                                    <div class="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 p-6 rounded-lg">
-                                        <h3 class="text-xl font-bold mb-4 text-red-800">分析器載入失敗</h3>
-                                        <p class="text-red-700 mb-4">AI 分析器未能正確載入，請重新整理頁面</p>
-                                        <button onclick="updateDetailedInfo()" 
-                                            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                                            重新嘗試
-                                        </button>
-                                    </div>
-                                `;
-                            }
-                        }, 2000);
                         return;
                     }
 
                     console.log('✅ AIAnalyzer 已載入:', window.AIAnalyzer);
+                    console.log('🤖 即將調用 requestAnalysis...');
+                    console.log('🤖 userProfile:', userProfile);
+                    console.log('🤖 destinBoard:', destinBoard);
                     
                     // 調用 AI 分析
                     const analysisResult = await window.AIAnalyzer.requestAnalysis(userProfile, destinBoard);
+                    console.log('🤖 AI 分析結果:', analysisResult);
                     
                     if (analysisResult.success) {
                         // 格式化 AI 分析結果
