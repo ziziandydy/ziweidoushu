@@ -102,7 +102,7 @@
             <p class="text-center text-gray-600 mb-8">遵循中州派傳統理論 · 主頁整合版本</p>
 
             <!-- 步驟指示器 -->
-            <div class="flex justify-center mb-8 space-x-8">
+            <div class="flex justify-center mb-8 space-x-4">
                 <div id="step-1" class="flex items-center">
                     <div
                         class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">
@@ -119,6 +119,12 @@
                     <div
                         class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-medium">
                         3</div>
+                    <span class="ml-2 text-gray-400 font-medium">命盤圖表</span>
+                </div>
+                <div id="step-4" class="flex items-center">
+                    <div
+                        class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-medium">
+                        4</div>
                     <span class="ml-2 text-gray-400 font-medium">詳細解析</span>
                 </div>
             </div>
@@ -256,12 +262,52 @@
             <div id="step-content-2" class="hidden animate-fade-in">
                 <h2 class="text-2xl font-bold mb-6 text-center">❤️ 命盤星曜分析</h2>
                 <div id="stars-display" class="space-y-4"></div>
+                
+                <!-- 導航按鈕 -->
+                <div class="mt-6 flex space-x-4">
+                    <button onclick="goToStep(3)" 
+                        class="flex-1 bg-ziwei-purple text-white py-3 rounded-lg font-medium hover:bg-purple-600 transition-all duration-200">
+                        📊 查看命盤圖表
+                    </button>
+                </div>
             </div>
 
-            <!-- 步驟三：詳細解析 - 隱藏 -->
+            <!-- 步驟三：命盤圖表 -->
             <div id="step-content-3" class="hidden animate-fade-in">
-                <h2 id="detailed-title" class="text-2xl font-bold mb-6 text-center"></h2>
+                <h2 class="text-2xl font-bold mb-6 text-center">📊 紫微斗數命盤圖</h2>
+                
+                <!-- 命盤圖表容器 -->
+                <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                    <div id="destiny-chart" class="grid grid-cols-4 gap-2 text-xs">
+                        <!-- 命盤圖表將在這裡動態生成 -->
+                    </div>
+                </div>
+                
+                <!-- 導航按鈕 -->
+                <div class="flex space-x-4">
+                    <button onclick="goToStep(2)" 
+                        class="flex-1 bg-gray-500 text-white py-3 rounded-lg font-medium hover:bg-gray-600 transition-all duration-200">
+                        ← 返回星曜分析
+                    </button>
+                    <button onclick="goToStep(4)" 
+                        class="flex-1 bg-ziwei-purple text-white py-3 rounded-lg font-medium hover:bg-purple-600 transition-all duration-200">
+                        詳細解析 →
+                    </button>
+                </div>
+            </div>
+
+            <!-- 步驟四：詳細解析 -->
+            <div id="step-content-4" class="hidden animate-fade-in">
+                <h2 id="detailed-title" class="text-2xl font-bold mb-6 text-center">📖 詳細命理解析</h2>
                 <div id="detailed-info" class="space-y-4"></div>
+                
+                <!-- 導航按鈕 -->
+                <div class="mt-6">
+                    <button onclick="goToStep(3)" 
+                        class="w-full bg-gray-500 text-white py-3 rounded-lg font-medium hover:bg-gray-600 transition-all duration-200">
+                        ← 返回命盤圖表
+                    </button>
+                </div>
             </div>
 
             <!-- 重製按鈕 -->
@@ -452,13 +498,13 @@
             console.log('切換到步驟:', step);
 
             // 隱藏所有步驟
-            ['step-content-1', 'step-content-2', 'step-content-3'].forEach(id => {
+            ['step-content-1', 'step-content-2', 'step-content-3', 'step-content-4'].forEach(id => {
                 const element = document.getElementById(id);
                 if (element) element.classList.add('hidden');
             });
 
             // 更新步驟指示器
-            for (let i = 1; i <= 3; i++) {
+            for (let i = 1; i <= 4; i++) {
                 const stepElement = document.getElementById(`step-${i}`);
                 if (stepElement) {
                     if (i === step) {
@@ -484,8 +530,13 @@
                 currentStepElement.classList.remove('hidden');
             }
 
-            // 如果是第三步，更新詳細資訊
+            // 如果是第三步，生成命盤圖表
             if (step === 3) {
+                generateDestinyChart();
+            }
+            
+            // 如果是第四步，更新詳細資訊
+            if (step === 4) {
                 updateDetailedInfo();
             }
 
@@ -706,6 +757,86 @@
             if (energy >= 60) return { color: 'bg-yellow-400', border: 'border-yellow-500' };
             if (energy >= 40) return { color: 'bg-orange-400', border: 'border-orange-500' };
             return { color: 'bg-red-400', border: 'border-red-500' };
+        }
+
+        function generateDestinyChart() {
+            const chartContainer = document.getElementById('destiny-chart');
+            if (!chartContainer || !destinBoard || !destinBoard.palaces) return;
+
+            // 十二宮位的標準排列順序
+            const palaceOrder = [
+                '命宮', '兄弟', '夫妻', '子女', '財帛', '疾厄',
+                '遷移', '交友', '事業', '田宅', '福德', '父母'
+            ];
+
+            // 年齡範圍
+            const ageRanges = [
+                '5-14', '15-24', '25-34', '35-44', '45-54', '55-64',
+                '65-74', '75-84', '85-94', '95-104', '105-114', '115-124'
+            ];
+
+            // 生成命盤圖表 HTML
+            let chartHTML = '';
+            
+            // 創建 4x4 的網格布局，中央為命主信息
+            for (let row = 0; row < 4; row++) {
+                for (let col = 0; col < 4; col++) {
+                    const position = row * 4 + col;
+                    
+                    if (position === 5 || position === 6 || position === 9 || position === 10) {
+                        // 中央區域 - 顯示命主信息
+                        if (position === 6) {
+                            chartHTML += `
+                                <div class="bg-white border-2 border-purple-300 p-2 rounded text-center">
+                                    <div class="font-bold text-purple-800 text-xs">命主</div>
+                                    <div class="text-lg font-bold text-purple-600">破軍</div>
+                                    <div class="text-xs text-gray-600">身主</div>
+                                    <div class="text-sm font-bold text-purple-600">火星</div>
+                                </div>
+                            `;
+                        } else {
+                            chartHTML += `<div class="bg-gray-100 rounded"></div>`;
+                        }
+                    } else {
+                        // 外圍十二宮
+                        const palaceIndex = getPalaceIndex(position);
+                        const palace = destinBoard.palaces[palaceIndex];
+                        const palaceName = palaceOrder[palaceIndex];
+                        const ageRange = ageRanges[palaceIndex];
+                        
+                        if (palace) {
+                            const majorStars = Array.isArray(palace.majorStars) 
+                                ? palace.majorStars.map(star => star.name || star).join('')
+                                : palace.majorStars || '';
+                            
+                            chartHTML += `
+                                <div class="bg-white border border-gray-300 p-2 rounded text-center">
+                                    <div class="font-bold text-blue-800 text-xs mb-1">${palaceName}</div>
+                                    <div class="text-sm font-bold text-purple-600 mb-1">${majorStars}</div>
+                                    <div class="text-xs text-gray-500">${ageRange}</div>
+                                </div>
+                            `;
+                        } else {
+                            chartHTML += `
+                                <div class="bg-white border border-gray-300 p-2 rounded text-center">
+                                    <div class="font-bold text-blue-800 text-xs mb-1">${palaceName}</div>
+                                    <div class="text-sm font-bold text-purple-600 mb-1">-</div>
+                                    <div class="text-xs text-gray-500">${ageRange}</div>
+                                </div>
+                            `;
+                        }
+                    }
+                }
+            }
+
+            chartContainer.innerHTML = chartHTML;
+        }
+
+        // 根據網格位置獲取宮位索引
+        function getPalaceIndex(position) {
+            // 4x4 網格中十二宮的位置映射
+            const simplifiedMap = [0, 1, 2, 3, 4, -1, -1, 7, 8, -1, -1, 11];
+            return simplifiedMap[position] || 0;
         }
 
         function updateDetailedInfo() {
