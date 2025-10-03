@@ -351,6 +351,15 @@
             <!-- 步驟四：詳細解析 -->
             <div id="step-content-4" class="hidden animate-fade-in">
                 <h2 id="detailed-title" class="text-2xl font-bold mb-6 text-center">📖 詳細命理解析</h2>
+                
+                <!-- API 測試按鈕 -->
+                <div class="mb-4 text-center">
+                    <button onclick="testAIAnalysis()" 
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm">
+                        🧪 測試 API 連接
+                    </button>
+                </div>
+                
                 <div id="detailed-info" class="space-y-4"></div>
                 
                 <!-- 問答系統 -->
@@ -975,6 +984,8 @@
 
         // 全域函數，供 HTML onclick 調用
         window.updateDetailedInfo = async function() {
+            console.log('🚨 updateDetailedInfo 函數被調用了！');
+            
             const detailedTitle = document.getElementById('detailed-title');
             const detailedInfo = document.getElementById('detailed-info');
 
@@ -1050,6 +1061,55 @@
             }
         };
 
+        // API 測試函數 - 驗證是否能成功調用 OpenAI API
+        window.testAIAnalysis = async function() {
+            console.log('🧪 開始測試 AI 分析 API...');
+            
+            if (typeof window.AIAnalyzer === 'undefined') {
+                alert('❌ AIAnalyzer 未載入，無法測試');
+                return;
+            }
+
+            // 模擬測試數據
+            const testProfile = {
+                name: '測試用戶',
+                gender: 'M',
+                birthYear: 1990,
+                birthMonth: 1,
+                birthDay: 1,
+                birthHour: '子時',
+                calendarType: 'lunar',
+                isLeapMonth: false
+            };
+
+            const testDestinyData = {
+                palaces: [
+                    {
+                        palaceName: '命宮',
+                        majorStars: ['紫微', '天府']
+                    },
+                    {
+                        palaceName: '兄弟',
+                        majorStars: ['天同']
+                    }
+                ]
+            };
+
+            try {
+                console.log('🧪 發送測試請求到 /api/analyze...');
+                const result = await window.AIAnalyzer.requestAnalysis(testProfile, testDestinyData);
+                console.log('🧪 API 測試結果:', result);
+                
+                if (result.success) {
+                    alert(`✅ API 測試成功！\n結果: ${result.analysis.substring(0, 100)}...`);
+                } else {
+                    alert(`❌ API 測試失敗\n錯誤: ${result.error}`);
+                }
+            } catch (error) {
+                console.error('🧪 API 測試錯誤:', error);
+                alert(`❌ API 測試拋出異常\n錯誤: ${error.message}`);
+            }
+        };
 
         function resetForm() {
             console.log('重製表單...');
@@ -1088,6 +1148,18 @@
             }
             console.log('✅ DOM 載入完成');
             console.log('🔍 檢查 updateDetailedInfo 是否已定義:', typeof window.updateDetailedInfo);
+            
+            if (typeof window.updateDetailedInfo === 'undefined') {
+                console.error('❌ updateDetailedInfo 函數未定義！');
+            } else {
+                console.log('✅ updateDetailedInfo 函數已正確定義');
+            }
+            
+            if (typeof window.testAIAnalysis === 'undefined') {
+                console.error('❌ testAIAnalysis 函數未定義！');
+            } else {
+                console.log('✅ testAIAnalysis 函數已正確定義');
+            }
 
             // 強制重新初始化
             setTimeout(() => {
