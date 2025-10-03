@@ -181,13 +181,16 @@ window.AIAnalyzer = {
                             <div class="${iconClass} text-lg mr-3">🌟</div>
                             <h3 class="text-xl font-bold text-purple-800">${section.title}</h3>
                         </div>
-                        <div class="text-gray-800 leading-relaxed pl-6 border-l-4 border-purple-300 bg-white rounded-lg p-4 shadow-sm">
-                            ${section.content.map(line => 
-                                line.includes('：') || line.includes(':') ? 
-                                    `<div class="mb-2"><span class="font-semibold text-blue-700">${line}</span></div>` :
-                                    `<div class="mb-2">${line}</div>`
-                                ).join('')
-                            }
+                        <div class="text-gray-800 leading-relaxed">
+                            ${section.content.map(line => {
+                                const trimmedLine = line.trim();
+                                if (trimmedLine.includes('：') || trimmedLine.includes(':')) {
+                                    return `<div class="mb-3"><span class="font-semibold text-blue-700">${trimmedLine}</span></div>`;
+                                } else if (trimmedLine.length > 0) {
+                                    return `<div class="mb-2 pl-2 text-gray-700">${trimmedLine}</div>`;
+                                }
+                                return '';
+                            }).filter(line => line.length > 0).join('')}
                         </div>
                     </div>
                 `;

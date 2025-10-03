@@ -219,13 +219,13 @@
                     <div>
                         <label class="block mb-2 font-medium">曆法類型</label>
                         <div class="flex space-x-2">
-                            <button id="calendar-lunar"
-                                class="flex-1 py-3 rounded-lg border transition-colors font-medium bg-green-500 text-white border-green-500">
-                                農曆
-                            </button>
                             <button id="calendar-solar"
-                                class="flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
+                                class="flex-1 py-3 rounded-lg border transition-colors font-medium bg-green-500 text-white border-green-500">
                                 西曆
+                            </button>
+                            <button id="calendar-lunar"
+                                class="flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
+                                農曆
                             </button>
                         </div>
                     </div>
@@ -351,15 +351,6 @@
             <!-- 步驟四：詳細解析 -->
             <div id="step-content-4" class="hidden animate-fade-in">
                 <h2 id="detailed-title" class="text-2xl font-bold mb-6 text-center">📖 詳細命理解析</h2>
-                
-                <!-- API 測試按鈕 -->
-                <div class="mb-4 text-center">
-                    <button onclick="testAIAnalysis()" 
-                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm">
-                        🧪 測試 API 連接
-                    </button>
-                </div>
-                
                 <div id="detailed-info" class="space-y-4"></div>
                 
                 <!-- 問答系統 -->
@@ -460,7 +451,7 @@
             birthMonth: '',
             birthDay: '',
             birthHour: '',
-            calendarType: 'lunar',
+            calendarType: 'solar',
             isLeapMonth: false
         };
         let destinBoard = null;
@@ -1061,56 +1052,6 @@
             }
         };
 
-        // API 測試函數 - 驗證是否能成功調用 OpenAI API
-        window.testAIAnalysis = async function() {
-            console.log('🧪 開始測試 AI 分析 API...');
-            
-            if (typeof window.AIAnalyzer === 'undefined') {
-                alert('❌ AIAnalyzer 未載入，無法測試');
-                return;
-            }
-
-            // 模擬測試數據
-            const testProfile = {
-                name: '測試用戶',
-                gender: 'M',
-                birthYear: 1990,
-                birthMonth: 1,
-                birthDay: 1,
-                birthHour: '子時',
-                calendarType: 'lunar',
-                isLeapMonth: false
-            };
-
-            const testDestinyData = {
-                palaces: [
-                    {
-                        palaceName: '命宮',
-                        majorStars: ['紫微', '天府']
-                    },
-                    {
-                        palaceName: '兄弟',
-                        majorStars: ['天同']
-                    }
-                ]
-            };
-
-            try {
-                console.log('🧪 發送測試請求到 /api/analyze...');
-                const result = await window.AIAnalyzer.requestAnalysis(testProfile, testDestinyData);
-                console.log('🧪 API 測試結果:', result);
-                
-                if (result.success) {
-                    alert(`✅ API 測試成功！\n結果: ${result.analysis.substring(0, 100)}...`);
-                } else {
-                    alert(`❌ API 測試失敗\n錯誤: ${result.error}`);
-                }
-            } catch (error) {
-                console.error('🧪 API 測試錯誤:', error);
-                alert(`❌ API 測試拋出異常\n錯誤: ${error.message}`);
-            }
-        };
-
         function resetForm() {
             console.log('重製表單...');
 
@@ -1155,11 +1096,6 @@
                 console.log('✅ updateDetailedInfo 函數已正確定義');
             }
             
-            if (typeof window.testAIAnalysis === 'undefined') {
-                console.error('❌ testAIAnalysis 函數未定義！');
-            } else {
-                console.log('✅ testAIAnalysis 函數已正確定義');
-            }
 
             // 強制重新初始化
             setTimeout(() => {
@@ -1197,6 +1133,9 @@
             if (lunarBtn && solarBtn) {
                 lunarBtn.onclick = function () { selectCalendar('lunar'); };
                 solarBtn.onclick = function () { selectCalendar('solar'); };
+                
+                // 設定預設為西曆選中狀態
+                selectCalendar('solar');
             }
         }
     </script>
