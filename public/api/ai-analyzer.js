@@ -183,7 +183,7 @@ window.AIAnalyzer = {
                         </div>
                         <div class="text-gray-800 leading-relaxed pl-6 border-l-4 border-purple-300 bg-white rounded-lg p-4 shadow-sm">
                             ${section.content.map(line => 
-                                line.includes('：') || line.includes(':' ? 
+                                line.includes('：') || line.includes(':') ? 
                                     `<div class="mb-2"><span class="font-semibold text-blue-700">${line}</span></div>` :
                                     `<div class="mb-2">${line}</div>`
                                 ).join('')
