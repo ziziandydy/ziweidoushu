@@ -1,396 +1,185 @@
-# fortel-ziweidoushu
+# 紫微斗數命盤計算系統 ✨
 
-紫微斗數排盤 (中州派) Javascript library
-
-**Copyright (c) 2022 Airic Yu | Maintained by iTubai**
-
--------
-
-## What is it?
-
-This is a Javascript library for Zi Wei Dou Shu creating destiny broad (紫微斗數排盤).
-
-## Which branch(門派) of 紫微斗數 it is?
-
-This library is based on 中州派 .
-
-## What feature is supported?
-
-- Create destiny board with friendly input options. (排盤)
-- Check board criteria. (檢查宮位是否存在/會見各星)
-- Present board as JSON object.
-- Print board as string.
-
---------
-
-## 🌐 Live Demo
-
-**線上試用**: [Vercel 部署連結](https://ziweidoushu.vercel.app/)
-
-**主要功能**:
-- 🔮 完整紫微斗數命盤計算
-- 📊 十二宮位星曜配置顯示 (4x4 命盤圖表)
-- 🎨 現代化響應式介面設計
-- 📱 支援手機、平板、桌面裝置
-- 🔍 AI 驅動的詳細命理解析
-- 💬 互動式命盤問答系統
-- 💎 Credit 限制機制 (每月3次免費問答)
-- 💰 付費解鎖模式 (1小時無限問答)
-- 📈 Google Analytics + Groundhog 雙重追蹤
-- 📊 Google AdSense 廣告整合
-
-## 📦 Install
-
-```bash
-npm i fortel-ziweidoushu
-```
-
-## 🎯 專案特色
-
-- ✅ **完整前端介面**: 互動式 HTML/CSS/JavaScript 介面
-- ✅ **真實核心計算**: TypeScript 紫微斗數核心庫整合
-- ✅ **雲端部署**: Vercel 平台支援
-- ✅ **現代化設計**: Tailwind CSS 響應式設計
-
-## 🚀 快速開始
-
-### 本地開發
-
-```bash
-# 克隆專案
-git clone https://github.com/ziziandydy/ziweidoushu.git
-cd ziweidoushu
-
-# 安裝依賴
-npm install
-
-# 啟動後端 API 服務器
-npm run server
-
-# 啟動前端開發服務器
-cd public && python3 -m http.server 8080
-```
-
-### 部署到 Vercel
-
-1. Fork 這個 repository
-2. 在 [Vercel Dashboard](https://vercel.com/dashboard) 新增專案
-3. 連接你的 GitHub repository
-4. Vercel 會自動部署！
-
-### 🔄 GitHub 自動持續部署
-
-✅ **推送自動觸發部署**
-- 每次 `git push origin main` 都會自動重新部署
-- **分支策略**: 只有 `main` 分支的推送觸發生產部署
-- **預覽部署**: 其他分支推送會創建預覽 URL
-
-✅ **即時更新**
-- GitHub 推送 → Webhook 通知 Vercel → 自動構建部署
-- 無需手動操作，代碼更新後即可在生產環境看到
-- 部署狀態會在 GitHub 上顯示為 check mark
-
-```bash
-# 本地開發 → GitHub → Vercel 自動部署流程
-git add .
-git commit -m "✨ 新功能更新"
-git push origin main
-# 🚀 Vercel 自動重新部署開始！
-```
-
-## 🔧 API 端點
-
-- `POST /api/calculate` - 計算紫微斗數命盤
-- `GET /api/health` - API 健康檢查
-- `GET /api/status` - API 狀態資訊
-
-## 🏗️ 專案架構
-
-**前端 (Static)**:
-- 📁 `public/` - HTML/CSS/JavaScript 靜態檔案
-- 📄 `index.html` - 主應用頁面
-- 🎨 `favicon.svg` - 專屬品牌圖標
-- 🔧 API 整合 - JavaScript 調用後端
-- 📊 用戶追蹤 - Groundhog 分析系統
-
-**後端 (Serverless)**:
-- 📁 `src/` - TypeScript 紫微斗數核心庫
-- 📁 `build/` - 編譯後的 JavaScript 檔案
-- 📁 `api/` - Vercel Serverless Functions
-  - `calculate.js` - 命盤計算 API
-  - `health.js` - 健康檢查 API
-  - `status.js` - 狀態查詢 API
-- 🖥️ `api-server.js` - 本地開發 API 服務器
-
----------
-
-## Hello world
-
-### Create board with Lunar date (以農曆參數排盤)
-
-You can use `DestinyConfigBuilder.withlunar` to specify the parameters.
-And then use `new DestinyBoard(config)` to build the board.
-
-```javascript
-import { DestinyBoard, DestinyConfigBuilder, DayTimeGround, ConfigType, Gender } from 'fortel-ziweidoushu'
-
-// 農曆1952年三月十五日寅時女士
-const destinyBoard = new DestinyBoard(
-    DestinyConfigBuilder.withlunar({
-        year: 1952, // 年
-        month: 3, //月
-        day: 15, //日
-        isLeapMonth: false, // 非潤月
-        bornTimeGround: DayTimeGround.getByName('寅時'), // 出生時辰
-        configType: ConfigType.SKY, // 天盤, if missing this option, default is 天盤
-        gender: Gender.F, // 女士
-    }),
-)
-
-console.log(destinyBoard.toString())
-```
-
-output
-```
-DestinyBoard {
-    config: {"year":1952,"month":3,"day":15,"isLeapMonth":false,"yearSky":"壬","yearGround":"辰","monthSky":"甲","monthGround":"辰","daySky":"乙","dayGround":"酉","bornTimeGround":"寅時","configType":"天盤","gender":"女
-"},
-    element: 金四局,
-    destinyMaster: 廉貞,
-    bodyMaster: 文昌,
-    startControl: 子,
-    cells: [
-        Cell {壬子, temples=[夫妻], majorStars=[武曲 1,天府 2], minorStars=[鈴星,擎羊], miniStars=[], miscStars=[官府,白虎,將星], ageRange=[24-33], lifeStage=[衰]},
-        Cell {癸丑, temples=[兄弟], majorStars=[太陽 -1,太陰 2], minorStars=[地劫], miniStars=[寡宿,破碎], miscStars=[伏兵,天德,攀鞍], ageRange=[14-23], lifeStage=[帝旺]},
-        Cell {壬寅, temples=[命宮], majorStars=[貪狼 0], minorStars=[天馬], miniStars=[天哭,截空,天巫], miscStars=[大耗,弔客,歲驛], ageRange=[4-13], lifeStage=[臨官]},
-        Cell {癸卯, temples=[父母], majorStars=[天機 1,巨門 2], minorStars=[天魁], miniStars=[截空,天姚], miscStars=[病符,病符,息神], ageRange=[114-123], lifeStage=[冠帶]},
-        Cell {甲辰, temples=[福德], majorStars=[紫微 -1,天相 1], minorStars=[火星], miniStars=[封誥,天月], miscStars=[喜神,太歲,華蓋], ageRange=[104-113], lifeStage=[沐浴]},
-        Cell {乙巳, temples=[田宅], majorStars=[天梁 -1], minorStars=[天鉞], miniStars=[天喜,孤辰,劫煞,天空], miscStars=[蜚廉,晦氣,劫煞], ageRange=[94-103], lifeStage=[長生]},
-        Cell {丙午, temples=[身宮,事業], majorStars=[七殺 1], minorStars=[文曲,左輔], miniStars=[天福,鳳閣,解神,天才,旬空,蜚廉,八座], miscStars=[奏書,喪門,災煞], ageRange=[84-93], lifeStage=[養]},
-        Cell {丁未, temples=[交友], majorStars=[], minorStars=[], miniStars=[旬空,天貴,天使], miscStars=[將軍,貫索,天煞], ageRange=[74-83], lifeStage=[胎]},
-        Cell {戊申, temples=[遷移], majorStars=[廉貞 2], minorStars=[文昌,右弼], miniStars=[龍池,台輔,三台], miscStars=[小耗,官符,指背], ageRange=[64-73], lifeStage=[絕]},
-        Cell {己酉, temples=[疾厄], majorStars=[], minorStars=[地空], miniStars=[天廚,咸池,月德,恩光,天傷], miscStars=[青龍,小耗,咸池], ageRange=[54-63], lifeStage=[墓]},
-        Cell {庚戌, temples=[財帛], majorStars=[破軍 1], minorStars=[陀羅], miniStars=[天官,天虛,天壽,陰煞,解神], miscStars=[力士,歲破,月煞], ageRange=[44-53], lifeStage=[死]},
-        Cell {辛亥, temples=[子女], majorStars=[天同 2], minorStars=[祿存], miniStars=[紅鸞,大耗,天刑], miscStars=[博士,龍德,亡神], ageRange=[34-43], lifeStage=[病]}
-    ],
-    #bornStarDerivativeMap: {"祿":"天梁","權":"紫微","科":"天府","忌":"武曲"}
-}
-```
-
-### Create board with Solar date (以西曆參數排盤)
-
-use `DestinyConfigBuilder.withSolar` instead of `DestinyConfigBuilder.withlunar` for Solar Calendar date input parameters.
-
-```javascript
-// 公曆1952年4月9日寅時女士
-const destinyBoard = new DestinyBoard(
-    DestinyConfigBuilder.withSolar({
-        year: 1952,
-        month: 4,
-        day: 9,
-        bornTimeGround: DayTimeGround.getByName('寅時'),
-        configType: ConfigType.SKY,
-        gender: Gender.F,
-    }),
-)
-```
-
-### Create board with human text (以文字描述排盤)
-
-The library can parse your reasonable human description text and turn it into the board.
-
-Basically we need such information from text:
-- Calendar type (農曆/公曆)
-- year
-- month (and whether it is leap month)
-- day
-- Born time hour
-- Gender
-
-```javascript
-import { DestinyBoard, DestinyConfigBuilder, DayTimeGround, ConfigType, Gender } from 'fortel-ziweidoushu'
-
-// 農曆1952年三月十五日寅時女士
-const destinyBoard = new DestinyBoard(DestinyConfigBuilder.withText('農曆1952年三月十五日寅時女士'))
-
-
-```
--------------
-
-
-## Criteria
-
-You can use `BoardCriteria` to check broad criteria condition.
-
-### Example - Check Temple having stars
-
-- 判斷兄弟宮是否有太陽, 地劫, 寡宿全部星。
-- 判斷夫妻宮是否有武曲, 貪狼, 任意一顆星。
-
-```javascript
-import { DestinyBoard, Temple, BoardCriteria, starByName, DestinyConfigBuilder, DayTimeGround, ConfigType, Gender } from 'fortel-ziweidoushu'
-
-// 公曆1952年4月9日寅時出生女士
-const destinyBoard = new DestinyBoard(DestinyConfigBuilder.withText('公曆1952年4月9日寅時出生女士'))
-
-console.log(destinyBoard.toString())
-
-console.log(
-    new BoardCriteria(destinyBoard).ofTemple(Temple.TEMPLE_BROTHER).hasAllStars([starByName('太陽'), starByName('地劫'), starByName('寡宿')])
-)
-
-console.log(
-    new BoardCriteria(destinyBoard).ofTemple(Temple.TEMPLE_MARRIAGE).hasAnyStars([starByName('武曲'), starByName('貪狼')])
-)
-```
-
-#### output
-```
-DestinyBoard {
-    config: {"year":1952,"month":3,"day":15,"isLeapMonth":false,"yearSky":"壬","yearGround":"辰","monthSky":"甲","monthGround":"辰","daySky":"乙","dayGround":"酉","bornTimeGround":"寅時","configType":"天盤","gender":"女
-"},
-    element: 金四局,
-    destinyMaster: 廉貞,
-    bodyMaster: 文昌,
-    startControl: 子,
-    cells: [
-        Cell {壬子, temples=[夫妻], majorStars=[武曲 1,天府 2], minorStars=[鈴星,擎羊], miniStars=[], miscStars=[官府,白虎,將星], ageRange=[24-33], lifeStage=[衰]},
-        Cell {癸丑, temples=[兄弟], majorStars=[太陽 -1,太陰 2], minorStars=[地劫], miniStars=[寡宿,破碎], miscStars=[伏兵,天德,攀鞍], ageRange=[14-23], lifeStage=[帝旺]},
-        ......
-    ],
-    #bornStarDerivativeMap: {"祿":"天梁","權":"紫微","科":"天府","忌":"武曲"}
-}
-true
-true
-```
-
-
-#### Explain
-
-```javascript
-new BoardCriteria(destinyBoard).ofTemple(Temple.TEMPLE_BROTHER)
-```
-This means building a checking criteria of the broad for target temple TEMPLE_BROTHER (兄弟宮).
-
-```javascript
-.hasAllStars([starByName('太陽'), starByName('地劫'), starByName('寡宿')])
-```
-
-This means we check for the temple having **ALL stars** 太陽, 地劫, 寡宿.
-
-```javascript
-.hasAnyStars([starByName('武曲'), starByName('貪狼')])
-```
-
-This means we check for the temple having **ANY ONE OF stars** 武曲, 貪狼.
-
---------
-
-#### Runtime Context (大運/流年/流月/流日資訊)
-
-(Sorry if it is bad translation.)
-
-After you build the destiny board object, you can then call the "getRuntimContext" method to get the context info.
-
-```javascript
-const runtimeContext = destinyBoard.getRuntimContext({
-    lunarYear: 2023,
-    lunarMonth: 5,
-    lunarDay: 1,
-    leap: false,
-})
-```
-
-The type of RuntimeContext is like this:
-```
-export type RuntimeContext = {
-    tenYear: {
-        cellGround: Ground | null
-        groundStars: Map<Ground, MinorStar[]> | null
-        starDerivativeMap: Map<MajorStar | MinorStar, StarDerivative> | null
-    }
-    year: {
-        cellGround: Ground | null
-        groundStars: Map<Ground, MinorStar[]> | null
-        starDerivativeMap: Map<MajorStar | MinorStar, StarDerivative> | null
-    }
-    month: {
-        cellGround: Ground | null
-        groundStars: Map<Ground, MinorStar[]> | null
-        starDerivativeMap: Map<MajorStar | MinorStar, StarDerivative> | null
-    }
-    day: {
-        cellGround: Ground | null
-        groundStars: Map<Ground, MinorStar[]> | null
-        starDerivativeMap: Map<MajorStar | MinorStar, StarDerivative> | null
-    }
-    yearSky: Sky
-    yearGround: Ground
-    monthSky: Sky
-    monthGround: Ground
-    daySky: Sky
-    dayGround: Ground
-    age: number
-    effectiveMonth: number
-    tenYearGround: Ground
-    tenYearSky: Sky
-}
-```
-
-At the root level, tenYear is 十年/大運, year is 流年, month is 流月, day is 流日. Other attribites are extra info of the date.
-
-At the second level,
-
-- cellGround : Destiny Temple ground.
-- groundStars : Map of Temple ground to star 
-- starDerivativeMap : Map of star derivative.
-  
-中文翻譯這段:
-- cellGround : 流X命宮地支
-- groundStars : 流X飛星表, key是地支, value是該宮所擁有的飛星
-- starDerivativeMap : 流X四化表, key是星, value是化祿/科/權/忌
-
-----
-
-## Maintainer
-
-iTubai - Current maintainer
-
-## Original Author
-
-Airic Yu (Original Author)
-- Owner of Myfortel 紫微斗數起盤網站(舊版) ( https://www.myfortel.com/ )
-- Owner of Myfortel 紫微斗數起盤網站(新版) ( https://airicyu.github.io/myfortel/ )
-- Author of 紫微斗數排盤 library for Java ( https://github.com/airicyu/Fortel )
-- Author of 紫微斗數排盤 library for JS ( https://www.npmjs.com/package/fortel-ziweidousju )
-
-## 🎯 最新功能更新
-
-### AI 驅動分析系統
-- **ChatGPT 整合**: 專業的紫微斗數深度分析
-- **智能格式化**: 美觀的漸層卡片式布局
-- **多格式支援**: 自動識別分析內容格式並適當處理
-
-### 問答互動系統
-- **Credit 機制**: 每月3次免費問答額度
-- **付費解鎖**: 1小時無限問答模式
-- **預設問題**: 快速問答建議按鈕
-- **本地存儲**: Cookie ID 追蹤用戶額度
-
-### 商業化功能
-- **Google AdSense**: fate-square 廣告單元整合
-- **Google Analytics**: GTM 用戶行為追蹤
-- **Groundhog**: 詳細的分析數據收集
-
-### 用戶體驗優化
-- **4x4 命盤圖表**: 視覺化的十二宮位顯示
-- **年份降冪排列**: 更直觀的日期選擇
-- **響應式設計**: 完美適配各種裝置
-- **載入動畫**: 友善的等待體驗
+**現代化 Web 應用 | AI 驅動命理解析 | 商業化完整方案**
 
 ---
 
-## Special Credit
+## 🎯 專案特色
 
-Jea杨 - Thanks for his lunar/solar calendar conversion library ( https://github.com/jjonline/calendar.js )
+一個整合了 **TypeScript 核心計算引擎**、**AI 深度分析** 和 **完整商業功能** 的現代化紫微斗數系統。遵循**中州派**傳統理論，提供從基礎排盤到 AI 智能解析的完整解決方案。
 
+## ✨ 主要功能
+
+### 💫 **核心計算能力**
+- 📊 **專業排盤**: 基於 TypeScript 的準確計算引擎
+- 🌍 **十二宮位**: 完整的宮位配置和星曜安放
+- 🔮 **多重驗證**: 詳細的星曜條件檢查和驗證
+- 📈 **能量分析**: 主星、輔星的小吉星能量等級評估
+
+### 🤖 **AI 智能分析**
+- 🧠 **ChatGPT 整合**: OpenAI GPT-4 深度命理解析
+- 📝 **章節化輸出**: 自動格式化的美觀分析結果
+- 👶 **白話文解釋**: 12歲小朋友也能理解的正面解讀
+- ⚡ **即時響應**: 無需重新載入的動態更新
+
+### 💬 **互動問答系統**
+- 🎫 **Credit 機制**: 每月3次免費問答機會
+- ⚡ **快速提問**: 流年運勢、工作、桃花等預設問題
+- 💎 **付費解鎖**: 1小時無限問答商業模式
+- 🔐 **隱私保護**: LocalStorage 用戶狀態追蹤
+
+### 💰 **商業化功能**
+- 📊 **Google AdSense**: fate-square 廣告單元優化整合
+- 📈 **雙重追蹤**: Google Analytics + Groundhog 數據分析
+- 🎨 **廣告優化**: 側邊欄位置無影響用戶體驗
+- 📄 **合規文件**: 完整的 ads.txt 授權配置
+
+### 🎨 **現代化界面**
+- 📱 **響應式設計**: 支援桌面、平板、手機多種裝置
+- 🎭 **4步驟導航**: 基本資料→圖表→星曜→分析的清晰流程
+- 🎯 **自動滾動**: 步驟切換時平滑滾動到頁面頂部
+- 🌈 **品牌識別**: 紫色漸層 favicon 和專業配色
+
+## 🌐 線上體驗
+
+**🔗 立即試用**: [https://ziweidoushy.vercel.app](https://ziweidoushu.vercel.app)
+
+**使用流程**：
+1. 📝 **填寫基本資料**（姓名、性別、出生年月日時）
+2. 📊 **查看命盤圖表**（4×4 網格視覺化十二宮位）
+3. ⭐ **分析星曜配置**（主星、輔星詳細資訊）
+4. 🤖 **獲得 AI 解析**（深度的命理分析和互動問答）
+
+## 🔧 開發者整合
+
+### 📦 安裝核心庫
+
+```bash
+npm install fortel-ziweidoushu
+```
+
+### 💻 TypeScript 集成
+
+```typescript
+
+import { DestinyBoard, DestinyConfigBuilder } from 'fortel-ziweidoushu';
+
+// 創建命盤
+const destinyBoard = new DestinyBoard(
+  DestinyConfigBuilder.withText('1990年三月十五日寅時男')
+);
+
+// 輸出結果
+console.log(destinyBoard.toString());
+console.log(destinyBoard.toJSON());
+```
+
+### 🔌 API 接口
+
+**命盤計算**:
+```
+POST /api/calculate
+{
+  "userProfile": {
+    "name": "用戶姓名",
+    "gender": "M|F",
+    "birthYear": 1990,
+    "birthMonth": 1,
+    "birthDay": 1,
+    "birthHour": "子時",
+    "calendarType": "solar|lunar",
+    "isLeapMonth": false
+  }
+}
+```
+
+**AI 分析**:
+```
+POST /api/analyze
+{
+  "userProfile": {...},
+  "destinyData": {...}
+}
+```
+
+## 🏗️ 專案架構
+
+### 🎨 前端 (Static Web App)
+```
+public/
+├── index.html           # 主要用戶界面
+├── favicon.svg         # 品牌圖標
+├── ads.txt             # Google AdSense 授權
+└── api/               # 前端API代理
+    ├── destiny-calculator.js
+    ├── ai-analyzer.js
+    └── qa-system.js
+```
+
+### ⚡ 後端 (Serverless Functions)
+```
+api/
+├── calculate.js         # 命盤計算
+├── analyze.js          # AI分析 (ChatGPT)
+├── question.js         # 問答系統
+├── health.js           # 健康檢查
+└── status.js           # 服務狀態
+```
+
+### 🔧 核心模組 (TypeScript)
+```
+src/
+├── model/              # 資料模型
+├── calendar/           # 曆法轉換
+├── criteria/           # 條件判斷
+└── util/               # 工具函數
+```
+
+## 🚀 部署設置
+
+### 🌐 Vercel 自動部署
+
+1. **Fork 此專案到您的 GitHub**
+2. **連接 Vercel**: 匯入 GitHub 專案
+3. **配置環境變數**: 設置 `OPENAI_API_KEY`
+4. **自動部署**: 每次 push 到 main 分支自動部署
+
+### 🔧 環境變數
+
+```bash
+OPENAI_API_KEY=your-openai-api-key-here
+```
+
+## 🎯 最新功能更新 (v2.0.0)
+
+### 🤖 AI 分析增強
+- ✅ ChatGPT GPT-4 集成
+- ✅ 多章節格式化 (### 標題解析)
+- ✅ 智能 12歲白話文解釋
+- ✅ 實時API響應和錯誤處理
+
+### 💬 Q&A 系統
+- ✅ Credit 計費機制 (3次/月)
+- ✅ 預設問題快速提問
+- ✅ 付費解鎖模式 (1小時無限)
+- ✅ LocalStorage 用戶狀態管理
+
+### 💰 商業化功能
+- ✅ Google AdSense 優化整合
+- ✅ Google Analytics + Groundhog 追蹤
+- ✅ 側邊欄廣告位置優化
+- ✅ 完整的 ads.txt 合規配置
+
+### 🎨 UX 改進
+- ✅ 自動滾動到頁面頂部
+- ✅ 西曆預設選擇 (更符合習慣)
+- ✅ 移除調試元素，產品化界面
+- ✅ 響應式設計優化
+
+## 📋 許可證
+
+**MIT License** | Copyright (c) 2022 Airic Yu | Maintained by iTubai
+
+---
+
+**🎉 現在就體驗完整的紫微斗數 AI 分析系統！**

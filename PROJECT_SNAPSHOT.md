@@ -2,42 +2,70 @@
 
 ## 📋 專案概覽
 
-這是一個以 JavaScript/TypeScript 實作的紫微斗數排盤系統，遵循中州派傳統。此系統提供完整的紫微斗數排盤功能，包括天盤、地盤、人盤的計算，以及大運、流年、流月、流日的運行分析。
+這是一個整合了前端用戶界面和後端 AI 分析功能的現代化紫微斗數排盤系統。系統結合 TypeScript 核心計算引擎、AI 驅動的深度分析，以及完整的商業化功能，遵循中州派傳統理論。
 
 ### 🔗 專案資訊
-- **版本**: 1.3.4
+- **版本**: 2.0.0 (完整整合版)
 - **門派**: 中州派
 - **許可證**: MIT
 - **當前維護者**: iTubai
 - **原始作者**: Airic Yu (2022)
+- **部署平台**: Vercel (GitHub 自動佈署)
+- **生產環境**: https://ziweidoushu.vercel.app
 
 ## 🏗️ 專案架構
 
-### 📁 檔案結構
+### 🎨 前端架構 (Static Web App)
+```
+public/
+├── index.html           # 主要用戶界面
+├── favicon.svg         # 品牌圖標
+├── favicon.ico         # 瀏覽器兼容圖標
+├── ads.txt             # Google AdSense 授權文件
+└── api/               # 前端API代理模組
+    ├── destiny-calculator.js    # 命盤計算前端API
+    ├── frontend-api.js          # API代理服務
+    ├── ai-analyzer.js           # AI分析前端模組
+    └── qa-system.js             # 問答系統前端
+
+部署配置：
+└── vercel.json         # Vercel 零配置部署
+```
+
+### ⚡ 後端架構 (Serverless Functions)
+```
+api/
+├── calculate.js         # 命盤計算API
+├── analyze.js          # AI分析API (ChatGPT)
+├── question.js         # 問答系統API
+├── health.js           # 系統健康檢查
+└── status.js           # 服務狀態API
+
+環境變數：
+- OPENAI_API_KEY        # ChatGPT API金鑰
+```
+
+### 🔧 核心TypeScript模組
 ```
 src/
-├── calendar/           # 萬年曆相關
+├── calendar/           # 曆法轉換
 │   ├── calender.ts     # 曆法介面定義
 │   ├── defaultCalendar.ts    # 預設曆法實作
-│   └── jjonline/       # 農曆轉換函式庫
-├── criteria/           # 命盤條件判斷
-│   └── boardCriteria.ts # 星曜判斷條件
+│   └── jjonline/       # 農曆轉換庫
+├── criteria/           # 命盤判斷
+│   └── boardCriteria.ts # 星曜條件
 ├── model/              # 核心資料模型
 │   ├── destinyBoard.ts  # 命盤主類別
 │   ├── destinyConfig.ts # 命運配置
-│   ├── cell.ts         # 宮位
-│   ├── majorStar.ts    # 主星
-│   ├── minorStar.ts    # 輔星
-│   ├── miniStar.ts     # 小吉星
-│   ├── temple.ts       # 十二宮
-│   ├── sky.ts          # 天干
-│   ├── ground.ts       # 地支
-│   ├── runtime.ts      # 運行時狀態
+│   ├── cell.ts         # 宮位模型
+│   ├── majorStar.ts    # 主星系統
+│   ├── minorStar.ts    # 輔星系統
+│   ├── miniStar.ts     # 小吉星系統
 │   └── ...
 ├── util/               # 工具函數
 │   ├── destinyConfigBuilder.ts     # 配置建構器
 │   └── destinyConfigTextParser.ts  # 文字解析器
-└── main.ts             # 主入口檔案
+└── main.ts             # TypeScript入口
 ```
 
 ## 🔧 核心功能模組
@@ -192,6 +220,42 @@ const runtimeContext = destinyBoard.getRuntimContext({
 - **打包**: Webpack 5.89+
 - **代碼品質**: ESLint + Prettier
 
+## ✨ 前端功能特色
+
+#### 🎨 現代化用戶界面
+- **響應式設計**: 支援桌面、平板、手機等多種裝置
+- **直觀操作流程**: 4個清晰步驟的基本資料→圖表→星曜→分析
+- **自動滾動導航**: 步驟切換時平滑滾動到頁面頂部
+- **視覺化命盤**: 4x4網格展示傳統十二宮位配置
+- **個性化品牌**: 紫色漸層 favicon 和專業配色
+
+#### 🤖 AI 驅動深度分析
+- **ChatGPT 整合**: 基於 OpenAI GPT-3.5-turbo 的智能分析
+- **多章節格式化**: 自動解析 ### 標題格式的美觀顯示
+- **專業內容生成**: 主星亮度、格局分析、命宮說明、總結
+- **12歲白話文**: 正面積極的易懂解釋
+- **即時API響應**: 無需重新載入頁面的動態更新
+
+#### 💬 互動問答系統
+- **Credit 機制**: 每月3次免費問答機會
+- **預設問題**: 流年運勢、工作運、桃花運快速提問
+- **付費解鎖**: 1小時無限問答的商業化模式
+- **LocalStorage**: 基於 Cookie ID 的用戶狀態管理
+- **智能計費**: 自動重置和到期提醒
+
+#### 💰 商業化功能
+- **Google AdSense**: fate-square 廣告單元整合
+- **雙重追蹤**: Google Analytics (GTM) + Groundhog
+- **廣告優化**: 側邊欄位置不影響用戶體驗
+- **廣告授權**: 完整的 ads.txt 文件配置
+
+#### 🔧 技術實現
+- **零配置部署**: Vercel Serverless Functions 自動部署
+- **CORS 支援**: 完整的跨域請求處理
+- **錯誤處理**: 分層次的錯誤檢測和用戶提示
+- **調試友好**: 詳細的控制台日誌和狀態追蹤
+- **版本管理**: GitHub 自動持續集成部署
+
 ## 🎨 設計特色
 
 1. **型別安全**: 完整的 TypeScript 型別定義
@@ -199,16 +263,28 @@ const runtimeContext = destinyBoard.getRuntimContext({
 3. **資料不可變**: 使用 Object.freeze 確保資料安全
 4. **靈活查詢**: 支援多種條件組合和查詢方式
 5. **中州派正統**: 遵循傳統紫微斗數理論
+6. **現代化架構**: 前後端分離 + Serverless 無伺服器部署
 
 ## 🚀 使用方式
 
-### 📦 NPM 安裝
+### 🌐 Web 應用程式 (推薦)
+
+**直接訪問線上版本**：
+🔗 **https://ziweidoushu.vercel.app**
+
+**功能完整的使用流程**：
+1. **步驟1**: 填寫個人基本資料（姓名、性別、曆法類型、出生年月日時）
+2. **步驟2**: 查看命盤圖表（4x4網格視覺化十二宮位）
+3. **步驟3**: 分析命盤星曜（主星、輔星詳細資訊）
+4. **步驟4**: AI 詳細解析（ChatGPT 深度分析和問答系統）
+
+### 📦 開發者整合 (TypeScript)
+
 ```bash
 npm install fortel-ziweidoushu
 ```
 
-### 🔧 程式碼整合
-```javascript
+```typescript
 import { DestinyBoard, DestinyConfigBuilder, ConfigType, Gender, DayTimeGround } from 'fortel-ziweidoushu';
 
 const destinyBoard = new DestinyBoard(
@@ -219,27 +295,48 @@ console.log(destinyBoard.toString());
 console.log(destinyBoard.toJSON());
 ```
 
-### 🌐 前端介面系統
+### 🔌 API 接口
 
-專案提供了現代化的前端介面，具有以下特色：
+**命盤計算 API**:
+```
+POST /api/calculate
+Content-Type: application/json
 
-#### ✨ 前端功能特色
-- **AI 驅動介面**: ChatGPT 深度命盤分析和智能問答系統
-- **4x4 命盤圖表**: 視覺化的十二宮位配置顯示，中央合併命主信息
-- **互動問答**: Credit 限制的個性化問答功能 (3次/月)
-- **付費解鎖**: 1小時無限問答模式
-- **響應式設計**: 支援桌面、平板、手機等多種裝置  
-- **現代化 UI**: 基於 Tailwind CSS 的漸層卡片設計
-- **真實計算**: 整合 TypeScript 核心庫的真實命盤運算
-- **品牌識別**: 專屬紫色漸層 favicon 和品牌色彩
-- **多追蹤系統**: Google Analytics (GTM) + Groundhog 雙重追蹤
-- **商業整合**: Google AdSense fate-square 廣告單元
+{
+  "userProfile": {
+    "name": "用戶姓名",
+    "gender": "M|F",
+    "birthYear": 1990,
+    "birthMonth": 1,
+    "birthDay": 1,
+    "birthHour": "子時",
+    "calendarType": "solar|lunar",
+    "isLeapMonth": false
+  }
+}
+```
 
-#### 📊 追蹤與分析系統
-- **頁面瀏覽追蹤**: 自動記錄用戶訪問
-- **計算行為分析**: 追蹤命盤計算次數和參數
-- **用戶偏好統計**: 分析曆法類型、時辰使用頻率
-- **隱私保護**: 符合 GDPR 規範的數據收集
+**AI 分析 API**:
+```
+POST /api/analyze
+Content-Type: application/json
+
+{
+  "userProfile": {...},
+  "destinyData": {...}
+}
+```
+
+**問答系統 API**:
+```
+POST /api/question
+Content-Type: application/json
+
+{
+  "question": "用戶問題",
+  "destinyData": {...}
+}
+```
 - **即時反饋**: 表單驗證、載入狀態和使用者指引
 - **農曆西曆轉換**: 自動支援農曆和西曆輸入
 
