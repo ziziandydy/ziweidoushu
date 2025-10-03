@@ -29,11 +29,15 @@ This library is based on 中州派 .
 
 **主要功能**:
 - 🔮 完整紫微斗數命盤計算
-- 📊 十二宮位星曜配置顯示
-- 🎨 現代化響應式介面
+- 📊 十二宮位星曜配置顯示 (4x4 命盤圖表)
+- 🎨 現代化響應式介面設計
 - 📱 支援手機、平板、桌面裝置
-- 🔍 詳細宮位星曜分析
-- 📈 用戶行為追蹤分析
+- 🔍 AI 驅動的詳細命理解析
+- 💬 互動式命盤問答系統
+- 💎 Credit 限制機制 (每月3次免費問答)
+- 💰 付費解鎖模式 (1小時無限問答)
+- 📈 Google Analytics + Groundhog 雙重追蹤
+- 📊 Google AdSense 廣告整合
 
 ## 📦 Install
 
@@ -359,6 +363,32 @@ Airic Yu (Original Author)
 - Owner of Myfortel 紫微斗數起盤網站(新版) ( https://airicyu.github.io/myfortel/ )
 - Author of 紫微斗數排盤 library for Java ( https://github.com/airicyu/Fortel )
 - Author of 紫微斗數排盤 library for JS ( https://www.npmjs.com/package/fortel-ziweidousju )
+
+## 🎯 最新功能更新
+
+### AI 驅動分析系統
+- **ChatGPT 整合**: 專業的紫微斗數深度分析
+- **智能格式化**: 美觀的漸層卡片式布局
+- **多格式支援**: 自動識別分析內容格式並適當處理
+
+### 問答互動系統
+- **Credit 機制**: 每月3次免費問答額度
+- **付費解鎖**: 1小時無限問答模式
+- **預設問題**: 快速問答建議按鈕
+- **本地存儲**: Cookie ID 追蹤用戶額度
+
+### 商業化功能
+- **Google AdSense**: fate-square 廣告單元整合
+- **Google Analytics**: GTM 用戶行為追蹤
+- **Groundhog**: 詳細的分析數據收集
+
+### 用戶體驗優化
+- **4x4 命盤圖表**: 視覺化的十二宮位顯示
+- **年份降冪排列**: 更直觀的日期選擇
+- **響應式設計**: 完美適配各種裝置
+- **載入動畫**: 友善的等待體驗
+
+---
 
 ## Special Credit
 

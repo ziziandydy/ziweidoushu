@@ -122,10 +122,16 @@ window.AIAnalyzer = {
             
             // 如果沒有找到標題分割，直接顯示全文
             if (sections.length <= 2) {
+                const formattedContent = analysis.trim()
+                    .replace(/###?\d+\.\s*([^#\n]+)/g, '<div class="mb-6"><h3 class="text-xl font-bold mb-3 text-purple-800 flex items-center"><span class="w-3 h-3 bg-purple-500 rounded-full mr-3"></span>$1</h3>')
+                    .replace(/\n(?=[^<\n])/g, '<br>')
+                    .replace(/\n\n/g, '</div><div class="bg-white rounded-lg p-4 shadow-sm">')
+                    + '</div>';
+                
                 html += `
-                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 p-6 rounded-lg">
-                        <div class="text-gray-700 leading-relaxed whitespace-pre-line">
-                            ${analysis.trim().replace(/###?\d+\.\s*/g, '<h3 class="text-lg font-bold mb-2 text-blue-800">').replace(/\n\n/g, '</h3>\n<div class="mt-2 mb-4">').replace(/\n(?=[^<])/g, '<br>')}
+                    <div class="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 border-2 border-purple-200 p-6 rounded-xl shadow-lg">
+                        <div class="text-gray-800 leading-relaxed">
+                            ${formattedContent}
                         </div>
                     </div>
                 `;
@@ -136,11 +142,15 @@ window.AIAnalyzer = {
                     const sectionContent = sections[i + 1];
                     
                     if (sectionTitle && sectionContent) {
+                        const iconClass = this.getSectionIcon(sectionTitle);
                         html += `
-                            <div class="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 p-6 rounded-lg">
-                                <h3 class="text-xl font-bold mb-4 text-blue-800">${sectionTitle}</h3>
-                                <div class="text-gray-700 leading-relaxed whitespace-pre-line">
-                                    ${sectionContent.trim()}
+                            <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 border-2 border-blue-200 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                <div class="flex items-center mb-4">
+                                    <div class="${iconClass} text-lg mr-3"></div>
+                                    <h3 class="text-xl font-bold text-purple-800">${sectionTitle}</h3>
+                                </div>
+                                <div class="text-gray-800 leading-relaxed pl-6 border-l-4 border-purple-300 bg-white rounded-lg p-4 shadow-sm">
+                                    ${this.formatSectionContent(sectionContent.trim())}
                                 </div>
                             </div>
                         `;
@@ -156,12 +166,43 @@ window.AIAnalyzer = {
             console.error('🎨 格式化錯誤:', error);
             // 回退方案：簡單顯示
             return `
-                <div class="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 p-6 rounded-lg">
-                    <div class="text-gray-700 leading-relaxed whitespace-pre-line">
+                <div class="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 border-2 border-purple-200 p-6 rounded-xl shadow-lg">
+                    <div class="text-gray-800 leading-relaxed whitespace-pre-line">
                         ${analysis.trim()}
                     </div>
                 </div>
             `;
         }
+    },
+
+    /**
+     * 獲取章節圖標
+     */
+    getSectionIcon(sectionTitle) {
+        const iconMap = {
+            '主星亮度與吉凶分析': 'text-yellow-500',
+            '格局分析': 'text-green-500', 
+            '本命': 'text-blue-500',
+            '命宮之各星說明': 'text-blue-500',
+            '總結': 'text-purple-500'
+        };
+        
+        for (const [key, icon] of Object.entries(iconMap)) {
+            if (sectionTitle.includes(key)) {
+                return icon;
+            }
+        }
+        return 'text-purple-500'; // 默認圖標
+    },
+
+    /**
+     * 格式化章節內容
+     */
+    formatSectionContent(content) {
+        return content
+            .replace(/\n\n/g, '</p><p class="mb-3">')
+            .replace(/\n/g, '<br>')
+            .replace(/^/, '<p class="mb-3">')
+            .replace(/$/, '</p>');
     }
 };

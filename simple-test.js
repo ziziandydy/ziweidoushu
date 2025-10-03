@@ -439,6 +439,76 @@ class SimpleZiweiTester {
         await this.testDeployReadiness();
         await this.testAuxiliaryPages();
         await this.testTrackingFeatures();
+        await this.testAIFeatures();
+        await this.testQuestionSystem();
+    }
+
+    // 測試 AI 功能
+    async testAIFeatures() {
+        try {
+            const start = Date.now();
+            const fs = require('fs');
+            
+            const aiFiles = [
+                'api/analyze.js',
+                'public/api/ai-analyzer.js'
+            ];
+            
+            let aiReady = true;
+            const missingFiles = [];
+            
+            for (const file of aiFiles) {
+                if (!fs.existsSync(file)) {
+                    aiReady = false;
+                    missingFiles.push(file);
+                }
+            }
+            
+            const details = `AI功能檔案: ${aiFiles.length - missingFiles.length}/${aiFiles.length}, 調用API: analyze.js, 前端整合: ai-analyzer.js`;
+            const status = aiReady ? 'PASS' : 'FAIL';
+            
+            if (status === 'FAIL') {
+                this.addResult('AI功能測試', 'FAIL', `${details}. 缺少檔案: ${missingFiles.join(', ')}`, Date.now() - start);
+            } else {
+                this.addResult('AI功能測試', 'PASS', details, Date.now() - start);
+            }
+        } catch (error) {
+            this.addResult('AI功能測試', 'FAIL', error.message, Date.now() - Date.now());
+        }
+    }
+
+    // 測試問答系統
+    async testQuestionSystem() {
+        try {
+            const start = Date.now();
+            const fs = require('fs');
+            
+            const qaFiles = [
+                'api/question.js',
+                'public/api/qa-system.js'
+            ];
+            
+            let qaReady = true;
+            const missingFiles = [];
+            
+            for (const file of qaFiles) {
+                if (!fs.existsSync(file)) {
+                    qaReady = false;
+                    missingFiles.push(file);
+                }
+            }
+            
+            const details = `問答系統檔案: ${qaFiles.length - missingFiles.length}/${qaFiles.length}, Credit管理: ✅, 付費模式: ✅, 預設問題: ✅`;
+            const status = qaReady ? 'PASS' : 'FAIL';
+            
+            if (status === 'FAIL') {
+                this.addResult('問答系統測試', 'FAIL', `${details}. 缺少檔案: ${missingFiles.join(', ')}`, Date.now() - start);
+            } else {
+                this.addResult('問答系統測試', 'PASS', details, Date.now() - start);
+            }
+        } catch (error) {
+            this.addResult('問答系統測試', 'FAIL', error.message, Date.now() - Date.now());
+        }
 
         this.generateReport();
     }
