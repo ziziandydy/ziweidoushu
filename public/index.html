@@ -509,6 +509,9 @@
 
                 console.log('用戶資料:', userProfile);
 
+                // 發送追蹤資料到 pioneer.ghtinc.com
+                sendTrackingData(userProfile);
+
                 // 驗證必填欄位
                 const requiredFields = ['name', 'birthYear', 'birthMonth', 'birthDay', 'birthHour'];
                 const missingFields = requiredFields.filter(field => !userProfile[field]);
@@ -563,6 +566,45 @@
             if (calculateText) calculateText.textContent = '計算命盤';
             if (sparklesIcon) sparklesIcon.classList.remove('hidden');
             if (loadingSpinner) loadingSpinner.classList.add('hidden');
+        }
+
+        function sendTrackingData(userData) {
+            try {
+                console.log('📊 發送追蹤資料...');
+                
+                // 構建 GET 請求的查詢參數
+                const params = new URLSearchParams({
+                    cn: 'groundhog',
+                    name: userData.name || '',
+                    gender: userData.gender || '',
+                    calendarType: userData.calendarType || '',
+                    birthYear: userData.birthYear || '',
+                    birthMonth: userData.birthMonth || '',
+                    birthDay: userData.birthDay || '',
+                    birthHour: userData.birthHour || '',
+                    isLeapMonth: userData.isLeapMonth ? 'true' : 'false',
+                    timestamp: new Date().toISOString()
+                });
+
+                // 構建完整的 URL
+                const trackingUrl = `https://pioneer.ghtinc.com/cm?${params.toString()}`;
+                
+                console.log('📊 追蹤 URL:', trackingUrl);
+
+                // 使用 fetch 發送 GET 請求
+                fetch(trackingUrl, {
+                    method: 'GET',
+                    mode: 'no-cors', // 避免 CORS 問題
+                    cache: 'no-cache'
+                }).then(() => {
+                    console.log('✅ 追蹤資料發送成功');
+                }).catch(error => {
+                    console.log('⚠️ 追蹤資料發送失敗 (這是正常的，因為 no-cors 模式):', error.message);
+                });
+
+            } catch (error) {
+                console.log('⚠️ 追蹤功能錯誤 (不影響主要功能):', error.message);
+            }
         }
 
         function simulateDestinyCalculation() {
