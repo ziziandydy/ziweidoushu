@@ -42,7 +42,7 @@ module.exports = async function handler(req, res) {
 
     try {
         const data = req.body;
-        
+
         // 記錄接收到的數據結構（不記錄敏感內容）
         console.log('📥 接收到問答請求:', {
             hasQuestion: !!data?.question,
@@ -62,7 +62,7 @@ module.exports = async function handler(req, res) {
             });
         }
 
-        // 詳細檢查每個必要參數
+        // 詳細檢查每個必要參數（與 analyze.js 保持一致）
         const missingParams = [];
         if (!data.question) missingParams.push('question');
         if (!data.userProfile) missingParams.push('userProfile');
@@ -77,13 +77,20 @@ module.exports = async function handler(req, res) {
             });
         }
         
-        // 檢查 destinyData 是否包含 palaces
-        if (!data.destinyData.palaces || !Array.isArray(data.destinyData.palaces)) {
-            console.error('❌ destinyData.palaces 無效:', data.destinyData);
+        // 驗證 destinyData 結構（寬鬆檢查，與 analyze.js 一致）
+        // 如果有 palaces 但為空數組，也允許通過（AI 會處理）
+        if (data.destinyData.palaces !== undefined && !Array.isArray(data.destinyData.palaces)) {
+            console.error('❌ destinyData.palaces 不是數組:', typeof data.destinyData.palaces);
             return res.status(400).json({
                 success: false,
-                error: '命盤數據無效，請先計算命盤'
+                error: '命盤數據格式錯誤'
             });
+        }
+        
+        // 如果 destinyData 沒有 palaces 屬性，記錄警告但繼續（可能是舊格式）
+        if (!data.destinyData.palaces) {
+            console.warn('⚠️ destinyData 缺少 palaces 屬性，嘗試繼續處理');
+            console.warn('⚠️ destinyData 結構:', Object.keys(data.destinyData));
         }
 
         // 驗證問題長度
@@ -263,6 +270,28 @@ function buildSystemMessage(userProfile, destinyData) {
     const name = sanitizeInput(userProfile.name);
     const gender = userProfile.gender === 'M' ? '男' : '女';
 
+    // 構建宮位配置文字（容錯處理）
+    let palacesText = '';
+    if (destinyData.palaces && Array.isArray(destinyData.palaces) && destinyData.palaces.length > 0) {
+        palacesText = destinyData.palaces.map((palace, index) => {
+            const palaceNames = ['命宮', '兄弟宮', '夫妻宮', '子女宮', '財帛宮', '疾厄宮', '遷移宮', '交友宮', '事業宮', '田宅宮', '福德宮', '父母宮'];
+            const palaceName = palace.palaceName || palaceNames[index] || `宮位${index + 1}`;
+            
+            let majorStars = '無主星';
+            if (Array.isArray(palace.majorStars) && palace.majorStars.length > 0) {
+                majorStars = palace.majorStars
+                    .map(star => sanitizeInput(star.name || star))
+                    .join('、');
+            } else if (typeof palace.majorStars === 'string') {
+                majorStars = sanitizeInput(palace.majorStars);
+            }
+            
+            return `${palaceName}: ${majorStars}`;
+        }).join('\n');
+    } else {
+        palacesText = '（命盤數據正在載入中，請根據用戶的基本資料提供一般性建議）';
+    }
+
     return `你是一位專業的紫微斗數命理師，遵循中州派傳統理論。你正在為以下用戶提供命理諮詢：
 
 【用戶命盤資料】
@@ -273,13 +302,7 @@ function buildSystemMessage(userProfile, destinyData) {
 曆法類型：${userProfile.calendarType === 'lunar' ? '農曆' : '西曆'}
 
 【十二宮位星曜配置】
-${destinyData.palaces.map((palace, index) => {
-        const palaceNames = ['命宮', '兄弟', '夫妻', '子女', '財帛', '疾厄', '遷移', '交友', '事業', '田宅', '福德', '父母'];
-        const majorStars = Array.isArray(palace.majorStars)
-            ? palace.majorStars.map(star => sanitizeInput(star.name || star)).join('、')
-            : palace.majorStars || '無主星';
-        return `${palaceNames[index]}: ${majorStars}`;
-    }).join('\n')}
+${palacesText}
 
 請注意：
 1. 所有回答必須基於此命盤的星曜配置
