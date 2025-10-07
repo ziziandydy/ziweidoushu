@@ -161,35 +161,64 @@ window.QASystem = {
      * 發送問題
      */
     async sendQuestion() {
+        console.log('🚀 sendQuestion() 被調用');
+        
         const questionInput = document.getElementById('question-input');
         const chatContainer = document.getElementById('chat-container');
-
+        
         const question = questionInput.value.trim();
-        if (!question) return;
+        console.log('📝 問題內容:', question);
+        
+        if (!question) {
+            console.log('❌ 問題為空，退出');
+            return;
+        }
 
         // 檢查是否已計算命盤
+        console.log('🔍 檢查命盤數據:', {
+            hasDestinBoard: !!window.destinBoard,
+            hasPalaces: !!(window.destinBoard && window.destinBoard.palaces),
+            palacesLength: window.destinBoard?.palaces?.length
+        });
+        
         if (!window.destinBoard || !window.destinBoard.palaces) {
+            console.log('❌ 命盤數據檢查失敗');
             this.addMessageToChat('assistant', '請先計算您的命盤，才能開始問答。請回到步驟一填寫基本資料並計算命盤。');
             return;
         }
 
         // 檢查 userProfile 是否存在
+        console.log('🔍 檢查用戶資料:', {
+            hasUserProfile: !!window.userProfile,
+            hasName: !!(window.userProfile && window.userProfile.name),
+            name: window.userProfile?.name
+        });
+        
         if (!window.userProfile || !window.userProfile.name) {
+            console.log('❌ 用戶資料檢查失敗');
             this.addMessageToChat('assistant', '請先填寫您的基本資料並計算命盤。');
             return;
         }
 
         // 檢查 credit
+        console.log('🔍 檢查 Credit:', {
+            currentCredits: this.currentCredits
+        });
+        
         if (this.currentCredits <= 0) {
+            console.log('❌ Credit 不足');
             this.showCreditExhaustedModal();
             return;
         }
 
         // 消耗 credit
         if (!this.consumeCredit()) {
+            console.log('❌ 消耗 Credit 失敗');
             this.showCreditExhaustedModal();
             return;
         }
+
+        console.log('✅ 所有檢查通過，開始發送請求');
 
         // 添加到聊天記錄
         this.addMessageToChat('user', question);
