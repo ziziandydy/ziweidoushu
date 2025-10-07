@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>問答 API 測試工具</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-100 p-8">
     <div class="max-w-4xl mx-auto">
         <h1 class="text-3xl font-bold mb-6 text-purple-600">問答 API 測試工具</h1>
-        
+
         <div class="bg-white p-6 rounded-lg shadow-md mb-6">
             <h2 class="text-xl font-bold mb-4">步驟 1: 測試數據準備</h2>
-            
+
             <div class="mb-4">
                 <label class="block font-bold mb-2">用戶資料 (userProfile)</label>
                 <textarea id="userProfile" class="w-full p-3 border rounded h-32 font-mono text-sm">
@@ -93,22 +95,19 @@
 
             <div class="mb-4">
                 <label class="block font-bold mb-2">問題 (question)</label>
-                <input type="text" id="question" value="今年流年運勢如何？" 
-                       class="w-full p-3 border rounded">
+                <input type="text" id="question" value="今年流年運勢如何？" class="w-full p-3 border rounded">
             </div>
 
-            <button onclick="testQuestionAPI()" 
-                    class="bg-purple-600 text-white px-6 py-3 rounded hover:bg-purple-700">
+            <button onclick="testQuestionAPI()" class="bg-purple-600 text-white px-6 py-3 rounded hover:bg-purple-700">
                 🧪 測試問答 API
             </button>
 
-            <button onclick="testFromWindow()" 
-                    class="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 ml-2">
+            <button onclick="testFromWindow()" class="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 ml-2">
                 🔍 使用 Window 數據測試
             </button>
 
-            <button onclick="copyWindowData()" 
-                    class="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 ml-2">
+            <button onclick="copyWindowData()"
+                class="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 ml-2">
                 📋 複製 Window 數據
             </button>
         </div>
@@ -126,8 +125,8 @@
         <div class="bg-white p-6 rounded-lg shadow-md">
             <h2 class="text-xl font-bold mb-4">步驟 4: Window 數據診斷</h2>
             <div id="windowDiagnosis" class="text-sm"></div>
-            <button onclick="diagnoseWindow()" 
-                    class="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 mt-4">
+            <button onclick="diagnoseWindow()"
+                class="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 mt-4">
                 🔍 診斷 Window 數據
             </button>
         </div>
@@ -136,20 +135,20 @@
     <script>
         function diagnoseWindow() {
             const diagnosis = document.getElementById('windowDiagnosis');
-            
+
             let html = '<div class="space-y-4">';
-            
+
             // 檢查 userProfile
             html += '<div class="border-l-4 border-blue-500 pl-4">';
             html += '<h3 class="font-bold">window.userProfile:</h3>';
             if (typeof window.userProfile !== 'undefined') {
-                html += '<pre class="bg-gray-100 p-2 rounded mt-2 text-xs overflow-auto">' + 
-                        JSON.stringify(window.userProfile, null, 2) + '</pre>';
+                html += '<pre class="bg-gray-100 p-2 rounded mt-2 text-xs overflow-auto">' +
+                    JSON.stringify(window.userProfile, null, 2) + '</pre>';
             } else {
                 html += '<p class="text-red-600">❌ 未定義</p>';
             }
             html += '</div>';
-            
+
             // 檢查 destinBoard
             html += '<div class="border-l-4 border-purple-500 pl-4">';
             html += '<h3 class="font-bold">window.destinBoard:</h3>';
@@ -163,20 +162,20 @@
                     palacesLength: window.destinBoard && window.destinBoard.palaces ? window.destinBoard.palaces.length : 0,
                     keys: window.destinBoard ? Object.keys(window.destinBoard) : []
                 };
-                html += '<pre class="bg-gray-100 p-2 rounded mt-2 text-xs overflow-auto">' + 
-                        JSON.stringify(info, null, 2) + '</pre>';
-                
+                html += '<pre class="bg-gray-100 p-2 rounded mt-2 text-xs overflow-auto">' +
+                    JSON.stringify(info, null, 2) + '</pre>';
+
                 if (window.destinBoard && window.destinBoard.palaces) {
                     html += '<details class="mt-2"><summary class="cursor-pointer text-blue-600">查看完整數據</summary>';
-                    html += '<pre class="bg-gray-100 p-2 rounded mt-2 text-xs overflow-auto">' + 
-                            JSON.stringify(window.destinBoard, null, 2) + '</pre>';
+                    html += '<pre class="bg-gray-100 p-2 rounded mt-2 text-xs overflow-auto">' +
+                        JSON.stringify(window.destinBoard, null, 2) + '</pre>';
                     html += '</details>';
                 }
             } else {
                 html += '<p class="text-red-600">❌ 未定義</p>';
             }
             html += '</div>';
-            
+
             html += '</div>';
             diagnosis.innerHTML = html;
         }
@@ -230,7 +229,7 @@
             const responseInfo = document.getElementById('responseInfo');
 
             // 顯示請求信息
-            requestInfo.textContent = '📤 發送請求中...\n\n' + 
+            requestInfo.textContent = '📤 發送請求中...\n\n' +
                 JSON.stringify({
                     url: '/api/question',
                     method: 'POST',
@@ -260,7 +259,7 @@
                 const result = await response.json();
 
                 // 顯示回應
-                responseInfo.textContent = 
+                responseInfo.textContent =
                     `📥 回應狀態: ${response.status} ${response.statusText}\n\n` +
                     `結果:\n${JSON.stringify(result, null, 2)}`;
 
@@ -282,5 +281,5 @@
         });
     </script>
 </body>
-</html>
 
+</html>

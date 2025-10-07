@@ -67,7 +67,7 @@ module.exports = async function handler(req, res) {
         if (!data.question) missingParams.push('question');
         if (!data.userProfile) missingParams.push('userProfile');
         if (!data.destinyData) missingParams.push('destinyData');
-        
+
         if (missingParams.length > 0) {
             console.error('❌ 缺少必要參數:', missingParams);
             return res.status(400).json({
@@ -76,7 +76,7 @@ module.exports = async function handler(req, res) {
                 missingParams: missingParams
             });
         }
-        
+
         // 驗證 destinyData 結構（寬鬆檢查，與 analyze.js 一致）
         // 如果有 palaces 但為空數組，也允許通過（AI 會處理）
         if (data.destinyData.palaces !== undefined && !Array.isArray(data.destinyData.palaces)) {
@@ -86,7 +86,7 @@ module.exports = async function handler(req, res) {
                 error: '命盤數據格式錯誤'
             });
         }
-        
+
         // 如果 destinyData 沒有 palaces 屬性，記錄警告但繼續（可能是舊格式）
         if (!data.destinyData.palaces) {
             console.warn('⚠️ destinyData 缺少 palaces 屬性，嘗試繼續處理');
@@ -276,7 +276,7 @@ function buildSystemMessage(userProfile, destinyData) {
         palacesText = destinyData.palaces.map((palace, index) => {
             const palaceNames = ['命宮', '兄弟宮', '夫妻宮', '子女宮', '財帛宮', '疾厄宮', '遷移宮', '交友宮', '事業宮', '田宅宮', '福德宮', '父母宮'];
             const palaceName = palace.palaceName || palaceNames[index] || `宮位${index + 1}`;
-            
+
             let majorStars = '無主星';
             if (Array.isArray(palace.majorStars) && palace.majorStars.length > 0) {
                 majorStars = palace.majorStars
@@ -285,7 +285,7 @@ function buildSystemMessage(userProfile, destinyData) {
             } else if (typeof palace.majorStars === 'string') {
                 majorStars = sanitizeInput(palace.majorStars);
             }
-            
+
             return `${palaceName}: ${majorStars}`;
         }).join('\n');
     } else {

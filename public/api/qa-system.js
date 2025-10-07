@@ -5,7 +5,7 @@
 
 window.QASystem = {
     currentThreadId: null,  // 當前對話 Thread ID
-    
+
     /**
      * 初始化問答系統
      */
@@ -21,17 +21,17 @@ window.QASystem = {
         const cookieId = this.getCookieId();
         const creditsKey = `credits_${cookieId}`;
         const expiryKey = `credits_expiry_${cookieId}`;
-        
+
         let credits = parseInt(localStorage.getItem(creditsKey) || '3');
         const expiry = localStorage.getItem(expiryKey);
-        
+
         // 檢查是否過期（一個月）
         if (expiry && new Date().getTime() > parseInt(expiry)) {
             credits = 3; // 重置為3個 credit
             localStorage.setItem(creditsKey, '3');
             localStorage.setItem(expiryKey, (new Date().getTime() + 30 * 24 * 60 * 60 * 1000).toString());
         }
-        
+
         this.currentCredits = credits;
         this.updateCreditsDisplay();
         return credits;
@@ -78,7 +78,7 @@ window.QASystem = {
         const cookieId = this.getCookieId();
         const creditsKey = `credits_${cookieId}`;
         const paidModeKey = `paid_mode_${cookieId}`;
-        
+
         // 檢查是否在付費模式
         const paidModeExpiry = localStorage.getItem(paidModeKey);
         if (paidModeExpiry && new Date().getTime() < parseInt(paidModeExpiry)) {
@@ -86,13 +86,13 @@ window.QASystem = {
             this.updateCreditsDisplay('unlimited');
             return true;
         }
-        
+
         let credits = parseInt(localStorage.getItem(creditsKey) || '3');
-        
+
         if (credits <= 0) {
             return false;
         }
-        
+
         credits--;
         localStorage.setItem(creditsKey, credits.toString());
         this.currentCredits = credits;
@@ -105,7 +105,7 @@ window.QASystem = {
      */
     initEventListeners() {
         console.log('🔧 QASystem: 初始化事件監聽器');
-        
+
         // 監聽發送按鈕
         const sendButton = document.getElementById('send-question');
         if (sendButton) {
@@ -148,7 +148,7 @@ window.QASystem = {
             });
         });
     },
-    
+
     /**
      * 強制重新綁定事件（用於步驟切換後）
      */
@@ -163,7 +163,7 @@ window.QASystem = {
     async sendQuestion() {
         const questionInput = document.getElementById('question-input');
         const chatContainer = document.getElementById('chat-container');
-        
+
         const question = questionInput.value.trim();
         if (!question) return;
 
@@ -201,12 +201,12 @@ window.QASystem = {
         try {
             // 調用問答 API
             const response = await this.askAI(question);
-            
+
             if (response.success) {
                 // 移除載入消息，添加 AI 回應
                 this.removeMessageFromChat(loadingMessage);
                 this.addMessageToChat('assistant', response.answer);
-                
+
                 // 保存 threadId 供下次使用
                 if (response.threadId) {
                     this.currentThreadId = response.threadId;
@@ -254,7 +254,7 @@ window.QASystem = {
         });
 
         const result = await response.json();
-        
+
         console.log('📥 收到問答回應:', {
             success: result.success,
             hasAnswer: !!result.answer,
@@ -271,9 +271,9 @@ window.QASystem = {
     addMessageToChat(type, message, isLoading = false) {
         const chatContainer = document.getElementById('chat-container');
         const messageElement = document.createElement('div');
-        
+
         const messageId = 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
-        
+
         if (type === 'user') {
             messageElement.innerHTML = `
                 <div class="flex justify-end mb-4">
@@ -291,11 +291,11 @@ window.QASystem = {
                 </div>
             `;
         }
-        
+
         messageElement.id = messageId;
         chatContainer.appendChild(messageElement);
         chatContainer.scrollTop = chatContainer.scrollHeight;
-        
+
         return messageElement;
     },
 
@@ -334,17 +334,17 @@ window.QASystem = {
     enablePaidMode() {
         const cookieId = this.getCookieId();
         const paidModeKey = `paid_mode_${cookieId}`;
-        
+
         // 設置一小時付費模式
         localStorage.setItem(paidModeKey, (Date.now() + 60 * 60 * 1000).toString());
-        
+
         this.closeCreditModal();
         this.checkCredits(); // 重新檢查 credit 狀態
     }
 };
 
 // 初始化問答系統
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     if (window.QASystem) {
         window.QASystem.init();
     }
