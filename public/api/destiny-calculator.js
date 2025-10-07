@@ -111,22 +111,30 @@ class ZiweiCalculator {
         };
     }
 
-    // 西曆轉農曆（簡化版）
+    // 西曆轉農曆（使用簡化算法 - 生產環境應使用完整曆法庫）
     convertSolarToLunar(solarYear, solarMonth, solarDay) {
-        // 簡化的農曆轉換
+        // 注意：這是簡化版本，實際應用應使用 calendar.js 或其他專業曆法庫
+        // 這裡提供基本的近似轉換
         const solarDate = new Date(solarYear, solarMonth - 1, solarDay);
-        const yearDifference = solarYear - 1900;
+        const baseDate = new Date(1900, 0, 31);  // 1900年農曆正月初一
 
-        // 近似農曆計算
-        const lunarYear = solarYear;
-        const lunarMonth = Math.floor(Math.random() * 12) + 1;
-        const lunarDay = Math.floor(Math.random() * 29) + 1;
+        // 計算相差天數
+        const diffDays = Math.floor((solarDate - baseDate) / (1000 * 60 * 60 * 24));
+
+        // 簡化計算：平均每月 29.5 天
+        const avgMonthDays = 29.5;
+        const avgYearDays = 354;
+
+        const lunarYear = 1900 + Math.floor(diffDays / avgYearDays);
+        const remainingDays = diffDays % avgYearDays;
+        const lunarMonth = Math.min(12, Math.floor(remainingDays / avgMonthDays) + 1);
+        const lunarDay = Math.min(29, Math.floor(remainingDays % avgMonthDays) + 1);
 
         return {
             year: lunarYear,
             month: lunarMonth,
             day: lunarDay,
-            isLeapMonth: Math.random() > 0.9
+            isLeapMonth: false  // 簡化版本不處理閏月
         };
     }
 
@@ -142,7 +150,7 @@ class ZiweiCalculator {
             '巳': ['巳', '午', '未', '申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰'],
             '午': ['午', '未', '申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳'],
             '未': ['未', '申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午'],
-            '未': ['未', '申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午'],
+            '申': ['申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未'],
             '酉': ['酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申'],
             '戌': ['戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉'],
             '亥': ['亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌']

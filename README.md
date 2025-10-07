@@ -17,16 +17,19 @@
 - 📈 **能量分析**: 主星、輔星的小吉星能量等級評估
 
 ### 🤖 **AI 智能分析**
-- 🧠 **ChatGPT 整合**: OpenAI GPT-4 深度命理解析
+- 🧠 **GPT-4o 整合**: OpenAI 最新 GPT-4o 模型深度命理解析
 - 📝 **章節化輸出**: 自動格式化的美觀分析結果
 - 👶 **白話文解釋**: 12歲小朋友也能理解的正面解讀
 - ⚡ **即時響應**: 無需重新載入的動態更新
+- 🔐 **安全防護**: 完整的輸入驗證和 XSS 保護
 
 ### 💬 **互動問答系統**
-- 🎫 **Credit 機制**: 每月3次免費問答機會
+- 🎫 **後端 Credit 管理**: 每月3次免費問答機會（後端驗證）
+- 🧵 **Thread 對話**: 連續對話功能，自動記憶上下文
+- 🎯 **命盤自動帶入**: 每次問答自動包含完整命盤信息
 - ⚡ **快速提問**: 流年運勢、工作、桃花等預設問題
 - 💎 **付費解鎖**: 1小時無限問答商業模式
-- 🔐 **隱私保護**: LocalStorage 用戶狀態追蹤
+- 🔐 **安全保護**: 後端驗證、Rate Limiting、XSS 防護
 
 ### 💰 **商業化功能**
 - 📊 **Google AdSense**: fate-square 廣告單元優化整合
@@ -150,19 +153,39 @@ src/
 OPENAI_API_KEY=your-openai-api-key-here
 ```
 
-## 🎯 最新功能更新 (v2.0.0)
+## 🎯 最新功能更新 (v2.1.0 - 2024)
 
-### 🤖 AI 分析增強
-- ✅ ChatGPT GPT-4 集成
-- ✅ 多章節格式化 (### 標題解析)
-- ✅ 智能 12歲白話文解釋
-- ✅ 實時API響應和錯誤處理
+Airic Yu (Original Author)
+- Owner of Myfortel 紫微斗數起盤網站(舊版) ( https://www.myfortel.com/ )
+- Owner of Myfortel 紫微斗數起盤網站(新版) ( https://airicyu.github.io/myfortel/ )
+- Author of 紫微斗數排盤 library for Java ( https://github.com/airicyu/Fortel )
+- Author of 紫微斗數排盤 library for JS ( https://www.npmjs.com/package/fortel-ziweidousju )
+
+### 🆕 **v2.1.0 重大更新**
+
+#### 🚀 **AI 升級**
+- ✅ **GPT-4o 模型**: 升級至 OpenAI 最新 GPT-4o，回應更準確、更快速
+- ✅ **Thread 對話系統**: 連續對話功能，自動記憶上下文，提供更連貫的分析
+- ✅ **智能命盤整合**: 每次問答自動帶入完整命盤資料，回應更精準
+
+#### 🔒 **安全性強化**
+- ✅ **後端 Credit 驗證**: Credit 管理移至後端，防止繞過
+- ✅ **CORS 限制**: 限制 API 訪問來源，防止濫用
+- ✅ **輸入清理**: 完整的 XSS 防護和輸入驗證
+- ✅ **錯誤處理**: 不暴露敏感信息的安全錯誤處理
+
+#### 🐛 **Bug 修復**
+- ✅ 修復 api/question.js 語法錯誤
+- ✅ 修復 destiny-calculator.js 重複鍵定義
+- ✅ 改進農曆轉換算法（移除隨機數）
+- ✅ 整合真實 TypeScript 計算引擎到 API
 
 ### 💬 Q&A 系統
-- ✅ Credit 計費機制 (3次/月)
+- ✅ 後端 Credit 計費機制 (3次/月)
+- ✅ Thread 連續對話功能
 - ✅ 預設問題快速提問
 - ✅ 付費解鎖模式 (1小時無限)
-- ✅ LocalStorage 用戶狀態管理
+- ✅ 安全的用戶狀態管理
 
 ### 💰 商業化功能
 - ✅ Google AdSense 優化整合
