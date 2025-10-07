@@ -455,7 +455,11 @@
                 calendarType: 'solar',
                 isLeapMonth: false
             };
+            // 確保 userProfile 也是全域變數
+            window.userProfile = userProfile;
             let destinBoard = null;
+            // 確保 destinBoard 也是全域變數
+            window.destinBoard = null;
 
             // === 立即執行的初始化函數 ===
             (function () {
@@ -695,6 +699,9 @@
                     userProfile.birthHour = document.getElementById('birth-hour').value;
                     userProfile.isLeapMonth = document.getElementById('leap-month').checked;
 
+                    // 同步更新全域變數
+                    window.userProfile = userProfile;
+
                     console.log('用戶資料:', userProfile);
 
                     // 發送追蹤資料到 pioneer.ghtinc.com
@@ -718,6 +725,7 @@
                         if (result.success) {
                             // 新 API 格式：直接包含 palaces
                             destinBoard = result;
+                            window.destinBoard = result;  // 同時設置全域變數
                             showDestinyStars(result);
                             goToStep(2); // 跳轉到命盤圖表
                         } else {
@@ -817,6 +825,7 @@
                         energy: Math.floor(Math.random() * 40) + 50
                     }))
                 };
+                window.destinBoard = destinBoard;  // 同時設置全域變數
                 showDestinyStars(destinBoard);
                 goToStep(2); // 跳轉到命盤圖表
             }
