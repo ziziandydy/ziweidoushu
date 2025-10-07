@@ -42,19 +42,47 @@ module.exports = async function handler(req, res) {
 
     try {
         const data = req.body;
+        
+        // 記錄接收到的數據結構（不記錄敏感內容）
+        console.log('📥 接收到問答請求:', {
+            hasQuestion: !!data?.question,
+            hasUserProfile: !!data?.userProfile,
+            hasDestinyData: !!data?.destinyData,
+            hasPalaces: !!(data?.destinyData?.palaces),
+            palacesCount: data?.destinyData?.palaces?.length,
+            questionLength: data?.question?.length
+        });
 
         // 詳細的輸入驗證
         if (!data || typeof data !== 'object') {
+            console.error('❌ 請求數據格式無效');
             return res.status(400).json({
                 success: false,
                 error: '請求數據格式無效'
             });
         }
 
-        if (!data.question || !data.userProfile || !data.destinyData) {
+        // 詳細檢查每個必要參數
+        const missingParams = [];
+        if (!data.question) missingParams.push('question');
+        if (!data.userProfile) missingParams.push('userProfile');
+        if (!data.destinyData) missingParams.push('destinyData');
+        
+        if (missingParams.length > 0) {
+            console.error('❌ 缺少必要參數:', missingParams);
             return res.status(400).json({
                 success: false,
-                error: '缺少必要參數：question, userProfile, destinyData'
+                error: `缺少必要參數：${missingParams.join(', ')}`,
+                missingParams: missingParams
+            });
+        }
+        
+        // 檢查 destinyData 是否包含 palaces
+        if (!data.destinyData.palaces || !Array.isArray(data.destinyData.palaces)) {
+            console.error('❌ destinyData.palaces 無效:', data.destinyData);
+            return res.status(400).json({
+                success: false,
+                error: '命盤數據無效，請先計算命盤'
             });
         }
 

@@ -4,6 +4,8 @@
  */
 
 window.QASystem = {
+    currentThreadId: null,  // 當前對話 Thread ID
+    
     /**
      * 初始化問答系統
      */
@@ -138,6 +140,18 @@ window.QASystem = {
         const question = questionInput.value.trim();
         if (!question) return;
 
+        // 檢查是否已計算命盤
+        if (!window.destinBoard || !window.destinBoard.palaces) {
+            this.addMessageToChat('assistant', '請先計算您的命盤，才能開始問答。請回到步驟一填寫基本資料並計算命盤。');
+            return;
+        }
+
+        // 檢查 userProfile 是否存在
+        if (!window.userProfile || !window.userProfile.name) {
+            this.addMessageToChat('assistant', '請先填寫您的基本資料並計算命盤。');
+            return;
+        }
+
         // 檢查 credit
         if (this.currentCredits <= 0) {
             this.showCreditExhaustedModal();
@@ -165,9 +179,15 @@ window.QASystem = {
                 // 移除載入消息，添加 AI 回應
                 this.removeMessageFromChat(loadingMessage);
                 this.addMessageToChat('assistant', response.answer);
+                
+                // 保存 threadId 供下次使用
+                if (response.threadId) {
+                    this.currentThreadId = response.threadId;
+                }
             } else {
                 this.removeMessageFromChat(loadingMessage);
-                this.addMessageToChat('assistant', '抱歉，無法獲取回答。請稍後再試。');
+                const errorMsg = response.error || '抱歉，無法獲取回答。請稍後再試。';
+                this.addMessageToChat('assistant', errorMsg);
             }
         } catch (error) {
             console.error('問答錯誤:', error);
@@ -180,21 +200,42 @@ window.QASystem = {
      * 調用 AI API
      */
     async askAI(question) {
+        // 確保數據完整性
         const requestData = {
             question: question,
             userProfile: window.userProfile,
-            destinyData: window.destinBoard
+            destinyData: window.destinBoard,
+            threadId: this.currentThreadId,  // 傳遞 threadId 以支援連續對話
+            userId: this.getCookieId()  // 傳遞 userId 供後端 Credit 驗證
         };
+
+        console.log('📤 發送問答請求:', {
+            question: question.substring(0, 50),
+            hasUserProfile: !!requestData.userProfile,
+            hasDestinyData: !!requestData.destinyData,
+            hasPalaces: !!(requestData.destinyData && requestData.destinyData.palaces),
+            threadId: requestData.threadId
+        });
 
         const response = await fetch('/api/question', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-User-ID': this.getCookieId()  // 在 header 中也傳遞 userId
             },
             body: JSON.stringify(requestData)
         });
 
-        return await response.json();
+        const result = await response.json();
+        
+        console.log('📥 收到問答回應:', {
+            success: result.success,
+            hasAnswer: !!result.answer,
+            threadId: result.threadId,
+            remainingCredits: result.remainingCredits
+        });
+
+        return result;
     },
 
     /**
