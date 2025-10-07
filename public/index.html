@@ -657,6 +657,16 @@
                 // 如果是第四步，更新詳細資訊
                 if (step === 4) {
                     updateDetailedInfo();
+                    
+                    // 重新綁定 QASystem 事件監聽器
+                    setTimeout(() => {
+                        if (typeof window.QASystem !== 'undefined' && window.QASystem.rebindEvents) {
+                            console.log('🔄 重新綁定 QASystem 事件');
+                            window.QASystem.rebindEvents();
+                        } else {
+                            console.warn('⚠️ QASystem 或 rebindEvents 未定義');
+                        }
+                    }, 300); // 等待 DOM 更新完成
                 }
 
                 // 🚀 滾動到頁面最上方 - 優化用戶體驗

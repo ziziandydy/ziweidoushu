@@ -104,30 +104,57 @@ window.QASystem = {
      * 初始化事件監聽器
      */
     initEventListeners() {
+        console.log('🔧 QASystem: 初始化事件監聽器');
+        
         // 監聽發送按鈕
         const sendButton = document.getElementById('send-question');
         if (sendButton) {
-            sendButton.addEventListener('click', () => this.sendQuestion());
+            console.log('✅ 找到發送按鈕，綁定事件');
+            // 移除舊的監聽器（如果存在）
+            sendButton.removeEventListener('click', this._sendHandler);
+            // 保存處理函數以便後續移除
+            this._sendHandler = () => this.sendQuestion();
+            sendButton.addEventListener('click', this._sendHandler);
+        } else {
+            console.warn('⚠️ 未找到發送按鈕 (#send-question)');
         }
 
         // 監聽輸入框 Enter 鍵
         const questionInput = document.getElementById('question-input');
         if (questionInput) {
-            questionInput.addEventListener('keypress', (e) => {
+            console.log('✅ 找到輸入框，綁定 Enter 鍵事件');
+            // 移除舊的監聽器（如果存在）
+            questionInput.removeEventListener('keypress', this._keypressHandler);
+            this._keypressHandler = (e) => {
                 if (e.key === 'Enter') {
                     this.sendQuestion();
                 }
-            });
+            };
+            questionInput.addEventListener('keypress', this._keypressHandler);
+        } else {
+            console.warn('⚠️ 未找到輸入框 (#question-input)');
         }
 
         // 監聽預設問題按鈕
-        document.querySelectorAll('.preset-question').forEach(button => {
+        const presetButtons = document.querySelectorAll('.preset-question');
+        console.log(`🔍 找到 ${presetButtons.length} 個預設問題按鈕`);
+        presetButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 const question = e.target.textContent;
-                questionInput.value = question;
-                questionInput.focus();
+                if (questionInput) {
+                    questionInput.value = question;
+                    questionInput.focus();
+                }
             });
         });
+    },
+    
+    /**
+     * 強制重新綁定事件（用於步驟切換後）
+     */
+    rebindEvents() {
+        console.log('🔄 QASystem: 強制重新綁定事件');
+        this.initEventListeners();
     },
 
     /**
