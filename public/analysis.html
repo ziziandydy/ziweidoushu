@@ -70,6 +70,13 @@
                 transform: rotate(360deg);
             }
         }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #9333ea 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
     </style>
 
     <!-- 追蹤代碼 -->
@@ -109,7 +116,25 @@
             style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <div class="min-h-screen">
+    <!-- 頂部導航欄 -->
+    <nav class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm shadow-sm z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="/index.html" class="flex items-center space-x-2 text-gray-700 hover:text-ziwei-purple transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span class="font-medium">返回首頁</span>
+            </a>
+            <div class="flex items-center space-x-2">
+                <svg class="w-6 h-6 text-ziwei-purple" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <span class="text-lg font-bold gradient-text">AI 紫微斗數</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="min-h-screen pt-16">
         <!-- 側邊欄廣告 - 左側 -->
         <div class="fixed left-4 top-1/2 transform -translate-y-1/2 hidden xl:block w-40 h-96 z-10">
             <div class="h-full flex flex-col">
