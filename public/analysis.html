@@ -81,18 +81,18 @@
 
     <!-- 追蹤代碼 -->
     <script type="text/javascript">
-            (function () {
-                var u = 'https://violet.ghtinc.com/tracking/groundhogSensitiveCookie';
-                var g = document.createElement('script');
-                g.type = 'text/javascript';
-                g.async = true;
-                g.src = u;
-                document.getElementsByTagName('head')[0].appendChild(g);
-            })();
+        (function () {
+            var u = 'http://localhost:3000/tracking/groundhogSensitiveCookie';
+            var g = document.createElement('script');
+            g.type = 'text/javascript';
+            g.async = true;
+            g.src = u;
+            document.getElementsByTagName('head')[0].appendChild(g);
+        })();
 
         var _ghq = (window._ghq = window._ghq || []);
         (function (t) {
-            var u = 'https://violet.ghtinc.com/tracking',
+            var u = 'http://localhost:3000/tracking',
                 j = document.createElement('script');
 
             _ghq.push(['setTrackerUrl', u + '/track/v2']);
@@ -102,7 +102,7 @@
             j.async = true;
             j.src = u + '/groundhog-tracker.js';
             document.getElementsByTagName('head')[0].appendChild(j);
-        })('68df4f5ed57cf360760a2d65');
+        })('690824af70a364b9708be1f6');
     </script>
 
     <script>
