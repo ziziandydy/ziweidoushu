@@ -56,6 +56,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "ecpay_aio_nodejs": "^1.2.2",
     "util": "^0.12.5"
   }
 }

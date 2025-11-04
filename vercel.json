@@ -1,29 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "public/**/*",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/$1"
-    },
-    {
-      "src": "/",
-      "dest": "/public/index.html"
-    }
-  ],
   "rewrites": [
     {
       "source": "/",
@@ -36,7 +12,20 @@
     {
       "source": "/privacy-policy",
       "destination": "/public/privacy-policy.html"
+    },
+    {
+      "source": "/payment-success",
+      "destination": "/public/payment-success.html"
+    },
+    {
+      "source": "/payment-failed",
+      "destination": "/public/payment-failed.html"
     }
-  ]
+  ],
+  "env": {
+    "ECPAY_MERCHANT_ID": "@ecpay_merchant_id",
+    "ECPAY_HASH_KEY": "@ecpay_hash_key",
+    "ECPAY_HASH_IV": "@ecpay_hash_iv"
+  }
 }
 

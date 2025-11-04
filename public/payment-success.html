@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>付款成功 - 紫微斗數命盤</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" href="/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .checkmark-circle {
+            animation: scaleIn 0.5s ease-out;
+        }
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .countdown {
+            animation: pulse 1s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+        <!-- 成功圖標 -->
+        <div class="checkmark-circle mb-6">
+            <svg class="w-24 h-24 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+
+        <!-- 標題 -->
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">付款成功！</h1>
+        <p class="text-gray-600 mb-6">感謝您的支持，付費模式已啟用</p>
+
+        <!-- 訂單資訊 -->
+        <div class="bg-purple-50 rounded-lg p-6 mb-6 text-left">
+            <h2 class="text-lg font-semibold text-purple-900 mb-4">訂單詳情</h2>
+            <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">訂單編號：</span>
+                    <span class="font-medium text-gray-800" id="order-id">載入中...</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">付款金額：</span>
+                    <span class="font-medium text-gray-800">NT$ <span id="amount">199</span></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">服務時長：</span>
+                    <span class="font-medium text-purple-600">1 小時無限問答</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">到期時間：</span>
+                    <span class="font-medium text-gray-800" id="expiry-time">計算中...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 提示訊息 -->
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 text-left">
+            <div class="flex items-start">
+                <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+                <div class="text-sm text-blue-800">
+                    <p class="font-medium mb-1">付費模式已啟用</p>
+                    <p>在接下來的 1 小時內，您可以無限次使用 AI 問答功能，深入探索您的命盤。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自動跳轉提示 -->
+        <p class="text-sm text-gray-500 mb-4 countdown">
+            <span id="countdown">5</span> 秒後自動返回分析頁面...
+        </p>
+
+        <!-- 按鈕 -->
+        <button onclick="goToAnalysis()" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+            立即開始問答
+        </button>
+    </div>
+
+    <script>
+        // 取得 URL 參數
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('orderId');
+        const userId = urlParams.get('userId');
+        const amount = urlParams.get('amount');
+        const tradeNo = urlParams.get('tradeNo');
+
+        console.log('✅ 付款成功頁面載入:', { orderId, userId, amount, tradeNo });
+
+        // 顯示訂單資訊
+        if (orderId) {
+            document.getElementById('order-id').textContent = orderId;
+        }
+        if (amount) {
+            document.getElementById('amount').textContent = amount;
+        }
+
+        // 啟用付費模式（寫入 localStorage）
+        if (userId) {
+            const paidModeKey = `paid_mode_${userId}`;
+            const expiryTime = Date.now() + 60 * 60 * 1000; // 1 小時後
+            localStorage.setItem(paidModeKey, expiryTime.toString());
+
+            // 顯示到期時間
+            const expiryDate = new Date(expiryTime);
+            const expiryTimeStr = expiryDate.toLocaleString('zh-TW', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+            document.getElementById('expiry-time').textContent = expiryTimeStr;
+
+            console.log('✅ 付費模式已啟用:', { userId, expiryTime: expiryTimeStr });
+        }
+
+        // 倒數計時
+        let countdown = 5;
+        const countdownElement = document.getElementById('countdown');
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdownElement) {
+                countdownElement.textContent = countdown;
+            }
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                goToAnalysis();
+            }
+        }, 1000);
+
+        // 返回分析頁面並恢復狀態
+        function goToAnalysis() {
+            // 添加 restore 參數，讓分析頁面知道要恢復狀態
+            window.location.href = '/analysis.html?restore=true';
+        }
+
+        // 追蹤付款成功事件（Google Analytics）
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'purchase', {
+                transaction_id: orderId,
+                value: amount,
+                currency: 'TWD',
+                items: [{
+                    item_id: 'premium_1hour',
+                    item_name: '1小時無限問答',
+                    price: amount,
+                    quantity: 1
+                }]
+            });
+        }
+    </script>
+</body>
+</html>

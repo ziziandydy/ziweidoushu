@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>付款失敗 - 紫微斗數命盤</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" href="/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .error-icon {
+            animation: shake 0.5s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+        .countdown {
+            animation: pulse 1s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-red-50 to-orange-50 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+        <!-- 失敗圖標 -->
+        <div class="error-icon mb-6">
+            <svg class="w-24 h-24 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+
+        <!-- 標題 -->
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">付款失敗</h1>
+        <p class="text-gray-600 mb-6">很抱歉，您的付款未能完成</p>
+
+        <!-- 錯誤資訊 -->
+        <div class="bg-red-50 rounded-lg p-6 mb-6 text-left">
+            <h2 class="text-lg font-semibold text-red-900 mb-4">失敗原因</h2>
+            <div class="space-y-2 text-sm">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                    <p class="text-red-800" id="error-message">付款過程中發生錯誤</p>
+                </div>
+                <div class="text-gray-600 text-xs mt-4" id="order-info"></div>
+            </div>
+        </div>
+
+        <!-- 常見原因 -->
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6 text-left">
+            <h3 class="text-sm font-semibold text-yellow-900 mb-2">可能的原因：</h3>
+            <ul class="text-sm text-yellow-800 space-y-1 list-disc list-inside">
+                <li>信用卡餘額不足</li>
+                <li>信用卡資訊輸入錯誤</li>
+                <li>銀行拒絕此筆交易</li>
+                <li>網路連線中斷</li>
+                <li>取消付款操作</li>
+            </ul>
+        </div>
+
+        <!-- 建議 -->
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 text-left">
+            <div class="flex items-start">
+                <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+                <div class="text-sm text-blue-800">
+                    <p class="font-medium mb-1">建議處理方式</p>
+                    <p>請檢查您的信用卡狀態，或嘗試使用其他付款方式。如果問題持續發生，請聯繫您的發卡銀行。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自動跳轉提示 -->
+        <p class="text-sm text-gray-500 mb-4 countdown">
+            <span id="countdown">10</span> 秒後自動返回分析頁面...
+        </p>
+
+        <!-- 按鈕 -->
+        <div class="space-y-3">
+            <button onclick="goToAnalysis()" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+                返回分析頁面
+            </button>
+            <button onclick="retryPayment()" class="w-full bg-white border-2 border-purple-600 text-purple-600 py-3 rounded-lg font-medium hover:bg-purple-50 transition-all duration-200">
+                重新嘗試付款
+            </button>
+        </div>
+
+        <!-- 客服資訊 -->
+        <p class="text-xs text-gray-500 mt-6">
+            如有任何問題，請聯繫客服：<a href="mailto:support@ziweidoushu.com" class="text-purple-600 hover:underline">support@ziweidoushu.com</a>
+        </p>
+    </div>
+
+    <script>
+        // 取得 URL 參數
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('orderId');
+        const error = urlParams.get('error');
+
+        console.log('❌ 付款失敗頁面載入:', { orderId, error });
+
+        // 顯示錯誤訊息
+        const errorMessages = {
+            'verification_failed': '付款驗證失敗，請確認交易安全性',
+            'server_error': '伺服器錯誤，請稍後再試',
+            'user_cancel': '您已取消此筆交易',
+            'insufficient_balance': '信用卡餘額不足',
+            'invalid_card': '信用卡資訊無效',
+            'transaction_declined': '銀行拒絕此筆交易'
+        };
+
+        const errorMessage = errorMessages[error] || error || '付款過程中發生未知錯誤';
+        document.getElementById('error-message').textContent = errorMessage;
+
+        // 顯示訂單編號（如果有）
+        if (orderId) {
+            document.getElementById('order-info').textContent = `訂單編號：${orderId}`;
+        }
+
+        // 倒數計時
+        let countdown = 10;
+        const countdownElement = document.getElementById('countdown');
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdownElement) {
+                countdownElement.textContent = countdown;
+            }
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                goToAnalysis();
+            }
+        }, 1000);
+
+        // 返回分析頁面
+        function goToAnalysis() {
+            window.location.href = '/analysis.html';
+        }
+
+        // 重新嘗試付款
+        function retryPayment() {
+            // 清除倒數計時
+            clearInterval(countdownInterval);
+            // 返回分析頁面，用戶可以重新點擊付費按鈕
+            goToAnalysis();
+        }
+
+        // 追蹤付款失敗事件（Google Analytics）
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'payment_failed', {
+                error_message: errorMessage,
+                order_id: orderId || 'unknown'
+            });
+        }
+    </script>
+</body>
+</html>

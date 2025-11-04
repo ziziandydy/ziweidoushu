@@ -12,6 +12,117 @@ window.QASystem = {
     init() {
         this.checkCredits();
         this.initEventListeners();
+
+        // 檢查是否需要恢復付款前的狀態
+        this.checkAndRestoreState();
+    },
+
+    /**
+     * 檢查並恢復付款前的狀態
+     */
+    checkAndRestoreState() {
+        // 檢查 URL 是否有 restore 參數
+        const urlParams = new URLSearchParams(window.location.search);
+        const shouldRestore = urlParams.get('restore') === 'true';
+
+        if (!shouldRestore) return;
+
+        console.log('🔄 檢測到付款返回，準備恢復狀態...');
+
+        try {
+            // 從 sessionStorage 讀取保存的狀態
+            const stateJSON = sessionStorage.getItem('payment_restore_state');
+            if (!stateJSON) {
+                console.warn('⚠️ 未找到保存的狀態資料');
+                return;
+            }
+
+            const stateData = JSON.parse(stateJSON);
+            console.log('📦 讀取到保存的狀態:', stateData);
+
+            // 恢復用戶資料和命盤
+            if (stateData.userProfile) {
+                window.userProfile = stateData.userProfile;
+            }
+            if (stateData.destinBoard) {
+                window.destinBoard = stateData.destinBoard;
+            }
+
+            // 等待 DOM 載入完成後恢復 UI
+            setTimeout(() => {
+                this.restoreUI(stateData);
+            }, 100);
+
+            // 清除保存的狀態（已使用）
+            sessionStorage.removeItem('payment_restore_state');
+
+            console.log('✅ 狀態恢復完成！');
+        } catch (error) {
+            console.error('❌ 恢復狀態失敗:', error);
+        }
+    },
+
+    /**
+     * 恢復 UI 狀態（命盤圖表、分析結果、對話記錄）
+     */
+    restoreUI(stateData) {
+        // 1. 恢復到正確的步驟
+        if (stateData.currentStep) {
+            this.showStep(stateData.currentStep);
+        }
+
+        // 2. 如果有命盤資料，重新渲染命盤圖表
+        if (window.destinBoard && typeof window.renderDestinyChart === 'function') {
+            window.renderDestinyChart(window.destinBoard);
+        }
+
+        // 3. 恢復聊天記錄
+        if (stateData.chatHistory && stateData.chatHistory.length > 0) {
+            this.restoreChatHistory(stateData.chatHistory);
+        }
+
+        // 4. 更新 Credit 顯示（應該會顯示付費模式）
+        this.checkCredits();
+
+        console.log('🎨 UI 恢復完成');
+    },
+
+    /**
+     * 恢復聊天記錄
+     */
+    restoreChatHistory(chatHistory) {
+        const chatContainer = document.getElementById('chat-container');
+        if (!chatContainer) return;
+
+        // 清空現有對話
+        chatContainer.innerHTML = '';
+
+        // 重新添加所有對話
+        chatHistory.forEach(msg => {
+            this.addMessageToChat(msg.type, msg.message);
+        });
+
+        console.log(`💬 已恢復 ${chatHistory.length} 條對話記錄`);
+    },
+
+    /**
+     * 切換到指定步驟
+     */
+    showStep(stepId) {
+        // 隱藏所有步驟
+        const steps = ['step1', 'step2', 'step3', 'step4'];
+        steps.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.classList.add('hidden');
+            }
+        });
+
+        // 顯示目標步驟
+        const targetStep = document.getElementById(stepId);
+        if (targetStep) {
+            targetStep.classList.remove('hidden');
+        }
     },
 
     /**
@@ -358,17 +469,141 @@ window.QASystem = {
     },
 
     /**
-     * 開啟付費模式
+     * 保存付款前的狀態（命盤、用戶資料、對話記錄）
      */
-    enablePaidMode() {
-        const cookieId = this.getCookieId();
-        const paidModeKey = `paid_mode_${cookieId}`;
+    saveStateBeforePayment() {
+        try {
+            const stateData = {
+                userProfile: window.userProfile,
+                destinBoard: window.destinBoard,
+                chatHistory: this.getChatHistory(),
+                currentStep: this.getCurrentStep(),
+                timestamp: Date.now()
+            };
 
-        // 設置一小時付費模式
-        localStorage.setItem(paidModeKey, (Date.now() + 60 * 60 * 1000).toString());
+            sessionStorage.setItem('payment_restore_state', JSON.stringify(stateData));
+            console.log('💾 已保存付款前狀態:', stateData);
+        } catch (error) {
+            console.error('❌ 保存狀態失敗:', error);
+        }
+    },
 
-        this.closeCreditModal();
-        this.checkCredits(); // 重新檢查 credit 狀態
+    /**
+     * 取得當前聊天記錄
+     */
+    getChatHistory() {
+        const chatContainer = document.getElementById('chat-container');
+        if (!chatContainer) return [];
+
+        const messages = [];
+        const messageElements = chatContainer.querySelectorAll('.flex');
+
+        messageElements.forEach(element => {
+            const text = element.querySelector('p')?.textContent || '';
+            const isUser = element.classList.contains('justify-end');
+            messages.push({
+                type: isUser ? 'user' : 'assistant',
+                message: text
+            });
+        });
+
+        return messages;
+    },
+
+    /**
+     * 取得當前步驟
+     */
+    getCurrentStep() {
+        // 檢查哪個步驟是顯示的
+        const steps = ['step1', 'step2', 'step3', 'step4'];
+        for (const stepId of steps) {
+            const stepElement = document.getElementById(stepId);
+            if (stepElement && !stepElement.classList.contains('hidden')) {
+                return stepId;
+            }
+        }
+        return 'step4'; // 預設為步驟4（分析頁面）
+    },
+
+    /**
+     * 開啟付費模式 - 導向綠界金流付款
+     */
+    async enablePaidMode() {
+        try {
+            // 關閉彈窗
+            this.closeCreditModal();
+
+            // 💾 保存當前狀態到 sessionStorage（付款前）
+            this.saveStateBeforePayment();
+
+            // 顯示載入中
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.id = 'payment-loading';
+            loadingOverlay.innerHTML = `
+                <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-white rounded-lg p-8 max-w-md text-center">
+                        <div class="loading-spinner mx-auto mb-4 w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full"></div>
+                        <p class="text-lg font-medium text-gray-800">正在導向付款頁面...</p>
+                        <p class="text-sm text-gray-600 mt-2">請稍候，不要關閉視窗</p>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(loadingOverlay);
+
+            // 取得用戶資料
+            const userId = this.getCookieId();
+            const userName = window.userProfile?.name || '';
+            const userEmail = '';  // 如果有 Email 欄位可以加入
+
+            console.log('💰 開始建立付費訂單:', { userId, userName });
+
+            // 調用後端建立訂單 API
+            const response = await fetch('/api/ecpay-create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    userName: userName,
+                    userEmail: userEmail
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success && result.html) {
+                console.log('✅ 訂單建立成功，導向綠界付款頁面');
+
+                // 建立一個隱藏的 form 並提交（綠界要求）
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = result.html;
+                document.body.appendChild(tempDiv);
+
+                // 自動提交表單（導向綠界）
+                const form = tempDiv.querySelector('form');
+                if (form) {
+                    form.submit();
+                } else {
+                    throw new Error('無法取得付款表單');
+                }
+
+            } else {
+                throw new Error(result.error || '建立訂單失敗');
+            }
+
+        } catch (error) {
+            console.error('❌ 付費流程錯誤:', error);
+
+            // 移除載入覆蓋層
+            const loadingOverlay = document.getElementById('payment-loading');
+            if (loadingOverlay) {
+                loadingOverlay.remove();
+            }
+
+            // 顯示錯誤訊息
+            alert('付款流程發生錯誤，請稍後再試。\n錯誤訊息：' + error.message);
+        }
     }
 };
 
