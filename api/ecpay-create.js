@@ -68,6 +68,7 @@ module.exports = async (req, res) => {
                 HashKey: ECPAY_CONFIG.HashKey,
                 HashIV: ECPAY_CONFIG.HashIV,
             },
+            IgnorePayment: [],  // 不忽略任何付款方式
             IsProjectContractor: false
         };
 
@@ -86,8 +87,8 @@ module.exports = async (req, res) => {
             ItemName: '1小時無限問答',           // 商品名稱
             ReturnURL: `${baseUrl}/api/ecpay-callback`,  // 付款完成後端通知
             ClientBackURL: `${baseUrl}/api/ecpay-return`, // 付款完成前端返回
-            ChoosePayment: 'Credit',            // 付款方式：信用卡
-            EncryptType: 1,                     // 加密類型
+            // ChoosePayment: 'Credit',         // 移除此參數，使用 aio_check_out_credit_onetime
+            // EncryptType: 1,                  // 移除此參數，SDK 會自動處理
 
             // 自訂參數（會在 ReturnURL 回傳）
             CustomField1: userId,               // 用戶 ID
@@ -95,17 +96,8 @@ module.exports = async (req, res) => {
             CustomField3: userEmail || '',      // 用戶 Email（選填）
         };
 
-        // 信用卡分期參數（不啟用）
-        const creditcard_param = {
-            // CreditInstallment: '3,6,12',    // 分期期數
-            // InstallmentAmount: 0,            // 分期金額
-        };
-
-        // 合併參數
-        const create_payment = Object.assign(base_param, creditcard_param);
-
-        // 產生綠界金流 HTML 表單
-        const html = create.payment_client.aio_check_out_all(create_payment);
+        // 產生綠界金流 HTML 表單（使用信用卡一次付清）
+        const html = create.payment_client.aio_check_out_credit_onetime(base_param);
 
         console.log('✅ 訂單建立成功:', {
             orderId: TradeNo,
