@@ -21,11 +21,6 @@
       "source": "/payment-failed",
       "destination": "/public/payment-failed.html"
     }
-  ],
-  "env": {
-    "ECPAY_MERCHANT_ID": "@ecpay_merchant_id",
-    "ECPAY_HASH_KEY": "@ecpay_hash_key",
-    "ECPAY_HASH_IV": "@ecpay_hash_iv"
-  }
+  ]
 }
 
