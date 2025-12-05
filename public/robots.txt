@@ -1,0 +1,21 @@
+# robots.txt for AI 紫微斗數
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /test/
+Disallow: /*.test.html
+Disallow: /debug-buttons.html
+Disallow: /js-debug.html
+Disallow: /calculation-test.html
+Disallow: /browser-test.html
+Disallow: /quick-test.html
+Disallow: /simple-dev.html
+Disallow: /fix-main.html
+Disallow: /fix-report.html
+
+# Sitemap
+Sitemap: https://ziweidoushu.com/sitemap.xml
+
+# Crawl-delay (optional, helps prevent server overload)
+Crawl-delay: 1
