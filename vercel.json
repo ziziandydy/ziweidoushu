@@ -20,6 +20,10 @@
     {
       "source": "/payment-failed",
       "destination": "/public/payment-failed.html"
+    },
+    {
+      "source": "/pricing",
+      "destination": "/public/pricing.html"
     }
   ]
 }
