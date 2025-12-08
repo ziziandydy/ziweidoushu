@@ -26,7 +26,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=16.0.0"
+    "node": "24.x"
   },
   "scripts": {
     "build": "echo 'No build step required for Vercel Serverless Functions'",
