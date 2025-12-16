@@ -24,6 +24,22 @@
     {
       "source": "/pricing",
       "destination": "/public/pricing.html"
+    },
+    {
+      "source": "/blog",
+      "destination": "/api/blog-page"
+    },
+    {
+      "source": "/blog/:slug",
+      "destination": "/api/blog/page/:slug"
+    },
+    {
+      "source": "/admin-login",
+      "destination": "/api/admin-login-page"
+    },
+    {
+      "source": "/admin-dashboard",
+      "destination": "/api/admin-dashboard-page"
     }
   ]
 }

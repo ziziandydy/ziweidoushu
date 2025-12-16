@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>後台管理 | AI 紫微斗數</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .editor-container { min-height: 400px; }
+        .preview-content { max-height: 500px; overflow-y: auto; }
+        .prose h1 { font-size: 2em; font-weight: bold; margin-top: 1em; margin-bottom: 0.5em; }
+        .prose h2 { font-size: 1.5em; font-weight: bold; margin-top: 1.5em; margin-bottom: 0.5em; }
+        .prose h3 { font-size: 1.25em; font-weight: bold; margin-top: 1.25em; margin-bottom: 0.5em; }
+        .prose p { margin-bottom: 1em; line-height: 1.75; }
+        .prose ul, .prose ol { margin-left: 1.5em; margin-bottom: 1em; }
+        .prose li { margin-bottom: 0.5em; }
+        .prose code { background: #f3f4f6; padding: 0.2em 0.4em; border-radius: 0.25em; font-family: monospace; }
+        .prose pre { background: #1f2937; color: #f3f4f6; padding: 1em; border-radius: 0.5em; overflow-x: auto; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="/" class="text-2xl font-bold text-purple-600">AI 紫微斗數</a>
+                <span class="text-gray-400">|</span>
+                <span class="text-lg text-gray-600">後台管理</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="userName" class="text-gray-600"></span>
+                <button onclick="logout()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                    登出
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+
+        <!-- Tabs -->
+        <div class="mb-6 flex space-x-4 border-b">
+            <button onclick="showTab('list')" id="tabList" class="tab-btn px-6 py-3 font-semibold text-purple-600 border-b-2 border-purple-600">
+                文章列表
+            </button>
+            <button onclick="showTab('create')" id="tabCreate" class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:text-purple-600">
+                新增文章
+            </button>
+        </div>
+
+        <!-- Article List Tab -->
+        <div id="listTab">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">文章列表</h2>
+
+                <!-- Loading -->
+                <div id="listLoading" class="text-center py-12">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+                </div>
+
+                <!-- Articles Table -->
+                <div id="articlesTable" class="hidden overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">標題</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">標籤</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">狀態</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">發布時間</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="articlesBody" class="divide-y">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div id="listPagination" class="flex justify-center items-center space-x-4 mt-6 hidden">
+                    <!-- Dynamic pagination -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Create/Edit Article Tab -->
+        <div id="createTab" class="hidden">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 id="formTitle" class="text-2xl font-bold text-gray-800 mb-6">新增文章</h2>
+
+                <!-- Alert -->
+                <div id="formAlert" class="hidden mb-4 p-4 rounded-lg"></div>
+
+                <!-- Form -->
+                <form id="articleForm" class="space-y-6">
+                    <input type="hidden" id="articleId">
+
+                    <!-- Title -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">文章標題 *</label>
+                        <input type="text" id="title" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                               placeholder="請輸入文章標題">
+                    </div>
+
+                    <!-- Tags -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">標籤（用逗號分隔）</label>
+                        <input type="text" id="tags"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                               placeholder="例如：紫微斗數,AI,運勢">
+                    </div>
+
+                    <!-- Content Editor -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">內容（Markdown 格式）*</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Editor -->
+                            <div>
+                                <textarea id="content" required
+                                          class="w-full h-96 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent font-mono text-sm"
+                                          placeholder="請輸入 Markdown 格式內容..."></textarea>
+                            </div>
+                            <!-- Preview -->
+                            <div>
+                                <div class="border border-gray-300 rounded-lg p-4 h-96 overflow-y-auto bg-gray-50">
+                                    <div id="preview" class="prose prose-sm max-w-none">
+                                        <p class="text-gray-400">預覽將顯示在這裡...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">狀態</label>
+                        <select id="status"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+                            <option value="draft">草稿</option>
+                            <option value="published">發布</option>
+                        </select>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex space-x-4">
+                        <button type="submit" id="saveBtn"
+                                class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold">
+                            儲存文章
+                        </button>
+                        <button type="button" onclick="cancelEdit()"
+                                class="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 font-semibold">
+                            取消
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const API_BASE = '/api/blog';
+        let currentPage = 1;
+        let editingArticleId = null;
+
+        // Check authentication
+        const token = localStorage.getItem('admin_token');
+        if (!token) {
+            window.location.href = '/admin-login';
+        }
+
+        // Load user info
+        const user = JSON.parse(localStorage.getItem('admin_user') || '{}');
+        document.getElementById('userName').textContent = user.username || '管理員';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadArticles();
+
+            // Markdown preview
+            document.getElementById('content').addEventListener('input', updatePreview);
+        });
+
+        // Tab switching
+        function showTab(tab) {
+            const tabs = ['list', 'create'];
+            tabs.forEach(t => {
+                document.getElementById(t + 'Tab').classList.toggle('hidden', t !== tab);
+                document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))
+                    .classList.toggle('text-purple-600', t === tab);
+                document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))
+                    .classList.toggle('border-b-2', t === tab);
+                document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))
+                    .classList.toggle('border-purple-600', t === tab);
+                document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))
+                    .classList.toggle('text-gray-600', t !== tab);
+            });
+
+            if (tab === 'list') {
+                loadArticles();
+            }
+        }
+
+        // Load articles
+        async function loadArticles(page = 1) {
+            currentPage = page;
+            const loading = document.getElementById('listLoading');
+            const table = document.getElementById('articlesTable');
+
+            loading.classList.remove('hidden');
+            table.classList.add('hidden');
+
+            try {
+                const response = await fetch(`${API_BASE}/list?page=${page}&limit=20&includeAll=true`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.error);
+                }
+
+                renderArticles(result.data.posts);
+                renderPagination(result.data.pagination);
+
+                loading.classList.add('hidden');
+                table.classList.remove('hidden');
+            } catch (error) {
+                console.error('載入文章失敗:', error);
+                loading.innerHTML = '<p class="text-red-500">載入失敗</p>';
+            }
+        }
+
+        // Render articles
+        function renderArticles(posts) {
+            const tbody = document.getElementById('articlesBody');
+            tbody.innerHTML = posts.map(post => `
+                <tr>
+                    <td class="px-4 py-3">
+                        <a href="/blog/${post.slug}" target="_blank" class="text-purple-600 hover:underline">
+                            ${escapeHtml(post.title)}
+                        </a>
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex flex-wrap gap-1">
+                            ${post.tags.map(tag => `
+                                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full">
+                                    ${escapeHtml(tag)}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 ${post.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'} text-xs rounded-full">
+                            ${post.status === 'published' ? '已發布' : '草稿'}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-sm text-gray-600">
+                        ${formatDate(post.published_at || post.created_at)}
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex space-x-2">
+                            <button onclick="editArticle('${post.id}')" class="text-blue-600 hover:text-blue-800">
+                                編輯
+                            </button>
+                            <button onclick="deleteArticle('${post.id}', '${escapeHtml(post.title)}')" class="text-red-600 hover:text-red-800">
+                                刪除
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Render pagination
+        function renderPagination(paginationData) {
+            const pagination = document.getElementById('listPagination');
+            const { page, totalPages, hasPrev, hasNext } = paginationData;
+
+            if (totalPages <= 1) {
+                pagination.classList.add('hidden');
+                return;
+            }
+
+            pagination.innerHTML = `
+                <button onclick="loadArticles(${page - 1})"
+                        class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                        ${!hasPrev ? 'disabled' : ''}>
+                    上一頁
+                </button>
+                <span class="text-gray-700">第 ${page} / ${totalPages} 頁</span>
+                <button onclick="loadArticles(${page + 1})"
+                        class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                        ${!hasNext ? 'disabled' : ''}>
+                    下一頁
+                </button>
+            `;
+            pagination.classList.remove('hidden');
+        }
+
+        // Article form submission
+        document.getElementById('articleForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = '儲存中...';
+
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const tagsInput = document.getElementById('tags').value;
+            const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
+            const status = document.getElementById('status').value;
+
+            const data = { title, content, tags, status };
+
+            try {
+                let url, method;
+                if (editingArticleId) {
+                    url = `${API_BASE}/${editingArticleId}`;
+                    method = 'PUT';
+                } else {
+                    url = `${API_BASE}/create`;
+                    method = 'POST';
+                }
+
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showFormAlert(editingArticleId ? '文章更新成功' : '文章創建成功', 'success');
+                    setTimeout(() => {
+                        cancelEdit();
+                        showTab('list');
+                    }, 1500);
+                } else {
+                    showFormAlert(result.error || '儲存失敗', 'error');
+                }
+            } catch (error) {
+                console.error('儲存文章失敗:', error);
+                showFormAlert('儲存失敗，請稍後再試', 'error');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = '儲存文章';
+            }
+        });
+
+        // Edit article
+        async function editArticle(id) {
+            try {
+                const response = await fetch(`${API_BASE}/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.error);
+                }
+
+                const post = result.data;
+
+                // Fill form
+                document.getElementById('articleId').value = post.id;
+                document.getElementById('title').value = post.title;
+                document.getElementById('content').value = post.content;
+                document.getElementById('tags').value = post.tags.join(', ');
+                document.getElementById('status').value = post.status;
+                document.getElementById('formTitle').textContent = '編輯文章';
+
+                editingArticleId = id;
+                updatePreview();
+                showTab('create');
+
+            } catch (error) {
+                console.error('載入文章失敗:', error);
+                alert('載入文章失敗');
+            }
+        }
+
+        // Delete article
+        async function deleteArticle(id, title) {
+            if (!confirm(`確定要刪除文章「${title}」嗎？`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('文章刪除成功');
+                    loadArticles(currentPage);
+                } else {
+                    alert(result.error || '刪除失敗');
+                }
+            } catch (error) {
+                console.error('刪除文章失敗:', error);
+                alert('刪除失敗');
+            }
+        }
+
+        // Cancel edit
+        function cancelEdit() {
+            document.getElementById('articleForm').reset();
+            document.getElementById('articleId').value = '';
+            document.getElementById('formTitle').textContent = '新增文章';
+            document.getElementById('preview').innerHTML = '<p class="text-gray-400">預覽將顯示在這裡...</p>';
+            editingArticleId = null;
+        }
+
+        // Update preview
+        function updatePreview() {
+            const content = document.getElementById('content').value;
+            const preview = document.getElementById('preview');
+
+            if (content.trim()) {
+                const html = marked.parse(content);
+                preview.innerHTML = html;
+            } else {
+                preview.innerHTML = '<p class="text-gray-400">預覽將顯示在這裡...</p>';
+            }
+        }
+
+        // Show form alert
+        function showFormAlert(message, type) {
+            const alert = document.getElementById('formAlert');
+            alert.className = `mb-4 p-4 rounded-lg ${type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
+            alert.textContent = message;
+            alert.classList.remove('hidden');
+
+            setTimeout(() => {
+                alert.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('admin_token');
+            localStorage.removeItem('admin_user');
+            window.location.href = '/admin-login';
+        }
+
+        // Utility functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('zh-TW', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+    </script>
+
+</body>
+</html>

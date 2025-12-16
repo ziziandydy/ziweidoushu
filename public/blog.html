@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>紫微斗數 AI 部落格 | 命理知識分享</title>
+    <meta name="description" content="探索紫微斗數的奧秘，AI 生成的命理知識文章，涵蓋每日運勢、星曜解析、命理教學等內容。">
+    <meta name="keywords" content="紫微斗數部落格,命理文章,AI命理,每日運勢,星曜解析">
+    <meta name="author" content="AI 紫微斗數">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="紫微斗數 AI 部落格">
+    <meta property="og:description" content="探索紫微斗數的奧秘，AI 生成的命理知識文章">
+    <meta property="og:url" content="https://ziweidoushu.com/blog">
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .blog-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(147, 51, 234, 0.15);
+        }
+        .tag-badge {
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+        }
+        .tag-badge:hover {
+            background-color: #7c3aed;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-white to-purple-50 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="/" class="text-2xl font-bold text-purple-600">AI 紫微斗數</a>
+                <span class="text-gray-400">|</span>
+                <span class="text-lg text-gray-600">部落格</span>
+            </div>
+            <nav class="flex space-x-6">
+                <a href="/" class="text-gray-600 hover:text-purple-600">首頁</a>
+                <a href="/analysis" class="text-gray-600 hover:text-purple-600">命盤計算</a>
+                <a href="/blog" class="text-purple-600 font-semibold">部落格</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-12">
+
+        <!-- Page Title -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">紫微斗數 AI 部落格</h1>
+            <p class="text-lg text-gray-600">探索命理智慧，每日更新運勢與星曜解析</p>
+        </div>
+
+        <!-- Tag Filter -->
+        <div id="tagFilter" class="flex flex-wrap justify-center gap-2 mb-8">
+            <!-- 動態生成標籤 -->
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+            <p class="mt-4 text-gray-600">載入文章中...</p>
+        </div>
+
+        <!-- Blog Posts Grid -->
+        <div id="blogGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 hidden">
+            <!-- 動態生成文章卡片 -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="text-center py-12 hidden">
+            <p class="text-xl text-gray-500">目前沒有文章</p>
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="flex justify-center items-center space-x-4 mt-12 hidden">
+            <!-- 動態生成分頁 -->
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>&copy; 2025 AI 紫微斗數. All rights reserved.</p>
+            <div class="mt-4 space-x-6">
+                <a href="/privacy-policy" class="hover:text-purple-400">隱私政策</a>
+                <a href="/pricing" class="hover:text-purple-400">價格方案</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // API 基礎 URL
+        const API_BASE = '/api/blog';
+
+        // 狀態
+        let currentPage = 1;
+        let currentTag = null;
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBlogPosts();
+        });
+
+        // 載入部落格文章
+        async function loadBlogPosts(page = 1, tag = null) {
+            currentPage = page;
+            currentTag = tag;
+
+            const loading = document.getElementById('loading');
+            const blogGrid = document.getElementById('blogGrid');
+            const emptyState = document.getElementById('emptyState');
+            const pagination = document.getElementById('pagination');
+
+            // 顯示載入狀態
+            loading.classList.remove('hidden');
+            blogGrid.classList.add('hidden');
+            emptyState.classList.add('hidden');
+            pagination.classList.add('hidden');
+
+            try {
+                let url = `${API_BASE}/list?page=${page}&limit=9`;
+                if (tag) url += `&tag=${encodeURIComponent(tag)}`;
+
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.error);
+                }
+
+                const { posts, pagination: paginationData } = result.data;
+
+                // 隱藏載入狀態
+                loading.classList.add('hidden');
+
+                if (posts.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                // 渲染文章
+                renderBlogPosts(posts);
+                renderPagination(paginationData);
+                renderTagFilter(posts);
+
+                blogGrid.classList.remove('hidden');
+                if (paginationData.totalPages > 1) {
+                    pagination.classList.remove('hidden');
+                }
+
+            } catch (error) {
+                console.error('載入文章失敗:', error);
+                loading.innerHTML = '<p class="text-red-500">載入失敗，請稍後再試</p>';
+            }
+        }
+
+        // 渲染文章卡片
+        function renderBlogPosts(posts) {
+            const blogGrid = document.getElementById('blogGrid');
+            blogGrid.innerHTML = posts.map(post => `
+                <article class="blog-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+                         onclick="window.location.href='/blog/${post.slug}'">
+                    <div class="p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-3 line-clamp-2">
+                            ${escapeHtml(post.title)}
+                        </h2>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            ${extractPlainText(post.excerpt)}...
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${post.tags.map(tag => `
+                                <span class="tag-badge px-3 py-1 bg-purple-100 text-purple-700 text-sm rounded-full"
+                                      onclick="event.stopPropagation(); loadBlogPosts(1, '${escapeHtml(tag)}')">
+                                    ${escapeHtml(tag)}
+                                </span>
+                            `).join('')}
+                        </div>
+                        <div class="flex justify-between items-center text-sm text-gray-500">
+                            <span>${formatDate(post.published_at || post.created_at)}</span>
+                            <span class="text-purple-600 font-semibold">閱讀更多 →</span>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // 渲染分頁
+        function renderPagination(paginationData) {
+            const pagination = document.getElementById('pagination');
+            const { page, totalPages, hasPrev, hasNext } = paginationData;
+
+            pagination.innerHTML = `
+                <button onclick="loadBlogPosts(${page - 1}, currentTag)"
+                        class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                        ${!hasPrev ? 'disabled' : ''}>
+                    上一頁
+                </button>
+                <span class="text-gray-700">第 ${page} / ${totalPages} 頁</span>
+                <button onclick="loadBlogPosts(${page + 1}, currentTag)"
+                        class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                        ${!hasNext ? 'disabled' : ''}>
+                    下一頁
+                </button>
+            `;
+        }
+
+        // 渲染標籤過濾器
+        function renderTagFilter(posts) {
+            const tagFilter = document.getElementById('tagFilter');
+            const allTags = new Set();
+            posts.forEach(post => {
+                post.tags.forEach(tag => allTags.add(tag));
+            });
+
+            tagFilter.innerHTML = `
+                <button onclick="loadBlogPosts(1, null)"
+                        class="px-4 py-2 rounded-full ${!currentTag ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 border'} hover:bg-purple-500 hover:text-white">
+                    全部
+                </button>
+                ${Array.from(allTags).map(tag => `
+                    <button onclick="loadBlogPosts(1, '${escapeHtml(tag)}')"
+                            class="px-4 py-2 rounded-full ${currentTag === tag ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 border'} hover:bg-purple-500 hover:text-white">
+                        ${escapeHtml(tag)}
+                    </button>
+                `).join('')}
+            `;
+        }
+
+        // 工具函數
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function extractPlainText(markdown) {
+            return markdown.replace(/[#*_`\[\]]/g, '').substring(0, 150);
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('zh-TW', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+    </script>
+
+</body>
+</html>
