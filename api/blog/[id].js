@@ -9,8 +9,8 @@
  */
 
 const { sql } = require('@vercel/postgres');
-const { verifyBearerToken } = require('../utils/auth');
-const { setCorsHeaders, handleOptions } = require('../utils/cors');
+const { verifyBearerToken } = require('../../lib/auth');
+const { setCorsHeaders, handleOptions } = require('../../lib/cors');
 const slugify = require('slugify');
 
 module.exports = async function handler(req, res) {

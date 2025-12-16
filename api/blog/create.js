@@ -8,8 +8,8 @@
 
 const { sql } = require('@vercel/postgres');
 const slugify = require('slugify');
-const { verifyBearerToken } = require('../utils/auth');
-const { setCorsHeaders, handleOptions } = require('../utils/cors');
+const { verifyBearerToken } = require('../../lib/auth');
+const { setCorsHeaders, handleOptions } = require('../../lib/cors');
 
 module.exports = async function handler(req, res) {
   console.log('📝 Blog Create API');

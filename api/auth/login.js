@@ -6,8 +6,8 @@
  */
 
 const { sql } = require('@vercel/postgres');
-const { verifyPassword, generateJWT } = require('../utils/auth');
-const { setCorsHeaders, handleOptions } = require('../utils/cors');
+const { verifyPassword, generateJWT } = require('../../lib/auth');
+const { setCorsHeaders, handleOptions } = require('../../lib/cors');
 
 module.exports = async function handler(req, res) {
   console.log('🔐 Admin Login API');

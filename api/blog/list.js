@@ -7,7 +7,7 @@
  */
 
 const { sql } = require('@vercel/postgres');
-const { setCorsHeaders, handleOptions } = require('../utils/cors');
+const { setCorsHeaders, handleOptions } = require('../../lib/cors');
 
 module.exports = async function handler(req, res) {
   console.log('📚 Blog List API');
