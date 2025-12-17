@@ -186,13 +186,15 @@
                         <p class="text-gray-600 mb-4 line-clamp-3">
                             ${extractPlainText(post.excerpt)}...
                         </p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            ${post.tags.map(tag => `
-                                <span class="tag-badge px-3 py-1 bg-purple-100 text-purple-700 text-sm rounded-full"
-                                      onclick="event.stopPropagation(); loadBlogPosts(1, '${escapeHtml(tag)}')">
+                        <div class="flex flex-wrap gap-2 mb-4 max-h-16 overflow-hidden">
+                            ${post.tags.slice(0, 5).map(tag => `
+                                <span class="tag-badge px-2.5 py-1 bg-purple-100 text-purple-700 text-xs rounded-full whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px]"
+                                      onclick="event.stopPropagation(); loadBlogPosts(1, '${escapeHtml(tag)}')"
+                                      title="${escapeHtml(tag)}">
                                     ${escapeHtml(tag)}
                                 </span>
                             `).join('')}
+                            ${post.tags.length > 5 ? `<span class="text-xs text-gray-500 self-center">+${post.tags.length - 5}</span>` : ''}
                         </div>
                         <div class="flex justify-between items-center text-sm text-gray-500">
                             <span>${formatDate(post.published_at || post.created_at)}</span>

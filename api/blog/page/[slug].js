@@ -66,6 +66,19 @@ function renderBlogPage(post) {
         .prose code { background: #f3f4f6; padding: 0.2em 0.4em; border-radius: 0.25em; font-family: monospace; }
         .prose pre { background: #1f2937; color: #f3f4f6; padding: 1em; border-radius: 0.5em; overflow-x: auto; }
         .prose blockquote { border-left: 4px solid #9333ea; padding-left: 1em; color: #6b7280; font-style: italic; }
+        .prose a {
+            color: #7c3aed;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            transition: color 0.2s ease;
+        }
+        .prose a:hover {
+            color: #5b21b6;
+            text-decoration-thickness: 2px;
+        }
+        .prose a:visited {
+            color: #6d28d9;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -88,13 +101,14 @@ function renderBlogPage(post) {
         <h1 class="text-4xl font-bold text-gray-900 mb-4">${escapeHtml(post.title)}</h1>
 
         <!-- Meta -->
-        <div class="flex items-center space-x-4 text-gray-500 mb-8">
-            <span>${formatDate(post.published_at || post.created_at)}</span>
-            <span>•</span>
-            <div class="flex space-x-2">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3 text-gray-500 mb-8">
+            <span class="text-sm">${formatDate(post.published_at || post.created_at)}</span>
+            <span class="hidden sm:inline">•</span>
+            <div class="flex flex-wrap gap-2">
                 ${post.tags.map(tag => `
                     <a href="/blog?tag=${encodeURIComponent(tag)}"
-                       class="px-3 py-1 bg-purple-100 text-purple-700 text-sm rounded-full hover:bg-purple-200">
+                       class="px-2.5 py-1 bg-purple-100 text-purple-700 text-xs rounded-full hover:bg-purple-200 transition-colors whitespace-nowrap"
+                       title="${escapeHtml(tag)}">
                         ${escapeHtml(tag)}
                     </a>
                 `).join('')}
