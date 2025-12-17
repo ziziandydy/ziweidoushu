@@ -271,14 +271,14 @@
                                      data-ad-client="ca-pub-3240143153468832"
                                      data-ad-slot="7607800035"></ins>
                             </div>
-                            <!-- Mobile: Fluid Ad -->
-                            <div class="md:hidden">
+                            <!-- Mobile: Responsive Ad (min 250px wide) -->
+                            <div class="md:hidden w-full min-w-[250px]">
                                 <ins class="adsbygoogle"
-                                     style="display:block"
+                                     style="display:block;width:100%;min-width:250px;"
                                      data-ad-client="ca-pub-3240143153468832"
                                      data-ad-slot="7607800035"
-                                     data-ad-format="fluid"
-                                     data-ad-layout-key="-fb+5w+4e-db+86"></ins>
+                                     data-ad-format="auto"
+                                     data-full-width-responsive="true"></ins>
                             </div>
                         </div>
                     `;
@@ -287,13 +287,15 @@
 
             blogGrid.innerHTML = content;
 
-            // 初始化新插入的廣告
-            const adElements = blogGrid.querySelectorAll('.adsbygoogle');
-            adElements.forEach(ad => {
-                if (!ad.dataset.adsbygoogleStatus) {
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                }
-            });
+            // 延遲初始化廣告，確保 DOM 已渲染並有正確尺寸
+            setTimeout(() => {
+                const adElements = blogGrid.querySelectorAll('.adsbygoogle');
+                adElements.forEach(ad => {
+                    if (!ad.dataset.adsbygoogleStatus) {
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    }
+                });
+            }, 100);
         }
 
         // 渲染分頁
