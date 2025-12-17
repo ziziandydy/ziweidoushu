@@ -48,6 +48,11 @@ function renderBlogPage(post) {
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
+    <!-- Google AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-3240143153468832">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3240143153468832"
+            crossorigin="anonymous"></script>
+
     <style>
         .prose { max-width: 65ch; }
         .prose h1 { font-size: 2em; font-weight: bold; margin-top: 1em; margin-bottom: 0.5em; color: #1f2937; }
@@ -117,6 +122,34 @@ function renderBlogPage(post) {
         const clean = DOMPurify.sanitize(html);
         document.getElementById('content').innerHTML = clean;
     </script>
+
+    <!-- Left Sidebar Ad -->
+    <div class="fixed left-4 top-1/2 transform -translate-y-1/2 hidden xl:block w-40 h-96 z-10">
+        <div class="h-full flex flex-col">
+            <div class="text-center text-xs text-gray-500 mb-2 flex-shrink-0">廣告</div>
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-2 flex-1 flex items-center justify-center">
+                <ins class="adsbygoogle w-full" style="display:block" data-ad-client="ca-pub-3240143153468832"
+                    data-ad-slot="7607800035" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Sidebar Ad -->
+    <div class="fixed right-4 top-1/2 transform -translate-y-1/2 hidden xl:block w-40 h-96 z-10">
+        <div class="h-full flex flex-col">
+            <div class="text-center text-xs text-gray-500 mb-2 flex-shrink-0">廣告</div>
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-2 flex-1 flex items-center justify-center">
+                <ins class="adsbygoogle w-full" style="display:block" data-ad-format="autorelaxed"
+                    data-ad-client="ca-pub-3240143153468832" data-ad-slot="5671756041"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>`;
