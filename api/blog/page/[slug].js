@@ -115,9 +115,33 @@ function renderBlogPage(post) {
             </div>
         </div>
 
+        <!-- Mobile Top Ad (Between title and content) -->
+        <div class="xl:hidden my-8">
+            <div class="text-center text-xs text-gray-500 mb-2">廣告</div>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-3240143153468832"
+                 data-ad-slot="7607800035"
+                 data-ad-format="fluid"
+                 data-ad-layout-key="-fb+5w+4e-db+86"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
         <!-- Content -->
         <div id="content" class="prose prose-lg max-w-none bg-white rounded-lg shadow-sm p-8">
             <!-- Markdown will be rendered here -->
+        </div>
+
+        <!-- Mobile Bottom Ad (Above back button) -->
+        <div class="xl:hidden my-8">
+            <div class="text-center text-xs text-gray-500 mb-2">廣告</div>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-3240143153468832"
+                 data-ad-slot="5671756041"
+                 data-ad-format="fluid"
+                 data-ad-layout-key="-fb+5w+4e-db+86"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
 
         <!-- Back Link -->
@@ -134,7 +158,33 @@ function renderBlogPage(post) {
         const content = ${JSON.stringify(post.content)};
         const html = marked.parse(content);
         const clean = DOMPurify.sanitize(html);
-        document.getElementById('content').innerHTML = clean;
+        const contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = clean;
+
+        // 在手機版插入中間廣告（約 50% 位置）
+        if (window.innerWidth < 1280) {
+            const allElements = contentDiv.children;
+            if (allElements.length > 3) {
+                const midPoint = Math.floor(allElements.length / 2);
+                const midAd = document.createElement('div');
+                midAd.className = 'my-8 not-prose';
+                midAd.innerHTML = \`
+                    <div class="text-center text-xs text-gray-500 mb-2">廣告</div>
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3240143153468832"
+                         data-ad-slot="7607800035"
+                         data-ad-format="fluid"
+                         data-ad-layout-key="-fb+5w+4e-db+86"></ins>
+                \`;
+
+                // 插入廣告到中間位置
+                allElements[midPoint].parentNode.insertBefore(midAd, allElements[midPoint]);
+
+                // 初始化廣告
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+        }
     </script>
 
     <!-- Left Sidebar Ad -->
