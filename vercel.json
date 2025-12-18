@@ -27,11 +27,11 @@
     },
     {
       "source": "/sitemap.xml",
-      "destination": "/api/sitemap.xml"
+      "destination": "/api/page?page=sitemap"
     },
     {
       "source": "/blog",
-      "destination": "/api/blog-page"
+      "destination": "/api/page?page=blog"
     },
     {
       "source": "/blog/:slug",
