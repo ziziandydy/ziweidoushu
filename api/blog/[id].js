@@ -1,11 +1,12 @@
 /**
  * Vercel Serverless Function - Blog Post Operations
  * API Routes:
+ *   - POST /api/blog/create - 新增文章 (auth required)
  *   - GET /api/blog/[id] - 取得單篇文章 (public)
  *   - PUT /api/blog/[id] - 更新文章 (auth required)
  *   - DELETE /api/blog/[id] - 刪除文章 (auth required)
  *
- * [id] 可以是 UUID 或 slug
+ * [id] 可以是 UUID 或 slug，或 'create' 用於新增
  */
 
 const { sql } = require('@vercel/postgres');
@@ -30,7 +31,10 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    if (req.method === 'GET') {
+    // POST /api/blog/create - 新增文章
+    if (req.method === 'POST' && id === 'create') {
+      return await handleCreate(req, res);
+    } else if (req.method === 'GET') {
       return await handleGet(id, res);
     } else if (req.method === 'PUT') {
       return await handleUpdate(id, req, res);
@@ -50,6 +54,76 @@ module.exports = async function handler(req, res) {
     });
   }
 };
+
+// POST - 新增文章 (需認證)
+async function handleCreate(req, res) {
+  console.log('✍️ 新增文章');
+
+  // 驗證認證
+  const authHeader = req.headers.authorization;
+  await verifyBearerToken(authHeader);
+
+  const { title, content, tags, status } = req.body;
+
+  // 驗證必填欄位
+  if (!title || !content) {
+    return res.status(400).json({
+      success: false,
+      error: '缺少必填欄位：title 或 content'
+    });
+  }
+
+  // 生成 slug
+  let baseSlug = slugify(title, {
+    lower: true,
+    strict: true,
+    locale: 'zh',
+    remove: /[*+~.()'"!:@]/g
+  });
+
+  // 檢查 slug 是否重複，若重複則加上數字後綴
+  let slug = baseSlug;
+  let counter = 1;
+  let isUnique = false;
+
+  while (!isUnique) {
+    const existing = await sql`
+      SELECT id FROM blog_posts WHERE slug = ${slug}
+    `;
+
+    if (existing.rows.length === 0) {
+      isUnique = true;
+    } else {
+      slug = `${baseSlug}-${counter}`;
+      counter++;
+    }
+  }
+
+  // 處理 tags
+  const tagsArray = Array.isArray(tags) ? tags : (tags ? JSON.parse(tags) : []);
+
+  // 插入文章
+  const result = await sql`
+    INSERT INTO blog_posts (title, slug, content, tags, status, published_at)
+    VALUES (
+      ${title},
+      ${slug},
+      ${content},
+      ${JSON.stringify(tagsArray)}::jsonb,
+      ${status || 'draft'},
+      ${status === 'published' ? new Date().toISOString() : null}
+    )
+    RETURNING *
+  `;
+
+  console.log('✅ 文章新增成功:', result.rows[0].title);
+
+  return res.status(201).json({
+    success: true,
+    message: '文章新增成功',
+    data: result.rows[0]
+  });
+}
 
 // GET - 取得單篇文章 (公開)
 async function handleGet(id, res) {

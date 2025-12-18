@@ -9,7 +9,6 @@ const { sql } = require('@vercel/postgres');
 
 // 允許的頁面映射
 const PAGES = {
-  'blog': 'blog.html',
   'admin-login': 'admin-login.html',
   'admin-dashboard': 'admin-dashboard.html'
 };

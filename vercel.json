@@ -31,7 +31,7 @@
     },
     {
       "source": "/blog",
-      "destination": "/api/page?page=blog"
+      "destination": "/api/blog-page"
     },
     {
       "source": "/blog/:slug",
