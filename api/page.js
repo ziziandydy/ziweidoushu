@@ -73,13 +73,13 @@ async function generateSitemap(req, res) {
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 ${staticPages.map(page => `    <url>
-        <loc>https://ziweidoushu.com${page.url}</loc>
+        <loc>https://aiziwei.online${page.url}</loc>
         <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
         <changefreq>${page.changefreq}</changefreq>
         <priority>${page.priority}</priority>
     </url>`).join('\n')}
 ${blogPosts.map(post => `    <url>
-        <loc>https://ziweidoushu.com/blog/${escapeXml(post.slug)}</loc>
+        <loc>https://aiziwei.online/blog/${escapeXml(post.slug)}</loc>
         <lastmod>${formatDate(post.updated_at || post.published_at)}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
@@ -97,7 +97,7 @@ ${blogPosts.map(post => `    <url>
     const basicSitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://ziweidoushu.com</loc>
+        <loc>https://aiziwei.online</loc>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>

@@ -15,7 +15,7 @@ Disallow: /fix-main.html
 Disallow: /fix-report.html
 
 # Sitemap
-Sitemap: https://ziweidoushu.com/sitemap.xml
+Sitemap: https://aiziwei.online/sitemap.xml
 
 # Crawl-delay (optional, helps prevent server overload)
 Crawl-delay: 1
