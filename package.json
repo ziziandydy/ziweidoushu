@@ -29,7 +29,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "build": "npm run build:css",
+    "build": "echo 'CSS already compiled and committed to Git. No build step required.'",
     "build:css": "npx tailwindcss -i ./src/styles/input.css -o ./public/styles.css --minify",
     "dev:css": "npx tailwindcss -i ./src/styles/input.css -o ./public/styles.css --watch",
     "test": "jest --coverage",
