@@ -33,7 +33,7 @@ module.exports = async function handler(req, res) {
     let postsQuery;
     if (tag) {
       postsQuery = await sql`
-        SELECT id, title, excerpt, tags, published_at, created_at, slug
+        SELECT id, title, LEFT(content, 200) as excerpt, tags, published_at, created_at, slug
         FROM blog_posts
         WHERE status = 'published' AND ${tag} = ANY(tags)
         ORDER BY published_at DESC
@@ -41,7 +41,7 @@ module.exports = async function handler(req, res) {
       `;
     } else {
       postsQuery = await sql`
-        SELECT id, title, excerpt, tags, published_at, created_at, slug
+        SELECT id, title, LEFT(content, 200) as excerpt, tags, published_at, created_at, slug
         FROM blog_posts
         WHERE status = 'published'
         ORDER BY published_at DESC
