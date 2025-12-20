@@ -101,7 +101,7 @@ async function handleCreate(req, res) {
   }
 
   // 處理 tags
-  const tagsArray = Array.isArray(tags) ? tags : (tags ? JSON.parse(tags) : []);
+  const tagsArray = parseTags(tags);
 
   // 插入文章
   const result = await sql`
@@ -191,7 +191,7 @@ async function handleUpdate(id, req, res) {
 
   if (tags !== undefined) {
     updates.push('tags = $' + (values.length + 1) + '::jsonb');
-    const tagsArray = Array.isArray(tags) ? tags : JSON.parse(tags);
+    const tagsArray = parseTags(tags);
     values.push(JSON.stringify(tagsArray));
   }
 
@@ -267,4 +267,22 @@ async function handleDelete(id, req, res) {
     message: '文章刪除成功',
     data: result.rows[0]
   });
+}
+
+/**
+ * 安全解析標籤
+ * 支援 JSON 陣列字串 或 逗號分隔字串
+ */
+function parseTags(tags) {
+  if (!tags) return [];
+  if (Array.isArray(tags)) return tags;
+  if (typeof tags !== 'string') return [];
+
+  try {
+    const parsed = JSON.parse(tags);
+    return Array.isArray(parsed) ? parsed : [parsed];
+  } catch (e) {
+    // 如果不是有效的 JSON，視為逗號分隔字串
+    return tags.split(',').map(t => t.trim()).filter(t => t);
+  }
 }
