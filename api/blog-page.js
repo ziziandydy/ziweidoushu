@@ -6,82 +6,82 @@
 const { sql } = require('@vercel/postgres');
 
 module.exports = async function handler(req, res) {
-  const { page = 1, tag } = req.query;
-  const limit = 9;
-  const offset = (parseInt(page) - 1) * limit;
+    const { page = 1, tag } = req.query;
+    const limit = 9;
+    const offset = (parseInt(page) - 1) * limit;
 
-  try {
-    // 查詢文章總數
-    let countQuery;
-    if (tag) {
-      countQuery = await sql`
+    try {
+        // 查詢文章總數
+        let countQuery;
+        if (tag) {
+            countQuery = await sql`
         SELECT COUNT(*) as total
         FROM blog_posts
         WHERE status = 'published' AND ${tag} = ANY(tags)
       `;
-    } else {
-      countQuery = await sql`
+        } else {
+            countQuery = await sql`
         SELECT COUNT(*) as total
         FROM blog_posts
         WHERE status = 'published'
       `;
-    }
-    const totalPosts = parseInt(countQuery.rows[0].total);
-    const totalPages = Math.ceil(totalPosts / limit);
+        }
+        const totalPosts = parseInt(countQuery.rows[0].total);
+        const totalPages = Math.ceil(totalPosts / limit);
 
-    // 查詢文章列表
-    let postsQuery;
-    if (tag) {
-      postsQuery = await sql`
+        // 查詢文章列表
+        let postsQuery;
+        if (tag) {
+            postsQuery = await sql`
         SELECT id, title, LEFT(content, 200) as excerpt, tags, published_at, created_at, slug
         FROM blog_posts
         WHERE status = 'published' AND ${tag} = ANY(tags)
         ORDER BY published_at DESC
         LIMIT ${limit} OFFSET ${offset}
       `;
-    } else {
-      postsQuery = await sql`
+        } else {
+            postsQuery = await sql`
         SELECT id, title, LEFT(content, 200) as excerpt, tags, published_at, created_at, slug
         FROM blog_posts
         WHERE status = 'published'
         ORDER BY published_at DESC
         LIMIT ${limit} OFFSET ${offset}
       `;
-    }
+        }
 
-    const posts = postsQuery.rows;
+        const posts = postsQuery.rows;
 
-    // 獲取所有標籤
-    const tagsQuery = await sql`
-      SELECT DISTINCT unnest(tags) as tag
+        // 獲取所有標籤
+        const tagsQuery = await sql`
+      SELECT DISTINCT jsonb_array_elements_text(tags) as tag
       FROM blog_posts
       WHERE status = 'published'
     `;
-    const allTags = tagsQuery.rows.map(row => row.tag);
+        const allTags = tagsQuery.rows.map(row => row.tag);
 
-    // 渲染 HTML
-    const html = renderBlogListPage(posts, allTags, {
-      currentPage: parseInt(page),
-      totalPages,
-      currentTag: tag || null,
-      hasPrev: page > 1,
-      hasNext: page < totalPages
-    });
+        // 渲染 HTML
+        const html = renderBlogListPage(posts, allTags, {
+            currentPage: parseInt(page),
+            totalPages,
+            currentTag: tag || null,
+            hasPrev: page > 1,
+            hasNext: page < totalPages
+        });
 
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, max-age=300, must-revalidate');
-    return res.status(200).send(html);
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.setHeader('Cache-Control', 'public, max-age=300, must-revalidate');
+        return res.status(200).send(html);
 
-  } catch (error) {
-    console.error('渲染部落格列表失敗:', error);
-    return res.status(500).send('<h1>伺服器錯誤</h1>');
-  }
+    } catch (error) {
+        console.error('渲染部落格列表失敗:', error);
+        return res.status(500).send('<h1>伺服器錯誤</h1>');
+    }
 };
 
 function renderBlogListPage(posts, allTags, pagination) {
-  const { currentPage, totalPages, currentTag, hasPrev, hasNext } = pagination;
+    const { currentPage, totalPages, currentTag, hasPrev, hasNext } = pagination;
 
-  return `<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -315,25 +315,25 @@ function renderBlogListPage(posts, allTags, pagination) {
 }
 
 function escapeHtml(text) {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-  return text.replace(/[&<>"']/g, m => map[m]);
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
 }
 
 function extractPlainText(markdown) {
-  return markdown.replace(/[#*_`\[\]]/g, '').substring(0, 150);
+    return markdown.replace(/[#*_`\[\]]/g, '').substring(0, 150);
 }
 
 function formatDate(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('zh-TW', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+    const date = new Date(dateString);
+    return date.toLocaleDateString('zh-TW', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }
