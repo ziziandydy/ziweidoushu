@@ -63,10 +63,11 @@ async function handleCreate(req, res) {
   const authHeader = req.headers.authorization;
   await verifyBearerToken(authHeader);
 
-  const { title, content, tags, status } = req.body;
+  const { title, titles, content, tags, status } = req.body;
+  const finalTitle = title || titles;
 
   // 驗證必填欄位
-  if (!title || !content) {
+  if (!finalTitle || !content) {
     return res.status(400).json({
       success: false,
       error: '缺少必填欄位：title 或 content'
@@ -74,7 +75,7 @@ async function handleCreate(req, res) {
   }
 
   // 生成 slug
-  let baseSlug = slugify(title, {
+  let baseSlug = slugify(finalTitle, {
     lower: true,
     strict: true,
     locale: 'zh',
@@ -106,7 +107,7 @@ async function handleCreate(req, res) {
   const result = await sql`
     INSERT INTO blog_posts (title, slug, content, tags, status, published_at)
     VALUES (
-      ${title},
+      ${finalTitle},
       ${slug},
       ${content},
       ${JSON.stringify(tagsArray)}::jsonb,
@@ -161,18 +162,19 @@ async function handleUpdate(id, req, res) {
   const authHeader = req.headers.authorization;
   await verifyBearerToken(authHeader);
 
-  const { title, content, tags, status } = req.body;
+  const { title, titles, content, tags, status } = req.body;
+  const finalTitle = title || titles;
 
   // 建立更新欄位
   const updates = [];
   const values = [];
 
-  if (title !== undefined) {
+  if (finalTitle !== undefined) {
     updates.push('title = $' + (values.length + 1));
-    values.push(title);
+    values.push(finalTitle);
 
     // 更新 slug
-    const newSlug = slugify(title, {
+    const newSlug = slugify(finalTitle, {
       lower: true,
       strict: true,
       locale: 'zh',
