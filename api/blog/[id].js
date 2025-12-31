@@ -63,7 +63,7 @@ async function handleCreate(req, res) {
   const authHeader = req.headers.authorization;
   await verifyBearerToken(authHeader);
 
-  const { title, titles, content, tags, status } = req.body;
+  const { title, titles, content, tags, status, language, translated_from } = req.body;
   const finalTitle = title || titles;
 
   // 驗證必填欄位
@@ -74,6 +74,23 @@ async function handleCreate(req, res) {
     });
   }
 
+  // 驗證語言參數 (預設為 zh-TW)
+  const validLanguages = ['zh-TW', 'en'];
+  const finalLanguage = language && validLanguages.includes(language) ? language : 'zh-TW';
+
+  // 驗證 translated_from 參數 (如果提供)
+  if (translated_from) {
+    const originalPost = await sql`
+      SELECT id FROM blog_posts WHERE id::text = ${translated_from}
+    `;
+    if (originalPost.rows.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'translated_from 指向的原始文章不存在'
+      });
+    }
+  }
+
   // 生成 slug
   let baseSlug = slugify(finalTitle, {
     lower: true,
@@ -82,14 +99,14 @@ async function handleCreate(req, res) {
     remove: /[*+~.()'"!:@]/g
   });
 
-  // 檢查 slug 是否重複，若重複則加上數字後綴
+  // 檢查 slug 在同語言下是否重複，若重複則加上數字後綴
   let slug = baseSlug;
   let counter = 1;
   let isUnique = false;
 
   while (!isUnique) {
     const existing = await sql`
-      SELECT id FROM blog_posts WHERE slug = ${slug}
+      SELECT id FROM blog_posts WHERE slug = ${slug} AND language = ${finalLanguage}
     `;
 
     if (existing.rows.length === 0) {
@@ -105,24 +122,29 @@ async function handleCreate(req, res) {
 
   // 插入文章
   const result = await sql`
-    INSERT INTO blog_posts (title, slug, content, tags, status, published_at)
+    INSERT INTO blog_posts (title, slug, content, tags, status, published_at, language, translated_from)
     VALUES (
       ${finalTitle},
       ${slug},
       ${content},
       ${JSON.stringify(tagsArray)}::jsonb,
       ${status || 'draft'},
-      ${status === 'published' ? new Date().toISOString() : null}
+      ${status === 'published' ? new Date().toISOString() : null},
+      ${finalLanguage},
+      ${translated_from || null}
     )
     RETURNING *
   `;
 
-  console.log('✅ 文章新增成功:', result.rows[0].title);
+  console.log(`✅ 文章新增成功 (${finalLanguage}):`, result.rows[0].title);
 
   return res.status(201).json({
     success: true,
     message: '文章新增成功',
-    data: result.rows[0]
+    data: {
+      ...result.rows[0],
+      url: `/${finalLanguage}/blog/${result.rows[0].slug}`
+    }
   });
 }
 

@@ -31,14 +31,19 @@ module.exports = async function handler(req, res) {
       limit = '10',
       tag = null,
       status = 'published',
-      includeAll = 'false'
+      includeAll = 'false',
+      language = 'zh-TW'
     } = req.query;
 
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
     const offset = (pageNum - 1) * limitNum;
 
-    console.log('📊 查詢參數:', { page: pageNum, limit: limitNum, tag, status, includeAll });
+    // 驗證語言參數
+    const validLanguages = ['zh-TW', 'en'];
+    const finalLanguage = validLanguages.includes(language) ? language : 'zh-TW';
+
+    console.log('📊 查詢參數:', { page: pageNum, limit: limitNum, tag, status, includeAll, language: finalLanguage });
 
     // 建立 SQL 查詢
     let postsQuery;
@@ -60,9 +65,11 @@ module.exports = async function handler(req, res) {
             created_at,
             published_at,
             slug,
+            language,
             LEFT(content, 200) as excerpt
           FROM blog_posts
           WHERE tags @> ${JSON.stringify([tag])}::jsonb
+          AND language = ${finalLanguage}
           ORDER BY created_at DESC
           LIMIT ${limitNum}
           OFFSET ${offset}
@@ -72,6 +79,7 @@ module.exports = async function handler(req, res) {
           SELECT COUNT(*) as total
           FROM blog_posts
           WHERE tags @> ${JSON.stringify([tag])}::jsonb
+          AND language = ${finalLanguage}
         `;
       } else {
         postsQuery = await sql`
@@ -84,10 +92,12 @@ module.exports = async function handler(req, res) {
             created_at,
             published_at,
             slug,
+            language,
             LEFT(content, 200) as excerpt
           FROM blog_posts
           WHERE status = ${status}
           AND tags @> ${JSON.stringify([tag])}::jsonb
+          AND language = ${finalLanguage}
           ORDER BY published_at DESC NULLS LAST, created_at DESC
           LIMIT ${limitNum}
           OFFSET ${offset}
@@ -98,6 +108,7 @@ module.exports = async function handler(req, res) {
           FROM blog_posts
           WHERE status = ${status}
           AND tags @> ${JSON.stringify([tag])}::jsonb
+          AND language = ${finalLanguage}
         `;
       }
     } else {
@@ -113,8 +124,10 @@ module.exports = async function handler(req, res) {
             created_at,
             published_at,
             slug,
+            language,
             LEFT(content, 200) as excerpt
           FROM blog_posts
+          WHERE language = ${finalLanguage}
           ORDER BY created_at DESC
           LIMIT ${limitNum}
           OFFSET ${offset}
@@ -123,6 +136,7 @@ module.exports = async function handler(req, res) {
         countQuery = await sql`
           SELECT COUNT(*) as total
           FROM blog_posts
+          WHERE language = ${finalLanguage}
         `;
       } else {
         postsQuery = await sql`
@@ -135,9 +149,11 @@ module.exports = async function handler(req, res) {
             created_at,
             published_at,
             slug,
+            language,
             LEFT(content, 200) as excerpt
           FROM blog_posts
           WHERE status = ${status}
+          AND language = ${finalLanguage}
           ORDER BY published_at DESC NULLS LAST, created_at DESC
           LIMIT ${limitNum}
           OFFSET ${offset}
@@ -147,6 +163,7 @@ module.exports = async function handler(req, res) {
           SELECT COUNT(*) as total
           FROM blog_posts
           WHERE status = ${status}
+          AND language = ${finalLanguage}
         `;
       }
     }
@@ -155,7 +172,7 @@ module.exports = async function handler(req, res) {
     const total = parseInt(countQuery.rows[0].total);
     const totalPages = Math.ceil(total / limitNum);
 
-    console.log(`✅ 找到 ${posts.length} 篇文章（總共 ${total} 篇）`);
+    console.log(`✅ 找到 ${posts.length} 篇文章（總共 ${total} 篇）[${finalLanguage}]`);
 
     // 返回結果
     return res.status(200).json({
@@ -163,7 +180,7 @@ module.exports = async function handler(req, res) {
       data: {
         posts: posts.map(post => ({
           ...post,
-          url: `/blog/${post.slug}`
+          url: `/${post.language}/blog/${post.slug}`
         })),
         pagination: {
           page: pageNum,
@@ -172,7 +189,8 @@ module.exports = async function handler(req, res) {
           totalPages,
           hasNext: pageNum < totalPages,
           hasPrev: pageNum > 1
-        }
+        },
+        language: finalLanguage
       }
     });
 
