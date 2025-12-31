@@ -40,7 +40,8 @@
     "format": "prettier --write ./src/**.ts ./test/**.ts",
     "lint": "eslint ./src ./test --ext .ts",
     "migrate": "node scripts/run-migration.js",
-    "migrate:002": "node scripts/run-migration.js 002"
+    "migrate:002": "node scripts/run-migration.js 002",
+    "verify-migration": "node scripts/verify-migration.js"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.4",

@@ -2,48 +2,82 @@
  * Vercel Serverless Function - Render Blog Post Page
  * API Route: GET /blog/[slug]
  *
- * 動態渲染部落格文章頁面
+ * 動態渲染部落格文章頁面 (支援多語言)
  */
 
 const { sql } = require('@vercel/postgres');
 
 module.exports = async function handler(req, res) {
-  const { slug } = req.query;
+  const { slug, locale } = req.query;
+
+  // Determine language (from locale parameter or default to zh-TW)
+  const language = (locale === 'en') ? 'en' : 'zh-TW';
 
   try {
-    // 查詢文章
+    // 查詢文章 (by slug and language)
     const result = await sql`
       SELECT * FROM blog_posts
-      WHERE slug = ${slug} AND status = 'published'
+      WHERE slug = ${slug} AND language = ${language} AND status = 'published'
     `;
 
     if (result.rows.length === 0) {
-      return res.status(404).send(render404Page());
+      return res.status(404).send(render404Page(language));
     }
 
     const post = result.rows[0];
-    return res.status(200).send(renderBlogPage(post));
+    return res.status(200).send(renderBlogPage(post, language));
 
   } catch (error) {
     console.error('渲染文章頁面失敗:', error);
-    return res.status(500).send('<h1>伺服器錯誤</h1>');
+    return res.status(500).send(renderErrorPage(language));
   }
 };
 
-function renderBlogPage(post) {
+function renderBlogPage(post, language) {
+  const lang = language === 'en' ? 'en' : 'zh-TW';
+  const blogPath = `/${lang}/blog`;
+
+  // i18n strings
+  const t = language === 'en' ? {
+    siteName: 'AI Zi Wei Dou Shu',
+    blog: 'Blog',
+    home: 'Home',
+    backToBlog: '← Back to Blog List',
+    advertisement: 'Advertisement',
+    metaTitle: `${post.title} | AI Zi Wei Dou Shu Blog`
+  } : {
+    siteName: 'AI 紫微斗數',
+    blog: '部落格',
+    home: '首頁',
+    backToBlog: '← 返回部落格列表',
+    advertisement: '廣告',
+    metaTitle: `${post.title} | AI 紫微斗數部落格`
+  };
+
   return `<!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="${lang}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${escapeHtml(post.title)} | AI 紫微斗數部落格</title>
+
+    <!-- Multilingual Support -->
+    <link rel="alternate" hreflang="zh-TW" href="https://aiziwei.online/zh-TW/blog/${post.slug}">
+    <link rel="alternate" hreflang="en" href="https://aiziwei.online/en/blog/${post.slug}">
+    <link rel="alternate" hreflang="x-default" href="https://aiziwei.online/zh-TW/blog/${post.slug}">
+
+    <!-- Primary Meta Tags -->
+    <title>${escapeHtml(t.metaTitle)}</title>
     <meta name="description" content="${escapeHtml(extractPlainText(post.content).substring(0, 160))}">
+
+    <!-- Open Graph -->
     <meta property="og:title" content="${escapeHtml(post.title)}">
     <meta property="og:description" content="${escapeHtml(extractPlainText(post.content).substring(0, 160))}">
     <meta property="og:type" content="article">
+    <meta property="og:url" content="https://aiziwei.online${blogPath}/${post.slug}">
+    <meta property="og:locale" content="${lang === 'en' ? 'en_US' : 'zh_TW'}">
     <meta property="article:published_time" content="${post.published_at}">
 
-    <link rel="icon" href="/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
@@ -86,10 +120,10 @@ function renderBlogPage(post) {
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-purple-600">AI 紫微斗數</a>
+            <a href="${blogPath.replace('/blog', '')}" class="text-2xl font-bold text-purple-600">${t.siteName}</a>
             <nav class="flex space-x-6">
-                <a href="/" class="text-gray-600 hover:text-purple-600">首頁</a>
-                <a href="/blog" class="text-gray-600 hover:text-purple-600">部落格</a>
+                <a href="${blogPath.replace('/blog', '')}" class="text-gray-600 hover:text-purple-600">${t.home}</a>
+                <a href="${blogPath}" class="text-gray-600 hover:text-purple-600">${t.blog}</a>
             </nav>
         </div>
     </header>
@@ -102,11 +136,11 @@ function renderBlogPage(post) {
 
         <!-- Meta -->
         <div class="flex flex-col sm:flex-row sm:items-center gap-3 text-gray-500 mb-8">
-            <span class="text-sm">${formatDate(post.published_at || post.created_at)}</span>
+            <span class="text-sm">${formatDate(post.published_at || post.created_at, lang)}</span>
             <span class="hidden sm:inline">•</span>
             <div class="flex flex-wrap gap-2">
                 ${post.tags.map(tag => `
-                    <a href="/blog?tag=${encodeURIComponent(tag)}"
+                    <a href="${blogPath}?tag=${encodeURIComponent(tag)}"
                        class="px-2.5 py-1 bg-purple-100 text-purple-700 text-xs rounded-full hover:bg-purple-200 transition-colors whitespace-nowrap"
                        title="${escapeHtml(tag)}">
                         ${escapeHtml(tag)}
@@ -117,7 +151,7 @@ function renderBlogPage(post) {
 
         <!-- Mobile Top Ad (Between title and content) -->
         <div class="xl:hidden my-8">
-            <div class="text-center text-xs text-gray-500 mb-2">廣告</div>
+            <div class="text-center text-xs text-gray-500 mb-2">${t.advertisement}</div>
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-3240143153468832"
@@ -134,7 +168,7 @@ function renderBlogPage(post) {
 
         <!-- Mobile Bottom Ad (Above back button) -->
         <div class="xl:hidden my-8">
-            <div class="text-center text-xs text-gray-500 mb-2">廣告</div>
+            <div class="text-center text-xs text-gray-500 mb-2">${t.advertisement}</div>
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-3240143153468832"
@@ -146,8 +180,8 @@ function renderBlogPage(post) {
 
         <!-- Back Link -->
         <div class="mt-12 text-center">
-            <a href="/blog" class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
-                ← 返回部落格列表
+            <a href="${blogPath}" class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                ${t.backToBlog}
             </a>
         </div>
 
@@ -169,7 +203,7 @@ function renderBlogPage(post) {
                 const midAd = document.createElement('div');
                 midAd.className = 'my-8 not-prose';
                 midAd.innerHTML = \`
-                    <div class="text-center text-xs text-gray-500 mb-2">廣告</div>
+                    <div class="text-center text-xs text-gray-500 mb-2">${t.advertisement}</div>
                     <ins class="adsbygoogle"
                          style="display:block"
                          data-ad-client="ca-pub-3240143153468832"
@@ -190,7 +224,7 @@ function renderBlogPage(post) {
     <!-- Left Sidebar Ad -->
     <div class="fixed left-4 top-1/2 transform -translate-y-1/2 hidden xl:block w-40 h-96 z-10">
         <div class="h-full flex flex-col">
-            <div class="text-center text-xs text-gray-500 mb-2 flex-shrink-0">廣告</div>
+            <div class="text-center text-xs text-gray-500 mb-2 flex-shrink-0">${t.advertisement}</div>
             <div class="bg-gray-50 border border-gray-200 rounded-lg p-2 flex-1 flex items-center justify-center">
                 <ins class="adsbygoogle w-full" style="display:block" data-ad-client="ca-pub-3240143153468832"
                     data-ad-slot="7607800035" data-ad-format="auto" data-full-width-responsive="true"></ins>
@@ -204,7 +238,7 @@ function renderBlogPage(post) {
     <!-- Right Sidebar Ad -->
     <div class="fixed right-4 top-1/2 transform -translate-y-1/2 hidden xl:block w-40 h-96 z-10">
         <div class="h-full flex flex-col">
-            <div class="text-center text-xs text-gray-500 mb-2 flex-shrink-0">廣告</div>
+            <div class="text-center text-xs text-gray-500 mb-2 flex-shrink-0">${t.advertisement}</div>
             <div class="bg-gray-50 border border-gray-200 rounded-lg p-2 flex-1 flex items-center justify-center">
                 <ins class="adsbygoogle w-full" style="display:block" data-ad-format="autorelaxed"
                     data-ad-client="ca-pub-3240143153468832" data-ad-slot="5671756041"></ins>
@@ -219,20 +253,71 @@ function renderBlogPage(post) {
 </html>`;
 }
 
-function render404Page() {
+function render404Page(language) {
+  const lang = language === 'en' ? 'en' : 'zh-TW';
+  const blogPath = `/${lang}/blog`;
+
+  const t = language === 'en' ? {
+    title: 'Article Not Found | AI Zi Wei Dou Shu',
+    heading: '404',
+    message: 'Article not found',
+    backToBlog: 'Back to Blog'
+  } : {
+    title: '文章不存在 | AI 紫微斗數',
+    heading: '404',
+    message: '找不到此文章',
+    backToBlog: '返回部落格'
+  };
+
   return `<!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="${lang}">
 <head>
     <meta charset="UTF-8">
-    <title>文章不存在 | AI 紫微斗數</title>
+    <title>${t.title}</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 flex items-center justify-center min-h-screen">
     <div class="text-center">
-        <h1 class="text-6xl font-bold text-gray-800 mb-4">404</h1>
-        <p class="text-xl text-gray-600 mb-8">找不到此文章</p>
-        <a href="/blog" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
-            返回部落格
+        <h1 class="text-6xl font-bold text-gray-800 mb-4">${t.heading}</h1>
+        <p class="text-xl text-gray-600 mb-8">${t.message}</p>
+        <a href="${blogPath}" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+            ${t.backToBlog}
+        </a>
+    </div>
+</body>
+</html>`;
+}
+
+function renderErrorPage(language) {
+  const lang = language === 'en' ? 'en' : 'zh-TW';
+  const blogPath = `/${lang}/blog`;
+
+  const t = language === 'en' ? {
+    title: 'Server Error | AI Zi Wei Dou Shu',
+    heading: 'Server Error',
+    message: 'An error occurred while loading the article',
+    backToBlog: 'Back to Blog'
+  } : {
+    title: '伺服器錯誤 | AI 紫微斗數',
+    heading: '伺服器錯誤',
+    message: '載入文章時發生錯誤',
+    backToBlog: '返回部落格'
+  };
+
+  return `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+    <meta charset="UTF-8">
+    <title>${t.title}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+    <div class="text-center">
+        <h1 class="text-6xl font-bold text-gray-800 mb-4">500</h1>
+        <p class="text-xl text-gray-600 mb-2">${t.heading}</p>
+        <p class="text-gray-500 mb-8">${t.message}</p>
+        <a href="${blogPath}" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+            ${t.backToBlog}
         </a>
     </div>
 </body>
@@ -254,9 +339,9 @@ function extractPlainText(markdown) {
   return markdown.replace(/[#*_`\[\]]/g, '');
 }
 
-function formatDate(dateString) {
+function formatDate(dateString, locale = 'zh-TW') {
   const date = new Date(dateString);
-  return date.toLocaleDateString('zh-TW', {
+  return date.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
