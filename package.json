@@ -29,7 +29,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "build": "npm run build:css",
+    "build": "echo 'Build output already committed to git. Skipping build step.'",
     "build:ts": "tsc",
     "build:css": "npx tailwindcss -i ./src/styles/input.css -o ./public/styles.css --minify",
     "dev:css": "npx tailwindcss -i ./src/styles/input.css -o ./public/styles.css --watch",
