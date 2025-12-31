@@ -10,28 +10,28 @@
       "destination": "/$1/index.html"
     },
     {
-      "source": "/(en|zh-TW)/:page",
-      "destination": "/$1/:page.html"
-    },
-    {
       "source": "/sitemap.xml",
       "destination": "/api/page?page=sitemap"
-    },
-    {
-      "source": "/(en|zh-TW)/blog",
-      "destination": "/api/blog-page?locale=$1"
     },
     {
       "source": "/(en|zh-TW)/blog/:slug",
       "destination": "/api/blog/page/:slug?locale=$1"
     },
     {
-      "source": "/blog",
-      "destination": "/zh-TW/blog"
+      "source": "/(en|zh-TW)/blog",
+      "destination": "/api/blog-page?locale=$1"
     },
     {
       "source": "/blog/:slug",
       "destination": "/zh-TW/blog/:slug"
+    },
+    {
+      "source": "/blog",
+      "destination": "/zh-TW/blog"
+    },
+    {
+      "source": "/(en|zh-TW)/:page",
+      "destination": "/$1/:page.html"
     },
     {
       "source": "/admin-login",
