@@ -1,0 +1,32 @@
+import * as util from 'util';
+declare class Temple {
+    key: string;
+    displayName: string;
+    formalName: string;
+    index: number;
+    constructor(key: string, displayName: string, formalName: string, index: number);
+    toJSON(): string;
+    toString(): string;
+    [util.inspect.custom](depth: number, opts: any): string;
+    getDisplayName(): string;
+    getFormalName(): string;
+    static getByKey(key: string): Temple | null;
+    static getByName(name: string): Readonly<Temple> | undefined;
+    static TEMPLE_DESTINY: Readonly<Temple>;
+    static TEMPLE_BROTHER: Readonly<Temple>;
+    static TEMPLE_MARRIAGE: Readonly<Temple>;
+    static TEMPLE_CHILDREN: Readonly<Temple>;
+    static TEMPLE_MONEY: Readonly<Temple>;
+    static TEMPLE_ILLNESS: Readonly<Temple>;
+    static TEMPLE_MOVE: Readonly<Temple>;
+    static TEMPLE_FRIEND: Readonly<Temple>;
+    static TEMPLE_CAREER: Readonly<Temple>;
+    static TEMPLE_HOUSE: Readonly<Temple>;
+    static TEMPLE_HAPPINESS: Readonly<Temple>;
+    static TEMPLE_PARENT: Readonly<Temple>;
+    static TEMPLE_BODY: Readonly<Temple>;
+    static TEMPLES: readonly Readonly<Temple>[];
+    static LOOP_TEMPLES: readonly Readonly<Temple>[];
+    equals(temple: Temple): boolean;
+}
+export { Temple };
