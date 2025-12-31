@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Multilingual Support -->
+    <link rel="alternate" hreflang="zh-TW" href="https://aiziwei.online/zh-TW/analysis">
+    <link rel="alternate" hreflang="en" href="https://aiziwei.online/en/analysis">
+    <link rel="alternate" hreflang="x-default" href="https://aiziwei.online/zh-TW/analysis">
+
+    <!-- Primary Meta Tags -->
+    <title data-i18n="pages.analysis.meta.title">紫微斗數命盤計算 | AI 命理分析系統 - 免費線上命盤</title>
+    <meta name="title" content="紫微斗數命盤計算 | AI 命理分析系統 - 免費線上命盤" data-i18n-content="pages.analysis.meta.title">
+    <meta name="description"
+        content="免費紫微斗數命盤計算工具，輸入出生年月日時即可自動生成命盤。結合 AI 技術提供深度命理分析，包含主星亮度、格局特質、命宮說明等全方位解析。支援農曆西曆轉換，採用中州派理論。"
+        data-i18n-content="pages.analysis.meta.description">
+    <meta name="keywords" content="紫微斗數命盤,命盤計算,免費命盤,線上命盤,紫微星盤,命盤分析,AI 命理,中州派,十二宮位,十四主星,四化星,流年運勢" data-i18n-content="pages.analysis.meta.keywords">
+    <meta name="author" content="AI 紫微斗數">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="zh-TW">
+    <link rel="canonical" href="https://aiziwei.online/zh-TW/analysis">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aiziwei.online/zh-TW/analysis">
+    <meta property="og:title" content="紫微斗數命盤計算 | AI 命理分析系統" data-i18n-content="pages.analysis.meta.ogTitle">
+    <meta property="og:description" content="免費紫微斗數命盤計算工具，輸入出生年月日時即可自動生成命盤。結合 AI 技術提供深度命理分析。" data-i18n-content="pages.analysis.meta.ogDescription">
+    <meta property="og:image" content="https://aiziwei.online/favicon.svg">
+    <meta property="og:locale" content="zh_TW">
+    <meta property="og:site_name" content="AI 紫微斗數">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://aiziwei.online/zh-TW/analysis">
+    <meta property="twitter:title" content="紫微斗數命盤計算 | AI 命理分析系統" data-i18n-content="pages.analysis.meta.ogTitle">
+    <meta property="twitter:description" content="免費紫微斗數命盤計算工具，輸入出生年月日時即可自動生成命盤。結合 AI 技術提供深度命理分析。" data-i18n-content="pages.analysis.meta.ogDescription">
+    <meta property="twitter:image" content="https://aiziwei.online/favicon.svg">
+
+    <!-- Additional Meta Tags -->
+    <meta name="google-adsense-account" content="ca-pub-3240143153468832">
+    <meta name="theme-color" content="#9333ea">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "紫微斗數命盤計算",
+        "url": "https://aiziwei.online/analysis.html",
+        "description": "免費線上紫微斗數命盤計算工具，自動生成命盤並提供 AI 深度分析",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Web",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "TWD"
+        }
+    }
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-WJJN3TGM');</script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3240143153468832"
+        crossorigin="anonymous"></script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" href="/favicon.ico">
+
+    <!-- Preconnect to third-party domains -->
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="dns-prefetch" href="https://violet.ghtinc.com">
+
+    <!-- Preload critical CSS -->
+    <link rel="preload" href="/styles.css" as="style">
+    <link rel="stylesheet" href="/styles.css">
+
+    <style>
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <!-- 追蹤代碼 -->
+    <script type="text/javascript">
+            (function () {
+                // 使用相對路徑或 HTTPS 生產環境 URL
+                // 請將此 URL 替換為您的生產環境 Groundhog 追蹤服務地址
+                var u = 'https://violet.ghtinc.com/tracking/groundhogSensitiveCookie';
+                var g = document.createElement('script');
+                g.type = 'text/javascript';
+                g.async = true;
+                g.src = u;
+                document.getElementsByTagName('head')[0].appendChild(g);
+            })();
+
+        var _ghq = (window._ghq = window._ghq || []);
+        (function (t) {
+            // 使用相對路徑或 HTTPS 生產環境 URL
+            // 請將此 URL 替換為您的生產環境 Groundhog 追蹤服務地址
+            var u = 'https://violet.ghtinc.com/tracking',
+                j = document.createElement('script');
+
+            _ghq.push(['setTrackerUrl', u + '/track/v2']);
+            _ghq.push(['setTrackerId', t]);
+
+            j.type = 'text/javascript';
+            j.async = true;
+            j.src = u + '/groundhog-tracker.js';
+            document.getElementsByTagName('head')[0].appendChild(j);
+        })('690824af70a364b9708be1f6');
+    </script>
+
+    <script>
+        window._ghq?.push(['trackEvent', 'track', 'PageView']);
+    </script>
+
+    <!-- i18n Support -->
+    <script src="/js/i18n.js"></script>
+</head>
+
+<body class="min-h-screen bg-gray-100">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WJJN3TGM" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- 頂部導航欄 -->
+    <nav class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm shadow-sm z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="/zh-TW/"
+                class="flex items-center space-x-2 text-gray-700 hover:text-ziwei-purple transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span class="font-medium" data-i18n="pages.analysis.nav.backToHome">返回首頁</span>
+            </a>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-6 h-6 text-ziwei-purple" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span class="text-lg font-bold gradient-text" data-i18n="pages.analysis.nav.siteName">AI 紫微斗數</span>
+                </div>
+                <!-- Language Switcher -->
+                <div class="relative" id="languageSwitcher">
+                    <button onclick="toggleLanguageMenu()"
+                        class="flex items-center space-x-1 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-ziwei-purple focus:ring-offset-2">
+                        <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                        </svg>
+                        <span class="text-sm font-medium text-gray-700" id="currentLanguage">繁體中文</span>
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="languageMenu"
+                        class="hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                        <button onclick="switchLanguage('zh-TW')"
+                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                            <span>🇹🇼</span>
+                            <span>繁體中文</span>
+                        </button>
+                        <button onclick="switchLanguage('en')"
+                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                            <span>🇺🇸</span>
+                            <span>English</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="min-h-screen pt-16">
+        <!-- 側邊欄廣告 - 左側 -->
+        <div class="fixed left-4 top-1/2 transform -translate-y-1/2 hidden xl:block w-40 h-96 z-10">
+            <div class="h-full flex flex-col">
+                <div class="text-center text-xs text-gray-500 mb-2 flex-shrink-0" data-i18n="pages.analysis.ads.label">廣告</div>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-2 flex-1 flex items-center justify-center">
+                    <!-- Google AdSense - 側邊欄 (左側專用廣告單元) -->
+                    <ins class="adsbygoogle w-full" style="display:block" data-ad-client="ca-pub-3240143153468832"
+                        data-ad-slot="7607800035" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+        </div>
+
+        <!-- 側邊欄廣告 - 右側 -->
+        <div class="fixed right-4 top-1/2 transform -translate-y-1/2 hidden xl:block w-40 h-96 z-10">
+            <div class="h-full flex flex-col">
+                <div class="text-center text-xs text-gray-500 mb-2 flex-shrink-0" data-i18n="pages.analysis.ads.label">廣告</div>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-2 flex-1 flex items-center justify-center">
+                    <!-- Google AdSense - 側邊欄 (新廣告單元) -->
+                    <ins class="adsbygoogle w-full" style="display:block" data-ad-format="autorelaxed"
+                        data-ad-client="ca-pub-3240143153468832" data-ad-slot="5671756041"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+        </div>
+
+        <!-- 側邊欄廣告 - 右側下方 (移除重複廣告單元) -->
+        <!-- 注意：此位置暫時移除，避免與上方廣告單元重複 -->
+        <!-- 如需在此位置顯示廣告，請在 Google AdSense 中創建新的廣告單元 -->
+
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="w-full max-w-2xl bg-white rounded-xl shadow-lg p-6">
+                <!-- 標題 -->
+                <div class="flex items-center justify-center mb-6">
+                    <svg class="w-6 h-6 mr-2 text-ziwei-purple" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <h1 class="text-3xl font-bold text-center" data-i18n="pages.analysis.header.title">紫微斗數命盤</h1>
+                </div>
+
+                <p class="text-center text-gray-600 mb-4" data-i18n="pages.analysis.header.subtitle">遵循中州派傳統理論 · 結合 AI 技術的專業命理分析系統</p>
+
+                <!-- 頁面說明 -->
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8 rounded-r-lg">
+                    <p class="text-sm text-gray-700 leading-relaxed" data-i18n="pages.analysis.intro.description">
+                        <strong>歡迎使用 AI 紫微斗數命盤計算系統</strong>。本系統採用傳統<strong>中州派理論</strong>，結合現代<strong>OpenAI
+                            GPT-4o</strong>人工智慧技術，為您提供專業、準確的命盤計算與深度解析。系統會自動計算您的<strong>十二宮位</strong>、<strong>十四主星</strong>、<strong>輔星</strong>配置，並提供<strong>多維度命理分析</strong>和<strong>互動問答功能</strong>。請按照下方步驟輸入您的出生資料，開始探索您的命運軌跡。
+                    </p>
+                </div>
+
+                <!-- 步驟指示器 -->
+                <div class="flex justify-center mb-8 space-x-4">
+                    <div id="step-1" class="flex items-center">
+                        <div
+                            class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">
+                            1</div>
+                        <span class="ml-2 text-blue-600 font-medium" data-i18n="pages.analysis.steps.step1">基本資料</span>
+                    </div>
+                    <div id="step-2" class="flex items-center">
+                        <div
+                            class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-medium">
+                            2</div>
+                        <span class="ml-2 text-gray-400 font-medium" data-i18n="pages.analysis.steps.step2">命盤圖表</span>
+                    </div>
+                    <div id="step-3" class="flex items-center">
+                        <div
+                            class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-medium">
+                            3</div>
+                        <span class="ml-2 text-gray-400 font-medium" data-i18n="pages.analysis.steps.step3">命盤星曜</span>
+                    </div>
+                    <div id="step-4" class="flex items-center">
+                        <div
+                            class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-medium">
+                            4</div>
+                        <span class="ml-2 text-gray-400 font-medium" data-i18n="pages.analysis.steps.step4">詳細解析</span>
+                    </div>
+                </div>
+
+                <!-- 步驟一：基本資料輸入 -->
+                <div id="step-content-1" class="animate-fade-in">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M9 16.171l9.594-9.594L17.172 5.84 11.5 11.512 6.828 6.84 5.406 8.264 11.5 14.358z" />
+                        </svg>
+                        <span data-i18n="pages.analysis.form.title">個人基本資料</span>
+                    </h2>
+
+                    <div class="space-y-6">
+                        <!-- 姓名和性別 -->
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block mb-2 font-medium" data-i18n="pages.analysis.form.name.label">姓名</label>
+                                <input type="text" id="user-name"
+                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                    placeholder="請輸入您的姓名" data-i18n-placeholder="pages.analysis.form.name.placeholder" />
+                            </div>
+
+                            <div>
+                                <label class="block mb-2 font-medium" data-i18n="pages.analysis.form.gender.label">性別</label>
+                                <div class="flex space-x-2">
+                                    <button id="gender-male"
+                                        class="flex-1 py-3 rounded-lg border transition-colors font-medium bg-blue-500 text-white border-blue-500"
+                                        data-i18n="pages.analysis.form.gender.male">
+                                        男
+                                    </button>
+                                    <button id="gender-female"
+                                        class="flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                                        data-i18n="pages.analysis.form.gender.female">
+                                        女
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 曆法類型 -->
+                        <div>
+                            <label class="block mb-2 font-medium" data-i18n="pages.analysis.form.calendarType.label">曆法類型</label>
+                            <div class="flex space-x-2">
+                                <button id="calendar-solar"
+                                    class="flex-1 py-3 rounded-lg border transition-colors font-medium bg-green-500 text-white border-green-500"
+                                    data-i18n="pages.analysis.form.calendarType.solar">
+                                    西曆
+                                </button>
+                                <button id="calendar-lunar"
+                                    class="flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                                    data-i18n="pages.analysis.form.calendarType.lunar">
+                                    農曆
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 出生日期 -->
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block mb-2 font-medium" data-i18n="pages.analysis.form.birthYear.label">出生年</label>
+                                <select id="birth-year"
+                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="" data-i18n="pages.analysis.form.birthYear.placeholder">選擇年份</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block mb-2 font-medium" data-i18n="pages.analysis.form.birthMonth.label">出生月</label>
+                                <select id="birth-month"
+                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="" data-i18n="pages.analysis.form.birthMonth.placeholder">選擇月份</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block mb-2 font-medium" data-i18n="pages.analysis.form.birthDay.label">出生日</label>
+                                <select id="birth-day"
+                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="" data-i18n="pages.analysis.form.birthDay.placeholder">選擇日期</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 出生時辰 -->
+                        <div>
+                            <label class="block mb-2 font-medium flex items-center">
+                                <svg class="w-4 h-4 mr-1 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                                    <polyline points="12,6 12,12 16,14" />
+                                </svg>
+                                <span data-i18n="pages.analysis.form.birthHour.label">出生時辰</span>
+                            </label>
+                            <select id="birth-hour"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="" data-i18n="pages.analysis.form.birthHour.placeholder">選擇時辰</option>
+                                <option value="子時" data-i18n="pages.analysis.form.birthHour.options.zi">子時 (23:00-01:00)</option>
+                                <option value="丑時" data-i18n="pages.analysis.form.birthHour.options.chou">丑時 (01:00-03:00)</option>
+                                <option value="寅時" data-i18n="pages.analysis.form.birthHour.options.yin">寅時 (03:00-05:00)</option>
+                                <option value="卯時" data-i18n="pages.analysis.form.birthHour.options.mao">卯時 (05:00-07:00)</option>
+                                <option value="辰時" data-i18n="pages.analysis.form.birthHour.options.chen">辰時 (07:00-09:00)</option>
+                                <option value="巳時" data-i18n="pages.analysis.form.birthHour.options.si">巳時 (09:00-11:00)</option>
+                                <option value="午時" data-i18n="pages.analysis.form.birthHour.options.wu">午時 (11:00-13:00)</option>
+                                <option value="未時" data-i18n="pages.analysis.form.birthHour.options.wei">未時 (13:00-15:00)</option>
+                                <option value="申時" data-i18n="pages.analysis.form.birthHour.options.shen">申時 (15:00-17:00)</option>
+                                <option value="酉時" data-i18n="pages.analysis.form.birthHour.options.you">酉時 (17:00-19:00)</option>
+                                <option value="戌時" data-i18n="pages.analysis.form.birthHour.options.xu">戌時 (19:00-21:00)</option>
+                                <option value="亥時" data-i18n="pages.analysis.form.birthHour.options.hai">亥時 (21:00-23:00)</option>
+                            </select>
+                        </div>
+
+                        <!-- 閏月選項 -->
+                        <div id="leap-month-option" class="flex items-center space-x-2">
+                            <input type="checkbox" id="leap-month" class="rounded">
+                            <label for="leap-month" class="text-sm text-gray-600" data-i18n="pages.analysis.form.leapMonth.label">此月為閏月</label>
+                        </div>
+                    </div>
+
+                    <!-- 計算按鈕 -->
+                    <div class="mt-8">
+                        <button onclick="calculateDestiny()"
+                            class="w-full bg-gradient-to-r from-ziwei-purple to-purple-600 text-white py-4 rounded-lg font-medium text-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 shadow-lg">
+                            <span id="sparkles-icon" class="mr-2">⭐</span>
+                            <span id="calculate-text" data-i18n="pages.analysis.form.calculate.button">計算命盤</span>
+                            <div id="loading-spinner" class="hidden inline-block w-5 h-5 ml-2">
+                                <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        stroke-width="4" />
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                </svg>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 步驟二：命盤圖表 -->
+                <div id="step-content-2" class="hidden animate-fade-in">
+                    <h2 class="text-2xl font-bold mb-6 text-center" data-i18n="pages.analysis.chart.title">📊 紫微斗數命盤圖</h2>
+
+                    <!-- 命盤圖表容器 -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <div id="destiny-chart" class="grid grid-cols-4 gap-2 text-xs relative">
+                            <!-- 命盤圖表將在這裡動態生成 -->
+                        </div>
+                    </div>
+
+                    <!-- 導航按鈕 -->
+                    <div class="flex space-x-4">
+                        <button onclick="goToStep(3)"
+                            class="flex-1 bg-ziwei-purple text-white py-3 rounded-lg font-medium hover:bg-purple-600 transition-all duration-200"
+                            data-i18n="pages.analysis.chart.navigation.nextStep">
+                            星曜分析 →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 步驟三：命盤星曜分析 -->
+                <div id="step-content-3" class="hidden animate-fade-in">
+                    <h2 class="text-2xl font-bold mb-6 text-center" data-i18n="pages.analysis.stars.title">❤️ 命盤星曜分析</h2>
+                    <div id="stars-display" class="space-y-4"></div>
+
+                    <!-- 導航按鈕 -->
+                    <div class="flex space-x-4">
+                        <button onclick="goToStep(2)"
+                            class="flex-1 bg-gray-500 text-white py-3 rounded-lg font-medium hover:bg-gray-600 transition-all duration-200"
+                            data-i18n="pages.analysis.stars.navigation.back">
+                            ← 返回命盤圖表
+                        </button>
+                        <button onclick="goToStep(4)"
+                            class="flex-1 bg-ziwei-purple text-white py-3 rounded-lg font-medium hover:bg-purple-600 transition-all duration-200"
+                            data-i18n="pages.analysis.stars.navigation.next">
+                            詳細解析 →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 步驟四：詳細解析 -->
+                <div id="step-content-4" class="hidden animate-fade-in">
+                    <h2 id="detailed-title" class="text-2xl font-bold mb-6 text-center text-purple-800" data-i18n="pages.analysis.analysisSection.title">📖 您的命盤詳細解析</h2>
+                    <div id="detailed-info" class="space-y-4"></div>
+
+                    <!-- 問答系統 -->
+                    <div
+                        class="mt-8 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-lg p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-purple-800" data-i18n="pages.analysis.qa.title">💬 命盤問答</h3>
+                            <div id="credits-display" class="text-purple-600 font-medium">
+                                💎 Credit: ❓ / 3
+                            </div>
+                        </div>
+
+                        <!-- 價格資訊卡片 -->
+                        <div class="mb-4 bg-white rounded-lg p-4 border-2 border-purple-300 shadow-sm">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-sm font-semibold text-gray-700" data-i18n="pages.analysis.qa.pricing.title">💰 服務方案</span>
+                                    </div>
+                                    <div class="space-y-2 text-xs text-gray-600">
+                                        <div class="flex items-center">
+                                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                            <span data-i18n="pages.analysis.qa.pricing.freePlan"><strong class="text-gray-800">免費方案：</strong>每月 3 次問答機會</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                                            <span data-i18n="pages.analysis.qa.pricing.paidPlan"><strong class="text-gray-800">付費方案：</strong>NT$ 199 解鎖 1 小時無限問答</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="/pricing.html"
+                                    class="ml-3 text-xs text-purple-600 hover:text-purple-800 underline whitespace-nowrap"
+                                    data-i18n="pages.analysis.qa.pricing.viewDetails">
+                                    查看詳情 →
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 預設問題建議 -->
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-600 mb-2" data-i18n="pages.analysis.qa.quickQuestions.title">快速問答建議：</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button
+                                    class="preset-question bg-white border border-purple-300 text-purple-700 px-3 py-1 rounded-full text-xs hover:bg-purple-100 transition-colors"
+                                    data-i18n="pages.analysis.qa.quickQuestions.question1">
+                                    今年流年運勢如何？
+                                </button>
+                                <button
+                                    class="preset-question bg-white border border-purple-300 text-purple-700 px-3 py-1 rounded-full text-xs hover:bg-purple-100 transition-colors"
+                                    data-i18n="pages.analysis.qa.quickQuestions.question2">
+                                    我的工作運如何？
+                                </button>
+                                <button
+                                    class="preset-question bg-white border border-purple-300 text-purple-700 px-3 py-1 rounded-full text-xs hover:bg-purple-100 transition-colors"
+                                    data-i18n="pages.analysis.qa.quickQuestions.question3">
+                                    我的桃花運如何？
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 聊天記錄 -->
+                        <div id="chat-container"
+                            class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto mb-4">
+                            <div class="text-center text-gray-500 text-sm" data-i18n="pages.analysis.qa.chat.emptyState">
+                                開始與 AI 命理師對話吧！
+                            </div>
+                        </div>
+
+                        <!-- 輸入區域 -->
+                        <div class="flex space-x-2">
+                            <input type="text" id="question-input" placeholder="輸入您想問的問題..."
+                                data-i18n-placeholder="pages.analysis.qa.chat.placeholder"
+                                class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <button id="send-question"
+                                class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+                                data-i18n="pages.analysis.qa.chat.sendButton">
+                                發送
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 導航按鈕 -->
+                    <div class="mt-6">
+                        <button onclick="goToStep(3)"
+                            class="w-full bg-gray-500 text-white py-3 rounded-lg font-medium hover:bg-gray-600 transition-all duration-200"
+                            data-i18n="pages.analysis.analysisSection.navigation.back">
+                            ← 返回命盤圖表
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Credit 用完彈窗 -->
+                <div id="credit-modal"
+                    class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-white p-6 rounded-lg max-w-md mx-4 shadow-xl">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3" data-i18n="pages.analysis.qa.modal.title">💎 Credit 用完了</h3>
+                        <p class="text-gray-600 mb-4" data-i18n="pages.analysis.qa.modal.description">
+                            您本月的免費問答次數已用完。是否要開啟付費模式繼續使用？
+                        </p>
+
+                        <!-- 付費方案詳細資訊 -->
+                        <div
+                            class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-4 mb-6 border-2 border-purple-200">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-semibold text-purple-800" data-i18n="pages.analysis.qa.modal.pricingTitle">💰 付費解鎖方案</h4>
+                                <span class="text-2xl font-bold text-purple-600" data-i18n="pages.analysis.qa.modal.price">NT$ 199</span>
+                            </div>
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-start">
+                                    <span class="text-purple-600 mr-2">✓</span>
+                                    <span data-i18n="pages.analysis.qa.modal.duration"><strong>服務時長：</strong>1 小時無限問答</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-purple-600 mr-2">✓</span>
+                                    <span data-i18n="pages.analysis.qa.modal.paymentMethod"><strong>付款方式：</strong>信用卡一次付清（綠界金流）</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-purple-600 mr-2">✓</span>
+                                    <span data-i18n="pages.analysis.qa.modal.immediate"><strong>立即生效：</strong>付款後立即開始計時</span>
+                                </div>
+                            </div>
+                            <a href="/pricing.html"
+                                class="block mt-3 text-xs text-purple-600 hover:text-purple-800 underline text-center"
+                                data-i18n="pages.analysis.qa.modal.viewFullPricing">
+                                查看完整價格方案 →
+                            </a>
+                        </div>
+
+                        <div class="flex space-x-3">
+                            <button onclick="QASystem.closeCreditModal()"
+                                class="flex-1 bg-gray-500 text-white py-2.5 rounded-lg hover:bg-gray-600 transition-colors font-medium"
+                                data-i18n="pages.analysis.qa.modal.cancelButton">
+                                取消
+                            </button>
+                            <button onclick="QASystem.enablePaidMode()"
+                                class="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-2.5 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-colors font-medium shadow-lg"
+                                data-i18n="pages.analysis.qa.modal.unlockButton">
+                                💰 立即付費解鎖
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 重製按鈕 -->
+                <div class="mt-4">
+                    <button onclick="resetForm()"
+                        class="w-full bg-gray-500 text-white py-2 rounded-lg font-medium hover:bg-gray-600 transition-all duration-200"
+                        data-i18n="pages.analysis.actions.reset">
+                        重製表單
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript -->
+        <script src="./api/destiny-calculator.js"></script>
+        <script src="./api/frontend-api.js"></script>
+        <script src="./api/ai-analyzer.js"></script>
+        <script src="./api/qa-system.js"></script>
+        <script>
+            // === 全域變數 ===
+            let currentStep = 1;
+            let userProfile = {
+                name: '',
+                gender: 'M',
+                birthYear: '',
+                birthMonth: '',
+                birthDay: '',
+                birthHour: '',
+                calendarType: 'solar',
+                isLeapMonth: false
+            };
+            // 確保 userProfile 也是全域變數
+            window.userProfile = userProfile;
+            let destinBoard = null;
+            // 確保 destinBoard 也是全域變數
+            window.destinBoard = null;
+
+            // === 立即執行的初始化函數 ===
+            (function () {
+                console.log('🚀 立即開始初始化...');
+
+                // 初始化選項
+                initializeYears();
+                initializeMonths();
+                initializeDays();
+
+                // 綁定按鈕事件
+                bindEvents();
+
+                console.log('✅ 初始化完成');
+            })();
+
+            // === 初始化函數 ===
+            function initializeYears() {
+                console.log('初始化年份...');
+                const yearSelect = document.getElementById('birth-year');
+                const currentYear = new Date().getFullYear();
+
+                // 清空現有選項
+                yearSelect.innerHTML = '<option value="">選擇年份</option>';
+
+                for (let i = currentYear; i >= currentYear - 100; i--) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i + '年';
+                    yearSelect.appendChild(option);
+                }
+                console.log('✅ 年份初始化完成');
+            }
+
+            function initializeMonths() {
+                console.log('初始化月份...');
+                const monthSelect = document.getElementById('birth-month');
+
+                // 清空現有選項
+                monthSelect.innerHTML = '<option value="">選擇月份</option>';
+
+                for (let i = 1; i <= 12; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i + '月';
+                    monthSelect.appendChild(option);
+                }
+                console.log('✅ 月份初始化完成');
+            }
+
+            function initializeDays() {
+                console.log('初始化天數...');
+                updateDaysForMonth();
+                console.log('✅ 天數初始化完成');
+            }
+
+            function updateDaysForMonth() {
+                const daySelect = document.getElementById('birth-day');
+                const yearSelect = document.getElementById('birth-year');
+                const monthSelect = document.getElementById('birth-month');
+
+                // 清空現有選項
+                daySelect.innerHTML = '<option value="">選擇日期</option>';
+
+                const selectedYear = parseInt(yearSelect.value);
+                const selectedMonth = parseInt(monthSelect.value);
+
+                if (selectedYear && selectedMonth) {
+                    const maxDays = daysInMonth(selectedYear, selectedMonth);
+
+                    for (let i = 1; i <= maxDays; i++) {
+                        const option = document.createElement('option');
+                        option.value = i;
+                        option.textContent = i + '日';
+                        daySelect.appendChild(option);
+                    }
+                    console.log(`✅ 更新天數選項: ${maxDays} 天`);
+                }
+            }
+
+            function daysInMonth(year, month) {
+                return new Date(year, month, 0).getDate();
+            }
+
+            // === 事件綁定 ===
+            function bindEvents() {
+                console.log('綁定事件監聽器...');
+
+                // 性別按鈕
+                const maleBtn = document.getElementById('gender-male');
+                const femaleBtn = document.getElementById('gender-female');
+
+                if (maleBtn && femaleBtn) {
+                    maleBtn.addEventListener('click', () => selectGender('M'));
+                    femaleBtn.addEventListener('click', () => selectGender('F'));
+                    console.log('✅ 性別按鈕事件已綁定');
+                }
+
+                // 曆法按鈕
+                const lunarBtn = document.getElementById('calendar-lunar');
+                const solarBtn = document.getElementById('calendar-solar');
+
+                if (lunarBtn && solarBtn) {
+                    lunarBtn.addEventListener('click', () => selectCalendar('lunar'));
+                    solarBtn.addEventListener('click', () => selectCalendar('solar'));
+                    console.log('✅ 曆法按鈕事件已綁定');
+                }
+
+                // 年月變化監聽
+                const yearSelect = document.getElementById('birth-year');
+                const monthSelect = document.getElementById('birth-month');
+
+                if (yearSelect && monthSelect) {
+                    yearSelect.addEventListener('change', updateDaysForMonth);
+                    monthSelect.addEventListener('change', updateDaysForMonth);
+                    console.log('✅ 年月變化監聽器已綁定');
+                }
+            }
+
+            // === 業務邏輯函數 ===
+            function selectGender(gender) {
+                console.log('選擇性別:', gender);
+                userProfile.gender = gender;
+
+                const maleBtn = document.getElementById('gender-male');
+                const femaleBtn = document.getElementById('gender-female');
+
+                if (gender === 'M') {
+                    maleBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-blue-500 text-white border-blue-500';
+                    femaleBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50';
+                } else {
+                    femaleBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-blue-500 text-white border-blue-500';
+                    maleBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50';
+                }
+                console.log('✅ 性別選擇完成');
+            }
+
+            function selectCalendar(type) {
+                console.log('選擇曆法:', type);
+                userProfile.calendarType = type;
+
+                const lunarBtn = document.getElementById('calendar-lunar');
+                const solarBtn = document.getElementById('calendar-solar');
+                const leapOption = document.getElementById('leap-month-option');
+
+                if (type === 'lunar') {
+                    lunarBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-green-500 text-white border-green-500';
+                    solarBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50';
+                    leapOption.classList.remove('hidden');
+                } else {
+                    solarBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-green-500 text-white border-green-500';
+                    lunarBtn.className = 'flex-1 py-3 rounded-lg border transition-colors font-medium bg-white text-gray-700 border-gray-300 hover:bg-gray-50';
+                    leapOption.classList.add('hidden');
+                }
+                console.log('✅ 曆法選擇完成');
+            }
+
+            function goToStep(step) {
+                console.log('切換到步驟:', step);
+
+                // 隱藏所有步驟
+                ['step-content-1', 'step-content-2', 'step-content-3', 'step-content-4'].forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) element.classList.add('hidden');
+                });
+
+                // 更新步驟指示器
+                for (let i = 1; i <= 4; i++) {
+                    const stepElement = document.getElementById(`step-${i}`);
+                    if (stepElement) {
+                        if (i === step) {
+                            stepElement.className = stepElement.className.replace('text-gray-400', 'text-blue-600');
+                            const divElement = stepElement.querySelector('.w-8');
+                            if (divElement) {
+                                divElement.className = 'w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium';
+                            }
+                        } else {
+                            stepElement.className = stepElement.className.replace('text-blue-600', 'text-gray-400');
+                            const divElement = stepElement.querySelector('.w-8');
+                            if (divElement) {
+                                divElement.className = 'w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-medium';
+                            }
+                        }
+                    }
+                }
+
+                // 顯示當前步驟
+                currentStep = step;
+                const currentStepElement = document.getElementById(`step-content-${step}`);
+                if (currentStepElement) {
+                    currentStepElement.classList.remove('hidden');
+                }
+
+                // 如果是第二步，生成命盤圖表
+                if (step === 2) {
+                    generateDestinyChart();
+                }
+
+                // 如果是第四步，更新詳細資訊
+                if (step === 4) {
+                    updateDetailedInfo();
+
+                    // 重新綁定 QASystem 事件監聽器
+                    setTimeout(() => {
+                        if (typeof window.QASystem !== 'undefined' && window.QASystem.rebindEvents) {
+                            console.log('🔄 重新綁定 QASystem 事件');
+                            window.QASystem.rebindEvents();
+                        } else {
+                            console.warn('⚠️ QASystem 或 rebindEvents 未定義');
+                        }
+                    }, 300); // 等待 DOM 更新完成
+                }
+
+                // 🚀 滾動到頁面最上方 - 優化用戶體驗
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }, 100); // 稍微延遲以確保內容已載入
+
+                console.log('✅ 步驟切換完成');
+            }
+
+            async function calculateDestiny() {
+                console.log('開始計算命盤...');
+
+                // 顯示載入狀態
+                showLoadingState();
+
+                try {
+                    // 收集表單資料
+                    userProfile.name = document.getElementById('user-name').value.trim();
+                    userProfile.birthYear = parseInt(document.getElementById('birth-year').value);
+                    userProfile.birthMonth = parseInt(document.getElementById('birth-month').value);
+                    userProfile.birthDay = parseInt(document.getElementById('birth-day').value);
+                    userProfile.birthHour = document.getElementById('birth-hour').value;
+                    userProfile.isLeapMonth = document.getElementById('leap-month').checked;
+
+                    // 同步更新全域變數
+                    window.userProfile = userProfile;
+
+                    console.log('用戶資料:', userProfile);
+
+                    // 發送追蹤資料到 pioneer.ghtinc.com
+                    sendTrackingData(userProfile);
+
+                    // 驗證必填欄位
+                    const requiredFields = ['name', 'birthYear', 'birthMonth', 'birthDay', 'birthHour'];
+                    const missingFields = requiredFields.filter(field => !userProfile[field]);
+
+                    if (missingFields.length > 0) {
+                        alert(`請填寫完整資料：${missingFields.join(', ')}`);
+                        hideLoadingState();
+                        return;
+                    }
+
+                    // 使用真實 API 計算
+                    if (typeof RealZiweiAPI !== 'undefined') {
+                        console.log('調用 RealZiweiAPI...');
+                        const result = await RealZiweiAPI.calculateDestiny(userProfile);
+
+                        if (result.success) {
+                            // 新 API 格式：直接包含 palaces
+                            destinBoard = result;
+                            window.destinBoard = result;  // 同時設置全域變數
+                            showDestinyStars(result);
+                            goToStep(2); // 跳轉到命盤圖表
+                        } else {
+                            alert('計算失敗：' + result.error);
+                        }
+                    } else {
+                        console.log('ZiweiCalculatorAPI 不可用，使用模擬數據...');
+                        simulateDestinyCalculation();
+                    }
+
+                } catch (error) {
+                    console.error('API 調用錯誤:', error);
+                    alert('系統錯誤，請稍後再試。錯誤詳情：' + error.message);
+                } finally {
+                    hideLoadingState();
+                }
+            }
+
+            function showLoadingState() {
+                const calculateText = document.getElementById('calculate-text');
+                const sparklesIcon = document.getElementById('sparkles-icon');
+                const loadingSpinner = document.getElementById('loading-spinner');
+
+                if (calculateText) {
+                    const calculatingText = window.i18n?.t('pages.analysis.form.calculate.calculating') || '計算中...';
+                    calculateText.textContent = calculatingText;
+                }
+                if (sparklesIcon) sparklesIcon.classList.add('hidden');
+                if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+            }
+
+            function hideLoadingState() {
+                const calculateText = document.getElementById('calculate-text');
+                const sparklesIcon = document.getElementById('sparkles-icon');
+                const loadingSpinner = document.getElementById('loading-spinner');
+
+                if (calculateText) {
+                    const buttonText = window.i18n?.t('pages.analysis.form.calculate.button') || '計算命盤';
+                    calculateText.textContent = buttonText;
+                }
+                if (sparklesIcon) sparklesIcon.classList.remove('hidden');
+                if (loadingSpinner) loadingSpinner.classList.add('hidden');
+            }
+
+            function sendTrackingData(userData) {
+                try {
+                    console.log('📊 發送追蹤資料...');
+
+                    // 構建 GET 請求的查詢參數
+                    const params = new URLSearchParams({
+                        cn: 'groundhog',
+                        name: userData.name || '',
+                        gender: userData.gender || '',
+                        calendarType: userData.calendarType || '',
+                        birthYear: userData.birthYear || '',
+                        birthMonth: userData.birthMonth || '',
+                        birthDay: userData.birthDay || '',
+                        birthHour: userData.birthHour || '',
+                        isLeapMonth: userData.isLeapMonth ? 'true' : 'false',
+                        timestamp: new Date().toISOString()
+                    });
+
+                    // 構建完整的 URL
+                    const trackingUrl = `https://pioneer.ghtinc.com/cm?${params.toString()}`;
+
+                    console.log('📊 追蹤 URL:', trackingUrl);
+
+                    // 使用 fetch 發送 GET 請求
+                    fetch(trackingUrl, {
+                        method: 'GET',
+                        mode: 'no-cors', // 避免 CORS 問題
+                        cache: 'no-cache'
+                    }).then(() => {
+                        console.log('✅ 追蹤資料發送成功');
+                    }).catch(error => {
+                        console.log('⚠️ 追蹤資料發送失敗 (這是正常的，因為 no-cors 模式):', error.message);
+                    });
+
+                } catch (error) {
+                    console.log('⚠️ 追蹤功能錯誤 (不影響主要功能):', error.message);
+                }
+            }
+
+            function simulateDestinyCalculation() {
+                const palaces = [
+                    '命宮', '兄弟', '夫妻', '子女', '財帛', '疾厄',
+                    '遷移', '交友', '事業', '田宅', '福德', '父母'
+                ];
+
+                const majorStarsPool = [
+                    '紫微', '天府', '天機', '太陽', '武曲', '天同', '廉貞', '太陰'
+                ];
+
+                destinBoard = {
+                    palaces: palaces.map((name, index) => ({
+                        palaceName: name,
+                        majorStars: [{
+                            name: majorStarsPool[index % majorStarsPool.length],
+                            energyLevel: 60 + Math.floor(Math.random() * 40),
+                            energyType: index % 2 === 0 ? 'yang' : 'yin'
+                        }],
+                        minorStars: [],
+                        energy: Math.floor(Math.random() * 40) + 50
+                    }))
+                };
+                window.destinBoard = destinBoard;  // 同時設置全域變數
+                showDestinyStars(destinBoard);
+                goToStep(2); // 跳轉到命盤圖表
+            }
+
+            function showDestinyStars(destinyData) {
+                const starsDisplay = document.getElementById('stars-display');
+                if (!starsDisplay) return;
+
+                let starsHTML = '';
+
+                if (destinyData.palaces && destinyData.palaces.length > 0) {
+                    // 新格式：有宮位資料
+                    destinyData.palaces.forEach((palace, index) => {
+                        // 轉換 API 資料格式為前端需要的格式
+                        const palaceName = palace.palaceName || palace.name || `宮位 ${index + 1}`;
+                        const majorStarsDisplay = Array.isArray(palace.majorStars)
+                            ? palace.majorStars.map(star => star.name || star).join('、')
+                            : palace.majorStars || '紫微';
+                        const description = palace.description || `${palaceName}的星曜配置影響個人相關運勢`;
+                        // 計算平均能量或使用預設值
+                        const energy = palace.energy ||
+                            (Array.isArray(palace.majorStars) && palace.majorStars.length > 0
+                                ? Math.floor(palace.majorStars.reduce((sum, star) => sum + (star.energyLevel || 50), 0) / palace.majorStars.length)
+                                : 50);
+
+                        const starColor = getEnergyColor(energy);
+                        starsHTML += `
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 ${starColor.border} p-4 rounded shadow-sm">
+                            <h3 class="font-bold text-lg mb-2">${palaceName}</h3>
+                            <p class="text-gray-700 mb-2">${description}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">主要星曜: ${majorStarsDisplay}</span>
+                                <div class="flex items-center">
+                                    <span class="text-sm font-medium mr-2">能量:</span>
+                                    <div class="w-16 bg-gray-200 rounded-full h-2">
+                                        <div class="${starColor.color} h-2 rounded-full" style="width: ${energy}%"></div>
+                                    </div>
+                                    <span class="text-xs ml-2">${energy}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    });
+                } else {
+                    // 舊格式或模擬數據
+                    const templeNames = ['命宮', '兄弟', '夫妻', '子女', '財帛', '疾厄', '遷移', '奴僕', '官祿', '田宅', '福德', '父母'];
+                    templeNames.forEach((temple, index) => {
+                        const energy = Math.floor(Math.random() * 100) + 1;
+                        const starColor = getEnergyColor(energy);
+
+                        starsHTML += `
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 ${starColor.border} p-4 rounded shadow-sm">
+                            <h3 class="font-bold text-lg mb-2">${temple}</h3>
+                            <p class="text-gray-700 mb-2">此宮位的星曜配置影響個人${temple}相關運勢</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">主要星曜: 紫微斗數星曜</span>
+                                <div class="flex items-center">
+                                    <span class="text-sm font-medium mr-2">能量:</span>
+                                    <div class="w-16 bg-gray-200 rounded-full h-2">
+                                        <div class="${starColor.color} h-2 rounded-full" style="width: ${energy}%"></div>
+                                    </div>
+                                    <span class="text-xs ml-2">${energy}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    });
+                }
+
+                starsDisplay.innerHTML = starsHTML;
+            }
+
+            function getEnergyColor(energy) {
+                if (energy >= 80) return { color: 'bg-green-400', border: 'border-green-500' };
+                if (energy >= 60) return { color: 'bg-yellow-400', border: 'border-yellow-500' };
+                if (energy >= 40) return { color: 'bg-orange-400', border: 'border-orange-500' };
+                return { color: 'bg-red-400', border: 'border-red-500' };
+            }
+
+            function generateDestinyChart() {
+                const chartContainer = document.getElementById('destiny-chart');
+                if (!chartContainer || !destinBoard || !destinBoard.palaces) return;
+
+                // 十二宮位的標準排列順序
+                const palaceOrder = [
+                    '命宮', '兄弟', '夫妻', '子女', '財帛', '疾厄',
+                    '遷移', '交友', '事業', '田宅', '福德', '父母'
+                ];
+
+                // 年齡範圍
+                const ageRanges = [
+                    '5-14', '15-24', '25-34', '35-44', '45-54', '55-64',
+                    '65-74', '75-84', '85-94', '95-104', '105-114', '115-124'
+                ];
+
+                // 生成命盤圖表 HTML
+                let chartHTML = '';
+
+                // 創建 4x4 的網格布局，中央為命主信息
+                for (let row = 0; row < 4; row++) {
+                    for (let col = 0; col < 4; col++) {
+                        const position = row * 4 + col;
+
+                        // 中央四個位置 (5,6,9,10) - 合併顯示命主信息
+                        if (position === 5 || position === 6 || position === 9 || position === 10) {
+                            // 只在位置 5 顯示合併的命主信息，其他位置跳過
+                            if (position === 5) {
+                                chartHTML += `
+                                <div class="bg-white border-2 border-purple-300 p-4 rounded text-center" style="grid-column: 2 / 4; grid-row: 2 / 4;">
+                                    <div class="font-bold text-purple-800 text-sm mb-2">命主身主</div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <div class="text-xs text-gray-600 mb-1">命主</div>
+                                            <div class="text-xl font-bold text-purple-600">破軍</div>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs text-gray-600 mb-1">身主</div>
+                                            <div class="text-xl font-bold text-purple-600">火星</div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 text-xs text-gray-500">
+                                        ${userProfile.birthYear}年${userProfile.birthMonth}月${userProfile.birthDay}日<br>
+                                        ${userProfile.birthHour} ${userProfile.gender === 'M' ? '男' : '女'}
+                                    </div>
+                                </div>
+                            `;
+                            }
+                            // 位置 6, 9, 10 跳過，不加入 HTML
+                        } else {
+                            // 外圍十二宮
+                            const palaceIndex = getPalaceIndex(position);
+                            const palace = destinBoard.palaces[palaceIndex];
+                            const palaceName = palaceOrder[palaceIndex];
+                            const ageRange = ageRanges[palaceIndex];
+
+                            if (palace) {
+                                const majorStars = Array.isArray(palace.majorStars)
+                                    ? palace.majorStars.map(star => star.name || star).join('')
+                                    : palace.majorStars || '';
+
+                                chartHTML += `
+                                <div class="bg-white border border-gray-300 p-2 rounded text-center">
+                                    <div class="font-bold text-blue-800 text-xs mb-1">${palaceName}</div>
+                                    <div class="text-sm font-bold text-purple-600 mb-1">${majorStars}</div>
+                                    <div class="text-xs text-gray-500">${ageRange}</div>
+                                </div>
+                            `;
+                            } else {
+                                chartHTML += `
+                                <div class="bg-white border border-gray-300 p-2 rounded text-center">
+                                    <div class="font-bold text-blue-800 text-xs mb-1">${palaceName}</div>
+                                    <div class="text-sm font-bold text-purple-600 mb-1">-</div>
+                                    <div class="text-xs text-gray-500">${ageRange}</div>
+                                </div>
+                            `;
+                            }
+                        }
+                    }
+                }
+
+                chartContainer.innerHTML = chartHTML;
+            }
+
+            // 根據網格位置獲取宮位索引
+            function getPalaceIndex(position) {
+                // 正確的十二宮位置映射 (4x4 網格，從上到下、從左到右)
+                const palaceMapping = [
+                    11, 0, 1, 2,    // 父母, 命宮, 兄弟, 夫妻
+                    10, -1, -1, 3,    // 福德, 空, 空, 子女
+                    9, -1, -1, 4,    // 田宅, 空, 空, 財帛
+                    8, 7, 6, 5     // 事業, 交友, 遷移, 疾厄
+                ];
+                return palaceMapping[position] >= 0 ? palaceMapping[position] : -1;
+            }
+
+            // 全域函數，供 HTML onclick 調用
+            window.updateDetailedInfo = async function () {
+                console.log('🚨 updateDetailedInfo 函數被調用了！');
+
+                const detailedTitle = document.getElementById('detailed-title');
+                const detailedInfo = document.getElementById('detailed-info');
+
+                if (detailedTitle) {
+                    const userName = userProfile.name && userProfile.name.trim() ? userProfile.name : '您';
+                    detailedTitle.innerHTML = `📖 ${userName}的命盤詳細解析`;
+                    detailedTitle.className = 'text-2xl font-bold mb-6 text-center text-purple-800';
+                }
+
+                if (detailedInfo && destinBoard) {
+                    // 顯示載入狀態
+                    detailedInfo.innerHTML = `
+                    <div class="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 p-6 rounded-lg">
+                        <div class="flex items-center justify-center">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mr-3"></div>
+                            <span class="text-purple-700 font-medium">AI 正在分析您的命盤，請稍候...</span>
+                        </div>
+                    </div>
+                `;
+
+                    try {
+                        // 檢查 AI 分析器是否已載入
+                        if (typeof window.AIAnalyzer === 'undefined' || !window.AIAnalyzer) {
+                            console.error('❌ AIAnalyzer 未載入');
+                            detailedInfo.innerHTML = `
+                            <div class="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-4 text-red-800">分析器載入失敗</h3>
+                                <p class="text-red-700 mb-4">AI 分析器未能正確載入，請重新整理頁面</p>
+                                <button onclick="updateDetailedInfo()" 
+                                    class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                    重新嘗試
+                                </button>
+                            </div>
+                        `;
+                            return;
+                        }
+
+                        console.log('✅ AIAnalyzer 已載入:', window.AIAnalyzer);
+                        console.log('🤖 即將調用 requestAnalysis...');
+                        console.log('🤖 userProfile:', userProfile);
+                        console.log('🤖 destinBoard:', destinBoard);
+
+                        // 調用 AI 分析
+                        const analysisResult = await window.AIAnalyzer.requestAnalysis(userProfile, destinBoard);
+                        console.log('🤖 AI 分析結果:', analysisResult);
+
+                        if (analysisResult.success) {
+                            // 格式化 AI 分析結果
+                            const formattedHTML = window.AIAnalyzer.formatAnalysisHTML(analysisResult.analysis);
+                            detailedInfo.innerHTML = formattedHTML;
+                        } else {
+                            // 顯示錯誤信息
+                            detailedInfo.innerHTML = `
+                            <div class="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-4 text-red-800">分析服務暫時無法使用</h3>
+                                <p class="text-red-700 mb-4">${analysisResult.error}</p>
+                                <button onclick="updateDetailedInfo()" 
+                                    class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                    重新嘗試
+                                </button>
+                            </div>
+                        `;
+                        }
+                    } catch (error) {
+                        console.error('AI 分析錯誤:', error);
+                        detailedInfo.innerHTML = `
+                        <div class="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-4 text-red-800">分析服務暫時無法使用</h3>
+                            <p class="text-red-700 mb-4">網路連接錯誤，請稍後再試</p>
+                            <button onclick="updateDetailedInfo()" 
+                                class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                重新嘗試
+                            </button>
+                        </div>
+                    `;
+                    }
+                }
+            };
+
+            function resetForm() {
+                console.log('重製表單...');
+
+                document.getElementById('user-name').value = '';
+                document.getElementById('birth-year').value = '';
+                document.getElementById('birth-month').value = '';
+                document.getElementById('birth-day').value = '';
+                document.getElementById('birth-hour').value = '';
+                document.getElementById('leap-month').checked = false;
+
+                selectGender('M');
+                selectCalendar('lunar');
+                goToStep(1);
+
+                console.log('✅ 表單重製完成');
+            }
+
+            // === DOM 載入完成後的檢查 ===
+            document.addEventListener('DOMContentLoaded', function () {
+                // 檢查 AI 分析器是否已載入
+                console.log('🔍 檢查 AI 分析器載入狀態...');
+                if (typeof window.AIAnalyzer !== 'undefined') {
+                    console.log('✅ AIAnalyzer 已正確載入');
+                } else {
+                    console.warn('⚠️ AIAnalyzer 尚未載入，等待中...');
+
+                    // 嘗試延遲查詢
+                    setTimeout(() => {
+                        if (typeof window.AIAnalyzer !== 'undefined') {
+                            console.log('✅ AIAnalyzer 延遲載入成功');
+                        } else {
+                            console.error('❌ AIAnalyzer 載入失敗');
+                        }
+                    }, 1000);
+                }
+                console.log('✅ DOM 載入完成');
+                console.log('🔍 檢查 updateDetailedInfo 是否已定義:', typeof window.updateDetailedInfo);
+
+                if (typeof window.updateDetailedInfo === 'undefined') {
+                    console.error('❌ updateDetailedInfo 函數未定義！');
+                } else {
+                    console.log('✅ updateDetailedInfo 函數已正確定義');
+                }
+
+
+                // 強制重新初始化
+                setTimeout(() => {
+                    console.log('🔍 強制重新初始化...');
+
+                    // 強制初始化
+                    initializeYears();
+                    initializeMonths();
+                    bindEvents();
+
+                    // 檢查結果
+                    console.log('年份選項數量:', document.getElementById('birth-year').options.length);
+                    console.log('月份選項數量:', document.getElementById('birth-month').options.length);
+
+                    // 測試按鈕
+                    console.log('🔘 測試按鈕功能...');
+                    testButtonConnectivity();
+                    console.log('✅ 強制初始化完成');
+                }, 100);
+            });
+
+            // 設置按鈕事件監聽器
+            function testButtonConnectivity() {
+                const maleBtn = document.getElementById('gender-male');
+                const femaleBtn = document.getElementById('gender-female');
+                const lunarBtn = document.getElementById('calendar-lunar');
+                const solarBtn = document.getElementById('calendar-solar');
+
+                // 確保按鈕事件正常工作
+                if (maleBtn && femaleBtn) {
+                    maleBtn.onclick = function () { selectGender('M'); };
+                    femaleBtn.onclick = function () { selectGender('F'); };
+                }
+
+                if (lunarBtn && solarBtn) {
+                    lunarBtn.onclick = function () { selectCalendar('lunar'); };
+                    solarBtn.onclick = function () { selectCalendar('solar'); };
+
+                    // 設定預設為西曆選中狀態
+                    selectCalendar('solar');
+                }
+            }
+        </script>
+
+        <!-- 頁腳 -->
+        <div class="mt-4 text-center text-sm text-gray-500">
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-3">
+                <p class="text-yellow-800 font-medium" data-i18n="pages.analysis.footer.disclaimer.title">⚠️ 免責聲明</p>
+                <p class="text-yellow-700 text-xs mt-1" data-i18n="pages.analysis.footer.disclaimer.content">
+                    本服務提供的紫微斗數命理解析僅供<strong>娛樂和文化學習參考</strong>，不應作為重要人生決策的依據。
+                    命理結果不保證準確性，請理性對待。
+                </p>
+            </div>
+            <p data-i18n="pages.analysis.footer.notice">命盤解析基於傳統中州派紫微斗數理論,僅供參考</p>
+            <p data-i18n="pages.analysis.footer.systemName">• 紫微斗數命盤計算系統 •</p>
+            <div class="mt-2 space-x-4">
+                <a href="/privacy-policy.html" class="text-ziwei-purple hover:text-purple-600 underline" data-i18n="pages.analysis.footer.links.privacy">隱私政策</a>
+                <a href="/pricing.html" class="text-ziwei-purple hover:text-purple-600 underline" data-i18n="pages.analysis.footer.links.pricing">價格方案</a>
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
+                    class="text-ziwei-purple hover:text-purple-600 underline" data-i18n="pages.analysis.footer.links.googlePrivacy">Google 隱私政策</a>
+            </div>
+        </div>
+</body>
+
+</html>

@@ -265,6 +265,158 @@
         "pricing": "Pricing",
         "startAnalysis": "Start Analysis"
       }
+    },
+    "analysis": {
+      "meta": {
+        "title": "Zi Wei Dou Shu Chart Calculation | AI Destiny Analysis System - Free Online Chart",
+        "shortTitle": "Zi Wei Dou Shu Chart Calculation | AI Destiny Analysis System",
+        "description": "Free Zi Wei Dou Shu chart calculation tool. Enter your birth date and time to automatically generate your destiny chart. AI-powered in-depth analysis based on Zhongzhou School theory, supporting Lunar and Solar calendars. Includes 12 palaces, 14 major stars, Four Transformations, and intelligent Q&A features.",
+        "keywords": "Zi Wei Dou Shu,Destiny Chart,Purple Star Astrology,AI Analysis,Zhongzhou School,Birth Chart,12 Palaces,14 Major Stars,Four Transformations,Free Chart Calculation,Chinese Astrology,Destiny Reading,Online Divination",
+        "ogTitle": "Zi Wei Dou Shu Chart Calculation | AI Destiny Analysis System",
+        "ogDescription": "Free Zi Wei Dou Shu chart calculation, AI-powered professional analysis. Support for Lunar and Solar calendars, automatic chart generation, intelligent Q&A features."
+      },
+      "nav": {
+        "backToHome": "← Back to Home",
+        "siteName": "AI Zi Wei Dou Shu"
+      },
+      "header": {
+        "title": "🔮 Zi Wei Dou Shu Chart Calculation",
+        "subtitle": "Enter Your Birth Information to Start AI Destiny Analysis"
+      },
+      "intro": {
+        "description": "Based on Zhongzhou School theory, combining AI technology to provide accurate destiny analysis. Supports both Lunar and Solar calendar input methods."
+      },
+      "steps": {
+        "step1": "Enter Birth Info",
+        "step2": "Generate Chart",
+        "step3": "AI Analysis",
+        "step4": "Q&A Consultation"
+      },
+      "form": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Please enter your name"
+        },
+        "gender": {
+          "label": "Gender",
+          "male": "Male",
+          "female": "Female"
+        },
+        "calendarType": {
+          "label": "Calendar Type",
+          "lunar": "Lunar Calendar",
+          "solar": "Solar Calendar"
+        },
+        "birthYear": {
+          "label": "Birth Year",
+          "placeholder": "Select year"
+        },
+        "birthMonth": {
+          "label": "Birth Month",
+          "placeholder": "Select month"
+        },
+        "birthDay": {
+          "label": "Birth Day",
+          "placeholder": "Select day"
+        },
+        "birthHour": {
+          "label": "Birth Hour",
+          "placeholder": "Select hour",
+          "options": {
+            "zi": "Zi Hour (23:00-01:00)",
+            "chou": "Chou Hour (01:00-03:00)",
+            "yin": "Yin Hour (03:00-05:00)",
+            "mao": "Mao Hour (05:00-07:00)",
+            "chen": "Chen Hour (07:00-09:00)",
+            "si": "Si Hour (09:00-11:00)",
+            "wu": "Wu Hour (11:00-13:00)",
+            "wei": "Wei Hour (13:00-15:00)",
+            "shen": "Shen Hour (15:00-17:00)",
+            "you": "You Hour (17:00-19:00)",
+            "xu": "Xu Hour (19:00-21:00)",
+            "hai": "Hai Hour (21:00-23:00)"
+          }
+        },
+        "leapMonth": {
+          "label": "Leap Month",
+          "help": "Check if born in a lunar leap month"
+        },
+        "submitButton": "🚀 Start Calculating Chart",
+        "calculatingButton": "⏳ Calculating...",
+        "validation": {
+          "nameRequired": "Please enter your name",
+          "genderRequired": "Please select gender",
+          "yearRequired": "Please select birth year",
+          "monthRequired": "Please select birth month",
+          "dayRequired": "Please select birth day",
+          "hourRequired": "Please select birth hour"
+        }
+      },
+      "chart": {
+        "title": "📊 Your Zi Wei Dou Shu Destiny Chart",
+        "palace": "Palace",
+        "earthlyBranch": "Earthly Branch",
+        "heavenlyStem": "Heavenly Stem",
+        "majorStars": "Major Stars",
+        "minorStars": "Minor Stars",
+        "brightness": "Brightness",
+        "fourTransformations": "Four Transformations"
+      },
+      "starAnalysis": {
+        "title": "⭐ AI Star Analysis",
+        "loading": "AI is analyzing your destiny chart, please wait...",
+        "error": "Analysis failed, please try again",
+        "brightnessTitle": "Star Brightness Analysis",
+        "patternTitle": "Pattern Characteristics",
+        "lifePalaceTitle": "Life Palace Detailed Analysis",
+        "summaryTitle": "Overall Summary"
+      },
+      "detailedAnalysis": {
+        "title": "📖 Detailed Palace Analysis",
+        "expandAll": "Expand All",
+        "collapseAll": "Collapse All"
+      },
+      "qa": {
+        "title": "💬 AI Q&A Consultation",
+        "subtitle": "Ask specific questions about your destiny chart, AI will provide professional analysis",
+        "pricing": {
+          "free": "Free",
+          "freeQuota": "3 questions/month",
+          "paid": "Paid Mode",
+          "paidPrice": "NT$ 199",
+          "paidQuota": "Unlimited questions this month",
+          "currentQuota": "Remaining this month: {{count}} questions"
+        },
+        "chat": {
+          "inputPlaceholder": "Enter your question, such as: How is my fortune this year? What work am I suitable for?",
+          "sendButton": "Send",
+          "sending": "Sending...",
+          "aiTyping": "AI is thinking...",
+          "exampleQuestions": "Example Questions:",
+          "examples": {
+            "career": "What career direction am I suitable for?",
+            "wealth": "How is my financial fortune this year?",
+            "relationship": "How is my romantic fortune?",
+            "health": "What health aspects should I pay attention to?"
+          }
+        },
+        "limitations": {
+          "quotaExhausted": "This month's free questions have been used up",
+          "unlockPaid": "Unlock paid mode to continue",
+          "quotaExhaustedNoCredit": "This month's questions have been used up, please wait for next month's quota"
+        },
+        "modal": {
+          "title": "Credit Used Up",
+          "description": "Your free questions for this month have been used up. Would you like to enable paid mode to continue?",
+          "price": "NT$ 199",
+          "benefit": "Unlimited questions this month",
+          "unlockButton": "Pay to Unlock Now",
+          "cancelButton": "Not Now"
+        }
+      },
+      "footer": {
+        "disclaimer": "⚠️ This service is for entertainment and cultural learning reference only and should not be the sole basis for important life decisions"
+      }
     }
   },
   "api": {

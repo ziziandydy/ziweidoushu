@@ -265,6 +265,182 @@
         "pricing": "價格方案",
         "startAnalysis": "開始分析"
       }
+    },
+    "analysis": {
+      "meta": {
+        "title": "紫微斗數命盤計算 | AI 命理分析系統 - 免費線上命盤",
+        "shortTitle": "紫微斗數命盤計算 | AI 命理分析系統",
+        "description": "免費紫微斗數命盤計算工具，輸入出生年月日時即可自動生成命盤。結合 AI 技術提供深度命理分析，包含主星亮度、格局特質、命宮說明等全方位解析。支援農曆西曆轉換，採用中州派理論。",
+        "keywords": "紫微斗數命盤,命盤計算,免費命盤,線上命盤,紫微星盤,命盤分析,AI 命理,中州派,十二宮位,十四主星,四化星,流年運勢",
+        "ogTitle": "紫微斗數命盤計算 | AI 命理分析系統",
+        "ogDescription": "免費紫微斗數命盤計算工具，輸入出生年月日時即可自動生成命盤。結合 AI 技術提供深度命理分析。"
+      },
+      "nav": {
+        "backToHome": "返回首頁",
+        "siteName": "AI 紫微斗數"
+      },
+      "ads": {
+        "label": "廣告"
+      },
+      "header": {
+        "title": "紫微斗數命盤",
+        "subtitle": "遵循中州派傳統理論 · 結合 AI 技術的專業命理分析系統"
+      },
+      "intro": {
+        "title": "歡迎使用 AI 紫微斗數命盤計算系統",
+        "description": "本系統採用傳統<strong>中州派理論</strong>，結合現代<strong>OpenAI GPT-4o</strong>人工智慧技術，為您提供專業、準確的命盤計算與深度解析。系統會自動計算您的<strong>十二宮位</strong>、<strong>十四主星</strong>、<strong>輔星</strong>配置，並提供<strong>多維度命理分析</strong>和<strong>互動問答功能</strong>。請按照下方步驟輸入您的出生資料，開始探索您的命運軌跡。"
+      },
+      "steps": {
+        "step1": "基本資料",
+        "step2": "命盤圖表",
+        "step3": "命盤星曜",
+        "step4": "詳細解析"
+      },
+      "form": {
+        "title": "個人基本資料",
+        "name": {
+          "label": "姓名",
+          "placeholder": "請輸入您的姓名"
+        },
+        "gender": {
+          "label": "性別",
+          "male": "男",
+          "female": "女"
+        },
+        "calendarType": {
+          "label": "曆法類型",
+          "solar": "西曆",
+          "lunar": "農曆"
+        },
+        "birthYear": {
+          "label": "出生年",
+          "placeholder": "選擇年份",
+          "suffix": "年"
+        },
+        "birthMonth": {
+          "label": "出生月",
+          "placeholder": "選擇月份",
+          "suffix": "月"
+        },
+        "birthDay": {
+          "label": "出生日",
+          "placeholder": "選擇日期",
+          "suffix": "日"
+        },
+        "birthHour": {
+          "label": "出生時辰",
+          "placeholder": "選擇時辰",
+          "options": {
+            "zi": "子時 (23:00-01:00)",
+            "chou": "丑時 (01:00-03:00)",
+            "yin": "寅時 (03:00-05:00)",
+            "mao": "卯時 (05:00-07:00)",
+            "chen": "辰時 (07:00-09:00)",
+            "si": "巳時 (09:00-11:00)",
+            "wu": "午時 (11:00-13:00)",
+            "wei": "未時 (13:00-15:00)",
+            "shen": "申時 (15:00-17:00)",
+            "you": "酉時 (17:00-19:00)",
+            "xu": "戌時 (19:00-21:00)",
+            "hai": "亥時 (21:00-23:00)"
+          }
+        },
+        "leapMonth": {
+          "label": "此月為閏月"
+        },
+        "calculate": {
+          "button": "計算命盤",
+          "calculating": "計算中..."
+        },
+        "validation": {
+          "missingFields": "請填寫完整資料：{fields}",
+          "calculationFailed": "計算失敗：{error}",
+          "systemError": "系統錯誤，請稍後再試。錯誤詳情：{error}"
+        }
+      },
+      "chart": {
+        "title": "紫微斗數命盤圖",
+        "centerTitle": "命主身主",
+        "destinyLord": "命主",
+        "bodyLord": "身主",
+        "navigation": {
+          "nextStep": "星曜分析 →"
+        }
+      },
+      "stars": {
+        "title": "命盤星曜分析",
+        "energy": "能量",
+        "majorStars": "主要星曜",
+        "palaceDescription": "{palace}的星曜配置影響個人相關運勢",
+        "navigation": {
+          "back": "← 返回命盤圖表",
+          "next": "詳細解析 →"
+        }
+      },
+      "analysisSection": {
+        "title": "您的命盤詳細解析",
+        "titleWithName": "{name}的命盤詳細解析",
+        "loading": "AI 正在分析您的命盤，請稍候...",
+        "errors": {
+          "analyzerNotLoaded": "分析器載入失敗",
+          "analyzerNotLoadedDesc": "AI 分析器未能正確載入，請重新整理頁面",
+          "serviceUnavailable": "分析服務暫時無法使用",
+          "networkError": "網路連接錯誤，請稍後再試",
+          "retryButton": "重新嘗試"
+        },
+        "navigation": {
+          "back": "← 返回命盤圖表"
+        }
+      },
+      "qa": {
+        "title": "命盤問答",
+        "creditDisplay": "Credit: {used} / {total}",
+        "pricing": {
+          "title": "服務方案",
+          "freePlan": "免費方案：每月 3 次問答機會",
+          "paidPlan": "付費方案：NT$ 199 解鎖 1 小時無限問答",
+          "viewDetails": "查看詳情 →"
+        },
+        "quickQuestions": {
+          "title": "快速問答建議：",
+          "question1": "今年流年運勢如何？",
+          "question2": "我的工作運如何？",
+          "question3": "我的桃花運如何？"
+        },
+        "chat": {
+          "placeholder": "輸入您想問的問題...",
+          "sendButton": "發送",
+          "emptyState": "開始與 AI 命理師對話吧！"
+        },
+        "modal": {
+          "title": "Credit 用完了",
+          "description": "您本月的免費問答次數已用完。是否要開啟付費模式繼續使用？",
+          "pricingTitle": "付費解鎖方案",
+          "price": "NT$ 199",
+          "duration": "服務時長：1 小時無限問答",
+          "paymentMethod": "付款方式：信用卡一次付清（綠界金流）",
+          "immediate": "立即生效：付款後立即開始計時",
+          "viewFullPricing": "查看完整價格方案 →",
+          "cancelButton": "取消",
+          "unlockButton": "立即付費解鎖"
+        }
+      },
+      "actions": {
+        "reset": "重製表單"
+      },
+      "footer": {
+        "disclaimer": {
+          "title": "免責聲明",
+          "content": "本服務提供的紫微斗數命理解析僅供<strong>娛樂和文化學習參考</strong>，不應作為重要人生決策的依據。命理結果不保證準確性，請理性對待。"
+        },
+        "notice": "命盤解析基於傳統中州派紫微斗數理論,僅供參考",
+        "systemName": "• 紫微斗數命盤計算系統 •",
+        "links": {
+          "privacy": "隱私政策",
+          "pricing": "價格方案",
+          "googlePrivacy": "Google 隱私政策"
+        }
+      }
     }
   },
   "api": {
