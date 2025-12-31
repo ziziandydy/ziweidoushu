@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "language": "zh-TW",
+    "displayName": "繁體中文"
+  },
+  "common": {
+    "siteName": "AI 紫微斗數",
+    "blog": "部落格",
+    "pricing": "價格方案",
+    "privacyPolicy": "隱私政策",
+    "backToHome": "返回首頁",
+    "startAnalysis": "開始分析",
+    "loading": "載入中...",
+    "error": "錯誤",
+    "success": "成功",
+    "confirm": "確認",
+    "cancel": "取消"
+  },
+  "nav": {
+    "blog": "📝 部落格",
+    "startAnalysis": "🚀 開始分析命盤",
+    "home": "首頁",
+    "analysis": "命盤分析",
+    "pricing": "價格方案",
+    "privacyPolicy": "隱私政策"
+  },
+  "pages": {
+    "index": {
+      "meta": {
+        "title": "AI 紫微斗數 - 現代化的命理分析系統 | 結合傳統中州派理論與 AI 技術",
+        "description": "AI 紫微斗數 - 請輸入你的出生年月日時辰，並選擇性別，即可得到你的免費紫微斗數命盤。結合傳統中州派理論與現代 AI 技術，提供精準的命理分析、十二宮位計算、十四主星配置、四化星解析與 AI 深度互動問答功能。"
+      },
+      "hero": {
+        "title": "AI 紫微斗數",
+        "subtitle": "結合傳統命理智慧與現代 AI 技術<br>為您提供更準確、更深入的命理分析",
+        "cta": "✨ 立即體驗 AI 命理分析"
+      }
+    }
+  },
+  "api": {
+    "errors": {
+      "INVALID_REQUEST": "請求格式無效",
+      "MISSING_PARAMETERS": "缺少必要參數",
+      "INVALID_PARAMETERS": "參數格式錯誤",
+      "METHOD_NOT_ALLOWED": "不允許的請求方法",
+      "CALCULATION_FAILED": "計算失敗",
+      "ANALYSIS_FAILED": "AI 分析失敗",
+      "INTERNAL_ERROR": "伺服器內部錯誤"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "language": "en",
+    "displayName": "English"
+  },
+  "common": {
+    "siteName": "AI Zi Wei Dou Shu",
+    "blog": "Blog",
+    "pricing": "Pricing",
+    "privacyPolicy": "Privacy Policy",
+    "backToHome": "Back to Home",
+    "startAnalysis": "Start Analysis",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "nav": {
+    "blog": "📝 Blog",
+    "startAnalysis": "🚀 Start Chart Analysis",
+    "home": "Home",
+    "analysis": "Chart Analysis",
+    "pricing": "Pricing",
+    "privacyPolicy": "Privacy Policy"
+  },
+  "pages": {
+    "index": {
+      "meta": {
+        "title": "AI Zi Wei Dou Shu - Modern Chinese Astrology System | Combining Traditional Zhongzhou School with AI",
+        "description": "AI Zi Wei Dou Shu - Enter your birth date and time, select your gender to get your free destiny chart. Combining traditional Zhongzhou school theory with modern AI technology, providing accurate destiny analysis, 12 palace calculations, 14 major star configurations, Four Transformations analysis, and AI-powered interactive Q&A."
+      },
+      "hero": {
+        "title": "AI Zi Wei Dou Shu",
+        "subtitle": "Combining Traditional Wisdom with Modern AI Technology<br>Providing More Accurate and In-depth Destiny Analysis",
+        "cta": "✨ Experience AI Destiny Analysis Now"
+      }
+    }
+  },
+  "api": {
+    "errors": {
+      "INVALID_REQUEST": "Invalid request format",
+      "MISSING_PARAMETERS": "Missing required parameters",
+      "INVALID_PARAMETERS": "Invalid parameter format",
+      "METHOD_NOT_ALLOWED": "Method not allowed",
+      "CALCULATION_FAILED": "Chart calculation failed",
+      "ANALYSIS_FAILED": "AI analysis failed",
+      "INTERNAL_ERROR": "Internal server error"
+    }
+  }
+}

@@ -2,16 +2,36 @@
   "version": 2,
   "rewrites": [
     {
+      "source": "/",
+      "destination": "/zh-TW/"
+    },
+    {
+      "source": "/(en|zh-TW)",
+      "destination": "/$1/index.html"
+    },
+    {
+      "source": "/(en|zh-TW)/:page",
+      "destination": "/$1/:page.html"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/page?page=sitemap"
     },
     {
+      "source": "/(en|zh-TW)/blog",
+      "destination": "/api/blog-page?locale=$1"
+    },
+    {
+      "source": "/(en|zh-TW)/blog/:slug",
+      "destination": "/api/blog/page/:slug?locale=$1"
+    },
+    {
       "source": "/blog",
-      "destination": "/api/blog-page"
+      "destination": "/zh-TW/blog"
     },
     {
       "source": "/blog/:slug",
-      "destination": "/api/blog/page/:slug"
+      "destination": "/zh-TW/blog/:slug"
     },
     {
       "source": "/admin-login",
@@ -90,6 +110,28 @@
         {
           "key": "Content-Type",
           "value": "application/xml; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/locales/:locale.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, must-revalidate"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/(en|zh-TW)/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, must-revalidate"
         }
       ]
     }

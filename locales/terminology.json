@@ -1,0 +1,178 @@
+{
+  "palaces": {
+    "ming": {
+      "zh-TW": "命宮",
+      "en": "Life Palace",
+      "pinyin": "Mìng Gōng"
+    },
+    "xiongdi": {
+      "zh-TW": "兄弟宮",
+      "en": "Siblings Palace",
+      "pinyin": "Xiōngdì Gōng"
+    },
+    "fuqi": {
+      "zh-TW": "夫妻宮",
+      "en": "Spouse Palace",
+      "pinyin": "Fūqī Gōng"
+    },
+    "zinv": {
+      "zh-TW": "子女宮",
+      "en": "Children Palace",
+      "pinyin": "Zǐnǚ Gōng"
+    },
+    "caibo": {
+      "zh-TW": "財帛宮",
+      "en": "Wealth Palace",
+      "pinyin": "Cáibó Gōng"
+    },
+    "jie": {
+      "zh-TW": "疾厄宮",
+      "en": "Health Palace",
+      "pinyin": "Jí'è Gōng"
+    },
+    "qianyi": {
+      "zh-TW": "遷移宮",
+      "en": "Travel Palace",
+      "pinyin": "Qiānyí Gōng"
+    },
+    "jiaoyou": {
+      "zh-TW": "僕役宮",
+      "en": "Friends Palace",
+      "pinyin": "Púyì Gōng"
+    },
+    "shiye": {
+      "zh-TW": "官祿宮",
+      "en": "Career Palace",
+      "pinyin": "Guānlù Gōng"
+    },
+    "tianzhai": {
+      "zh-TW": "田宅宮",
+      "en": "Property Palace",
+      "pinyin": "Tiánzhái Gōng"
+    },
+    "fude": {
+      "zh-TW": "福德宮",
+      "en": "Fortune Palace",
+      "pinyin": "Fúdé Gōng"
+    },
+    "fumu": {
+      "zh-TW": "父母宮",
+      "en": "Parents Palace",
+      "pinyin": "Fùmǔ Gōng"
+    }
+  },
+  "stars": {
+    "ziwei": {
+      "zh-TW": "紫微",
+      "en": "Purple Star (Ziwei)",
+      "pinyin": "Zǐwēi"
+    },
+    "tianfu": {
+      "zh-TW": "天府",
+      "en": "Heavenly Mansion (Tianfu)",
+      "pinyin": "Tiānfǔ"
+    },
+    "tianji": {
+      "zh-TW": "天機",
+      "en": "Heavenly Secret (Tianji)",
+      "pinyin": "Tiānjī"
+    },
+    "taiyang": {
+      "zh-TW": "太陽",
+      "en": "Sun (Taiyang)",
+      "pinyin": "Tàiyáng"
+    },
+    "wuqu": {
+      "zh-TW": "武曲",
+      "en": "Military Music (Wuqu)",
+      "pinyin": "Wǔqū"
+    },
+    "tiantong": {
+      "zh-TW": "天同",
+      "en": "Heavenly Unity (Tiantong)",
+      "pinyin": "Tiāntóng"
+    },
+    "lianzhen": {
+      "zh-TW": "廉貞",
+      "en": "Pure Virtue (Lianzhen)",
+      "pinyin": "Liánzhēn"
+    },
+    "taiyin": {
+      "zh-TW": "太陰",
+      "en": "Moon (Taiyin)",
+      "pinyin": "Tàiyīn"
+    },
+    "tanlang": {
+      "zh-TW": "貪狼",
+      "en": "Greedy Wolf (Tanlang)",
+      "pinyin": "Tānláng"
+    },
+    "jumen": {
+      "zh-TW": "巨門",
+      "en": "Giant Gate (Jumen)",
+      "pinyin": "Jùmén"
+    },
+    "tianxiang": {
+      "zh-TW": "天相",
+      "en": "Heavenly Minister (Tianxiang)",
+      "pinyin": "Tiānxiāng"
+    },
+    "tianliang": {
+      "zh-TW": "天梁",
+      "en": "Heavenly Support (Tianliang)",
+      "pinyin": "Tiānliáng"
+    },
+    "qisha": {
+      "zh-TW": "七殺",
+      "en": "Seven Killings (Qisha)",
+      "pinyin": "Qīshā"
+    },
+    "pojun": {
+      "zh-TW": "破軍",
+      "en": "破Army-Breaking (Pojun)",
+      "pinyin": "Pòjūn"
+    }
+  },
+  "concepts": {
+    "ziweiDouShu": {
+      "zh-TW": "紫微斗數",
+      "en": "Zi Wei Dou Shu",
+      "pinyin": "Zǐwēi Dòushù"
+    },
+    "zhongzhouSchool": {
+      "zh-TW": "中州派",
+      "en": "Zhongzhou School",
+      "pinyin": "Zhōngzhōu Pài"
+    },
+    "fourTransformations": {
+      "zh-TW": "四化",
+      "en": "Four Transformations",
+      "pinyin": "Sì Huà"
+    },
+    "hualu": {
+      "zh-TW": "化祿",
+      "en": "Transformation of Wealth",
+      "pinyin": "Huà Lù"
+    },
+    "huaquan": {
+      "zh-TW": "化權",
+      "en": "Transformation of Authority",
+      "pinyin": "Huà Quán"
+    },
+    "huake": {
+      "zh-TW": "化科",
+      "en": "Transformation of Academics",
+      "pinyin": "Huà Kē"
+    },
+    "huaji": {
+      "zh-TW": "化忌",
+      "en": "Transformation of Taboo",
+      "pinyin": "Huà Jì"
+    },
+    "liunian": {
+      "zh-TW": "流年",
+      "en": "Annual Fortune",
+      "pinyin": "Liúnián"
+    }
+  }
+}
