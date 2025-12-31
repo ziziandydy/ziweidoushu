@@ -23,11 +23,11 @@
     },
     {
       "source": "/blog/:slug",
-      "destination": "/zh-TW/blog/:slug"
+      "destination": "/api/blog/page/:slug?locale=zh-TW"
     },
     {
       "source": "/blog",
-      "destination": "/zh-TW/blog"
+      "destination": "/api/blog-page?locale=zh-TW"
     },
     {
       "source": "/(en|zh-TW)/:page",
