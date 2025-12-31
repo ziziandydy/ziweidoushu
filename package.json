@@ -38,7 +38,9 @@
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
     "format": "prettier --write ./src/**.ts ./test/**.ts",
-    "lint": "eslint ./src ./test --ext .ts"
+    "lint": "eslint ./src ./test --ext .ts",
+    "migrate": "node scripts/run-migration.js",
+    "migrate:002": "node scripts/run-migration.js 002"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.4",
