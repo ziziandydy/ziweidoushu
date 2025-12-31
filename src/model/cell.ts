@@ -5,7 +5,7 @@ import { MiniStar } from './miniStar'
 import { MinorStar } from './minorStar'
 import { Sky } from './sky'
 import { Temple } from './temple'
-import util from 'util'
+import * as util from 'util'
 import { mod } from './../utils'
 import { Star } from './star'
 

@@ -4,30 +4,14 @@
  * Model: GPT-4o (升級版)
  */
 
+const { setCorsHeaders, handleOptions } = require('../lib/cors');
+
 module.exports = async function handler(req, res) {
     console.log('🔮 紫微斗數 AI 分析 API (GPT-4o)');
 
-    // CORS 頭部 - 限制為特定域名
-    const allowedOrigins = [
-        'https://ziweidoushu.vercel.app',
-        'https://ziweidoushy.vercel.app',
-        'http://localhost:8080',
-        'http://localhost:3000'
-    ];
-
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-    }
-
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-    if (req.method === 'OPTIONS') {
-        res.status(200).end();
-        return;
-    }
+    // 設定 CORS
+    setCorsHeaders(req, res);
+    if (handleOptions(req, res)) return;
 
     if (req.method !== 'POST') {
         res.status(405).json({ error: '只允許 POST 請求' });

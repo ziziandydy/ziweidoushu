@@ -2,30 +2,6 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/public/index.html"
-    },
-    {
-      "source": "/analysis",
-      "destination": "/public/analysis.html"
-    },
-    {
-      "source": "/privacy-policy",
-      "destination": "/public/privacy-policy.html"
-    },
-    {
-      "source": "/payment-success",
-      "destination": "/public/payment-success.html"
-    },
-    {
-      "source": "/payment-failed",
-      "destination": "/public/payment-failed.html"
-    },
-    {
-      "source": "/pricing",
-      "destination": "/public/pricing.html"
-    },
-    {
       "source": "/sitemap.xml",
       "destination": "/api/page?page=sitemap"
     },

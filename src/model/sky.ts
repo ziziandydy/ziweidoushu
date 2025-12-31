@@ -1,5 +1,5 @@
 import { mod } from './../utils'
-import util from 'util'
+import * as util from 'util'
 
 const SKY_WORDS = Object.freeze(['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'])
 

@@ -29,9 +29,12 @@
     "node": "22.x"
   },
   "scripts": {
-    "build": "echo 'CSS already compiled and committed to Git. No build step required.'",
+    "build": "npm run build:ts && npm run build:css",
+    "build:ts": "tsc",
     "build:css": "npx tailwindcss -i ./src/styles/input.css -o ./public/styles.css --minify",
     "dev:css": "npx tailwindcss -i ./src/styles/input.css -o ./public/styles.css --watch",
+    "clean": "rimraf build",
+    "prebuild": "npm run clean",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
     "format": "prettier --write ./src/**.ts ./test/**.ts",

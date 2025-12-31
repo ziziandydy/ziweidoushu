@@ -1,6 +1,6 @@
 import { Ground } from './ground'
 import { mod } from './../utils'
-import util from 'util'
+import * as util from 'util'
 
 class DayTimeGround {
     index: number

@@ -2,7 +2,7 @@ import { DestinyBoard } from './destinyBoard'
 import { Ground } from './ground'
 import { Luckiness } from './miscEnums'
 import { Sky } from './sky'
-import util from 'util'
+import * as util from 'util'
 import { Star } from './star'
 
 class MinorStar implements Star {

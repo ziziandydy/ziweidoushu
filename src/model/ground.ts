@@ -1,5 +1,5 @@
 import { mod } from './../utils'
-import util from 'util'
+import * as util from 'util'
 
 const GROUND_WORDS = Object.freeze(['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'])
 

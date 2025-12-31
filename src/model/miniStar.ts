@@ -4,7 +4,7 @@ import { Ground } from './ground'
 import { Luckiness, Direction } from './miscEnums'
 import { MinorStar } from './minorStar'
 import { Temple } from './temple'
-import util from 'util'
+import * as util from 'util'
 import { Star } from './star'
 
 class MiniStar implements Star {

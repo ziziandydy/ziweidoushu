@@ -4,6 +4,9 @@
  * 整合真實的 TypeScript 核心計算引擎
  */
 
+const { setCorsHeaders, handleOptions } = require('../lib/cors');
+const { sendError, validateRequired } = require('../lib/errors');
+
 // 嘗試載入真實的 TypeScript 核心模組
 let ZiweiCore = null;
 try {
@@ -17,31 +20,12 @@ try {
 module.exports = async function handler(req, res) {
     console.log('🔮 紫微斗數計算 API - ' + (ZiweiCore ? '真實計算模式' : '簡化模式'));
 
-    // CORS 頭部 - 限制為特定域名
-    const allowedOrigins = [
-        'https://ziweidoushu.vercel.app',
-        'https://ziweidoushy.vercel.app',
-        'http://localhost:8080',
-        'http://localhost:3000'
-    ];
-
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-    }
-
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-    if (req.method === 'OPTIONS') {
-        res.status(200).end();
-        return;
-    }
+    // 設定 CORS
+    setCorsHeaders(req, res);
+    if (handleOptions(req, res)) return;
 
     if (req.method !== 'POST') {
-        res.status(405).json({ error: '只允許 POST 請求' });
-        return;
+        return sendError(res, 'METHOD_NOT_ALLOWED');
     }
 
     try {
@@ -49,61 +33,37 @@ module.exports = async function handler(req, res) {
 
         // 詳細的輸入驗證
         if (!data || typeof data !== 'object') {
-            return res.status(400).json({
-                error: '請求數據格式無效',
-                success: false
-            });
+            return sendError(res, 'INVALID_REQUEST');
         }
 
         // 驗證必填欄位
         const requiredFields = ['name', 'gender', 'birthYear', 'birthMonth', 'birthDay', 'birthHour'];
-        const missingFields = requiredFields.filter(field => !data[field]);
-
-        if (missingFields.length > 0) {
-            return res.status(400).json({
-                error: `請填寫完整資料：${missingFields.join(', ')}`,
-                required: requiredFields,
-                missing: missingFields,
-                success: false
-            });
+        const validationError = validateRequired(data, requiredFields);
+        if (validationError) {
+            return res.status(400).json(validationError);
         }
 
         // 驗證數據類型和範圍
         if (!['M', 'F'].includes(data.gender)) {
-            return res.status(400).json({
-                error: '性別必須是 M 或 F',
-                success: false
-            });
+            return sendError(res, 'INVALID_PARAMETERS', '性別必須是 M 或 F');
         }
 
         if (data.birthYear < 1900 || data.birthYear > 2100) {
-            return res.status(400).json({
-                error: '出生年份無效（1900-2100）',
-                success: false
-            });
+            return sendError(res, 'INVALID_PARAMETERS', '出生年份無效（1900-2100）');
         }
 
         if (data.birthMonth < 1 || data.birthMonth > 12) {
-            return res.status(400).json({
-                error: '出生月份無效（1-12）',
-                success: false
-            });
+            return sendError(res, 'INVALID_PARAMETERS', '出生月份無效（1-12）');
         }
 
         if (data.birthDay < 1 || data.birthDay > 31) {
-            return res.status(400).json({
-                error: '出生日期無效（1-31）',
-                success: false
-            });
+            return sendError(res, 'INVALID_PARAMETERS', '出生日期無效（1-31）');
         }
 
         // 檢查請求體大小
         const requestSize = JSON.stringify(req.body).length;
         if (requestSize > 10000) {
-            return res.status(413).json({
-                error: '請求數據過大',
-                success: false
-            });
+            return sendError(res, 'PAYLOAD_TOO_LARGE');
         }
 
         console.log('🔮 接收到計算請求:', {
@@ -136,11 +96,7 @@ module.exports = async function handler(req, res) {
 
     } catch (error) {
         console.error('❌ 計算錯誤:', error);
-        res.status(500).json({
-            success: false,
-            error: '計算失敗',
-            details: process.env.NODE_ENV === 'development' ? error.message : undefined
-        });
+        return sendError(res, 'CALCULATION_FAILED');
     }
 };
 

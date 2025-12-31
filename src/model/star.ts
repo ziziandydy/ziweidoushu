@@ -5,4 +5,4 @@ interface Star {
     equals(star: Star): boolean
 }
 
-export { Star }
+export type { Star }

@@ -2,7 +2,7 @@ import { DestinyBoard } from './destinyBoard'
 import { Element } from './miscEnums'
 import { Ground } from './ground'
 import { Star } from './star'
-import util from 'util'
+import * as util from 'util'
 
 /**
  * 主星

@@ -1,4 +1,4 @@
-import util from 'util'
+import * as util from 'util'
 import { MajorStar } from './majorStar'
 import { MinorStar } from './minorStar'
 import { Sky } from './sky'

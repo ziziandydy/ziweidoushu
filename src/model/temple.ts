@@ -1,4 +1,4 @@
-import util from 'util'
+import * as util from 'util'
 class Temple {
     key: string
     displayName: string

@@ -1,5 +1,5 @@
 declare module 'js-calendar-converter' {
-    export declare const calendar: {
+    export const calendar: {
         solar2lunar: (
             solarYear: number,
             solarMonth: number,

@@ -5,6 +5,8 @@
  * Features: 連續對話、命盤自動帶入、Credit 後端管理
  */
 
+const { setCorsHeaders, handleOptions } = require('../lib/cors');
+
 // 簡單的內存存儲（生產環境應使用 Redis 或數據庫）
 // Vercel Serverless 的限制：每次調用都是新的實例，所以這裡用簡化方案
 const conversationStore = new Map();
@@ -13,27 +15,9 @@ const creditStore = new Map();
 module.exports = async function handler(req, res) {
     console.log('🔮 紫微斗數問答系統 API (GPT-4o + Thread)');
 
-    // CORS 頭部 - 限制為特定域名
-    const allowedOrigins = [
-        'https://ziweidoushu.vercel.app',
-        'https://ziweidoushy.vercel.app',
-        'http://localhost:8080',
-        'http://localhost:3000'
-    ];
-
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-    }
-
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-User-ID');
-
-    if (req.method === 'OPTIONS') {
-        res.status(200).end();
-        return;
-    }
+    // 設定 CORS
+    setCorsHeaders(req, res);
+    if (handleOptions(req, res)) return;
 
     if (req.method !== 'POST') {
         res.status(405).json({ error: '只允許 POST 請求' });
