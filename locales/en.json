@@ -424,10 +424,27 @@
       "INVALID_REQUEST": "Invalid request format",
       "MISSING_PARAMETERS": "Missing required parameters",
       "INVALID_PARAMETERS": "Invalid parameter format",
+      "UNAUTHORIZED": "Unauthorized access",
+      "FORBIDDEN": "Insufficient permissions",
+      "NOT_FOUND": "Resource not found",
       "METHOD_NOT_ALLOWED": "Method not allowed",
-      "CALCULATION_FAILED": "Chart calculation failed",
+      "PAYLOAD_TOO_LARGE": "Request payload too large",
+      "RATE_LIMIT_EXCEEDED": "Too many requests, please try again later",
+      "CREDIT_INSUFFICIENT": "Question credits exhausted",
+      "CALCULATION_FAILED": "Destiny chart calculation failed",
       "ANALYSIS_FAILED": "AI analysis failed",
-      "INTERNAL_ERROR": "Internal server error"
+      "INTERNAL_ERROR": "Internal server error",
+      "SERVICE_UNAVAILABLE": "Service temporarily unavailable",
+      "AI_SERVICE_ERROR": "AI service temporarily unavailable",
+      "DATABASE_ERROR": "Database connection failed",
+      "CONFIGURATION_ERROR": "Service configuration error"
+    },
+    "validation": {
+      "invalidGender": "Gender must be M or F",
+      "invalidYear": "Invalid birth year (1900-2100)",
+      "invalidMonth": "Invalid birth month (1-12)",
+      "invalidDay": "Invalid birth day (1-31)",
+      "missingParams": "Missing required parameters: {{fields}}"
     }
   }
 }

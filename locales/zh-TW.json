@@ -448,10 +448,27 @@
       "INVALID_REQUEST": "請求格式無效",
       "MISSING_PARAMETERS": "缺少必要參數",
       "INVALID_PARAMETERS": "參數格式錯誤",
+      "UNAUTHORIZED": "未授權訪問",
+      "FORBIDDEN": "權限不足",
+      "NOT_FOUND": "資源不存在",
       "METHOD_NOT_ALLOWED": "不允許的請求方法",
-      "CALCULATION_FAILED": "計算失敗",
+      "PAYLOAD_TOO_LARGE": "請求數據過大",
+      "RATE_LIMIT_EXCEEDED": "請求次數過多，請稍後再試",
+      "CREDIT_INSUFFICIENT": "問答次數已用完",
+      "CALCULATION_FAILED": "命盤計算失敗",
       "ANALYSIS_FAILED": "AI 分析失敗",
-      "INTERNAL_ERROR": "伺服器內部錯誤"
+      "INTERNAL_ERROR": "伺服器內部錯誤",
+      "SERVICE_UNAVAILABLE": "服務暫時無法使用",
+      "AI_SERVICE_ERROR": "AI 服務暫時無法使用",
+      "DATABASE_ERROR": "資料庫連線失敗",
+      "CONFIGURATION_ERROR": "服務配置錯誤"
+    },
+    "validation": {
+      "invalidGender": "性別必須是 M 或 F",
+      "invalidYear": "出生年份無效（1900-2100）",
+      "invalidMonth": "出生月份無效（1-12）",
+      "invalidDay": "出生日期無效（1-31）",
+      "missingParams": "缺少必要參數：{{fields}}"
     }
   }
 }

@@ -5,7 +5,8 @@
  */
 
 const { setCorsHeaders, handleOptions } = require('../lib/cors');
-const { sendError, validateRequired } = require('../lib/errors');
+const { sendError, validateRequired, t } = require('../lib/errors');
+const { ServerI18n } = require('../lib/i18n-server');
 
 // 嘗試載入真實的 TypeScript 核心模組
 let ZiweiCore = null;
@@ -24,8 +25,13 @@ module.exports = async function handler(req, res) {
     setCorsHeaders(req, res);
     if (handleOptions(req, res)) return;
 
+    // 偵測語言
+    const i18n = new ServerI18n();
+    const locale = i18n.detectLocale(req);
+    console.log('🌐 Locale detected:', locale);
+
     if (req.method !== 'POST') {
-        return sendError(res, 'METHOD_NOT_ALLOWED');
+        return sendError(res, 'METHOD_NOT_ALLOWED', null, {}, locale);
     }
 
     try {
@@ -33,37 +39,41 @@ module.exports = async function handler(req, res) {
 
         // 詳細的輸入驗證
         if (!data || typeof data !== 'object') {
-            return sendError(res, 'INVALID_REQUEST');
+            return sendError(res, 'INVALID_REQUEST', null, {}, locale);
         }
 
         // 驗證必填欄位
         const requiredFields = ['name', 'gender', 'birthYear', 'birthMonth', 'birthDay', 'birthHour'];
-        const validationError = validateRequired(data, requiredFields);
+        const validationError = validateRequired(data, requiredFields, locale);
         if (validationError) {
             return res.status(400).json(validationError);
         }
 
         // 驗證數據類型和範圍
         if (!['M', 'F'].includes(data.gender)) {
-            return sendError(res, 'INVALID_PARAMETERS', '性別必須是 M 或 F');
+            const message = t(locale, 'api.validation.invalidGender') || '性別必須是 M 或 F';
+            return sendError(res, 'INVALID_PARAMETERS', message, {}, locale);
         }
 
         if (data.birthYear < 1900 || data.birthYear > 2100) {
-            return sendError(res, 'INVALID_PARAMETERS', '出生年份無效（1900-2100）');
+            const message = t(locale, 'api.validation.invalidYear') || '出生年份無效（1900-2100）';
+            return sendError(res, 'INVALID_PARAMETERS', message, {}, locale);
         }
 
         if (data.birthMonth < 1 || data.birthMonth > 12) {
-            return sendError(res, 'INVALID_PARAMETERS', '出生月份無效（1-12）');
+            const message = t(locale, 'api.validation.invalidMonth') || '出生月份無效（1-12）';
+            return sendError(res, 'INVALID_PARAMETERS', message, {}, locale);
         }
 
         if (data.birthDay < 1 || data.birthDay > 31) {
-            return sendError(res, 'INVALID_PARAMETERS', '出生日期無效（1-31）');
+            const message = t(locale, 'api.validation.invalidDay') || '出生日期無效（1-31）';
+            return sendError(res, 'INVALID_PARAMETERS', message, {}, locale);
         }
 
         // 檢查請求體大小
         const requestSize = JSON.stringify(req.body).length;
         if (requestSize > 10000) {
-            return sendError(res, 'PAYLOAD_TOO_LARGE');
+            return sendError(res, 'PAYLOAD_TOO_LARGE', null, {}, locale);
         }
 
         console.log('🔮 接收到計算請求:', {
@@ -88,6 +98,7 @@ module.exports = async function handler(req, res) {
             palaces: result.palaces,
             element: result.element,
             source: ZiweiCore ? 'real-core' : 'simplified',
+            locale: locale,
             timestamp: new Date().toISOString()
         };
 
@@ -96,7 +107,7 @@ module.exports = async function handler(req, res) {
 
     } catch (error) {
         console.error('❌ 計算錯誤:', error);
-        return sendError(res, 'CALCULATION_FAILED');
+        return sendError(res, 'CALCULATION_FAILED', null, {}, locale);
     }
 };
 
