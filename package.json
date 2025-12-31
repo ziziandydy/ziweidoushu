@@ -29,12 +29,12 @@
     "node": "22.x"
   },
   "scripts": {
-    "build": "npm run build:ts && npm run build:css",
+    "build": "npm run build:css",
     "build:ts": "tsc",
     "build:css": "npx tailwindcss -i ./src/styles/input.css -o ./public/styles.css --minify",
     "dev:css": "npx tailwindcss -i ./src/styles/input.css -o ./public/styles.css --watch",
     "clean": "rimraf build",
-    "prebuild": "npm run clean",
+    "rebuild": "npm run clean && npm run build:ts && npm run build:css",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
     "format": "prettier --write ./src/**.ts ./test/**.ts",
