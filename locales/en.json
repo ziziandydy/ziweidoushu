@@ -28,12 +28,242 @@
     "index": {
       "meta": {
         "title": "AI Zi Wei Dou Shu - Modern Chinese Astrology System | Combining Traditional Zhongzhou School with AI",
-        "description": "AI Zi Wei Dou Shu - Enter your birth date and time, select your gender to get your free destiny chart. Combining traditional Zhongzhou school theory with modern AI technology, providing accurate destiny analysis, 12 palace calculations, 14 major star configurations, Four Transformations analysis, and AI-powered interactive Q&A."
+        "description": "AI Zi Wei Dou Shu - Enter your birth date and time, select your gender to get your free destiny chart. Combining traditional Zhongzhou school theory with modern AI technology, providing accurate destiny analysis, 12 palace calculations, 14 major star configurations, Four Transformations analysis, and AI-powered interactive Q&A.",
+        "keywords": "Zi Wei Dou Shu,AI Destiny,Purple Star Astrology,Zhongzhou School,Chinese Astrology,Destiny Chart,Birth Chart Analysis,AI Fortune Telling,Traditional Divination,12 Palaces,14 Major Stars,Four Transformations,Yearly Fortune,Destiny Reading",
+        "ogTitle": "AI Zi Wei Dou Shu - Modern Chinese Astrology System",
+        "ogDescription": "Combining traditional Zhongzhou school theory with modern AI technology, providing accurate destiny analysis. Supports Lunar and Solar calendar conversion, automatic chart calculation, and AI-powered in-depth analysis with interactive Q&A."
       },
       "hero": {
         "title": "AI Zi Wei Dou Shu",
         "subtitle": "Combining Traditional Wisdom with Modern AI Technology<br>Providing More Accurate and In-depth Destiny Analysis",
         "cta": "✨ Experience AI Destiny Analysis Now"
+      },
+      "history": {
+        "heading": "📜 Historical Origins of Zi Wei Dou Shu",
+        "paragraph1": "<strong>Zi Wei Dou Shu</strong>, also known as \"Purple Star Astrology\" or \"Purple Star Destiny Chart\", is one of the most important astrological systems in traditional Chinese divination. Its origins can be traced back to the <strong>Tang Dynasty</strong>, founded by <strong>Zhang Guo Lao</strong> (Zhang Guo), and later developed by <strong>Chen Xi Yi</strong> (Chen Tuan) and others.",
+        "paragraph2": "Zi Wei Dou Shu centers on the <strong>Purple Star (Ziwei)</strong>, combining the <strong>Twelve Palaces</strong>, <strong>Fourteen Major Stars</strong>, <strong>Six Auspicious Stars</strong>, <strong>Six Inauspicious Stars</strong>, and the dynamic changes of the <strong>Four Transformations</strong> (Transformation of Wealth, Power, Fame, and Obstruction), forming a complete system of destiny analysis.",
+        "paragraph3": "Through the development of the <strong>Song, Yuan, Ming, and Qing</strong> dynasties, Zi Wei Dou Shu gradually became one of the four major divination systems alongside <strong>Ba Zi (Four Pillars)</strong>, <strong>Face Reading</strong>, and <strong>Feng Shui</strong>, beloved by scholars and common people alike."
+      },
+      "schools": {
+        "heading": "🏛️ Five Major Schools of Zi Wei Dou Shu",
+        "zhongzhou": {
+          "name": "Zhongzhou School",
+          "subtitle": "Also known as \"Heluo School\"",
+          "description": "Originating from Central China, emphasizing <strong>star combinations</strong> and <strong>palace interactions</strong>. Our system adopts this school's theory, emphasizing the integration of tradition and modernity.",
+          "features": [
+            "Emphasizes star energy levels",
+            "Focuses on pattern analysis",
+            "Stresses inter-palace relationships"
+          ]
+        },
+        "sanhe": {
+          "name": "Sanhe School",
+          "description": "<strong>Emphasizes the Trinity</strong> relationship, focusing on the triangular combination of Life Palace, Wealth Palace, and Career Palace, paying attention to <strong>Major Cycles and Annual Fortunes</strong>.",
+          "features": [
+            "Trinity analysis method",
+            "Emphasizes major cycles and annual fortunes",
+            "Focuses on temporal changes"
+          ]
+        },
+        "feixing": {
+          "name": "Feixing School",
+          "description": "<strong>Focuses on Flying Stars</strong> dynamic changes, emphasizing the influence of <strong>Four Transformations</strong>, and values <strong>time series</strong> analysis methods.",
+          "features": [
+            "Dynamic Flying Star analysis",
+            "Application of Four Transformations",
+            "Time series analysis"
+          ]
+        },
+        "modern": {
+          "name": "Modern School",
+          "description": "<strong>Integrates modern psychology</strong> and <strong>statistics</strong>, using scientific methods to validate traditional theories, focusing on <strong>empirical analysis</strong>.",
+          "features": [
+            "Scientific validation methods",
+            "Integration with psychology",
+            "Empirical analysis"
+          ]
+        },
+        "shuyuan": {
+          "name": "Academy School",
+          "description": "<strong>Emphasizes classical literature</strong> research, values <strong>traditional texts</strong> inheritance, and stresses <strong>theoretical completeness</strong>.",
+          "features": [
+            "Classical literature research",
+            "Traditional text inheritance",
+            "Theoretical completeness"
+          ]
+        },
+        "zhanyan": {
+          "name": "Verification School",
+          "description": "<strong>Values practical verification</strong>, emphasizes <strong>accuracy rate</strong>, and focuses on the accumulation and transmission of <strong>practical experience</strong>.",
+          "features": [
+            "Practical verification methods",
+            "Accuracy rate statistics",
+            "Practical experience"
+          ]
+        }
+      },
+      "zhongzhouSection": {
+        "heading": "🎯 Our System: Zhongzhou School Theory",
+        "whyChoose": {
+          "title": "Why Choose Zhongzhou School?",
+          "reasons": [
+            "<strong>Complete Theory</strong>: Zhongzhou School has the most complete theoretical system, covering comprehensive analysis of stars, palaces, and Four Transformations",
+            "<strong>Traditional Authenticity</strong>: Directly inherited from the orthodox Zi Wei Dou Shu of ancient Central China, maintaining traditional essence",
+            "<strong>Strong Practicality</strong>: Focuses on practical application, with clear and precise star energy level assessment",
+            "<strong>Rigorous Logic</strong>: Emphasizes pattern combinations and palace interactions, with clear analytical logic"
+          ]
+        },
+        "coreFeatures": {
+          "title": "Core Features of Zhongzhou School",
+          "starSystem": {
+            "title": "🌟 Star System",
+            "description": "Complete configuration of 14 Major Stars, including Purple Star and Heavenly Mansion systems"
+          },
+          "energyLevel": {
+            "title": "🎯 Energy Levels",
+            "description": "Clear energy level assessment system for major and auxiliary stars"
+          },
+          "pattern": {
+            "title": "📊 Pattern Analysis",
+            "description": "Emphasizes pattern combinations, analyzing overall chart characteristics"
+          },
+          "palaceInteraction": {
+            "title": "🔄 Palace Interaction",
+            "description": "Focuses on mutual influence relationships among the Twelve Palaces"
+          }
+        }
+      },
+      "advantages": {
+        "heading": "🤖 Future Advantages of AI Zi Wei Dou Shu",
+        "accuracy": {
+          "title": "Precise Analysis",
+          "description": "AI technology can integrate <strong>extensive historical cases</strong> and <strong>statistical data</strong>, combining traditional Zhongzhou school theory to provide more <strong>objective and accurate</strong> destiny analysis results."
+        },
+        "personalization": {
+          "title": "Deep Personalization",
+          "description": "AI can understand your <strong>specific questions</strong>, providing <strong>targeted answers</strong> instead of one-size-fits-all template responses. Each Q&A session <strong>remembers conversation context</strong>, making analysis more coherent."
+        },
+        "availability": {
+          "title": "Always Available",
+          "description": "Unrestricted by time and location, <strong>24/7</strong> availability for destiny analysis. No appointment needed, no waiting required, <strong>instant professional analysis</strong>."
+        },
+        "continuous": {
+          "title": "Continuous Optimization",
+          "description": "The AI system <strong>continuously learns</strong> and <strong>improves</strong>. As usage increases, analysis quality constantly improves, providing more precise recommendations."
+        },
+        "understandable": {
+          "title": "Easy Understanding",
+          "description": "AI can convert complex <strong>traditional divination terminology</strong> into <strong>modern everyday language</strong> that even 12-year-olds can understand. Maintains a <strong>positive attitude</strong>, providing life advice and encouragement."
+        },
+        "comprehensive": {
+          "title": "Comprehensive Analysis",
+          "description": "Simultaneously analyzes <strong>star brightness</strong>, <strong>pattern characteristics</strong>, <strong>Life Palace description</strong>, <strong>overall summary</strong>, and other dimensions, providing <strong>multi-dimensional comprehensive</strong> destiny analysis."
+        }
+      },
+      "howToUse": {
+        "heading": "📖 How to Use AI Zi Wei Dou Shu System",
+        "step1": {
+          "title": "Step 1: Enter Basic Information",
+          "description": "Please prepare your <strong>name</strong>, <strong>gender</strong>, <strong>birth date and time</strong>. The system supports both <strong>Lunar</strong> and <strong>Solar</strong> calendars - choose the most convenient input method. For birth time, please use the traditional <strong>Twelve Terrestrial Branches</strong> (Zi, Chou, Yin, Mao, etc.)."
+        },
+        "step2": {
+          "title": "Step 2: Automatic Chart Calculation",
+          "description": "After clicking \"Start Analysis\", the system will automatically calculate your Zi Wei Dou Shu chart based on <strong>Zhongzhou School theory</strong>. This includes the configuration of the <strong>Twelve Palaces</strong>, positions of the <strong>Fourteen Major Stars</strong>, distribution of <strong>auxiliary stars</strong>, and dynamic changes of the <strong>Four Transformations</strong>. The entire process uses traditional algorithms to ensure result accuracy."
+        },
+        "step3": {
+          "title": "Step 3: AI In-depth Analysis",
+          "description": "After chart calculation, AI will automatically perform <strong>multi-dimensional analysis</strong> of your chart, including star brightness assessment, pattern characteristic analysis, detailed Life Palace description, and overall personality and fortune summary. AI uses the <strong>GPT-4o</strong> model, capable of understanding complex divination relationships, providing professional and easy-to-understand analysis."
+        },
+        "step4": {
+          "title": "Step 4: Interactive Q&A",
+          "description": "After receiving the initial analysis, you can ask AI <strong>specific questions</strong>, such as \"How is my fortune this year?\" or \"What kind of work am I suitable for?\" AI will combine your chart data to provide targeted answers. The system uses a <strong>conversational design</strong>, remembering previous conversation content for more coherent and in-depth analysis."
+        }
+      },
+      "faq": {
+        "heading": "❓ Frequently Asked Questions",
+        "q1": {
+          "question": "Q1: What's the difference between Zi Wei Dou Shu and Ba Zi?",
+          "answer": "<strong>Zi Wei Dou Shu</strong> and <strong>Ba Zi</strong> are both important branches of traditional Chinese divination, but they differ in analytical methods. Zi Wei Dou Shu centers on <strong>stars</strong> and <strong>palaces</strong>, focusing more on <strong>detailed personality analysis</strong> and <strong>various life aspects</strong>; Ba Zi is based on <strong>Five Elements interactions</strong>, emphasizing <strong>major cycles and annual fortunes</strong>. Both have their unique features and can complement each other."
+        },
+        "q2": {
+          "question": "Q2: Why choose Zhongzhou School theory?",
+          "answer": "<strong>Zhongzhou School</strong> (also known as Heluo School) is one of the most <strong>traditional and authentic</strong> schools of Zi Wei Dou Shu, with a complete theoretical system and rigorous logic. It directly inherits the orthodox Zi Wei Dou Shu from ancient Central China, focusing on <strong>star energy levels</strong> and <strong>pattern combination analysis</strong>, performing excellently in practical applications. Our system adopts Zhongzhou School theory to ensure analytical accuracy and professionalism."
+        },
+        "q3": {
+          "question": "Q3: Is AI analysis accurate?",
+          "answer": "Our system uses the <strong>OpenAI GPT-4o</strong> model, combining traditional Zhongzhou School theory with extensive divination case training. AI can understand complex divination relationships, providing <strong>objective and professional</strong> analysis. However, please note that divination analysis belongs to <strong>cultural tradition</strong> and is for reference only. It should not be the sole basis for important life decisions. We recommend viewing it rationally and making judgments based on actual circumstances."
+        },
+        "q4": {
+          "question": "Q4: How to improve analysis accuracy?",
+          "answer": "To improve analysis accuracy, please ensure the precision of your <strong>birth time</strong>, especially the <strong>birth hour</strong> (Zi hour, Chou hour, etc.). The accuracy of the hour directly affects chart calculation results. Additionally, providing <strong>specific questions</strong> and <strong>relevant background information</strong> during the Q&A session can help AI provide more targeted analysis."
+        },
+        "q5": {
+          "question": "Q5: Will my data be saved?",
+          "answer": "We value your privacy. Chart data is only retained <strong>during the browser session</strong> and automatically cleared after closing the browser. Q&A records are kept for a maximum of <strong>1 hour</strong> (for continuous conversation) and then automatically deleted. We do not permanently store your personal information. For details, please refer to our <strong><a href=\"/privacy-policy.html\" class=\"text-ziwei-purple hover:underline\">Privacy Policy</a></strong>."
+        }
+      },
+      "palaces": {
+        "heading": "🏛️ Detailed Explanation of Twelve Palaces",
+        "ming": {
+          "name": "Life Palace",
+          "description": "Represents individual <strong>basic personality</strong>, <strong>innate qualities</strong>, and <strong>core abilities</strong>, serving as the heart of the destiny chart."
+        },
+        "xiongdi": {
+          "name": "Siblings Palace",
+          "description": "Reflects <strong>sibling relationships</strong>, <strong>friendships</strong>, and <strong>interpersonal interactions</strong>."
+        },
+        "fuqi": {
+          "name": "Marriage Palace",
+          "description": "Shows <strong>marriage status</strong>, <strong>spouse characteristics</strong>, and <strong>romantic fortune</strong>."
+        },
+        "zinv": {
+          "name": "Children Palace",
+          "description": "Represents <strong>children's fate</strong>, <strong>educational outcomes</strong>, and <strong>creative</strong> expression."
+        },
+        "caibo": {
+          "name": "Wealth Palace",
+          "description": "Shows <strong>financial fortune</strong>, <strong>money management abilities</strong>, and <strong>income sources</strong>."
+        },
+        "jie": {
+          "name": "Health Palace",
+          "description": "Reflects <strong>health condition</strong>, <strong>physical constitution</strong>, and <strong>potential illness</strong> tendencies."
+        },
+        "qianyi": {
+          "name": "Travel Palace",
+          "description": "Represents <strong>travel fortune</strong>, <strong>environmental adaptation</strong>, and <strong>movement changes</strong>."
+        },
+        "puyi": {
+          "name": "Servants Palace",
+          "description": "Shows <strong>subordinate relationships</strong>, <strong>business partners</strong>, and <strong>service recipients</strong>."
+        },
+        "guanlu": {
+          "name": "Career Palace",
+          "description": "Reflects <strong>career fortune</strong>, <strong>workplace performance</strong>, and <strong>social status</strong>."
+        },
+        "tianzhai": {
+          "name": "Property Palace",
+          "description": "Represents <strong>real estate</strong>, <strong>living environment</strong>, and <strong>family foundation</strong>."
+        },
+        "fude": {
+          "name": "Fortune Palace",
+          "description": "Shows <strong>spiritual aspects</strong>, <strong>inner cultivation</strong>, and <strong>blessing fortune</strong>."
+        },
+        "fumu": {
+          "name": "Parents Palace",
+          "description": "Reflects <strong>parental relationships</strong>, <strong>elder connections</strong>, and <strong>hereditary traits</strong>."
+        }
+      },
+      "cta": {
+        "heading": "Ready to Explore Your Destiny?",
+        "subtitle": "Combining Traditional Zhongzhou School Wisdom with Modern AI Technology<br>Providing the Most Professional and Understandable Destiny Analysis",
+        "button": "🚀 Start AI Destiny Analysis Now",
+        "disclaimer": "⚠️ This service is for entertainment and cultural learning reference only and should not be the sole basis for important life decisions"
+      },
+      "footer": {
+        "copyright": "© 2024 AI Zi Wei Dou Shu Destiny Chart System | Based on Traditional Zhongzhou School Theory",
+        "privacyPolicy": "Privacy Policy",
+        "pricing": "Pricing",
+        "startAnalysis": "Start Analysis"
       }
     }
   },

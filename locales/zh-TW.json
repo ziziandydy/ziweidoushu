@@ -28,12 +28,242 @@
     "index": {
       "meta": {
         "title": "AI 紫微斗數 - 現代化的命理分析系統 | 結合傳統中州派理論與 AI 技術",
-        "description": "AI 紫微斗數 - 請輸入你的出生年月日時辰，並選擇性別，即可得到你的免費紫微斗數命盤。結合傳統中州派理論與現代 AI 技術，提供精準的命理分析、十二宮位計算、十四主星配置、四化星解析與 AI 深度互動問答功能。"
+        "description": "AI 紫微斗數 - 請輸入你的出生年月日時辰，並選擇性別，即可得到你的免費紫微斗數命盤。結合傳統中州派理論與現代 AI 技術，提供精準的命理分析、十二宮位計算、十四主星配置、四化星解析與 AI 深度互動問答功能。",
+        "keywords": "紫微斗數,AI 命理,紫微命盤,中州派,命理分析,紫微星盤,命盤計算,AI 算命,傳統命理,十二宮位,十四主星,四化星,流年運勢,命理諮詢",
+        "ogTitle": "AI 紫微斗數 - 現代化的命理分析系統",
+        "ogDescription": "結合傳統中州派理論與現代 AI 技術，提供精準的命理分析。支援農曆西曆轉換，自動計算命盤，並提供 AI 深度解析與互動問答功能。"
       },
       "hero": {
         "title": "AI 紫微斗數",
         "subtitle": "結合傳統命理智慧與現代 AI 技術<br>為您提供更準確、更深入的命理分析",
         "cta": "✨ 立即體驗 AI 命理分析"
+      },
+      "history": {
+        "heading": "📜 紫微斗數的歷史淵源",
+        "paragraph1": "<strong>紫微斗數</strong>，又稱「紫微命盤」或「紫微星盤」，是中國傳統命理學中極為重要的占星術系統之一。其起源可追溯至<strong>唐代</strong>，由<strong>張果老</strong>（張果）所創立，後經由<strong>陳希夷</strong>（陳摶）等人傳承發展。",
+        "paragraph2": "紫微斗數以<strong>紫微星</strong>為核心，結合<strong>十二宮位</strong>、<strong>十四主星</strong>、<strong>六吉星</strong>、<strong>六煞星</strong>等星曜，以及<strong>四化星</strong>（化祿、化權、化科、化忌）的動態變化，形成一套完整的命理分析體系。",
+        "paragraph3": "歷經<strong>宋、元、明、清</strong>各朝的發展，紫微斗數逐漸成為與<strong>八字</strong>、<strong>面相</strong>、<strong>風水</strong>並列的四大命理體系之一，深受文人雅士和普通民眾的喜愛。"
+      },
+      "schools": {
+        "heading": "🏛️ 紫微斗數的五大主流分派",
+        "zhongzhou": {
+          "name": "中州派",
+          "subtitle": "又稱「河洛派」",
+          "description": "源自中原地區，注重<strong>星曜組合</strong>與<strong>宮位互動</strong>。本系統採用此派理論，強調傳統與現代的結合。",
+          "features": [
+            "重視星曜的能量等級",
+            "注重格局分析",
+            "強調宮位之間的相互關係"
+          ]
+        },
+        "sanhe": {
+          "name": "三合派",
+          "description": "<strong>重視三方四正</strong>的關係，強調命宮、財帛宮、官祿宮的三角組合，注重<strong>大運流年</strong>的變化。",
+          "features": [
+            "三方四正分析法",
+            "重視大運流年",
+            "強調時空變化"
+          ]
+        },
+        "feixing": {
+          "name": "飛星派",
+          "description": "<strong>注重飛星</strong>的動態變化，強調<strong>四化星</strong>的影響力，重視<strong>時間序列</strong>的分析方法。",
+          "features": [
+            "飛星動態分析",
+            "四化星運用",
+            "時間序列分析"
+          ]
+        },
+        "modern": {
+          "name": "現代派",
+          "description": "<strong>結合現代心理學</strong>和<strong>統計學</strong>，用科學方法驗證傳統理論，注重<strong>實證分析</strong>。",
+          "features": [
+            "科學驗證方法",
+            "心理學結合",
+            "實證分析"
+          ]
+        },
+        "shuyuan": {
+          "name": "書院派",
+          "description": "<strong>注重經典文獻</strong>的研究，重視<strong>傳統典籍</strong>的傳承，強調<strong>理論的完整性</strong>。",
+          "features": [
+            "經典文獻研究",
+            "傳統典籍傳承",
+            "理論完整性"
+          ]
+        },
+        "zhanyan": {
+          "name": "占驗派",
+          "description": "<strong>重視實際驗證</strong>，強調<strong>應驗率</strong>，注重<strong>實戰經驗</strong>的累積和傳承。",
+          "features": [
+            "實際驗證方法",
+            "應驗率統計",
+            "實戰經驗"
+          ]
+        }
+      },
+      "zhongzhouSection": {
+        "heading": "🎯 本系統採用：中州派理論",
+        "whyChoose": {
+          "title": "為什麼選擇中州派？",
+          "reasons": [
+            "<strong>理論完整</strong>：中州派擁有最完整的理論體系，涵蓋星曜、宮位、四化的全方位分析",
+            "<strong>傳統正統</strong>：直接傳承自古代中原地區的正統紫微斗數，保持傳統精髓",
+            "<strong>實用性強</strong>：注重實際應用，星曜能量等級評估清晰明確",
+            "<strong>邏輯嚴謹</strong>：重視格局組合和宮位互動，分析邏輯清晰可循"
+          ]
+        },
+        "coreFeatures": {
+          "title": "中州派的核心特色",
+          "starSystem": {
+            "title": "🌟 主星系統",
+            "description": "十四主星的完整配置，包括紫微星系和天府星系"
+          },
+          "energyLevel": {
+            "title": "🎯 能量等級",
+            "description": "清晰的主星、輔星能量等級評估系統"
+          },
+          "pattern": {
+            "title": "📊 格局分析",
+            "description": "重視格局組合，分析命盤整體特質"
+          },
+          "palaceInteraction": {
+            "title": "🔄 宮位互動",
+            "description": "注重十二宮位之間的相互影響關係"
+          }
+        }
+      },
+      "advantages": {
+        "heading": "🤖 AI 紫微斗數的未來優勢",
+        "accuracy": {
+          "title": "精準分析",
+          "description": "AI 技術能夠整合<strong>大量歷史案例</strong>和<strong>統計數據</strong>，結合傳統中州派理論，提供更<strong>客觀、準確</strong>的命理分析結果。"
+        },
+        "personalization": {
+          "title": "深度個人化",
+          "description": "AI 能夠理解您的<strong>具體問題</strong>，提供<strong>針對性的解答</strong>，而不是千篇一律的模板回應。每次問答都會<strong>記住對話上下文</strong>，讓分析更連貫。"
+        },
+        "availability": {
+          "title": "隨時可用",
+          "description": "不受時間和地點限制，<strong>24 小時</strong>隨時可以進行命理分析。無需預約，無需等待，<strong>即時獲得專業解析</strong>。"
+        },
+        "continuous": {
+          "title": "持續優化",
+          "description": "AI 系統會<strong>持續學習</strong>和<strong>改進</strong>，隨著使用量的增加，分析品質會不斷提升，提供更精準的建議。"
+        },
+        "understandable": {
+          "title": "易懂解讀",
+          "description": "AI 能夠將複雜的<strong>傳統命理術語</strong>轉換為<strong>現代白話文</strong>，讓 12 歲小朋友都能理解。保持<strong>正面積極</strong>的態度，提供人生建議和鼓勵。"
+        },
+        "comprehensive": {
+          "title": "全方位分析",
+          "description": "同時分析<strong>主星亮度</strong>、<strong>格局特質</strong>、<strong>命宮說明</strong>、<strong>整體總結</strong>等多個維度，提供<strong>立體全面</strong>的命理解析。"
+        }
+      },
+      "howToUse": {
+        "heading": "📖 如何使用 AI 紫微斗數系統",
+        "step1": {
+          "title": "第一步：輸入基本資料",
+          "description": "請準備好您的<strong>姓名</strong>、<strong>性別</strong>、<strong>出生年月日時</strong>等基本資料。系統支援<strong>農曆</strong>和<strong>西曆</strong>兩種曆法，您可選擇最方便的輸入方式。出生時辰請使用傳統的<strong>十二時辰</strong>（子、丑、寅、卯等）。"
+        },
+        "step2": {
+          "title": "第二步：系統自動計算命盤",
+          "description": "點擊「開始分析」後，系統會根據<strong>中州派理論</strong>自動計算您的紫微斗數命盤。這包括<strong>十二宮位</strong>的配置、<strong>十四主星</strong>的位置、<strong>輔星</strong>的分布，以及<strong>四化星</strong>的動態變化。整個過程採用傳統算法，確保結果的準確性。"
+        },
+        "step3": {
+          "title": "第三步：AI 深度分析",
+          "description": "命盤計算完成後，AI 會自動對您的命盤進行<strong>多維度分析</strong>，包括主星亮度評估、格局特質分析、命宮詳細說明，以及整體性格與運勢總結。AI 使用<strong>GPT-4o</strong>模型，能夠理解複雜的命理關係，提供專業且易懂的解析。"
+        },
+        "step4": {
+          "title": "第四步：互動問答",
+          "description": "在獲得初始分析後，您可以向 AI 提出<strong>具體問題</strong>，例如「今年流年運勢如何？」、「我適合從事什麼工作？」等。AI 會結合您的命盤資料，提供針對性的回答。系統採用<strong>對話式設計</strong>，會記住之前的對話內容，讓分析更連貫深入。"
+        }
+      },
+      "faq": {
+        "heading": "❓ 常見問題解答",
+        "q1": {
+          "question": "Q1: 紫微斗數和八字有什麼不同？",
+          "answer": "<strong>紫微斗數</strong>和<strong>八字</strong>都是傳統命理學的重要分支，但分析方法不同。紫微斗數以<strong>星曜</strong>和<strong>宮位</strong>為核心，更注重<strong>細膩的性格分析</strong>和<strong>人生各方面運勢</strong>；八字則以<strong>五行生剋</strong>為基礎，更側重<strong>大運流年</strong>的變化。兩者各有特色，可以互相補充。"
+        },
+        "q2": {
+          "question": "Q2: 為什麼選擇中州派理論？",
+          "answer": "<strong>中州派</strong>（又稱河洛派）是紫微斗數中最<strong>傳統正統</strong>的分派之一，理論體系完整，邏輯嚴謹。它直接傳承自古代中原地區的正統紫微斗數，注重<strong>星曜能量等級</strong>和<strong>格局組合分析</strong>，在實際應用中表現出色。本系統採用中州派理論，確保分析的準確性和專業性。"
+        },
+        "q3": {
+          "question": "Q3: AI 分析準確嗎？",
+          "answer": "本系統採用<strong>OpenAI GPT-4o</strong>模型，結合傳統中州派理論和大量命理案例訓練。AI 能夠理解複雜的命理關係，提供<strong>客觀、專業</strong>的分析。但需要注意的是，命理分析屬於<strong>文化傳統</strong>，僅供參考，不應作為重要人生決策的唯一依據。建議理性看待，結合實際情況做出判斷。"
+        },
+        "q4": {
+          "question": "Q4: 如何提高分析準確度？",
+          "answer": "要提高分析準確度，請確保<strong>出生時間</strong>的準確性，特別是<strong>出生時辰</strong>（子時、丑時等）。時辰的準確性直接影響命盤的計算結果。此外，在問答環節提供<strong>具體的問題</strong>和<strong>相關背景信息</strong>，能幫助 AI 提供更針對性的分析。"
+        },
+        "q5": {
+          "question": "Q5: 我的資料會被保存嗎？",
+          "answer": "我們重視您的隱私權。命盤數據僅在<strong>瀏覽器會話期間</strong>保留，關閉瀏覽器後自動清除。問答記錄最多保留<strong>1 小時</strong>（用於連續對話），之後自動刪除。我們不會永久保存您的個人資料。詳細資訊請參閱<strong><a href=\"/privacy-policy.html\" class=\"text-ziwei-purple hover:underline\">隱私政策</a></strong>。"
+        }
+      },
+      "palaces": {
+        "heading": "🏛️ 紫微斗數十二宮位詳解",
+        "ming": {
+          "name": "命宮",
+          "description": "代表個人的<strong>基本性格</strong>、<strong>先天特質</strong>和<strong>核心能力</strong>，是命盤的核心所在。"
+        },
+        "xiongdi": {
+          "name": "兄弟宮",
+          "description": "反映<strong>手足關係</strong>、<strong>朋友交往</strong>和<strong>人際互動</strong>的情況。"
+        },
+        "fuqi": {
+          "name": "夫妻宮",
+          "description": "顯示<strong>婚姻狀況</strong>、<strong>配偶特質</strong>和<strong>感情運勢</strong>。"
+        },
+        "zinv": {
+          "name": "子女宮",
+          "description": "代表<strong>子女緣分</strong>、<strong>教育成果</strong>和<strong>創造力</strong>表現。"
+        },
+        "caibo": {
+          "name": "財帛宮",
+          "description": "顯示<strong>財運狀況</strong>、<strong>理財能力</strong>和<strong>收入來源</strong>。"
+        },
+        "jie": {
+          "name": "疾厄宮",
+          "description": "反映<strong>健康狀況</strong>、<strong>體質特質</strong>和<strong>潛在疾病</strong>傾向。"
+        },
+        "qianyi": {
+          "name": "遷移宮",
+          "description": "代表<strong>外出運勢</strong>、<strong>環境適應</strong>和<strong>移動變化</strong>。"
+        },
+        "puyi": {
+          "name": "僕役宮",
+          "description": "顯示<strong>下屬關係</strong>、<strong>合作夥伴</strong>和<strong>服務對象</strong>。"
+        },
+        "guanlu": {
+          "name": "官祿宮",
+          "description": "反映<strong>事業運勢</strong>、<strong>職場表現</strong>和<strong>社會地位</strong>。"
+        },
+        "tianzhai": {
+          "name": "田宅宮",
+          "description": "代表<strong>不動產</strong>、<strong>居住環境</strong>和<strong>家庭根基</strong>。"
+        },
+        "fude": {
+          "name": "福德宮",
+          "description": "顯示<strong>精神層面</strong>、<strong>內在修養</strong>和<strong>福報運勢</strong>。"
+        },
+        "fumu": {
+          "name": "父母宮",
+          "description": "反映<strong>父母關係</strong>、<strong>長輩緣分</strong>和<strong>遺傳特質</strong>。"
+        }
+      },
+      "cta": {
+        "heading": "準備好探索您的命運了嗎？",
+        "subtitle": "結合傳統中州派智慧與現代 AI 技術<br>為您提供最專業、最易懂的命理分析",
+        "button": "🚀 立即開始 AI 命理分析",
+        "disclaimer": "⚠️ 本服務僅供娛樂和文化學習參考，不應作為重要人生決策的依據"
+      },
+      "footer": {
+        "copyright": "© 2024 AI 紫微斗數命盤計算系統 | 基於傳統中州派理論",
+        "privacyPolicy": "隱私政策",
+        "pricing": "價格方案",
+        "startAnalysis": "開始分析"
       }
     }
   },
