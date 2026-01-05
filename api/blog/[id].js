@@ -91,13 +91,19 @@ async function handleCreate(req, res) {
     }
   }
 
-  // 生成 slug
-  let baseSlug = slugify(finalTitle, {
-    lower: true,
-    strict: true,
-    locale: 'zh',
-    remove: /[*+~.()'"!:@]/g
-  });
+  // 生成 slug (支援中文)
+  let baseSlug = finalTitle
+    .toLowerCase()
+    .trim()
+    .replace(/[\s]+/g, '-')           // 空格轉換為連字符
+    .replace(/[^\w\u4e00-\u9fa5-]/g, '-')  // 保留英文、數字、中文和連字符
+    .replace(/-+/g, '-')              // 多個連字符合併為一個
+    .replace(/^-+|-+$/g, '');         // 移除開頭和結尾的連字符
+
+  // 如果 slug 為空（純符號標題），使用時間戳
+  if (!baseSlug) {
+    baseSlug = `post-${Date.now()}`;
+  }
 
   // 檢查 slug 在同語言下是否重複，若重複則加上數字後綴
   let slug = baseSlug;
@@ -195,13 +201,20 @@ async function handleUpdate(id, req, res) {
     updates.push('title = $' + (values.length + 1));
     values.push(finalTitle);
 
-    // 更新 slug
-    const newSlug = slugify(finalTitle, {
-      lower: true,
-      strict: true,
-      locale: 'zh',
-      remove: /[*+~.()'"!:@]/g
-    });
+    // 更新 slug (支援中文)
+    let newSlug = finalTitle
+      .toLowerCase()
+      .trim()
+      .replace(/[\s]+/g, '-')           // 空格轉換為連字符
+      .replace(/[^\w\u4e00-\u9fa5-]/g, '-')  // 保留英文、數字、中文和連字符
+      .replace(/-+/g, '-')              // 多個連字符合併為一個
+      .replace(/^-+|-+$/g, '');         // 移除開頭和結尾的連字符
+
+    // 如果 slug 為空，使用時間戳
+    if (!newSlug) {
+      newSlug = `post-${Date.now()}`;
+    }
+
     updates.push('slug = $' + (values.length + 1));
     values.push(newSlug);
   }
