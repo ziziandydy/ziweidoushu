@@ -97,9 +97,10 @@ function renderBlogPage(post, language) {
         .prose li { margin-bottom: 0.5em; }
         .prose strong { font-weight: bold; color: #1f2937; }
         .prose em { font-style: italic; }
-        .prose code { background: #f3f4f6; padding: 0.2em 0.4em; border-radius: 0.25em; font-family: monospace; }
-        .prose pre { background: #1f2937; color: #f3f4f6; padding: 1em; border-radius: 0.5em; overflow-x: auto; }
-        .prose blockquote { border-left: 4px solid #9333ea; padding-left: 1em; color: #6b7280; font-style: italic; }
+        .prose code { background: #f3f4f6; padding: 0.2em 0.4em; border-radius: 0.25em; font-family: monospace; font-size: 0.9em; }
+        .prose pre { background: #1f2937; color: #f3f4f6; padding: 1em; border-radius: 0.5em; overflow-x: auto; margin: 1em 0; }
+        .prose pre code { background: transparent; padding: 0; }
+        .prose blockquote { border-left: 4px solid #9333ea; padding-left: 1em; color: #6b7280; font-style: italic; margin: 1em 0; }
         .prose a {
             color: #7c3aed;
             text-decoration: underline;
@@ -112,6 +113,109 @@ function renderBlogPage(post, language) {
         }
         .prose a:visited {
             color: #6d28d9;
+        }
+
+        /* 表格樣式 */
+        .prose table {
+            width: 100%;
+            max-width: 100%;
+            border-collapse: collapse;
+            margin: 1.5em 0;
+            font-size: 0.9em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 0.5em;
+            overflow: hidden;
+        }
+        .prose thead {
+            background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+        }
+        .prose th {
+            padding: 0.75em 1em;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #9333ea;
+            border-right: 1px solid #e5e7eb;
+        }
+        .prose th:last-child {
+            border-right: none;
+        }
+        .prose td {
+            padding: 0.75em 1em;
+            border-bottom: 1px solid #e5e7eb;
+            border-right: 1px solid #f3f4f6;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .prose td:last-child {
+            border-right: none;
+        }
+        .prose tr:hover {
+            background-color: #faf5ff;
+        }
+        .prose tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* 目錄 (TOC) 樣式 */
+        .prose .toc {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 4px solid #9333ea;
+            border-radius: 0.5em;
+            padding: 1.5em;
+            margin: 2em 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .prose .toc h2 {
+            margin-top: 0;
+            margin-bottom: 0.75em;
+            color: #9333ea;
+            font-size: 1.25em;
+            border-bottom: 2px solid #9333ea;
+            padding-bottom: 0.5em;
+        }
+        .prose .toc ul {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+        .prose .toc ul ul {
+            margin-top: 0.5em;
+            padding-left: 1.5em;
+            border-left: 2px solid #e5e7eb;
+        }
+        .prose .toc li {
+            margin-bottom: 0.5em;
+            position: relative;
+        }
+        .prose .toc li::before {
+            content: '▸';
+            color: #9333ea;
+            font-weight: bold;
+            margin-right: 0.5em;
+        }
+        .prose .toc ul ul li::before {
+            content: '▹';
+            color: #a855f7;
+        }
+        .prose .toc a {
+            color: #4b5563;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            padding: 0.25em 0.5em;
+            border-radius: 0.25em;
+            display: inline-block;
+        }
+        .prose .toc a:hover {
+            color: #7c3aed;
+            background-color: #faf5ff;
+            text-decoration: none;
+            transform: translateX(3px);
+        }
+
+        /* 標題錨點樣式 */
+        .prose h1[id], .prose h2[id], .prose h3[id], .prose h4[id], .prose h5[id], .prose h6[id] {
+            scroll-margin-top: 5rem;
         }
     </style>
 </head>
@@ -188,9 +292,87 @@ function renderBlogPage(post, language) {
     </article>
 
     <script>
+        /**
+         * 生成目錄 (TOC)
+         */
+        function generateTOC(content) {
+            const headings = [];
+            const lines = content.split('\\n');
+
+            lines.forEach((line) => {
+                const match = line.match(/^(#{1,6})\\s+(.+)$/);
+                if (match) {
+                    const level = match[1].length;
+                    const text = match[2].trim();
+                    const id = text
+                        .toLowerCase()
+                        .replace(/[^\\w\\u4e00-\\u9fa5]+/g, '-')
+                        .replace(/^-+|-+$/g, '');
+
+                    headings.push({ level, text, id });
+                }
+            });
+
+            if (headings.length === 0) return null;
+
+            let tocHtml = '<div class="toc"><h2>目錄</h2><ul>';
+            let currentLevel = 0;
+
+            headings.forEach((heading, index) => {
+                const nextLevel = headings[index + 1]?.level || 0;
+
+                while (currentLevel < heading.level) {
+                    if (currentLevel > 0) tocHtml += '<ul>';
+                    currentLevel++;
+                }
+                while (currentLevel > heading.level) {
+                    tocHtml += '</ul>';
+                    currentLevel--;
+                }
+
+                tocHtml += \`<li><a href="#\${heading.id}">\${heading.text}</a>\`;
+
+                if (nextLevel <= heading.level) {
+                    tocHtml += '</li>';
+                }
+            });
+
+            while (currentLevel > 0) {
+                tocHtml += '</ul>';
+                currentLevel--;
+            }
+
+            tocHtml += '</ul></div>';
+            return tocHtml;
+        }
+
+        /**
+         * 為標題添加 ID
+         */
+        function addHeadingIds(html) {
+            return html.replace(/<h([1-6])>(.*?)<\\/h\\1>/g, (match, level, text) => {
+                const id = text
+                    .replace(/<[^>]+>/g, '')
+                    .toLowerCase()
+                    .replace(/[^\\w\\u4e00-\\u9fa5]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+                return \`<h\${level} id="\${id}">\${text}</h\${level}>\`;
+            });
+        }
+
         // 渲染 Markdown
-        const content = ${JSON.stringify(post.content)};
-        const html = marked.parse(content);
+        let content = ${JSON.stringify(post.content)};
+
+        // 檢查並處理 [TOC]
+        if (/\\[TOC\\]/i.test(content)) {
+            const toc = generateTOC(content);
+            if (toc) {
+                content = content.replace(/\\[TOC\\]/gi, toc);
+            }
+        }
+
+        let html = marked.parse(content);
+        html = addHeadingIds(html);
         const clean = DOMPurify.sanitize(html);
         const contentDiv = document.getElementById('content');
         contentDiv.innerHTML = clean;

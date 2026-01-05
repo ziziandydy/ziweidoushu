@@ -10,14 +10,111 @@
     <style>
         .editor-container { min-height: 400px; }
         .preview-content { max-height: 500px; overflow-y: auto; }
-        .prose h1 { font-size: 2em; font-weight: bold; margin-top: 1em; margin-bottom: 0.5em; }
-        .prose h2 { font-size: 1.5em; font-weight: bold; margin-top: 1.5em; margin-bottom: 0.5em; }
-        .prose h3 { font-size: 1.25em; font-weight: bold; margin-top: 1.25em; margin-bottom: 0.5em; }
-        .prose p { margin-bottom: 1em; line-height: 1.75; }
+        .prose h1 { font-size: 2em; font-weight: bold; margin-top: 1em; margin-bottom: 0.5em; color: #1f2937; }
+        .prose h2 { font-size: 1.5em; font-weight: bold; margin-top: 1.5em; margin-bottom: 0.5em; color: #374151; }
+        .prose h3 { font-size: 1.25em; font-weight: bold; margin-top: 1.25em; margin-bottom: 0.5em; color: #4b5563; }
+        .prose p { margin-bottom: 1em; line-height: 1.75; color: #374151; }
         .prose ul, .prose ol { margin-left: 1.5em; margin-bottom: 1em; }
         .prose li { margin-bottom: 0.5em; }
-        .prose code { background: #f3f4f6; padding: 0.2em 0.4em; border-radius: 0.25em; font-family: monospace; }
-        .prose pre { background: #1f2937; color: #f3f4f6; padding: 1em; border-radius: 0.5em; overflow-x: auto; }
+        .prose code { background: #f3f4f6; padding: 0.2em 0.4em; border-radius: 0.25em; font-family: monospace; font-size: 0.9em; }
+        .prose pre { background: #1f2937; color: #f3f4f6; padding: 1em; border-radius: 0.5em; overflow-x: auto; margin: 1em 0; }
+        .prose strong { font-weight: bold; color: #1f2937; }
+        .prose em { font-style: italic; }
+        .prose blockquote { border-left: 4px solid #9333ea; padding-left: 1em; color: #6b7280; font-style: italic; margin: 1em 0; }
+
+        /* 表格樣式 */
+        .prose table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5em 0;
+            font-size: 0.9em;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .prose thead {
+            background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+        }
+        .prose th {
+            padding: 0.75em 1em;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #9333ea;
+            border-right: 1px solid #e5e7eb;
+        }
+        .prose th:last-child {
+            border-right: none;
+        }
+        .prose td {
+            padding: 0.75em 1em;
+            border-bottom: 1px solid #e5e7eb;
+            border-right: 1px solid #f3f4f6;
+            color: #4b5563;
+        }
+        .prose td:last-child {
+            border-right: none;
+        }
+        .prose tr:hover {
+            background-color: #faf5ff;
+        }
+        .prose tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* 目錄 (TOC) 樣式 */
+        .prose .toc {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 4px solid #9333ea;
+            border-radius: 0.5em;
+            padding: 1.5em;
+            margin: 2em 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .prose .toc h2 {
+            margin-top: 0;
+            margin-bottom: 0.75em;
+            color: #9333ea;
+            font-size: 1.25em;
+            border-bottom: 2px solid #9333ea;
+            padding-bottom: 0.5em;
+        }
+        .prose .toc ul {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+        .prose .toc ul ul {
+            margin-top: 0.5em;
+            padding-left: 1.5em;
+            border-left: 2px solid #e5e7eb;
+        }
+        .prose .toc li {
+            margin-bottom: 0.5em;
+            position: relative;
+        }
+        .prose .toc li::before {
+            content: '▸';
+            color: #9333ea;
+            font-weight: bold;
+            margin-right: 0.5em;
+        }
+        .prose .toc ul ul li::before {
+            content: '▹';
+            color: #a855f7;
+        }
+        .prose .toc a {
+            color: #4b5563;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            padding: 0.25em 0.5em;
+            border-radius: 0.25em;
+            display: inline-block;
+        }
+        .prose .toc a:hover {
+            color: #7c3aed;
+            background-color: #faf5ff;
+            text-decoration: none;
+            transform: translateX(3px);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -318,7 +415,15 @@
             const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
             const status = document.getElementById('status').value;
 
-            const data = { title, content, tags, status };
+            const data = {
+                title,
+                content,
+                tags,
+                status,
+                language: 'zh-TW'  // 添加預設語言
+            };
+
+            console.log('📝 準備儲存文章:', data);
 
             try {
                 let url, method;
@@ -330,6 +435,8 @@
                     method = 'POST';
                 }
 
+                console.log('🌐 發送請求:', method, url);
+
                 const response = await fetch(url, {
                     method,
                     headers: {
@@ -339,20 +446,26 @@
                     body: JSON.stringify(data)
                 });
 
+                console.log('📡 Response status:', response.status);
+
                 const result = await response.json();
+                console.log('📦 Response data:', result);
 
                 if (result.success) {
-                    showFormAlert(editingArticleId ? '文章更新成功' : '文章創建成功', 'success');
+                    showFormAlert(editingArticleId ? '文章更新成功!' : '文章創建成功!', 'success');
+                    console.log('✅ 文章儲存成功:', result.data);
                     setTimeout(() => {
                         cancelEdit();
                         showTab('list');
                     }, 1500);
                 } else {
-                    showFormAlert(result.error || '儲存失敗', 'error');
+                    const errorMsg = result.error || '儲存失敗';
+                    console.error('❌ 儲存失敗:', errorMsg);
+                    showFormAlert(`儲存失敗: ${errorMsg}`, 'error');
                 }
             } catch (error) {
-                console.error('儲存文章失敗:', error);
-                showFormAlert('儲存失敗，請稍後再試', 'error');
+                console.error('❌ 儲存文章發生錯誤:', error);
+                showFormAlert(`儲存失敗: ${error.message}。請檢查瀏覽器控制台獲取更多資訊。`, 'error');
             } finally {
                 saveBtn.disabled = false;
                 saveBtn.textContent = '儲存文章';
@@ -427,14 +540,131 @@
             editingArticleId = null;
         }
 
+        // Configure marked.js for better Markdown support
+        marked.setOptions({
+            gfm: true,              // GitHub Flavored Markdown
+            breaks: true,           // 支援換行
+            tables: true,           // 支援表格
+            pedantic: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: true       // 智能引號和破折號
+        });
+
+        /**
+         * 生成目錄 (TOC)
+         * 支援 [TOC] 標記自動生成
+         */
+        function generateTOC(content) {
+            const headings = [];
+            const lines = content.split('\n');
+
+            // 提取所有標題
+            lines.forEach((line, index) => {
+                const match = line.match(/^(#{1,6})\s+(.+)$/);
+                if (match) {
+                    const level = match[1].length;
+                    const text = match[2].trim();
+                    const id = text
+                        .toLowerCase()
+                        .replace(/[^\w\u4e00-\u9fa5]+/g, '-')
+                        .replace(/^-+|-+$/g, '');
+
+                    headings.push({
+                        level,
+                        text,
+                        id,
+                        lineIndex: index
+                    });
+                }
+            });
+
+            if (headings.length === 0) {
+                return null;
+            }
+
+            // 生成 TOC HTML
+            let tocHtml = '<div class="toc"><h2>目錄</h2><ul>';
+            let currentLevel = 0;
+
+            headings.forEach((heading, index) => {
+                const nextLevel = headings[index + 1]?.level || 0;
+
+                // 處理層級變化
+                while (currentLevel < heading.level) {
+                    if (currentLevel > 0) tocHtml += '<ul>';
+                    currentLevel++;
+                }
+                while (currentLevel > heading.level) {
+                    tocHtml += '</ul>';
+                    currentLevel--;
+                }
+
+                tocHtml += `<li><a href="#${heading.id}">${heading.text}</a>`;
+
+                // 如果下一個標題層級不變或更小,關閉當前項
+                if (nextLevel <= heading.level) {
+                    tocHtml += '</li>';
+                }
+            });
+
+            // 關閉所有未關閉的列表
+            while (currentLevel > 0) {
+                tocHtml += '</ul>';
+                currentLevel--;
+            }
+
+            tocHtml += '</ul></div>';
+            return tocHtml;
+        }
+
+        /**
+         * 為標題添加 ID
+         */
+        function addHeadingIds(html) {
+            return html.replace(/<h([1-6])>(.*?)<\/h\1>/g, (match, level, text) => {
+                const id = text
+                    .replace(/<[^>]+>/g, '') // 移除 HTML 標籤
+                    .toLowerCase()
+                    .replace(/[^\w\u4e00-\u9fa5]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+                return `<h${level} id="${id}">${text}</h${level}>`;
+            });
+        }
+
         // Update preview
         function updatePreview() {
             const content = document.getElementById('content').value;
             const preview = document.getElementById('preview');
 
             if (content.trim()) {
-                const html = marked.parse(content);
-                preview.innerHTML = html;
+                try {
+                    let processedContent = content;
+
+                    // 檢查是否有 [TOC] 標記
+                    const hasTOC = /\[TOC\]/i.test(content);
+
+                    if (hasTOC) {
+                        // 生成 TOC
+                        const toc = generateTOC(content);
+                        if (toc) {
+                            // 替換 [TOC] 標記
+                            processedContent = processedContent.replace(/\[TOC\]/gi, toc);
+                        }
+                    }
+
+                    // 渲染 Markdown
+                    let html = marked.parse(processedContent);
+
+                    // 為標題添加 ID (用於錨點跳轉)
+                    html = addHeadingIds(html);
+
+                    preview.innerHTML = html;
+                    preview.scrollTop = 0; // 滾動到頂部
+                } catch (error) {
+                    console.error('Markdown 解析錯誤:', error);
+                    preview.innerHTML = '<p class="text-red-500">Markdown 解析錯誤，請檢查語法</p>';
+                }
             } else {
                 preview.innerHTML = '<p class="text-gray-400">預覽將顯示在這裡...</p>';
             }
