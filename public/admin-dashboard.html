@@ -313,7 +313,7 @@
             table.classList.add('hidden');
 
             try {
-                const response = await fetch(`${API_BASE}/list?page=${page}&limit=20&includeAll=true`, {
+                const response = await fetch(`${API_BASE}/list?page=${page}&limit=20&includeAll=true&language=zh-TW`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
@@ -322,6 +322,9 @@
                 if (!result.success) {
                     throw new Error(result.error);
                 }
+
+                console.log('📄 載入的文章列表:', result.data.posts);
+                console.log('🔍 檢查 slug 欄位:', result.data.posts.map(p => ({ id: p.id, slug: p.slug, title: p.title })));
 
                 renderArticles(result.data.posts);
                 renderPagination(result.data.pagination);
@@ -337,12 +340,22 @@
         // Render articles
         function renderArticles(posts) {
             const tbody = document.getElementById('articlesBody');
-            tbody.innerHTML = posts.map(post => `
+            tbody.innerHTML = posts.map(post => {
+                // Debug: Check if slug exists
+                if (!post.slug) {
+                    console.warn('⚠️ 文章缺少 slug:', post);
+                }
+
+                return `
                 <tr>
                     <td class="px-4 py-3">
-                        <a href="/blog/${post.slug}" target="_blank" class="text-purple-600 hover:underline">
-                            ${escapeHtml(post.title)}
-                        </a>
+                        ${post.slug ?
+                            `<a href="/blog/${post.slug}" target="_blank" class="text-purple-600 hover:underline">
+                                ${escapeHtml(post.title)}
+                            </a>` :
+                            `<span class="text-gray-600">${escapeHtml(post.title)}</span>
+                             <span class="text-xs text-red-500 ml-2">(無 slug)</span>`
+                        }
                     </td>
                     <td class="px-4 py-3">
                         <div class="flex flex-wrap gap-1">
