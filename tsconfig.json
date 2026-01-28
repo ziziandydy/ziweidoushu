@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "module":"NodeNext",
+    "module": "NodeNext",
     "target": "ES2022",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "strict": true,
     "isolatedModules": true,
     "sourceMap": true,
@@ -14,13 +16,34 @@
     "allowJs": true,
     "outDir": "build/",
     "typeRoots": [
-      "./node_modules/@types", "./src/types"
+      "./node_modules/@types",
+      "./src/types"
     ],
-    "types": ["node", "jest"]
+    "types": [
+      "node",
+      "jest"
+    ],
+    "skipLibCheck": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-    "./src/**/*"
+    "./src/**/*",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
-  "ts-node": {  "files": true },
-  "exclude": ["node_modules"]
+  "ts-node": {
+    "files": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }
