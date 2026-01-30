@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,20 +8,91 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .editor-container { min-height: 400px; }
-        .preview-content { max-height: 500px; overflow-y: auto; }
-        .prose h1 { font-size: 2em; font-weight: bold; margin-top: 1em; margin-bottom: 0.5em; color: #1f2937; }
-        .prose h2 { font-size: 1.5em; font-weight: bold; margin-top: 1.5em; margin-bottom: 0.5em; color: #374151; }
-        .prose h3 { font-size: 1.25em; font-weight: bold; margin-top: 1.25em; margin-bottom: 0.5em; color: #4b5563; }
-        .prose p { margin-bottom: 1em; line-height: 1.75; color: #374151; }
-        .prose ul, .prose ol { margin-left: 1.5em; margin-bottom: 1em; }
-        .prose li { margin-bottom: 0.5em; }
-        .prose code { background: #f3f4f6; padding: 0.2em 0.4em; border-radius: 0.25em; font-family: monospace; font-size: 0.9em; }
-        .prose pre { background: #1f2937; color: #f3f4f6; padding: 1em; border-radius: 0.5em; overflow-x: auto; margin: 1em 0; }
-        .prose strong { font-weight: bold; color: #1f2937; }
-        .prose em { font-style: italic; }
-        .prose blockquote { border-left: 4px solid #9333ea; padding-left: 1em; color: #6b7280; font-style: italic; margin: 1em 0; }
+        .editor-container {
+            min-height: 400px;
+        }
+
+        .preview-content {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .prose h1 {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+            color: #1f2937;
+        }
+
+        .prose h2 {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            color: #374151;
+        }
+
+        .prose h3 {
+            font-size: 1.25em;
+            font-weight: bold;
+            margin-top: 1.25em;
+            margin-bottom: 0.5em;
+            color: #4b5563;
+        }
+
+        .prose p {
+            margin-bottom: 1em;
+            line-height: 1.75;
+            color: #374151;
+        }
+
+        .prose ul,
+        .prose ol {
+            margin-left: 1.5em;
+            margin-bottom: 1em;
+        }
+
+        .prose li {
+            margin-bottom: 0.5em;
+        }
+
+        .prose code {
+            background: #f3f4f6;
+            padding: 0.2em 0.4em;
+            border-radius: 0.25em;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .prose pre {
+            background: #1f2937;
+            color: #f3f4f6;
+            padding: 1em;
+            border-radius: 0.5em;
+            overflow-x: auto;
+            margin: 1em 0;
+        }
+
+        .prose strong {
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .prose em {
+            font-style: italic;
+        }
+
+        .prose blockquote {
+            border-left: 4px solid #9333ea;
+            padding-left: 1em;
+            color: #6b7280;
+            font-style: italic;
+            margin: 1em 0;
+        }
 
         /* 表格樣式 */
         .prose table {
@@ -30,9 +102,11 @@
             font-size: 0.9em;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
+
         .prose thead {
             background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
         }
+
         .prose th {
             padding: 0.75em 1em;
             text-align: left;
@@ -41,21 +115,26 @@
             border-bottom: 2px solid #9333ea;
             border-right: 1px solid #e5e7eb;
         }
+
         .prose th:last-child {
             border-right: none;
         }
+
         .prose td {
             padding: 0.75em 1em;
             border-bottom: 1px solid #e5e7eb;
             border-right: 1px solid #f3f4f6;
             color: #4b5563;
         }
+
         .prose td:last-child {
             border-right: none;
         }
+
         .prose tr:hover {
             background-color: #faf5ff;
         }
+
         .prose tbody tr:last-child td {
             border-bottom: none;
         }
@@ -69,6 +148,7 @@
             margin: 2em 0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
+
         .prose .toc h2 {
             margin-top: 0;
             margin-bottom: 0.75em;
@@ -77,30 +157,36 @@
             border-bottom: 2px solid #9333ea;
             padding-bottom: 0.5em;
         }
+
         .prose .toc ul {
             margin: 0;
             padding-left: 0;
             list-style: none;
         }
+
         .prose .toc ul ul {
             margin-top: 0.5em;
             padding-left: 1.5em;
             border-left: 2px solid #e5e7eb;
         }
+
         .prose .toc li {
             margin-bottom: 0.5em;
             position: relative;
         }
+
         .prose .toc li::before {
             content: '▸';
             color: #9333ea;
             font-weight: bold;
             margin-right: 0.5em;
         }
+
         .prose .toc ul ul li::before {
             content: '▹';
             color: #a855f7;
         }
+
         .prose .toc a {
             color: #4b5563;
             text-decoration: none;
@@ -109,6 +195,7 @@
             border-radius: 0.25em;
             display: inline-block;
         }
+
         .prose .toc a:hover {
             color: #7c3aed;
             background-color: #faf5ff;
@@ -117,6 +204,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-50">
 
     <!-- Header -->
@@ -141,10 +229,12 @@
 
         <!-- Tabs -->
         <div class="mb-6 flex space-x-4 border-b">
-            <button onclick="showTab('list')" id="tabList" class="tab-btn px-6 py-3 font-semibold text-purple-600 border-b-2 border-purple-600">
+            <button onclick="showTab('list')" id="tabList"
+                class="tab-btn px-6 py-3 font-semibold text-purple-600 border-b-2 border-purple-600">
                 文章列表
             </button>
-            <button onclick="showTab('create')" id="tabCreate" class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:text-purple-600">
+            <button onclick="showTab('create')" id="tabCreate"
+                class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:text-purple-600">
                 新增文章
             </button>
         </div>
@@ -152,7 +242,17 @@
         <!-- Article List Tab -->
         <div id="listTab">
             <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">文章列表</h2>
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">文章列表</h2>
+                    <div id="batchActions" class="hidden flex items-center gap-2">
+                        <span id="selectedCount" class="text-gray-600 text-sm">已選 0 篇</span>
+                        <button onclick="batchDelete()"
+                            class="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            批量刪除
+                        </button>
+                    </div>
+                </div>
 
                 <!-- Loading -->
                 <div id="listLoading" class="text-center py-12">
@@ -164,6 +264,10 @@
                     <table class="w-full">
                         <thead class="bg-gray-100">
                             <tr>
+                                <th class="px-4 py-3 text-left w-12">
+                                    <input type="checkbox" id="selectAll" onchange="toggleSelectAll()"
+                                        class="w-4 h-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500">
+                                </th>
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">標題</th>
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">標籤</th>
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">狀態</th>
@@ -200,16 +304,16 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">文章標題 *</label>
                         <input type="text" id="title" required
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                               placeholder="請輸入文章標題">
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            placeholder="請輸入文章標題">
                     </div>
 
                     <!-- Tags -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">標籤（用逗號分隔）</label>
                         <input type="text" id="tags"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                               placeholder="例如：紫微斗數,AI,運勢">
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            placeholder="例如：紫微斗數,AI,運勢">
                     </div>
 
                     <!-- Content Editor -->
@@ -219,8 +323,8 @@
                             <!-- Editor -->
                             <div>
                                 <textarea id="content" required
-                                          class="w-full h-96 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent font-mono text-sm"
-                                          placeholder="請輸入 Markdown 格式內容..."></textarea>
+                                    class="w-full h-96 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent font-mono text-sm"
+                                    placeholder="請輸入 Markdown 格式內容..."></textarea>
                             </div>
                             <!-- Preview -->
                             <div>
@@ -237,7 +341,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">狀態</label>
                         <select id="status"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
                             <option value="draft">草稿</option>
                             <option value="published">發布</option>
                         </select>
@@ -246,11 +350,11 @@
                     <!-- Buttons -->
                     <div class="flex space-x-4">
                         <button type="submit" id="saveBtn"
-                                class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold">
+                            class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold">
                             儲存文章
                         </button>
                         <button type="button" onclick="cancelEdit()"
-                                class="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 font-semibold">
+                            class="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 font-semibold">
                             取消
                         </button>
                     </div>
@@ -264,6 +368,7 @@
         const API_BASE = '/api/blog';
         let currentPage = 1;
         let editingArticleId = null;
+        let selectedArticles = new Set();
 
         // Check authentication
         const token = localStorage.getItem('admin_token');
@@ -281,6 +386,9 @@
 
             // Markdown preview
             document.getElementById('content').addEventListener('input', updatePreview);
+
+            // Initialize Lucide icons
+            lucide.createIcons();
         });
 
         // Tab switching
@@ -312,6 +420,11 @@
             loading.classList.remove('hidden');
             table.classList.add('hidden');
 
+            // Reset selection
+            selectedArticles.clear();
+            updateBatchActions();
+            document.getElementById('selectAll').checked = false;
+
             try {
                 const response = await fetch(`${API_BASE}/list?page=${page}&limit=20&includeAll=true&language=zh-TW`, {
                     headers: { 'Authorization': `Bearer ${token}` }
@@ -324,13 +437,15 @@
                 }
 
                 console.log('📄 載入的文章列表:', result.data.posts);
-                console.log('🔍 檢查 slug 欄位:', result.data.posts.map(p => ({ id: p.id, slug: p.slug, title: p.title })));
 
                 renderArticles(result.data.posts);
                 renderPagination(result.data.pagination);
 
                 loading.classList.add('hidden');
                 table.classList.remove('hidden');
+
+                // Re-init icons for new content
+                lucide.createIcons();
             } catch (error) {
                 console.error('載入文章失敗:', error);
                 loading.innerHTML = '<p class="text-red-500">載入失敗</p>';
@@ -341,52 +456,129 @@
         function renderArticles(posts) {
             const tbody = document.getElementById('articlesBody');
             tbody.innerHTML = posts.map(post => {
-                // Debug: Check if slug exists
-                if (!post.slug) {
-                    console.warn('⚠️ 文章缺少 slug:', post);
-                }
-
                 return `
-                <tr>
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-4 py-3">
+                        <input type="checkbox" 
+                               value="${post.id}" 
+                               onchange="toggleSelect('${post.id}')"
+                               class="article-checkbox w-4 h-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500">
+                    </td>
                     <td class="px-4 py-3">
                         ${post.slug ?
-                            `<a href="/blog/${post.slug}" target="_blank" class="text-purple-600 hover:underline">
+                        `<a href="/blog/${post.slug}" target="_blank" class="text-purple-600 hover:underline font-medium">
                                 ${escapeHtml(post.title)}
                             </a>` :
-                            `<span class="text-gray-600">${escapeHtml(post.title)}</span>
+                        `<span class="text-gray-600">${escapeHtml(post.title)}</span>
                              <span class="text-xs text-red-500 ml-2">(無 slug)</span>`
-                        }
+                    }
                     </td>
                     <td class="px-4 py-3">
                         <div class="flex flex-wrap gap-1">
                             ${post.tags.map(tag => `
-                                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full">
+                                <span class="px-2 py-0.5 bg-purple-50 text-purple-700 text-xs rounded-full border border-purple-100">
                                     ${escapeHtml(tag)}
                                 </span>
                             `).join('')}
                         </div>
                     </td>
                     <td class="px-4 py-3">
-                        <span class="px-2 py-1 ${post.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'} text-xs rounded-full">
+                        <span class="px-2.5 py-1 ${post.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'} text-xs font-medium rounded-full">
                             ${post.status === 'published' ? '已發布' : '草稿'}
                         </span>
                     </td>
-                    <td class="px-4 py-3 text-sm text-gray-600">
+                    <td class="px-4 py-3 text-sm text-gray-500">
                         ${formatDate(post.published_at || post.created_at)}
                     </td>
                     <td class="px-4 py-3">
-                        <div class="flex space-x-2">
-                            <button onclick="editArticle('${post.id}')" class="text-blue-600 hover:text-blue-800">
-                                編輯
+                        <div class="flex items-center gap-2">
+                            <button onclick="editArticle('${post.id}')" 
+                                    class="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors"
+                                    title="編輯">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
                             </button>
-                            <button onclick="deleteArticle('${post.id}', '${escapeHtml(post.title)}')" class="text-red-600 hover:text-red-800">
-                                刪除
+                            <button onclick="deleteArticle('${post.id}', '${escapeHtml(post.title)}')" 
+                                    class="p-1.5 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+                                    title="刪除">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </div>
                     </td>
                 </tr>
                 `;
             }).join('');
+        }
+
+        // Selection Logic
+        function toggleSelect(id) {
+            if (selectedArticles.has(id)) {
+                selectedArticles.delete(id);
+            } else {
+                selectedArticles.add(id);
+            }
+            updateBatchActions();
+        }
+
+        function toggleSelectAll() {
+            const checkboxes = document.querySelectorAll('.article-checkbox');
+            const selectAllBtn = document.getElementById('selectAll');
+            const isChecked = selectAllBtn.checked;
+
+            checkboxes.forEach(cb => {
+                cb.checked = isChecked;
+                if (isChecked) {
+                    selectedArticles.add(cb.value);
+                } else {
+                    selectedArticles.delete(cb.value);
+                }
+            });
+            updateBatchActions();
+        }
+
+        function updateBatchActions() {
+            const batchActions = document.getElementById('batchActions');
+            const countSpan = document.getElementById('selectedCount');
+            const count = selectedArticles.size;
+
+            if (count > 0) {
+                batchActions.classList.remove('hidden');
+                countSpan.textContent = `已選 ${count} 篇`;
+            } else {
+                batchActions.classList.add('hidden');
+            }
+        }
+
+        // Batch Delete
+        async function batchDelete() {
+            const count = selectedArticles.size;
+            if (count === 0) return;
+
+            if (!confirm(`確定要刪除選中的 ${count} 篇文章嗎？此操作無法撤銷。`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/batch-delete`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ids: Array.from(selectedArticles) })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(`成功刪除 ${result.data.deletedCount} 篇文章`);
+                    loadArticles(currentPage);
+                } else {
+                    alert(result.error || '批量刪除失敗');
+                }
+            } catch (error) {
+                console.error('批量刪除錯誤:', error);
+                alert('批量刪除發生錯誤');
+            }
         }
 
         // Render pagination
@@ -723,4 +915,5 @@
     </script>
 
 </body>
+
 </html>
