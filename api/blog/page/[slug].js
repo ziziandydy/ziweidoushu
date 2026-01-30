@@ -8,53 +8,53 @@
 const { sql } = require('@vercel/postgres');
 
 module.exports = async function handler(req, res) {
-  const { slug, locale } = req.query;
+    const { slug, locale } = req.query;
 
-  // Determine language (from locale parameter or default to zh-TW)
-  const language = (locale === 'en') ? 'en' : 'zh-TW';
+    // Determine language (from locale parameter or default to zh-TW)
+    const language = (locale === 'en') ? 'en' : 'zh-TW';
 
-  try {
-    // 查詢文章 (by slug and language)
-    const result = await sql`
+    try {
+        // 查詢文章 (by slug and language)
+        const result = await sql`
       SELECT * FROM blog_posts
       WHERE slug = ${slug} AND language = ${language} AND status = 'published'
     `;
 
-    if (result.rows.length === 0) {
-      return res.status(404).send(render404Page(language));
+        if (result.rows.length === 0) {
+            return res.status(404).send(render404Page(language));
+        }
+
+        const post = result.rows[0];
+        return res.status(200).send(renderBlogPage(post, language));
+
+    } catch (error) {
+        console.error('渲染文章頁面失敗:', error);
+        return res.status(500).send(renderErrorPage(language));
     }
-
-    const post = result.rows[0];
-    return res.status(200).send(renderBlogPage(post, language));
-
-  } catch (error) {
-    console.error('渲染文章頁面失敗:', error);
-    return res.status(500).send(renderErrorPage(language));
-  }
 };
 
 function renderBlogPage(post, language) {
-  const lang = language === 'en' ? 'en' : 'zh-TW';
-  const blogPath = `/${lang}/blog`;
+    const lang = language === 'en' ? 'en' : 'zh-TW';
+    const blogPath = `/${lang}/blog`;
 
-  // i18n strings
-  const t = language === 'en' ? {
-    siteName: 'AI Zi Wei Dou Shu',
-    blog: 'Blog',
-    home: 'Home',
-    backToBlog: '← Back to Blog List',
-    advertisement: 'Advertisement',
-    metaTitle: `${post.title} | AI Zi Wei Dou Shu Blog`
-  } : {
-    siteName: 'AI 紫微斗數',
-    blog: '部落格',
-    home: '首頁',
-    backToBlog: '← 返回部落格列表',
-    advertisement: '廣告',
-    metaTitle: `${post.title} | AI 紫微斗數部落格`
-  };
+    // i18n strings
+    const t = language === 'en' ? {
+        siteName: 'AI Zi Wei Dou Shu',
+        blog: 'Blog',
+        home: 'Home',
+        backToBlog: '← Back to Blog List',
+        advertisement: 'Advertisement',
+        metaTitle: `${post.title} | AI Zi Wei Dou Shu Blog`
+    } : {
+        siteName: 'AI 紫微斗數',
+        blog: '部落格',
+        home: '首頁',
+        backToBlog: '← 返回部落格列表',
+        advertisement: '廣告',
+        metaTitle: `${post.title} | AI 紫微斗數部落格`
+    };
 
-  return `<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
     <meta charset="UTF-8">
@@ -83,9 +83,11 @@ function renderBlogPage(post, language) {
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
     <!-- Google AdSense -->
+    <!-- Google AdSense
     <meta name="google-adsense-account" content="ca-pub-3240143153468832">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3240143153468832"
             crossorigin="anonymous"></script>
+    -->
 
     <style>
         .prose { max-width: 65ch; }
@@ -253,7 +255,7 @@ function renderBlogPage(post, language) {
             </div>
         </div>
 
-        <!-- Mobile Top Ad (Between title and content) -->
+        <!-- Mobile Top Ad (Between title and content)
         <div class="xl:hidden my-8">
             <div class="text-center text-xs text-gray-500 mb-2">${t.advertisement}</div>
             <ins class="adsbygoogle"
@@ -264,13 +266,14 @@ function renderBlogPage(post, language) {
                  data-ad-layout-key="-fb+5w+4e-db+86"></ins>
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
+        -->
 
         <!-- Content -->
         <div id="content" class="prose prose-lg max-w-none bg-white rounded-lg shadow-sm p-8">
             <!-- Markdown will be rendered here -->
         </div>
 
-        <!-- Mobile Bottom Ad (Above back button) -->
+        <!-- Mobile Bottom Ad (Above back button)
         <div class="xl:hidden my-8">
             <div class="text-center text-xs text-gray-500 mb-2">${t.advertisement}</div>
             <ins class="adsbygoogle"
@@ -281,6 +284,7 @@ function renderBlogPage(post, language) {
                  data-ad-layout-key="-fb+5w+4e-db+86"></ins>
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
+        -->
 
         <!-- Back Link -->
         <div class="mt-12 text-center">
@@ -378,7 +382,7 @@ function renderBlogPage(post, language) {
         contentDiv.innerHTML = clean;
 
         // 在手機版插入中間廣告（約 50% 位置）
-        if (window.innerWidth < 1280) {
+        if (false && window.innerWidth < 1280) {
             const allElements = contentDiv.children;
             if (allElements.length > 3) {
                 const midPoint = Math.floor(allElements.length / 2);
@@ -403,7 +407,7 @@ function renderBlogPage(post, language) {
         }
     </script>
 
-    <!-- Left Sidebar Ad -->
+    <!-- Left Sidebar Ad
     <div class="fixed left-4 top-1/2 transform -translate-y-1/2 hidden xl:block w-40 h-96 z-10">
         <div class="h-full flex flex-col">
             <div class="text-center text-xs text-gray-500 mb-2 flex-shrink-0">${t.advertisement}</div>
@@ -416,8 +420,9 @@ function renderBlogPage(post, language) {
             </div>
         </div>
     </div>
+    -->
 
-    <!-- Right Sidebar Ad -->
+    <!-- Right Sidebar Ad
     <div class="fixed right-4 top-1/2 transform -translate-y-1/2 hidden xl:block w-40 h-96 z-10">
         <div class="h-full flex flex-col">
             <div class="text-center text-xs text-gray-500 mb-2 flex-shrink-0">${t.advertisement}</div>
@@ -430,28 +435,29 @@ function renderBlogPage(post, language) {
             </div>
         </div>
     </div>
+    -->
 
 </body>
 </html>`;
 }
 
 function render404Page(language) {
-  const lang = language === 'en' ? 'en' : 'zh-TW';
-  const blogPath = `/${lang}/blog`;
+    const lang = language === 'en' ? 'en' : 'zh-TW';
+    const blogPath = `/${lang}/blog`;
 
-  const t = language === 'en' ? {
-    title: 'Article Not Found | AI Zi Wei Dou Shu',
-    heading: '404',
-    message: 'Article not found',
-    backToBlog: 'Back to Blog'
-  } : {
-    title: '文章不存在 | AI 紫微斗數',
-    heading: '404',
-    message: '找不到此文章',
-    backToBlog: '返回部落格'
-  };
+    const t = language === 'en' ? {
+        title: 'Article Not Found | AI Zi Wei Dou Shu',
+        heading: '404',
+        message: 'Article not found',
+        backToBlog: 'Back to Blog'
+    } : {
+        title: '文章不存在 | AI 紫微斗數',
+        heading: '404',
+        message: '找不到此文章',
+        backToBlog: '返回部落格'
+    };
 
-  return `<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
     <meta charset="UTF-8">
@@ -471,22 +477,22 @@ function render404Page(language) {
 }
 
 function renderErrorPage(language) {
-  const lang = language === 'en' ? 'en' : 'zh-TW';
-  const blogPath = `/${lang}/blog`;
+    const lang = language === 'en' ? 'en' : 'zh-TW';
+    const blogPath = `/${lang}/blog`;
 
-  const t = language === 'en' ? {
-    title: 'Server Error | AI Zi Wei Dou Shu',
-    heading: 'Server Error',
-    message: 'An error occurred while loading the article',
-    backToBlog: 'Back to Blog'
-  } : {
-    title: '伺服器錯誤 | AI 紫微斗數',
-    heading: '伺服器錯誤',
-    message: '載入文章時發生錯誤',
-    backToBlog: '返回部落格'
-  };
+    const t = language === 'en' ? {
+        title: 'Server Error | AI Zi Wei Dou Shu',
+        heading: 'Server Error',
+        message: 'An error occurred while loading the article',
+        backToBlog: 'Back to Blog'
+    } : {
+        title: '伺服器錯誤 | AI 紫微斗數',
+        heading: '伺服器錯誤',
+        message: '載入文章時發生錯誤',
+        backToBlog: '返回部落格'
+    };
 
-  return `<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
     <meta charset="UTF-8">
@@ -507,25 +513,25 @@ function renderErrorPage(language) {
 }
 
 function escapeHtml(text) {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-  return text.replace(/[&<>"']/g, m => map[m]);
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
 }
 
 function extractPlainText(markdown) {
-  return markdown.replace(/[#*_`\[\]]/g, '');
+    return markdown.replace(/[#*_`\[\]]/g, '');
 }
 
 function formatDate(dateString, locale = 'zh-TW') {
-  const date = new Date(dateString);
-  return date.toLocaleDateString(locale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+    const date = new Date(dateString);
+    return date.toLocaleDateString(locale, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }

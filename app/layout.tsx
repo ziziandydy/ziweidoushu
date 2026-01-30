@@ -18,7 +18,7 @@ export default function RootLayout({
         <html lang="zh-TW">
             <head>
                 {/* Global Scripts like Google Analytics / AdSense can go here or in Script component */}
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3240143153468832" crossOrigin="anonymous"></script>
+                {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3240143153468832" crossOrigin="anonymous"></script> */}
             </head>
             <body className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 min-h-screen">
                 {children}

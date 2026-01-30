@@ -160,10 +160,11 @@ function renderBlogListPage(posts, allTags, pagination) {
     <link rel="preload" href="/styles.css" as="style">
     <link rel="stylesheet" href="/styles.css">
 
-    <!-- Google AdSense -->
+    <!-- Google AdSense
     <meta name="google-adsense-account" content="ca-pub-3240143153468832">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3240143153468832"
             crossorigin="anonymous"></script>
+    -->
 
     <style>
         .blog-card {
@@ -208,7 +209,7 @@ function renderBlogListPage(posts, allTags, pagination) {
             <p class="text-lg text-gray-600">${t.blogSubtitle}</p>
         </div>
 
-        <!-- Top Banner Ad (Desktop) -->
+        <!-- Top Banner Ad (Desktop)
         <div class="hidden md:block my-8">
             <div class="text-center text-xs text-gray-500 mb-2">廣告</div>
             <div class="flex justify-center">
@@ -219,8 +220,9 @@ function renderBlogListPage(posts, allTags, pagination) {
             </div>
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
+        -->
 
-        <!-- Top Banner Ad (Mobile) -->
+        <!-- Top Banner Ad (Mobile)
         <div class="md:hidden my-6">
             <div class="text-center text-xs text-gray-500 mb-2">廣告</div>
             <ins class="adsbygoogle"
@@ -231,6 +233,7 @@ function renderBlogListPage(posts, allTags, pagination) {
                  data-ad-layout-key="-fb+5w+4e-db+86"></ins>
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
+        -->
 
         <!-- Tag Filter -->
         <div class="flex flex-wrap justify-center gap-2 mb-8">
@@ -274,7 +277,7 @@ function renderBlogListPage(posts, allTags, pagination) {
                     </div>
                 </a>
             </article>
-            ${(index + 1) % 3 === 0 && index < posts.length - 1 ? `
+            ${false && (index + 1) % 3 === 0 && index < posts.length - 1 ? `
             <!-- Inline Ad -->
             <div class="col-span-1 md:col-span-2 lg:col-span-3 ${(index + 1) % 6 !== 0 ? 'md:hidden' : ''} my-4">
                 <div class="text-center text-xs text-gray-500 mb-2">廣告</div>
@@ -326,7 +329,7 @@ function renderBlogListPage(posts, allTags, pagination) {
         </div>
         ` : ''}
 
-        <!-- Bottom Banner Ad -->
+        <!-- Bottom Banner Ad
         <div class="hidden md:block my-12">
             <div class="text-center text-xs text-gray-500 mb-2">廣告</div>
             <div class="flex justify-center">
@@ -337,6 +340,7 @@ function renderBlogListPage(posts, allTags, pagination) {
             </div>
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
+        -->
 
         <div class="md:hidden my-8">
             <div class="text-center text-xs text-gray-500 mb-2">廣告</div>
@@ -348,6 +352,7 @@ function renderBlogListPage(posts, allTags, pagination) {
                  data-ad-layout-key="-fb+5w+4e-db+86"></ins>
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
+        -->
 
     </main>
 
