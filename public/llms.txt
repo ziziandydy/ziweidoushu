@@ -1,0 +1,20 @@
+# AI 紫微斗數
+
+> AI 驅動的紫微斗數命盤分析系統，採用中州派正統理論結合 GPT-4o 技術，提供繁體中文命理深度解讀。
+
+## 核心服務
+
+- 命盤分析：https://aiziwei.online/analysis.html — 輸入生辰八字即可獲得 AI 深度命盤解讀（免費每月 3 次）
+- 定價方案：https://aiziwei.online/pricing.html — 免費（每月 3 次問答）/ NT$199（1 小時無限問答）
+
+## 內容資源
+
+- 部落格：https://aiziwei.online/blog — 紫微斗數知識庫，涵蓋十二宮位解析、流日運勢、命理應用
+
+## 關於
+
+- 門派：中州派（傳統紫微斗數正統流派）
+- AI 模型：OpenAI GPT-4o
+- 語言：繁體中文（主）、英文
+- 隱私政策：https://aiziwei.online/privacy-policy.html
+- 聯絡：support@aiziwei.online

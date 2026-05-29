@@ -3,6 +3,25 @@
 User-agent: Mediapartners-Google
 Allow: /
 
+# AI Crawlers - explicitly allowed
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
 User-agent: *
 Allow: /
 Disallow: /api/
@@ -10,7 +29,8 @@ Disallow: /api/
 # Sitemap
 Sitemap: https://aiziwei.online/sitemap.xml
 
+# LLMs.txt
+LLMs: https://aiziwei.online/llms.txt
+
 # Crawl-delay (optional, helps prevent server overload)
 Crawl-delay: 1
-
-

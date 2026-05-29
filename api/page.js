@@ -50,8 +50,8 @@ async function generateSitemap(req, res) {
       { url: '', priority: '1.0', changefreq: 'weekly' },
       { url: '/analysis', priority: '0.9', changefreq: 'weekly' },
       { url: '/blog', priority: '0.9', changefreq: 'daily' },
-      { url: '/privacy-policy', priority: '0.5', changefreq: 'monthly' },
-      { url: '/pricing', priority: '0.7', changefreq: 'monthly' },
+      { url: '/privacy-policy.html', priority: '0.5', changefreq: 'monthly' },
+      { url: '/pricing.html', priority: '0.7', changefreq: 'monthly' },
       { url: '/payment-success', priority: '0.3', changefreq: 'monthly' },
       { url: '/payment-failed', priority: '0.3', changefreq: 'monthly' },
     ];

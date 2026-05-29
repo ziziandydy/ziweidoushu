@@ -23,5 +23,40 @@ export default async function LocalizedBlogPostPage(props: { params: Promise<{ l
         notFound();
     }
 
-    return <BlogPost post={post} lang={params.locale} />;
+    const isEn = params.locale === 'en';
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.excerpt,
+        datePublished: new Date(post.published_at).toISOString(),
+        dateModified: new Date(post.updated_at || post.published_at).toISOString(),
+        url: `https://aiziwei.online/${params.locale}/blog/${post.slug}`,
+        inLanguage: isEn ? 'en' : 'zh-TW',
+        author: {
+            '@type': 'Person',
+            name: isEn ? 'Master Wang' : '王老師',
+            url: 'https://aiziwei.online/about',
+        },
+        publisher: {
+            '@type': 'Organization',
+            name: isEn ? 'AI Zi Wei Dou Shu' : 'AI 紫微斗數',
+            url: 'https://aiziwei.online',
+            logo: {
+                '@type': 'ImageObject',
+                url: 'https://aiziwei.online/favicon.svg',
+            },
+        },
+        keywords: post.tags?.join(', '),
+    };
+
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <BlogPost post={post} lang={params.locale} />
+        </>
+    );
 }

@@ -14,16 +14,8 @@
       "destination": "/api/page?page=sitemap"
     },
     {
-      "source": "/(en|zh-TW)/blog/:slug",
-      "destination": "/api/blog/page/:slug?locale=$1"
-    },
-    {
       "source": "/(en|zh-TW)/blog",
       "destination": "/api/blog-page?locale=$1"
-    },
-    {
-      "source": "/blog/:slug",
-      "destination": "/api/blog/page/:slug?locale=zh-TW"
     },
     {
       "source": "/blog",

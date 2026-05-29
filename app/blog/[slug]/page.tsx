@@ -22,5 +22,39 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
         notFound();
     }
 
-    return <BlogPost post={post} lang="zh-TW" />;
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.excerpt,
+        datePublished: new Date(post.published_at).toISOString(),
+        dateModified: new Date(post.updated_at || post.published_at).toISOString(),
+        url: `https://aiziwei.online/blog/${post.slug}`,
+        inLanguage: 'zh-TW',
+        author: {
+            '@type': 'Person',
+            name: '王老師',
+            url: 'https://aiziwei.online/about',
+        },
+        publisher: {
+            '@type': 'Organization',
+            name: 'AI 紫微斗數',
+            url: 'https://aiziwei.online',
+            logo: {
+                '@type': 'ImageObject',
+                url: 'https://aiziwei.online/favicon.svg',
+            },
+        },
+        keywords: post.tags?.join(', '),
+    };
+
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <BlogPost post={post} lang="zh-TW" />
+        </>
+    );
 }
