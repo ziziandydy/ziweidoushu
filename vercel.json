@@ -14,8 +14,8 @@
       "destination": "/api/page?page=sitemap"
     },
     {
-      "source": "/(en|zh-TW)/:page",
-      "destination": "/$1/:page.html"
+      "source": "/(en|zh-TW)/analysis",
+      "destination": "/$1/analysis.html"
     },
     {
       "source": "/admin-login",
