@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 
 export async function generateMetadata(props: { params: Promise<{ locale: string, slug: string }> }) {
     const params = await props.params;
-    const post = await getBlogPost(params.slug, params.locale);
+    const post = await getBlogPost(decodeURIComponent(params.slug), params.locale);
     if (!post) return { title: 'Not Found' };
 
     const isEn = params.locale === 'en';
@@ -17,7 +17,7 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
 
 export default async function LocalizedBlogPostPage(props: { params: Promise<{ locale: string, slug: string }> }) {
     const params = await props.params;
-    const post = await getBlogPost(params.slug, params.locale);
+    const post = await getBlogPost(decodeURIComponent(params.slug), params.locale);
 
     if (!post) {
         notFound();

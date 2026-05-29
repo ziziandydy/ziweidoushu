@@ -27,13 +27,7 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
         advertisement: '廣告'
     };
 
-    const blogPath = lang === 'en' ? '/en/blog' : '/blog'; // Default to /blog which is zh-TW
-    // Actually if we are at /blog (zh-TW), we want links to be /blog
-    // If we are at /en/blog, we want links to be /en/blog
-    // So let's pass a basePath prop or derive it.
-    // For now, simplify: if lang is 'en', user /en/blog. Else /blog.
-
-    const basePath = lang === 'en' ? '/en/blog' : '/blog';
+    const basePath = lang === 'en' ? '/en/blog' : '/zh-TW/blog';
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString(lang === 'en' ? 'en-US' : 'zh-TW', {
