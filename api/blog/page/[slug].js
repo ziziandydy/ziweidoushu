@@ -6,6 +6,7 @@
  */
 
 const { sql } = require('@vercel/postgres');
+const { marked } = require('marked');
 
 module.exports = async function handler(req, res) {
     const { slug, locale } = req.query;
@@ -79,8 +80,28 @@ function renderBlogPage(post, language) {
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": ${JSON.stringify(post.title)},
+      "description": ${JSON.stringify(extractPlainText(post.content).substring(0, 160))},
+      "datePublished": ${JSON.stringify(new Date(post.published_at).toISOString())},
+      "dateModified": ${JSON.stringify(new Date(post.updated_at || post.published_at).toISOString())},
+      "url": ${JSON.stringify(`https://aiziwei.online${blogPath}/${post.slug}`)},
+      "inLanguage": ${JSON.stringify(lang === 'en' ? 'en' : 'zh-TW')},
+      "author": {
+        "@type": "Person",
+        "name": ${JSON.stringify(lang === 'en' ? 'Master Wang' : '王老師')}
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": ${JSON.stringify(lang === 'en' ? 'AI Zi Wei Dou Shu' : 'AI 紫微斗數')},
+        "url": "https://aiziwei.online"
+      }
+    }
+    </script>
 
     <!-- Google AdSense -->
     <!-- Google AdSense
@@ -269,8 +290,8 @@ function renderBlogPage(post, language) {
         -->
 
         <!-- Content -->
-        <div id="content" class="prose prose-lg max-w-none bg-white rounded-lg shadow-sm p-8">
-            <!-- Markdown will be rendered here -->
+        <div class="prose prose-lg max-w-none bg-white rounded-lg shadow-sm p-8">
+            ${marked.parse(post.content || '')}
         </div>
 
         <!-- Mobile Bottom Ad (Above back button)
@@ -295,117 +316,6 @@ function renderBlogPage(post, language) {
 
     </article>
 
-    <script>
-        /**
-         * 生成目錄 (TOC)
-         */
-        function generateTOC(content) {
-            const headings = [];
-            const lines = content.split('\\n');
-
-            lines.forEach((line) => {
-                const match = line.match(/^(#{1,6})\\s+(.+)$/);
-                if (match) {
-                    const level = match[1].length;
-                    const text = match[2].trim();
-                    const id = text
-                        .toLowerCase()
-                        .replace(/[^\\w\\u4e00-\\u9fa5]+/g, '-')
-                        .replace(/^-+|-+$/g, '');
-
-                    headings.push({ level, text, id });
-                }
-            });
-
-            if (headings.length === 0) return null;
-
-            let tocHtml = '<div class="toc"><h2>目錄</h2><ul>';
-            let currentLevel = 0;
-
-            headings.forEach((heading, index) => {
-                const nextLevel = headings[index + 1]?.level || 0;
-
-                while (currentLevel < heading.level) {
-                    if (currentLevel > 0) tocHtml += '<ul>';
-                    currentLevel++;
-                }
-                while (currentLevel > heading.level) {
-                    tocHtml += '</ul>';
-                    currentLevel--;
-                }
-
-                tocHtml += \`<li><a href="#\${heading.id}">\${heading.text}</a>\`;
-
-                if (nextLevel <= heading.level) {
-                    tocHtml += '</li>';
-                }
-            });
-
-            while (currentLevel > 0) {
-                tocHtml += '</ul>';
-                currentLevel--;
-            }
-
-            tocHtml += '</ul></div>';
-            return tocHtml;
-        }
-
-        /**
-         * 為標題添加 ID
-         */
-        function addHeadingIds(html) {
-            return html.replace(/<h([1-6])>(.*?)<\\/h\\1>/g, (match, level, text) => {
-                const id = text
-                    .replace(/<[^>]+>/g, '')
-                    .toLowerCase()
-                    .replace(/[^\\w\\u4e00-\\u9fa5]+/g, '-')
-                    .replace(/^-+|-+$/g, '');
-                return \`<h\${level} id="\${id}">\${text}</h\${level}>\`;
-            });
-        }
-
-        // 渲染 Markdown
-        let content = ${JSON.stringify(post.content)};
-
-        // 檢查並處理 [TOC]
-        if (/\\[TOC\\]/i.test(content)) {
-            const toc = generateTOC(content);
-            if (toc) {
-                content = content.replace(/\\[TOC\\]/gi, toc);
-            }
-        }
-
-        let html = marked.parse(content);
-        html = addHeadingIds(html);
-        const clean = DOMPurify.sanitize(html);
-        const contentDiv = document.getElementById('content');
-        contentDiv.innerHTML = clean;
-
-        // 在手機版插入中間廣告（約 50% 位置）
-        if (false && window.innerWidth < 1280) {
-            const allElements = contentDiv.children;
-            if (allElements.length > 3) {
-                const midPoint = Math.floor(allElements.length / 2);
-                const midAd = document.createElement('div');
-                midAd.className = 'my-8 not-prose';
-                midAd.innerHTML = \`
-                    <div class="text-center text-xs text-gray-500 mb-2">${t.advertisement}</div>
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-3240143153468832"
-                         data-ad-slot="7607800035"
-                         data-ad-format="fluid"
-                         data-ad-layout-key="-fb+5w+4e-db+86"></ins>
-                \`;
-
-                // 插入廣告到中間位置
-                allElements[midPoint].parentNode.insertBefore(midAd, allElements[midPoint]);
-
-                // 初始化廣告
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-        }
-    </script>
 
     <!-- Left Sidebar Ad
     <div class="fixed left-4 top-1/2 transform -translate-y-1/2 hidden xl:block w-40 h-96 z-10">
