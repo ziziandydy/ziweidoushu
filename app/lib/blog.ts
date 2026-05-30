@@ -40,7 +40,7 @@ export async function getBlogPosts({ page = 1, tag, limit = 9, locale = 'zh-TW' 
             countResult = await sql`
         SELECT COUNT(*) as total
         FROM blog_posts
-        WHERE status = 'published' AND language = ${language} AND ${tag} = ANY(tags)
+        WHERE status = 'published' AND language = ${language} AND tags @> jsonb_build_array(${tag}::text)
       `;
         } else {
             countResult = await sql`
@@ -59,7 +59,7 @@ export async function getBlogPosts({ page = 1, tag, limit = 9, locale = 'zh-TW' 
             postsResult = await sql`
         SELECT id, title, LEFT(content, 200) as excerpt, content, tags, published_at, created_at, slug, language
         FROM blog_posts
-        WHERE status = 'published' AND language = ${language} AND ${tag} = ANY(tags)
+        WHERE status = 'published' AND language = ${language} AND tags @> jsonb_build_array(${tag}::text)
         ORDER BY published_at DESC
         LIMIT ${limit} OFFSET ${offset}
       `;
