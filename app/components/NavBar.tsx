@@ -1,27 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 
 export default function NavBar({ locale }: { locale: string }) {
-    const [langOpen, setLangOpen] = useState(false);
     const isEn = locale === 'en';
 
     const t = isEn ? {
         siteName: 'AI Zi Wei Dou Shu',
         blog: '📝 Blog',
         startAnalysis: '🚀 Start Analysis',
-        currentLang: 'English',
-        switchLang: '繁體中文',
     } : {
         siteName: 'AI 紫微斗數',
         blog: '📝 部落格',
         startAnalysis: '🚀 開始分析命盤',
-        currentLang: '繁體中文',
-        switchLang: 'English',
     };
 
-    const otherLocale = isEn ? 'zh-TW' : 'en';
     const analysisHref = `/${locale}/analysis`;
     const blogHref = `/${locale}/blog`;
     const homeHref = `/${locale}/`;
@@ -41,41 +35,33 @@ export default function NavBar({ locale }: { locale: string }) {
 
                 {/* Right side */}
                 <div className="flex items-center space-x-2 sm:space-x-4">
-                    {/* Language switcher */}
-                    <div className="relative">
-                        <button
-                            onClick={() => setLangOpen(o => !o)}
-                            className="flex items-center space-x-1 text-gray-700 hover:text-purple-600 px-3 py-2 rounded-lg hover:bg-purple-50 transition-all"
+                    {/* Language switcher: two flag buttons */}
+                    <div className="flex items-center rounded-lg border border-gray-200 overflow-hidden">
+                        <Link
+                            href="/zh-TW/blog"
+                            title="繁體中文"
+                            className={`flex items-center gap-1.5 px-2.5 py-1.5 text-sm transition-colors ${
+                                !isEn
+                                    ? 'bg-purple-600 text-white font-medium'
+                                    : 'text-gray-400 hover:bg-gray-50 hover:text-gray-700'
+                            }`}
                         >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                    d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                            </svg>
-                            <span className="hidden sm:inline text-sm">{t.currentLang}</span>
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        {langOpen && (
-                            <div className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-xl z-50 border border-gray-200">
-                                <div className="py-2">
-                                    <Link
-                                        href={`/zh-TW/blog`}
-                                        onClick={() => setLangOpen(false)}
-                                        className={`w-full text-left px-4 py-2 flex items-center space-x-2 hover:bg-purple-50 ${!isEn ? 'text-purple-600 font-medium' : 'text-gray-700'}`}
-                                    >
-                                        <span>🇹🇼</span><span>繁體中文</span>
-                                    </Link>
-                                    <Link
-                                        href={`/en/blog`}
-                                        onClick={() => setLangOpen(false)}
-                                        className={`w-full text-left px-4 py-2 flex items-center space-x-2 hover:bg-purple-50 ${isEn ? 'text-purple-600 font-medium' : 'text-gray-700'}`}
-                                    >
-                                        <span>🇺🇸</span><span>English</span>
-                                    </Link>
-                                </div>
-                            </div>
-                        )}
+                            <span>🇹🇼</span>
+                            <span className="hidden sm:inline">中文</span>
+                        </Link>
+                        <div className="w-px h-5 bg-gray-200" />
+                        <Link
+                            href="/en/blog"
+                            title="English"
+                            className={`flex items-center gap-1.5 px-2.5 py-1.5 text-sm transition-colors ${
+                                isEn
+                                    ? 'bg-purple-600 text-white font-medium'
+                                    : 'text-gray-400 hover:bg-gray-50 hover:text-gray-700'
+                            }`}
+                        >
+                            <span>🇺🇸</span>
+                            <span className="hidden sm:inline">EN</span>
+                        </Link>
                     </div>
 
                     {/* Blog link */}
