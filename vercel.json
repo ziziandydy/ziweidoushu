@@ -18,6 +18,30 @@
       "destination": "/$1/analysis.html"
     },
     {
+      "source": "/privacy-policy",
+      "destination": "/privacy-policy.html"
+    },
+    {
+      "source": "/(en|zh-TW)/privacy-policy",
+      "destination": "/privacy-policy.html"
+    },
+    {
+      "source": "/(en|zh-TW)/privacy-policy.html",
+      "destination": "/privacy-policy.html"
+    },
+    {
+      "source": "/pricing",
+      "destination": "/pricing.html"
+    },
+    {
+      "source": "/(en|zh-TW)/pricing",
+      "destination": "/pricing.html"
+    },
+    {
+      "source": "/(en|zh-TW)/pricing.html",
+      "destination": "/pricing.html"
+    },
+    {
       "source": "/admin-login",
       "destination": "/api/page?page=admin-login"
     },
