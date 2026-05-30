@@ -12,6 +12,13 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
     return {
         title: `${post.title} | ${isEn ? 'AI Zi Wei Dou Shu Blog' : '紫微斗數 AI 部落格'}`,
         description: post.excerpt,
+        openGraph: {
+            images: [{ url: 'https://aiziwei.online/og-image.png', width: 1200, height: 630 }],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            images: ['https://aiziwei.online/og-image.png'],
+        },
     }
 }
 
