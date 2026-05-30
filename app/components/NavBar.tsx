@@ -35,33 +35,26 @@ export default function NavBar({ locale }: { locale: string }) {
 
                 {/* Right side */}
                 <div className="flex items-center space-x-2 sm:space-x-4">
-                    {/* Language switcher: two flag buttons */}
-                    <div className="flex items-center rounded-lg border border-gray-200 overflow-hidden">
-                        <Link
-                            href="/zh-TW/blog"
-                            title="繁體中文"
-                            className={`flex items-center gap-1.5 px-2.5 py-1.5 text-sm transition-colors ${
-                                !isEn
-                                    ? 'bg-purple-600 text-white font-medium'
-                                    : 'text-gray-400 hover:bg-gray-50 hover:text-gray-700'
-                            }`}
-                        >
-                            <span>🇹🇼</span>
-                            <span className="hidden sm:inline">中文</span>
-                        </Link>
-                        <div className="w-px h-5 bg-gray-200" />
-                        <Link
-                            href="/en/blog"
-                            title="English"
-                            className={`flex items-center gap-1.5 px-2.5 py-1.5 text-sm transition-colors ${
-                                isEn
-                                    ? 'bg-purple-600 text-white font-medium'
-                                    : 'text-gray-400 hover:bg-gray-50 hover:text-gray-700'
-                            }`}
-                        >
-                            <span>🇺🇸</span>
-                            <span className="hidden sm:inline">EN</span>
-                        </Link>
+                    {/* Language switcher: Toggle Pill */}
+                    <div className="flex items-center rounded-full p-1 bg-purple-100">
+                        {!isEn ? (
+                            <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-white shadow-sm text-purple-700 font-semibold text-sm">
+                                🇹🇼 中文
+                            </span>
+                        ) : (
+                            <Link href="/zh-TW/blog" className="flex items-center gap-1 px-3 py-1 rounded-full text-purple-400 hover:text-purple-600 text-sm transition-colors">
+                                🇹🇼 中文
+                            </Link>
+                        )}
+                        {isEn ? (
+                            <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-white shadow-sm text-purple-700 font-semibold text-sm">
+                                🇺🇸 EN
+                            </span>
+                        ) : (
+                            <Link href="/en/blog" className="flex items-center gap-1 px-3 py-1 rounded-full text-purple-400 hover:text-purple-600 text-sm transition-colors">
+                                🇺🇸 EN
+                            </Link>
+                        )}
                     </div>
 
                     {/* Blog link */}

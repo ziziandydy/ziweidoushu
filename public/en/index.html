@@ -210,36 +210,15 @@
                 <span class="text-xl font-bold gradient-text" data-i18n="common.siteName">AI Zi Wei Dou Shu</span>
             </div>
             <div class="flex items-center space-x-4">
-                <!-- Language Switcher -->
-                <div class="relative" id="languageSwitcher">
-                    <button onclick="toggleLanguageMenu()"
-                        class="flex items-center space-x-2 text-gray-700 hover:text-purple-600 px-3 py-2 rounded-lg hover:bg-purple-50 transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129">
-                            </path>
-                        </svg>
-                        <span id="currentLanguage">English</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                            </path>
-                        </svg>
-                    </button>
-                    <div id="languageMenu"
-                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-50 border border-gray-200">
-                        <div class="py-2">
-                            <button onclick="switchLanguage('zh-TW')"
-                                class="w-full text-left px-4 py-2 text-gray-700 hover:bg-purple-50 flex items-center space-x-2">
-                                <span>🇹🇼</span>
-                                <span>繁體中文</span>
-                            </button>
-                            <button onclick="switchLanguage('en')"
-                                class="w-full text-left px-4 py-2 text-gray-700 hover:bg-purple-50 flex items-center space-x-2">
-                                <span>🇺🇸</span>
-                                <span>English</span>
-                            </button>
-                        </div>
-                    </div>
+                <!-- Language Switcher Toggle Pill -->
+                <div class="flex items-center rounded-full p-1 bg-purple-100">
+                    <a href="/zh-TW/"
+                        class="flex items-center gap-1 px-3 py-1 rounded-full text-purple-400 hover:text-purple-600 text-sm transition-colors">
+                        🇹🇼 中文
+                    </a>
+                    <span class="flex items-center gap-1 px-3 py-1 rounded-full bg-white shadow-sm text-purple-700 font-semibold text-sm">
+                        🇺🇸 EN
+                    </span>
                 </div>
 
                 <a href="/en/blog"
