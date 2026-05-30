@@ -142,14 +142,31 @@ async function handleCreate(req, res) {
     RETURNING *
   `;
 
-  console.log(`✅ 文章新增成功 (${finalLanguage}):`, result.rows[0].title);
+  const createdPost = result.rows[0];
+  console.log(`✅ 文章新增成功 (${finalLanguage}):`, createdPost.title);
+
+  // 自動翻譯：zh-TW published 文章 → 建立英文版本
+  let translationResult = null;
+  if (finalLanguage === 'zh-TW' && createdPost.status === 'published' && !translated_from) {
+    try {
+      translationResult = await autoTranslateToEnglish(createdPost);
+      if (translationResult) {
+        console.log('🌐 英文版本建立成功:', translationResult.title);
+      }
+    } catch (err) {
+      console.error('⚠️ 自動翻譯失敗（不影響中文文章）:', err.message);
+    }
+  }
 
   return res.status(201).json({
     success: true,
     message: '文章新增成功',
     data: {
-      ...result.rows[0],
-      url: `/${finalLanguage}/blog/${result.rows[0].slug}`
+      ...createdPost,
+      url: `/${finalLanguage}/blog/${createdPost.slug}`,
+      translation: translationResult
+        ? { id: translationResult.id, slug: translationResult.slug, url: `/en/blog/${translationResult.slug}` }
+        : null
     }
   });
 }
@@ -265,12 +282,31 @@ async function handleUpdate(id, req, res) {
     });
   }
 
+  const updatedPost = result.rows[0];
   console.log('✅ 文章更新成功');
+
+  // 草稿發布時自動翻譯（zh-TW 且剛從非 published 改為 published）
+  let translationResult = null;
+  if (status === 'published' && updatedPost.language === 'zh-TW' && !updatedPost.translated_from) {
+    try {
+      translationResult = await autoTranslateToEnglish(updatedPost);
+      if (translationResult) {
+        console.log('🌐 英文版本建立成功:', translationResult.title);
+      }
+    } catch (err) {
+      console.error('⚠️ 自動翻譯失敗（不影響更新）:', err.message);
+    }
+  }
 
   return res.status(200).json({
     success: true,
     message: '文章更新成功',
-    data: result.rows[0]
+    data: {
+      ...updatedPost,
+      translation: translationResult
+        ? { id: translationResult.id, slug: translationResult.slug, url: `/en/blog/${translationResult.slug}` }
+        : null
+    }
   });
 }
 
@@ -302,6 +338,102 @@ async function handleDelete(id, req, res) {
     message: '文章刪除成功',
     data: result.rows[0]
   });
+}
+
+/**
+ * 自動將 zh-TW 文章翻譯並建立英文版本
+ * 使用 GPT-4o-mini（速度快、成本低，翻譯品質足夠）
+ */
+async function autoTranslateToEnglish(zhPost) {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    console.log('⚠️ OPENAI_API_KEY 未設定，跳過自動翻譯');
+    return null;
+  }
+
+  // 確認英文版本尚未存在
+  const existing = await sql`
+    SELECT id FROM blog_posts WHERE translated_from = ${zhPost.id} AND language = 'en'
+  `;
+  if (existing.rows.length > 0) {
+    console.log('⚠️ 英文版本已存在，跳過翻譯');
+    return null;
+  }
+
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a professional translator specializing in Traditional Chinese astrology, specifically Zi Wei Dou Shu (Purple Star Astrology). Translate accurately while preserving all Markdown formatting. Keep key Chinese astrology terms in both English and Chinese on first mention, e.g. "紫微星 (Zi Wei Star)". Always respond with valid JSON.'
+        },
+        {
+          role: 'user',
+          content: `Translate this Zi Wei Dou Shu blog article from Traditional Chinese to English.\n\nReturn a JSON object with exactly these two fields:\n{"title": "...", "content": "..."}\n\nTitle: ${zhPost.title}\n\nContent:\n${zhPost.content}`
+        }
+      ],
+      max_tokens: 3000,
+      temperature: 0.3,
+      response_format: { type: 'json_object' }
+    })
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(`OpenAI API 錯誤: ${response.status} - ${JSON.stringify(err)}`);
+  }
+
+  const aiData = await response.json();
+  const translated = JSON.parse(aiData.choices[0].message.content);
+
+  if (!translated.title || !translated.content) {
+    throw new Error('翻譯結果格式不正確');
+  }
+
+  // 生成英文 slug
+  let baseSlug = translated.title
+    .toLowerCase()
+    .trim()
+    .replace(/[\s]+/g, '-')
+    .replace(/[^\w-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '') || `post-${Date.now()}`;
+
+  // 確保英文 slug 不重複
+  let enSlug = baseSlug;
+  let counter = 1;
+  let isUnique = false;
+  while (!isUnique) {
+    const dup = await sql`SELECT id FROM blog_posts WHERE slug = ${enSlug} AND language = 'en'`;
+    if (dup.rows.length === 0) {
+      isUnique = true;
+    } else {
+      enSlug = `${baseSlug}-${counter++}`;
+    }
+  }
+
+  const enResult = await sql`
+    INSERT INTO blog_posts (title, slug, content, tags, status, published_at, language, translated_from)
+    VALUES (
+      ${translated.title},
+      ${enSlug},
+      ${translated.content},
+      ${JSON.stringify(zhPost.tags || [])}::jsonb,
+      ${zhPost.status},
+      ${zhPost.status === 'published' ? new Date().toISOString() : null},
+      'en',
+      ${zhPost.id}
+    )
+    RETURNING id, title, slug
+  `;
+
+  return enResult.rows[0];
 }
 
 /**
