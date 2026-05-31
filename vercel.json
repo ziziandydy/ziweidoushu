@@ -13,10 +13,6 @@
       "destination": "/zh-TW/"
     },
     {
-      "source": "/(en|zh-TW)",
-      "destination": "/$1/index.html"
-    },
-    {
       "source": "/sitemap.xml",
       "destination": "/api/page?page=sitemap"
     },
