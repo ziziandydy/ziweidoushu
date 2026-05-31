@@ -6,7 +6,7 @@
 
 const { setCorsHeaders, handleOptions } = require('../lib/cors');
 const { sendError, validateRequired, t } = require('../lib/errors');
-const { ServerI18n } = require('../lib/i18n-server');
+const { detectLocale } = require('../lib/i18n-server');
 
 // 嘗試載入真實的 TypeScript 核心模組
 let ZiweiCore = null;
@@ -26,8 +26,7 @@ module.exports = async function handler(req, res) {
     if (handleOptions(req, res)) return;
 
     // 偵測語言
-    const i18n = new ServerI18n();
-    const locale = i18n.detectLocale(req);
+    const locale = detectLocale(req);
     console.log('🌐 Locale detected:', locale);
 
     if (req.method !== 'POST') {

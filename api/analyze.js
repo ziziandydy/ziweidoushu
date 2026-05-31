@@ -7,7 +7,7 @@
 
 const { setCorsHeaders, handleOptions } = require('../lib/cors');
 const { sendError, t } = require('../lib/errors');
-const { ServerI18n } = require('../lib/i18n-server');
+const { detectLocale } = require('../lib/i18n-server');
 
 module.exports = async function handler(req, res) {
     console.log('🔮 紫微斗數 AI 分析 API (GPT-4o)');
@@ -17,8 +17,7 @@ module.exports = async function handler(req, res) {
     if (handleOptions(req, res)) return;
 
     // 偵測語言
-    const i18n = new ServerI18n();
-    const locale = i18n.detectLocale(req);
+    const locale = detectLocale(req);
     console.log('🌐 Locale detected:', locale);
 
     if (req.method !== 'POST') {
