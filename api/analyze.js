@@ -141,10 +141,11 @@ function buildChinesePrompt(data) {
 【十二宮位星曜配置】
 ${destinyData.palaces.map((palace, index) => {
         const palaceNames = ['命宮', '兄弟', '夫妻', '子女', '財帛', '疾厄', '遷移', '交友', '事業', '田宅', '福德', '父母'];
-        const majorStars = Array.isArray(palace.majorStars)
+        const palaceName = palace.palaceName || palaceNames[index] || `宮位${index + 1}`;
+        const majorStars = Array.isArray(palace.majorStars) && palace.majorStars.length > 0
             ? palace.majorStars.map(star => sanitizeInput(star.name || star)).join('、')
-            : palace.majorStars || '無主星';
-        return `${palaceNames[index]}: ${majorStars}`;
+            : '無主星';
+        return `${palaceName}: ${majorStars}`;
     }).join('\n')}
 
 請提供以下四個部分的詳細分析：
@@ -200,10 +201,17 @@ Leap Month: ${userProfile.isLeapMonth ? 'Yes' : 'No'}
 
 【Twelve Palaces Star Configuration】
 ${destinyData.palaces.map((palace, index) => {
-        const majorStars = Array.isArray(palace.majorStars)
+        const zhToEn = {
+            '命宮': 'Life Palace (命宮)', '兄弟宮': 'Siblings Palace (兄弟宮)', '夫妻宮': 'Spouse Palace (夫妻宮)',
+            '子女宮': 'Children Palace (子女宮)', '財帛宮': 'Wealth Palace (財帛宮)', '疾厄宮': 'Health Palace (疾厄宮)',
+            '遷移宮': 'Travel Palace (遷移宮)', '交友宮': 'Friends Palace (交友宮)', '事業宮': 'Career Palace (事業宮)',
+            '田宅宮': 'Property Palace (田宅宮)', '福德宮': 'Fortune Palace (福德宮)', '父母宮': 'Parents Palace (父母宮)'
+        };
+        const palaceName = zhToEn[palace.palaceName] || palaceNamesEn[index] || `Palace ${index + 1}`;
+        const majorStars = Array.isArray(palace.majorStars) && palace.majorStars.length > 0
             ? palace.majorStars.map(star => sanitizeInput(star.name || star)).join(', ')
-            : palace.majorStars || 'No Major Star';
-        return `${palaceNamesEn[index]}: ${majorStars}`;
+            : 'No Major Star';
+        return `${palaceName}: ${majorStars}`;
     }).join('\n')}
 
 Please provide a comprehensive analysis covering the following four sections:

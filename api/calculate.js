@@ -181,6 +181,9 @@ function calculateWithRealCore(data) {
             };
         });
 
+        // 依宮位順序排序（引擎原始順序是地支），讓下游以陣列順序取用時也正確
+        palaces.sort((a, b) => a.palaceIndex - b.palaceIndex);
+
         return {
             palaces: palaces,
             element: destinyBoard.element ? destinyBoard.element.displayName : '土五局',
