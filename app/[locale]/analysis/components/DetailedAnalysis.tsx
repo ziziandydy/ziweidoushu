@@ -1,40 +1,56 @@
+"use client";
 
 import React, { useEffect, useState } from 'react';
-import { UserProfile } from './AnalysisForm';
-import { CalculationResult } from '../types';
-import { aiService } from '../services/aiService';
+import { CalculationResult, UserProfile } from '../types';
+import { AnalysisDict } from '../translations';
+import { requestAnalysis } from '../services/aiService';
 import { formatAnalysisHTML } from '../utils/formatter';
+import QASection, { ChatMessage } from './QASection';
 
 interface DetailedAnalysisProps {
+    locale: string;
+    t: AnalysisDict;
     userProfile: UserProfile;
     destinyData: CalculationResult;
+    initialSections: { title: string; content: string[] }[] | null;
+    initialChatHistory: ChatMessage[];
     onBack: () => void;
 }
 
-export default function DetailedAnalysis({ userProfile, destinyData, onBack }: DetailedAnalysisProps) {
-    const [loading, setLoading] = useState(true);
-    const [analysisSections, setAnalysisSections] = useState<{ title: string, content: string[] }[]>([]);
+export default function DetailedAnalysis({
+    locale, t, userProfile, destinyData, initialSections, initialChatHistory, onBack,
+}: DetailedAnalysisProps) {
+    const [loading, setLoading] = useState(!initialSections);
+    const [analysisSections, setAnalysisSections] = useState<{ title: string, content: string[] }[]>(initialSections || []);
     const [error, setError] = useState<string | null>(null);
+    const [retryKey, setRetryKey] = useState(0);
 
     useEffect(() => {
+        // Restored from a payment redirect — the analysis was already generated
+        if (initialSections && retryKey === 0) return;
+
+        let cancelled = false;
         const fetchAnalysis = async () => {
+            setLoading(true);
+            setError(null);
             try {
-                const result = await aiService.requestAnalysis(userProfile, destinyData);
+                const result = await requestAnalysis(userProfile, destinyData.raw, locale);
+                if (cancelled) return;
                 if (result.success && result.analysis) {
-                    const sections = formatAnalysisHTML(result.analysis);
-                    setAnalysisSections(sections);
+                    setAnalysisSections(formatAnalysisHTML(result.analysis));
                 } else {
-                    setError(result.error || '分析失敗');
+                    setError(result.error || t.analysis.serviceUnavailable);
                 }
             } catch (err: any) {
-                setError(err.message || '發生錯誤');
+                if (!cancelled) setError(err.message || t.analysis.serviceUnavailable);
             } finally {
-                setLoading(false);
+                if (!cancelled) setLoading(false);
             }
         };
 
         fetchAnalysis();
-    }, [userProfile, destinyData]);
+        return () => { cancelled = true; };
+    }, [userProfile, destinyData, retryKey]);
 
     const getSectionIcon = (title: string) => {
         if (title.includes('主星')) return 'text-yellow-500';
@@ -46,20 +62,24 @@ export default function DetailedAnalysis({ userProfile, destinyData, onBack }: D
 
     return (
         <div className="animate-fade-in space-y-6">
-            <h2 className="text-2xl font-bold mb-6 text-center text-purple-800">📖 {userProfile.name}的命盤詳細解析</h2>
+            <h2 className="text-2xl font-bold mb-6 text-center text-purple-800">
+                {t.analysis.titleWithName.replace('{name}', userProfile.name)}
+            </h2>
 
             {loading && (
                 <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 p-6 rounded-lg flex justify-center items-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mr-3"></div>
-                    <span className="text-purple-700 font-medium">AI 正在分析您的命盤，請稍候...</span>
+                    <span className="text-purple-700 font-medium">{t.analysis.loading}</span>
                 </div>
             )}
 
             {error && (
                 <div className="bg-red-50 border border-red-200 p-6 rounded-lg">
-                    <h3 classNametext-red-800 font-bold mb-2>分析服務暫時無法使用</h3>
+                    <h3 className="text-red-800 font-bold mb-2">{t.analysis.serviceUnavailable}</h3>
                     <p className="text-red-600">{error}</p>
-                    <button onClick={() => window.location.reload()} className="mt-4 text-sm text-red-600 underline">重試</button>
+                    <button onClick={() => setRetryKey(k => k + 1)} className="mt-4 text-sm text-red-600 underline">
+                        {t.analysis.retryButton}
+                    </button>
                 </div>
             )}
 
@@ -81,19 +101,21 @@ export default function DetailedAnalysis({ userProfile, destinyData, onBack }: D
                 </div>
             )}
 
-            <div className="mt-8">
-                <div className="bg-white border-2 border-gray-200 rounded-lg p-6 opacity-50 cursor-not-allowed">
-                    <h3 className="text-lg font-bold text-gray-500 mb-2">💬 命盤問答 (Coming Soon)</h3>
-                    <p className="text-gray-500">問答功能正在遷移中...</p>
-                </div>
-            </div>
+            <QASection
+                locale={locale}
+                t={t}
+                userProfile={userProfile}
+                destinyData={destinyData}
+                initialMessages={initialChatHistory}
+                analysisSections={analysisSections}
+            />
 
             <div className="flex space-x-4 mt-6">
                 <button
                     onClick={onBack}
                     className="w-full bg-gray-500 text-white py-3 rounded-lg font-medium hover:bg-gray-600 transition-all duration-200"
                 >
-                    ← 返回星曜分析
+                    {t.analysis.back}
                 </button>
             </div>
         </div>

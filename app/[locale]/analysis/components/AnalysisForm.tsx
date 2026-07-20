@@ -1,23 +1,22 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-
-export type UserProfile = {
-    name: string;
-    gender: 'M' | 'F';
-    birthYear: number;
-    birthMonth: number;
-    birthDay: number;
-    birthHour: string;
-    calendarType: 'solar' | 'lunar';
-    isLeapMonth: boolean;
-};
+import React, { useEffect, useState } from 'react';
+import { CalculationResult, UserProfile } from '../types';
+import { AnalysisDict } from '../translations';
+import { calculateDestiny } from '../services/calculateService';
 
 interface AnalysisFormProps {
-    onSubmit: (profile: UserProfile) => void;
+    locale: string;
+    t: AnalysisDict;
+    onCalculated: (profile: UserProfile, result: CalculationResult) => void;
 }
 
-export default function AnalysisForm({ onSubmit }: AnalysisFormProps) {
+const HOUR_VALUES = [
+    '子時', '丑時', '寅時', '卯時', '辰時', '巳時',
+    '午時', '未時', '申時', '酉時', '戌時', '亥時',
+];
+
+export default function AnalysisForm({ locale, t, onCalculated }: AnalysisFormProps) {
     const [name, setName] = useState('');
     const [gender, setGender] = useState<'M' | 'F'>('M');
     const [calendarType, setCalendarType] = useState<'solar' | 'lunar'>('solar');
@@ -26,27 +25,13 @@ export default function AnalysisForm({ onSubmit }: AnalysisFormProps) {
     const [birthDay, setBirthDay] = useState<number>(0);
     const [birthHour, setBirthHour] = useState<string>('');
     const [isLeapMonth, setIsLeapMonth] = useState(false);
+    const [calculating, setCalculating] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    // Options
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
     const months = Array.from({ length: 12 }, (_, i) => i + 1);
     const [days, setDays] = useState<number[]>([]);
-
-    const hours = [
-        { value: '子時', label: '子時 (23:00-01:00)' },
-        { value: '丑時', label: '丑時 (01:00-03:00)' },
-        { value: '寅時', label: '寅時 (03:00-05:00)' },
-        { value: '卯時', label: '卯時 (05:00-07:00)' },
-        { value: '辰時', label: '辰時 (07:00-09:00)' },
-        { value: '巳時', label: '巳時 (09:00-11:00)' },
-        { value: '午時', label: '午時 (11:00-13:00)' },
-        { value: '未時', label: '未時 (13:00-15:00)' },
-        { value: '申時', label: '申時 (15:00-17:00)' },
-        { value: '酉時', label: '酉時 (17:00-19:00)' },
-        { value: '戌時', label: '戌時 (19:00-21:00)' },
-        { value: '亥時', label: '亥時 (21:00-23:00)' },
-    ];
 
     useEffect(() => {
         if (birthYear && birthMonth) {
@@ -57,56 +42,63 @@ export default function AnalysisForm({ onSubmit }: AnalysisFormProps) {
         }
     }, [birthYear, birthMonth]);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!name || !birthYear || !birthMonth || !birthDay || !birthHour) {
-            alert('請填寫完整資料');
+            setError(t.form.missingFields);
             return;
         }
-        onSubmit({
-            name,
-            gender,
-            birthYear,
-            birthMonth,
-            birthDay,
-            birthHour,
-            calendarType,
-            isLeapMonth
-        });
+
+        const profile: UserProfile = {
+            name, gender, birthYear, birthMonth, birthDay, birthHour, calendarType, isLeapMonth,
+        };
+
+        setError(null);
+        setCalculating(true);
+        try {
+            const result = await calculateDestiny(profile, locale);
+            if (result.success) {
+                onCalculated(profile, result);
+            } else {
+                setError(`${t.form.calculationFailed}${result.error ? `（${result.error}）` : ''}`);
+            }
+        } finally {
+            setCalculating(false);
+        }
     };
 
     return (
         <div className="animate-fade-in space-y-6">
             <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <span className="mr-2 text-blue-500">📝</span>
-                個人基本資料
+                {t.form.title}
             </h2>
 
             {/* Name & Gender */}
             <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block mb-2 font-medium">姓名</label>
+                    <label className="block mb-2 font-medium">{t.form.name.label}</label>
                     <input
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="請輸入您的姓名"
+                        placeholder={t.form.name.placeholder}
                     />
                 </div>
                 <div>
-                    <label className="block mb-2 font-medium">性別</label>
+                    <label className="block mb-2 font-medium">{t.form.gender.label}</label>
                     <div className="flex space-x-2">
                         <button
                             onClick={() => setGender('M')}
                             className={`flex-1 py-3 rounded-lg border transition-colors font-medium ${gender === 'M' ? 'bg-blue-500 text-white border-blue-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
                         >
-                            男
+                            {t.form.gender.male}
                         </button>
                         <button
                             onClick={() => setGender('F')}
                             className={`flex-1 py-3 rounded-lg border transition-colors font-medium ${gender === 'F' ? 'bg-blue-500 text-white border-blue-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
                         >
-                            女
+                            {t.form.gender.female}
                         </button>
                     </div>
                 </div>
@@ -114,19 +106,19 @@ export default function AnalysisForm({ onSubmit }: AnalysisFormProps) {
 
             {/* Calendar Type */}
             <div>
-                <label className="block mb-2 font-medium">曆法類型</label>
+                <label className="block mb-2 font-medium">{t.form.calendarType.label}</label>
                 <div className="flex space-x-2">
                     <button
                         onClick={() => setCalendarType('solar')}
                         className={`flex-1 py-3 rounded-lg border transition-colors font-medium ${calendarType === 'solar' ? 'bg-green-500 text-white border-green-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
                     >
-                        西曆
+                        {t.form.calendarType.solar}
                     </button>
                     <button
                         onClick={() => setCalendarType('lunar')}
                         className={`flex-1 py-3 rounded-lg border transition-colors font-medium ${calendarType === 'lunar' ? 'bg-green-500 text-white border-green-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
                     >
-                        農曆
+                        {t.form.calendarType.lunar}
                     </button>
                 </div>
             </div>
@@ -134,50 +126,50 @@ export default function AnalysisForm({ onSubmit }: AnalysisFormProps) {
             {/* Date */}
             <div className="grid md:grid-cols-3 gap-4">
                 <div>
-                    <label className="block mb-2 font-medium">出生年</label>
+                    <label className="block mb-2 font-medium">{t.form.birthYear.label}</label>
                     <select
                         value={birthYear || ''}
                         onChange={(e) => setBirthYear(Number(e.target.value))}
                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     >
-                        <option value="">選擇年份</option>
-                        {years.map(y => <option key={y} value={y}>{y}年</option>)}
+                        <option value="">{t.form.birthYear.placeholder}</option>
+                        {years.map(y => <option key={y} value={y}>{y}{t.form.birthYear.suffix}</option>)}
                     </select>
                 </div>
                 <div>
-                    <label className="block mb-2 font-medium">出生月</label>
+                    <label className="block mb-2 font-medium">{t.form.birthMonth.label}</label>
                     <select
                         value={birthMonth || ''}
                         onChange={(e) => setBirthMonth(Number(e.target.value))}
                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     >
-                        <option value="">選擇月份</option>
-                        {months.map(m => <option key={m} value={m}>{m}月</option>)}
+                        <option value="">{t.form.birthMonth.placeholder}</option>
+                        {months.map(m => <option key={m} value={m}>{m}{t.form.birthMonth.suffix}</option>)}
                     </select>
                 </div>
                 <div>
-                    <label className="block mb-2 font-medium">出生日</label>
+                    <label className="block mb-2 font-medium">{t.form.birthDay.label}</label>
                     <select
                         value={birthDay || ''}
                         onChange={(e) => setBirthDay(Number(e.target.value))}
                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     >
-                        <option value="">選擇日期</option>
-                        {days.map(d => <option key={d} value={d}>{d}日</option>)}
+                        <option value="">{t.form.birthDay.placeholder}</option>
+                        {days.map(d => <option key={d} value={d}>{d}{t.form.birthDay.suffix}</option>)}
                     </select>
                 </div>
             </div>
 
             {/* Hour */}
             <div>
-                <label className="block mb-2 font-medium">出生時辰</label>
+                <label className="block mb-2 font-medium">{t.form.birthHour.label}</label>
                 <select
                     value={birthHour}
                     onChange={(e) => setBirthHour(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
-                    <option value="">選擇時辰</option>
-                    {hours.map(h => <option key={h.value} value={h.value}>{h.label}</option>)}
+                    <option value="">{t.form.birthHour.placeholder}</option>
+                    {HOUR_VALUES.map(h => <option key={h} value={h}>{t.form.hourOptions[h] || h}</option>)}
                 </select>
             </div>
 
@@ -191,7 +183,13 @@ export default function AnalysisForm({ onSubmit }: AnalysisFormProps) {
                         id="leap-month"
                         className="rounded ring-purple-500"
                     />
-                    <label htmlFor="leap-month" className="text-sm text-gray-600">此月為閏月</label>
+                    <label htmlFor="leap-month" className="text-sm text-gray-600">{t.form.leapMonth}</label>
+                </div>
+            )}
+
+            {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3">
+                    {error}
                 </div>
             )}
 
@@ -199,10 +197,11 @@ export default function AnalysisForm({ onSubmit }: AnalysisFormProps) {
             <div className="mt-8">
                 <button
                     onClick={handleSubmit}
-                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 rounded-lg font-medium text-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 shadow-lg flex items-center justify-center"
+                    disabled={calculating}
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 rounded-lg font-medium text-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 shadow-lg flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                     <span className="mr-2">⭐</span>
-                    計算命盤
+                    {calculating ? t.form.calculating : t.form.calculate}
                 </button>
             </div>
         </div>

@@ -1,13 +1,15 @@
 import React from 'react';
 import { DestinyInfo } from '../types';
+import { AnalysisDict } from '../translations';
 
 interface StarAnalysisProps {
+    t: AnalysisDict;
     destinyInfo: DestinyInfo;
     onBack: () => void;
     onNext: () => void;
 }
 
-export default function StarAnalysis({ destinyInfo, onBack, onNext }: StarAnalysisProps) {
+export default function StarAnalysis({ t, destinyInfo, onBack, onNext }: StarAnalysisProps) {
 
     const getEnergyColor = (energy: number) => {
         if (energy >= 80) return { color: 'bg-green-400', border: 'border-green-500' };
@@ -16,38 +18,32 @@ export default function StarAnalysis({ destinyInfo, onBack, onNext }: StarAnalys
         return { color: 'bg-red-400', border: 'border-red-500' };
     };
 
+    // /api/calculate returns energyLevel on a 0-100 scale; the raw engine uses
+    // small integers (-1..2) — normalize the latter so the bars stay meaningful.
+    const normalizeEnergy = (energy: number) => {
+        if (energy > 10) return Math.min(Math.round(energy), 100);
+        if (energy >= 2) return 90;
+        if (energy >= 1) return 75;
+        if (energy >= 0) return 50;
+        return 30;
+    };
 
     return (
         <div className="animate-fade-in">
-            <h2 className="text-2xl font-bold mb-6 text-center">❤️ 命盤星曜分析</h2>
+            <h2 className="text-2xl font-bold mb-6 text-center">{t.stars.title}</h2>
 
             <div className="space-y-4">
                 {destinyInfo.palaces.map((palace) => {
                     const palaceName = palace.palaceName;
                     const majorStarsDisplay = palace.majorStars.length > 0
                         ? palace.majorStars.map(s => s.name).join('、')
-                        : '無主星';
-                    const description = `${palaceName}的星曜配置影響個人相關運勢`;
+                        : t.stars.noMajorStar;
+                    const description = t.stars.palaceDescription.replace('{palace}', palaceName);
 
-                    // Calculate average energy
-                    const energy = palace.majorStars.length > 0
-                        ? Math.floor(palace.majorStars.reduce((sum, star) => sum + (star.energyLevel || 50), 0) / palace.majorStars.length)
-                        : 50; // Default for empty palace
-
-                    // Map simplified energy levels (0, 1, 2) to percentage for display if needed
-                    // In legacy code it used `star.energyLevel`. But in my calculator I see strict maps:
-                    // male: 2, female: 1 etc.
-                    // The legacy mock code used randomization `60 + random`.
-                    // Real calculator (ported one) returns small integers (-1, 0, 1, 2).
-                    // I need to scale them to 0-100 for visual consistency if I want to use the same bars.
-                    // 2 -> 90%, 1 -> 70%, 0 -> 50%, -1 -> 30%?
-                    // Let's normalize:
-                    let normalizedEnergy = 50;
-                    if (energy >= 2) normalizedEnergy = 90;
-                    else if (energy >= 1) normalizedEnergy = 75;
-                    else if (energy >= 0) normalizedEnergy = 50;
-                    else normalizedEnergy = 30;
-
+                    const avgEnergy = palace.majorStars.length > 0
+                        ? palace.majorStars.reduce((sum, star) => sum + (star.energyLevel || 50), 0) / palace.majorStars.length
+                        : 50;
+                    const normalizedEnergy = normalizeEnergy(avgEnergy);
                     const starColor = getEnergyColor(normalizedEnergy);
 
                     return (
@@ -55,9 +51,9 @@ export default function StarAnalysis({ destinyInfo, onBack, onNext }: StarAnalys
                             <h3 className="font-bold text-lg mb-2">{palaceName}</h3>
                             <p className="text-gray-700 mb-2">{description}</p>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-500">主要星曜: {majorStarsDisplay}</span>
+                                <span className="text-sm text-gray-500">{t.stars.majorStars}: {majorStarsDisplay}</span>
                                 <div className="flex items-center">
-                                    <span className="text-sm font-medium mr-2">能量:</span>
+                                    <span className="text-sm font-medium mr-2">{t.stars.energy}:</span>
                                     <div className="w-16 bg-gray-200 rounded-full h-2">
                                         <div className={`${starColor.color} h-2 rounded-full`} style={{ width: `${normalizedEnergy}%` }}></div>
                                     </div>
@@ -74,13 +70,13 @@ export default function StarAnalysis({ destinyInfo, onBack, onNext }: StarAnalys
                     onClick={onBack}
                     className="flex-1 bg-gray-500 text-white py-3 rounded-lg font-medium hover:bg-gray-600 transition-all duration-200"
                 >
-                    ← 返回命盤圖表
+                    {t.stars.back}
                 </button>
                 <button
                     onClick={onNext}
-                    className="flex-1 bg-ziwei-purple bg-purple-600 text-white py-3 rounded-lg font-medium hover:bg-purple-700 transition-all duration-200"
+                    className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-medium hover:bg-purple-700 transition-all duration-200"
                 >
-                    詳細解析 →
+                    {t.stars.next}
                 </button>
             </div>
         </div>
