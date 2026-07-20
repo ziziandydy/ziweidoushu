@@ -27,6 +27,11 @@ const nextConfig = {
                 permanent: false,
             },
             {
+                source: '/:locale(en|zh-TW)/analysis.html',
+                destination: '/:locale/analysis',
+                permanent: true,
+            },
+            {
                 source: '/blog',
                 destination: '/zh-TW/blog',
                 permanent: false,
