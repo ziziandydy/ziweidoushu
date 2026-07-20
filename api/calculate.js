@@ -96,6 +96,8 @@ module.exports = async function handler(req, res) {
             name: sanitizeInput(data.name),
             palaces: result.palaces,
             element: result.element,
+            destinyMaster: result.destinyMaster || null,
+            bodyMaster: result.bodyMaster || null,
             source: ZiweiCore ? 'real-core' : 'simplified',
             locale: locale,
             timestamp: new Date().toISOString()
@@ -148,31 +150,42 @@ function calculateWithRealCore(data) {
         // 創建命盤
         const destinyBoard = new DestinyBoard(destinyConfig);
 
-        // 轉換為 API 格式
-        const palaces = destinyBoard.cells.map((cell, index) => {
-            const temple = cell.temples[0];
+        // 引擎的 cells 依地支排列，宮名（命宮除外）不帶「宮」字；
+        // 這裡正規化成前端使用的宮位順序索引與完整宮名
+        const PALACE_ORDER = ['命宮', '兄弟宮', '夫妻宮', '子女宮', '財帛宮', '疾厄宮',
+            '遷移宮', '交友宮', '事業宮', '田宅宮', '福德宮', '父母宮'];
+        const normalizeTempleName = (name) => name.endsWith('宮') ? name : `${name}宮`;
+
+        const palaces = destinyBoard.cells.map((cell, cellIndex) => {
+            const templeNames = cell.temples.map(t => normalizeTempleName(t.displayName));
+            const mainTemple = templeNames.find(n => n !== '身宮') || `宮位${cellIndex + 1}`;
+            const orderIndex = PALACE_ORDER.indexOf(mainTemple);
             return {
-                palaceName: temple ? temple.name : `宮位${index + 1}`,
-                palaceIndex: index,
+                palaceName: mainTemple,
+                palaceIndex: orderIndex >= 0 ? orderIndex : cellIndex,
+                isBodyPalace: templeNames.includes('身宮'),
                 majorStars: cell.majorStars.map(star => ({
-                    name: star.name,
-                    energyLevel: star.energyLevel || 0,
-                    energyType: star.shadowLight === 0 ? 'yang' : 'yin'
+                    name: star.displayName,
+                    // 廟旺平陷等級：-1（陷）到 2（廟）
+                    energyLevel: destinyBoard.getMajorStarEnergyLevel(star),
+                    energyType: 'major'
                 })),
                 minorStars: cell.minorStars.map(star => ({
-                    name: star.name,
+                    name: star.displayName,
                     energyLevel: 0,
                     energyType: 'neutral'
                 })),
-                element: cell.ground ? cell.ground.name : '未知',
-                sky: cell.sky ? cell.sky.name : '未知',
-                ground: cell.ground ? cell.ground.name : '未知'
+                element: cell.ground ? cell.ground.displayName : '未知',
+                sky: cell.sky ? cell.sky.displayName : '未知',
+                ground: cell.ground ? cell.ground.displayName : '未知'
             };
         });
 
         return {
             palaces: palaces,
-            element: destinyBoard.element ? destinyBoard.element.name : '土五局'
+            element: destinyBoard.element ? destinyBoard.element.displayName : '土五局',
+            destinyMaster: destinyBoard.destinyMaster ? destinyBoard.destinyMaster.displayName : null,
+            bodyMaster: destinyBoard.bodyMaster ? destinyBoard.bodyMaster.displayName : null
         };
 
     } catch (error) {

@@ -32,10 +32,15 @@ export async function calculateDestiny(
 
         const palaces: Palace[] = result.palaces;
 
+        // real-core 回應直接帶命主/身主；簡化模式沒有，退回從宮位推算
         const destinyInfo: DestinyInfo = {
             element: result.element || '',
-            destinyMaster: findFirstMajorStar(palaces, '命宮', FALLBACK_DESTINY_MASTER),
-            bodyMaster: findFirstMajorStar(palaces, '財帛宮', FALLBACK_BODY_MASTER),
+            destinyMaster: result.destinyMaster
+                ? { name: result.destinyMaster, energyLevel: 0, energyType: 'major' }
+                : findFirstMajorStar(palaces, '命宮', FALLBACK_DESTINY_MASTER),
+            bodyMaster: result.bodyMaster
+                ? { name: result.bodyMaster, energyLevel: 0, energyType: 'major' }
+                : findFirstMajorStar(palaces, '財帛宮', FALLBACK_BODY_MASTER),
             palaces,
         };
 

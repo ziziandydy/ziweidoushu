@@ -41,7 +41,7 @@ export default function StarAnalysis({ t, destinyInfo, onBack, onNext }: StarAna
                     const description = t.stars.palaceDescription.replace('{palace}', palaceName);
 
                     const avgEnergy = palace.majorStars.length > 0
-                        ? palace.majorStars.reduce((sum, star) => sum + (star.energyLevel || 50), 0) / palace.majorStars.length
+                        ? palace.majorStars.reduce((sum, star) => sum + (star.energyLevel ?? 50), 0) / palace.majorStars.length
                         : 50;
                     const normalizedEnergy = normalizeEnergy(avgEnergy);
                     const starColor = getEnergyColor(normalizedEnergy);
