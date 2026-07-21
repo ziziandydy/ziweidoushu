@@ -43,6 +43,7 @@
     "lint": "eslint ./src ./test --ext .ts",
     "migrate": "node scripts/run-migration.js",
     "migrate:002": "node scripts/run-migration.js 002",
+    "migrate:003": "node scripts/run-migration-003.js",
     "verify-migration": "node scripts/verify-migration.js"
   },
   "devDependencies": {

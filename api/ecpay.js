@@ -5,6 +5,7 @@
 
 const ecpay_payment = require('ecpay_aio_nodejs');
 const crypto = require('crypto');
+const { sql } = require('@vercel/postgres');
 
 // 綠界金流配置
 const ECPAY_CONFIG = {
@@ -104,6 +105,18 @@ async function handleCreate(req, res) {
 
     const html = create.payment_client.aio_check_out_credit_onetime(base_param);
 
+    // 記錄訂單為 pending，讓 callback 到達前也留有 TradeNo 查詢基礎；
+    // 即使消費者中途放棄付款，未來的退款/對帳仍能追溯這筆嘗試
+    try {
+        await sql`
+            INSERT INTO orders (merchant_trade_no, user_id, user_name, user_email, amount, status)
+            VALUES (${orderId}, ${userId}, ${userName || ''}, ${userEmail || ''}, ${amount}, 'pending')
+            ON CONFLICT (merchant_trade_no) DO NOTHING
+        `;
+    } catch (dbError) {
+        console.error('⚠️ 訂單寫入資料庫失敗（不影響付款流程，但退款時將查不到這筆訂單）:', dbError);
+    }
+
     console.log('✅ 訂單建立成功:', {
         orderId: orderId,
         amount: amount,
@@ -153,7 +166,9 @@ async function handleCallback(req, res) {
         CustomField1,
     } = data;
 
-    if (RtnCode === '1') {
+    const isPaid = RtnCode === '1';
+
+    if (isPaid) {
         console.log('✅ 付款成功:', {
             orderId: MerchantTradeNo,
             tradeNo: TradeNo,
@@ -167,6 +182,33 @@ async function handleCallback(req, res) {
             rtnCode: RtnCode,
             rtnMsg: RtnMsg
         });
+    }
+
+    // Upsert（非 insert）：ECPay callback 最多重送 4 次，須以 MerchantTradeNo 冪等處理，
+    // 避免重複入帳；也涵蓋 handleCreate 當下 DB 寫入失敗、這裡第一次補上該筆訂單的情況
+    try {
+        await sql`
+            INSERT INTO orders (merchant_trade_no, trade_no, user_id, amount, status, payment_type, payment_date, rtn_msg)
+            VALUES (
+                ${MerchantTradeNo},
+                ${TradeNo || null},
+                ${data.CustomField1 || ''},
+                ${TradeAmt ? parseInt(TradeAmt, 10) : null},
+                ${isPaid ? 'paid' : 'failed'},
+                ${data.PaymentType || null},
+                ${PaymentDate ? new Date(PaymentDate) : null},
+                ${RtnMsg || null}
+            )
+            ON CONFLICT (merchant_trade_no) DO UPDATE SET
+                trade_no = EXCLUDED.trade_no,
+                status = EXCLUDED.status,
+                payment_type = EXCLUDED.payment_type,
+                payment_date = EXCLUDED.payment_date,
+                rtn_msg = EXCLUDED.rtn_msg,
+                updated_at = CURRENT_TIMESTAMP
+        `;
+    } catch (dbError) {
+        console.error('⚠️ 訂單狀態更新失敗（付款結果仍會回覆給綠界，但這筆訂單的 TradeNo 未被記錄）:', dbError);
     }
 
     return res.status(200).send('1|OK');
@@ -234,6 +276,28 @@ async function handleReturn(req, res) {
 }
 
 /**
+ * 綠界專用 URL Encode：encodeURIComponent 不會編碼 ~ 和 '，但 ECPay 演算法
+ * 沿用 PHP urlencode() 行為（會編碼為 %7E / %27），漏做這兩個替換會導致
+ * 任何含 ~ 或 ' 的欄位（例如使用者姓名 O'Brien）算出的 CheckMacValue 永遠不符，
+ * 讓合法的付款通知被誤判為驗證失敗。
+ */
+function ecpayUrlEncode(source) {
+    let encoded = encodeURIComponent(source)
+        .replace(/%20/g, '+')
+        .replace(/~/g, '%7e')
+        .replace(/'/g, '%27');
+    encoded = encoded.toLowerCase();
+    const replacements = {
+        '%2d': '-', '%5f': '_', '%2e': '.', '%21': '!',
+        '%2a': '*', '%28': '(', '%29': ')',
+    };
+    for (const [oldStr, char] of Object.entries(replacements)) {
+        encoded = encoded.split(oldStr).join(char);
+    }
+    return encoded;
+}
+
+/**
  * 驗證綠界 CheckMacValue
  */
 function verifyCheckMacValue(data) {
@@ -258,28 +322,20 @@ function verifyCheckMacValue(data) {
         });
         checkStr += `&HashIV=${ECPAY_CONFIG.HashIV}`;
 
-        checkStr = encodeURIComponent(checkStr);
-        checkStr = checkStr.toLowerCase()
-            .replace(/%2d/g, '-')
-            .replace(/%5f/g, '_')
-            .replace(/%2e/g, '.')
-            .replace(/%21/g, '!')
-            .replace(/%2a/g, '*')
-            .replace(/%28/g, '(')
-            .replace(/%29/g, ')')
-            .replace(/%20/g, '+');
-
         const hash = crypto.createHash('sha256');
-        hash.update(checkStr);
+        hash.update(ecpayUrlEncode(checkStr));
         const calculatedCheckMacValue = hash.digest('hex').toUpperCase();
 
         console.log('🔐 CheckMacValue 驗證:', {
             received: receivedCheckMacValue,
             calculated: calculatedCheckMacValue,
-            match: receivedCheckMacValue === calculatedCheckMacValue
         });
 
-        return receivedCheckMacValue === calculatedCheckMacValue;
+        // Timing-safe 比對：CheckMacValue 是安全驗證機制，禁止用 === 直接比較字串
+        const receivedBuf = Buffer.from(receivedCheckMacValue);
+        const calculatedBuf = Buffer.from(calculatedCheckMacValue);
+        if (receivedBuf.length !== calculatedBuf.length) return false;
+        return crypto.timingSafeEqual(receivedBuf, calculatedBuf);
     } catch (error) {
         console.error('❌ CheckMacValue 驗證錯誤:', error);
         return false;
