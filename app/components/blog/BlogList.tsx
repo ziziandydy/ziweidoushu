@@ -1,6 +1,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import AdUnit from '../ads/AdUnit';
 
 export default function BlogList({ posts, pagination, lang, currentTag, allTags }: {
     posts: any[],
@@ -43,6 +44,21 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-12">
+            {/* Top Banner Ad */}
+            <AdUnit
+                slot="7607800035"
+                style={{ display: 'inline-block', width: 728, height: 90 }}
+                wrapperClassName="hidden md:flex md:justify-center my-8"
+                label={t.advertisement}
+            />
+            <AdUnit
+                slot="7607800035"
+                format="fluid"
+                layoutKey="-fb+5w+4e-db+86"
+                wrapperClassName="md:hidden my-6"
+                label={t.advertisement}
+            />
+
             <div className="flex flex-wrap justify-center gap-2 mb-8">
                 <Link href={basePath} className={`px-4 py-2 rounded-full transition-colors ${!currentTag ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 border hover:bg-purple-500 hover:text-white'}`}>
                     {t.allPosts}
@@ -61,30 +77,66 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {posts.map((post, index) => (
-                        <article key={post.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
-                            <Link href={`${basePath}/${post.slug}`} className="block p-6">
-                                <h2 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2">
-                                    {post.title}
-                                </h2>
-                                <p className="text-gray-600 mb-4 line-clamp-3 text-sm">
-                                    {extractPlainText(post.excerpt || post.content)}
-                                </p>
-                                <div className="flex flex-wrap gap-2 mb-4">
-                                    {post.tags && post.tags.slice(0, 5).map((tag: string) => (
-                                        <span key={tag} className="px-2.5 py-1 bg-purple-100 text-purple-700 text-xs rounded-full">
-                                            {tag}
-                                        </span>
-                                    ))}
+                        <React.Fragment key={post.id}>
+                            <article className="bg-white rounded-lg shadow-md overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+                                <Link href={`${basePath}/${post.slug}`} className="block p-6">
+                                    <h2 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2">
+                                        {post.title}
+                                    </h2>
+                                    <p className="text-gray-600 mb-4 line-clamp-3 text-sm">
+                                        {extractPlainText(post.excerpt || post.content)}
+                                    </p>
+                                    <div className="flex flex-wrap gap-2 mb-4">
+                                        {post.tags && post.tags.slice(0, 5).map((tag: string) => (
+                                            <span key={tag} className="px-2.5 py-1 bg-purple-100 text-purple-700 text-xs rounded-full">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <div className="flex justify-between items-center text-sm text-gray-500">
+                                        <span>{formatDate(post.published_at || post.created_at)}</span>
+                                        <span className="text-purple-600 font-semibold">{t.readMore}</span>
+                                    </div>
+                                </Link>
+                            </article>
+
+                            {/* Inline ad every 3rd post */}
+                            {(index + 1) % 3 === 0 && index < posts.length - 1 && (
+                                <div className="col-span-1 md:col-span-2 lg:col-span-3 my-4">
+                                    <AdUnit
+                                        slot="7607800035"
+                                        style={{ display: 'inline-block', width: 728, height: 90 }}
+                                        wrapperClassName="hidden md:flex md:justify-center"
+                                        label={t.advertisement}
+                                    />
+                                    <AdUnit
+                                        slot="7607800035"
+                                        format="auto"
+                                        fullWidthResponsive
+                                        wrapperClassName="md:hidden"
+                                        label={t.advertisement}
+                                    />
                                 </div>
-                                <div className="flex justify-between items-center text-sm text-gray-500">
-                                    <span>{formatDate(post.published_at || post.created_at)}</span>
-                                    <span className="text-purple-600 font-semibold">{t.readMore}</span>
-                                </div>
-                            </Link>
-                        </article>
+                            )}
+                        </React.Fragment>
                     ))}
                 </div>
             )}
+
+            {/* Bottom Banner Ad */}
+            <AdUnit
+                slot="5671756041"
+                style={{ display: 'inline-block', width: 728, height: 90 }}
+                wrapperClassName="hidden md:flex md:justify-center my-12"
+                label={t.advertisement}
+            />
+            <AdUnit
+                slot="5671756041"
+                format="fluid"
+                layoutKey="-fb+5w+4e-db+86"
+                wrapperClassName="md:hidden my-8"
+                label={t.advertisement}
+            />
 
             {pagination.totalPages > 1 && (
                 <div className="flex justify-center items-center space-x-4 mt-12">

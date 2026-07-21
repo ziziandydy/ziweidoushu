@@ -79,6 +79,7 @@ export interface AnalysisDict {
         payment: { redirecting: string; doNotClose: string; error: string };
     };
     footer: { disclaimerTitle: string; disclaimer: string };
+    ads: { label: string };
 }
 
 const zhTW: AnalysisDict = {
@@ -197,6 +198,7 @@ const zhTW: AnalysisDict = {
         disclaimer:
             '本服務提供的紫微斗數命理解析僅供娛樂和文化學習參考，不應作為重要人生決策的依據。命理結果不保證準確性，請理性對待。',
     },
+    ads: { label: '廣告' },
 };
 
 const en: AnalysisDict = {
@@ -321,6 +323,7 @@ const en: AnalysisDict = {
         disclaimer:
             'The Zi Wei Dou Shu analysis provided by this service is for entertainment and cultural learning reference only, and should not be the basis for important life decisions. Accuracy is not guaranteed.',
     },
+    ads: { label: 'Advertisement' },
 };
 
 export function getAnalysisDict(locale: string): AnalysisDict {

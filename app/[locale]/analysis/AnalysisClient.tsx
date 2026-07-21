@@ -8,6 +8,7 @@ import DetailedAnalysis from './components/DetailedAnalysis';
 import { CalculationResult, UserProfile } from './types';
 import { AnalysisDict } from './translations';
 import { ChatMessage, PAYMENT_RESTORE_KEY } from './components/QASection';
+import { AdSidebarLeft, AdSidebarRight } from '../../components/ads/AdSidebar';
 
 interface RestoreState {
     userProfile?: UserProfile;
@@ -74,6 +75,9 @@ export default function AnalysisClient({ locale, t }: AnalysisClientProps) {
 
     return (
         <div className="min-h-screen">
+            <AdSidebarLeft label={t.ads.label} />
+            <AdSidebarRight label={t.ads.label} />
+
             <div className="container mx-auto px-4 py-6">
                 {/* Header */}
                 <div className="text-center mb-6">
