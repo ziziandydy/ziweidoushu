@@ -66,6 +66,7 @@ module.exports = async function handler(req, res) {
             published_at,
             slug,
             language,
+            author,
             LEFT(content, 200) as excerpt
           FROM blog_posts
           WHERE tags @> ${JSON.stringify([tag])}::jsonb
@@ -93,6 +94,7 @@ module.exports = async function handler(req, res) {
             published_at,
             slug,
             language,
+            author,
             LEFT(content, 200) as excerpt
           FROM blog_posts
           WHERE status = ${status}
@@ -125,6 +127,7 @@ module.exports = async function handler(req, res) {
             published_at,
             slug,
             language,
+            author,
             LEFT(content, 200) as excerpt
           FROM blog_posts
           WHERE language = ${finalLanguage}
@@ -150,6 +153,7 @@ module.exports = async function handler(req, res) {
             published_at,
             slug,
             language,
+            author,
             LEFT(content, 200) as excerpt
           FROM blog_posts
           WHERE status = ${status}

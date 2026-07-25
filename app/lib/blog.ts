@@ -12,6 +12,7 @@ export type BlogPost = {
     created_at: Date;
     slug: string;
     language: string;
+    author: string;
 };
 
 export type PaginationParams = {
@@ -57,7 +58,7 @@ export async function getBlogPosts({ page = 1, tag, limit = 9, locale = 'zh-TW' 
         let postsResult;
         if (tag) {
             postsResult = await sql`
-        SELECT id, title, LEFT(content, 200) as excerpt, content, tags, published_at, created_at, slug, language
+        SELECT id, title, LEFT(content, 200) as excerpt, content, tags, published_at, created_at, slug, language, author
         FROM blog_posts
         WHERE status = 'published' AND language = ${language} AND tags @> jsonb_build_array(${tag}::text)
         ORDER BY published_at DESC
@@ -65,7 +66,7 @@ export async function getBlogPosts({ page = 1, tag, limit = 9, locale = 'zh-TW' 
       `;
         } else {
             postsResult = await sql`
-        SELECT id, title, LEFT(content, 200) as excerpt, content, tags, published_at, created_at, slug, language
+        SELECT id, title, LEFT(content, 200) as excerpt, content, tags, published_at, created_at, slug, language, author
         FROM blog_posts
         WHERE status = 'published' AND language = ${language}
         ORDER BY published_at DESC

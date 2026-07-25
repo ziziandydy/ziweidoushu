@@ -63,7 +63,7 @@ async function handleCreate(req, res) {
   const authHeader = req.headers.authorization;
   await verifyBearerToken(authHeader);
 
-  const { title, titles, content, tags, status, language, translated_from } = req.body;
+  const { title, titles, content, tags, status, language, translated_from, author } = req.body;
   const finalTitle = title || titles;
 
   // 驗證必填欄位
@@ -128,7 +128,7 @@ async function handleCreate(req, res) {
 
   // 插入文章
   const result = await sql`
-    INSERT INTO blog_posts (title, slug, content, tags, status, published_at, language, translated_from)
+    INSERT INTO blog_posts (title, slug, content, tags, status, published_at, language, translated_from, author)
     VALUES (
       ${finalTitle},
       ${slug},
@@ -137,7 +137,8 @@ async function handleCreate(req, res) {
       ${status || 'draft'},
       ${status === 'published' ? new Date().toISOString() : null},
       ${finalLanguage},
-      ${translated_from || null}
+      ${translated_from || null},
+      ${author || 'AI 紫微編輯室'}
     )
     RETURNING *
   `;
@@ -207,7 +208,7 @@ async function handleUpdate(id, req, res) {
   const authHeader = req.headers.authorization;
   await verifyBearerToken(authHeader);
 
-  const { title, titles, content, tags, status } = req.body;
+  const { title, titles, content, tags, status, author } = req.body;
   const finalTitle = title || titles;
 
   // 建立更新欄位
@@ -254,6 +255,11 @@ async function handleUpdate(id, req, res) {
     if (status === 'published') {
       updates.push('published_at = NOW()');
     }
+  }
+
+  if (author !== undefined) {
+    updates.push('author = $' + (values.length + 1));
+    values.push(author);
   }
 
   if (updates.length === 0) {
@@ -419,7 +425,7 @@ async function autoTranslateToEnglish(zhPost) {
   }
 
   const enResult = await sql`
-    INSERT INTO blog_posts (title, slug, content, tags, status, published_at, language, translated_from)
+    INSERT INTO blog_posts (title, slug, content, tags, status, published_at, language, translated_from, author)
     VALUES (
       ${translated.title},
       ${enSlug},
@@ -428,7 +434,8 @@ async function autoTranslateToEnglish(zhPost) {
       ${zhPost.status},
       ${zhPost.status === 'published' ? new Date().toISOString() : null},
       'en',
-      ${zhPost.id}
+      ${zhPost.id},
+      ${zhPost.author || 'AI Ziwei Editorial'}
     )
     RETURNING id, title, slug
   `;
