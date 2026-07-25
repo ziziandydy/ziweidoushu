@@ -351,6 +351,13 @@ async function handleDelete(id, req, res) {
  * 使用 GPT-4o-mini（速度快、成本低，翻譯品質足夠）
  */
 async function autoTranslateToEnglish(zhPost) {
+  // 2026-07-25 起停用：未經審校的機翻屬 AdSense 低價值內容（見 docs/deprecations-2026-07.md）。
+  // 需人工審校流程時設環境變數 AUTO_TRANSLATE=1 重新啟用。
+  if (process.env.AUTO_TRANSLATE !== '1') {
+    console.log('⚠️ 自動翻譯已停用（AUTO_TRANSLATE!=1），跳過');
+    return null;
+  }
+
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     console.log('⚠️ OPENAI_API_KEY 未設定，跳過自動翻譯');
