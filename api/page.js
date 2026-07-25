@@ -51,6 +51,8 @@ async function generateSitemap(req, res) {
       { url: '/zh-TW/analysis', priority: '0.9', changefreq: 'weekly' },
       { url: '/en/analysis', priority: '0.9', changefreq: 'weekly' },
       { url: '/blog', priority: '0.9', changefreq: 'daily' },
+      { url: '/zh-TW/about', priority: '0.5', changefreq: 'monthly' },
+      { url: '/en/about', priority: '0.5', changefreq: 'monthly' },
       { url: '/privacy-policy.html', priority: '0.5', changefreq: 'monthly' },
       { url: '/pricing.html', priority: '0.7', changefreq: 'monthly' },
       { url: '/payment-success', priority: '0.3', changefreq: 'monthly' },
