@@ -45,7 +45,7 @@ Schedule Trigger（週一 09:00）
 ```javascript
 const now = Date.now();
 const sevenDays = 7 * 24 * 60 * 60 * 1000;
-const perDomain = {};
+const perSource = {};
 const seen = new Set();
 const out = [];
 
@@ -57,15 +57,22 @@ for (const item of $input.all()) {
   if (!link || !title) continue;
   if (!pub || now - pub > sevenDays) continue;          // 只留近 7 天
   if (seen.has(title)) continue;                         // 標題去重
-  let domain = '';
-  try { domain = new URL(link).hostname; } catch (e) { continue; }
-  perDomain[domain] = (perDomain[domain] || 0) + 1;
-  if (perDomain[domain] > 2) continue;                   // 同網域最多 2 篇
+  // n8n Code 沙盒沒有 URL 類別，用 regex 解析網域
+  const m = link.match(/^https?:\/\/([^\/]+)/i);
+  if (!m) continue;
+  let source = m[1].toLowerCase();
+  // Google/Bing News 是轉址網域，改用標題尾端的媒體名當來源
+  if (source.indexOf('news.google.com') !== -1 || source.indexOf('bing.com') !== -1) {
+    const parts = title.split(' - ');
+    if (parts.length > 1) source = parts[parts.length - 1].trim();
+  }
+  perSource[source] = (perSource[source] || 0) + 1;
+  if (perSource[source] > 2) continue;                   // 同來源最多 2 篇
   seen.add(title);
   out.push({ json: {
     title,
     link,
-    snippet: (j.contentSnippet || j.content || '').slice(0, 300),
+    snippet: String(j.contentSnippet || j.content || '').slice(0, 300),
     pubDate: j.pubDate || j.isoDate,
   }});
   if (out.length >= 15) break;                           // 上限 15 篇
