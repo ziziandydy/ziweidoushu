@@ -24,7 +24,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: strin
                     <h2>Content policy</h2>
                     <p>Blog articles are AI-assisted and human-supervised, written from curated public sources with references listed at the end of each article. All content is for entertainment and cultural learning purposes only — it is not professional advice.</p>
                     <h2>Author</h2>
-                    <p><strong>AI Ziwei Editorial</strong> — the site&apos;s editorial byline. Articles are drafted with AI assistance from curated sources and our knowledge base, then reviewed by the site operator.</p>
+                    <p><strong>Wang Laoshi (王老師)</strong> — the site&apos;s editorial pen name. Articles are drafted with AI assistance from curated sources and our knowledge base, then reviewed by the site operator.</p>
                     <h2>Contact</h2>
                     <p>Email: andismtu@gmail.com · <a href="https://forms.gle/KnwbQqyRGBVFqBPQ6">Support form</a> · <a href="/privacy-policy">Privacy policy</a></p>
                 </article>
@@ -42,7 +42,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: strin
                 <h2>內容政策</h2>
                 <p>部落格文章由 AI 輔助撰寫、經站方監督，撰寫時參考外部公開文章並於文末附上引用來源。本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考，不構成專業建議。</p>
                 <h2>作者</h2>
-                <p><strong>AI 紫微編輯室</strong> — 本站的編輯署名。文章由 AI 依據策展素材與知識庫起草，站長定期抽查與修正。</p>
+                <p><strong>王老師</strong> — 本站專欄筆名。文章由 AI 依據策展素材與知識庫起草，站長監督並定期抽查修正。</p>
                 <h2>聯絡我們</h2>
                 <p>Email：andismtu@gmail.com · <a href="https://forms.gle/KnwbQqyRGBVFqBPQ6">支援表單</a> · <a href="/privacy-policy">隱私政策</a></p>
             </article>

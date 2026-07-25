@@ -138,7 +138,7 @@ async function handleCreate(req, res) {
       ${status === 'published' ? new Date().toISOString() : null},
       ${finalLanguage},
       ${translated_from || null},
-      ${author || 'AI 紫微編輯室'}
+      ${author || '王老師'}
     )
     RETURNING *
   `;
@@ -442,7 +442,7 @@ async function autoTranslateToEnglish(zhPost) {
       ${zhPost.status === 'published' ? new Date().toISOString() : null},
       'en',
       ${zhPost.id},
-      ${zhPost.author || 'AI Ziwei Editorial'}
+      ${zhPost.author || '王老師'}
     )
     RETURNING id, title, slug
   `;

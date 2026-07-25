@@ -51,7 +51,7 @@ export default function BlogPost({ post, lang }: { post: any, lang: string }) {
 
                 <div className="flex flex-col sm:flex-row sm:items-center gap-3 text-gray-500 mb-8">
                     <span className="text-sm font-medium">
-                        ✍️ {post.author || (lang === 'en' ? 'AI Ziwei Editorial' : 'AI 紫微編輯室')}
+                        ✍️ {post.author || '王老師'}
                     </span>
                     <span className="hidden sm:inline">•</span>
                     <time dateTime={post.published_at || post.created_at} className="text-sm">

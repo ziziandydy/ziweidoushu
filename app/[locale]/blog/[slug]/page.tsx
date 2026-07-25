@@ -41,8 +41,8 @@ export default async function LocalizedBlogPostPage(props: { params: Promise<{ l
         url: `https://aiziwei.online/${params.locale}/blog/${post.slug}`,
         inLanguage: isEn ? 'en' : 'zh-TW',
         author: {
-            '@type': 'Organization',
-            name: post.author || (isEn ? 'AI Ziwei Editorial' : 'AI 紫微編輯室'),
+            '@type': 'Person',
+            name: post.author || '王老師',
             url: `https://aiziwei.online/${params.locale}/about`,
         },
         publisher: {

@@ -1,0 +1,716 @@
+{
+  "name": "紫微策展週刊 1.0",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -560,
+        300
+      ],
+      "id": "trigger-weekly-monday",
+      "name": "每週一 09:00 啟動"
+    },
+    {
+      "parameters": {
+        "url": "https://news.google.com/rss/search?q=%E7%B4%AB%E5%BE%AE%E6%96%97%E6%95%B8&hl=zh-TW&gl=TW&ceid=TW:zh-Hant",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        -340,
+        100
+      ],
+      "id": "rss-ziwei",
+      "name": "RSS 紫微斗數"
+    },
+    {
+      "parameters": {
+        "url": "https://news.google.com/rss/search?q=%E9%81%8B%E5%8B%A2%20%E5%91%BD%E7%90%86&hl=zh-TW&gl=TW&ceid=TW:zh-Hant",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        -340,
+        300
+      ],
+      "id": "rss-fortune",
+      "name": "RSS 運勢命理"
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.feedburner.com/ettoday/fortune",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        -340,
+        500
+      ],
+      "id": "rss-ettoday",
+      "name": "RSS ETtoday 運勢"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        -120,
+        300
+      ],
+      "id": "merge-candidates",
+      "name": "合併候選"
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = Date.now();\nconst sevenDays = 7 * 24 * 60 * 60 * 1000;\nconst perDomain = {};\nconst seen = new Set();\nconst out = [];\n\nfor (const item of $input.all()) {\n  const j = item.json;\n  const link = j.link || '';\n  const title = (j.title || '').trim();\n  const pub = new Date(j.pubDate || j.isoDate || 0).getTime();\n  if (!link || !title) continue;\n  if (!pub || now - pub > sevenDays) continue;          // 只留近 7 天\n  if (seen.has(title)) continue;                         // 標題去重\n  let domain = '';\n  try { domain = new URL(link).hostname; } catch (e) { continue; }\n  perDomain[domain] = (perDomain[domain] || 0) + 1;\n  if (perDomain[domain] > 2) continue;                   // 同網域最多 2 篇\n  seen.add(title);\n  out.push({ json: {\n    title,\n    link,\n    snippet: (j.contentSnippet || j.content || '').toString().slice(0, 300),\n    pubDate: j.pubDate || j.isoDate,\n  }});\n  if (out.length >= 15) break;                           // 上限 15 篇\n}\n\nif (out.length < 3) {\n  throw new Error(`候選文章不足（${out.length} 篇），本週跳過`);\n}\nreturn out;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        100,
+        300
+      ],
+      "id": "code-dedup",
+      "name": "去重過濾"
+    },
+    {
+      "parameters": {
+        "url": "https://aiziwei.online/api/blog/list?limit=10&language=zh-TW",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        320,
+        300
+      ],
+      "id": "http-recent-posts",
+      "name": "取近期文章"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.first().json;\nconst posts = (j.data && j.data.posts) || j.posts || [];\nreturn [{ json: { recentTitles: posts.map(p => p.title) } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        300
+      ],
+      "id": "code-recent-titles",
+      "name": "取近期標題"
+    },
+    {
+      "parameters": {
+        "jsCode": "const candidates = $('去重過濾').all().map(i => i.json);\nconst recentTitles = $input.first().json.recentTitles || [];\nconst prompt = `候選文章：\n${JSON.stringify(candidates, null, 1)}\n\n近期已發文標題：\n${JSON.stringify(recentTitles)}`;\nreturn [{ json: { prompt, recentTitles } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        300
+      ],
+      "id": "code-select-prep",
+      "name": "選題素材"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5.6-luna",
+          "mode": "list",
+          "cachedResultName": "GPT-5.6-LUNA"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "你是「AI 紫微斗數」網站（aiziwei.online）的內容主編。你會收到一批近期外部文章候選與本站近期已發文標題。\n任務：挑選一個值得從紫微斗數角度評論的主題。\n\n規則：\n1. 新主題不得與近期已發文標題語意重複（連相似的切角都不行，例如已寫過「財帛宮×財富焦慮」就不得再選任何「宮位×財富焦慮」的變形）。\n2. 優先挑有真實時事討論度、且能自然連結紫微斗數概念的主題。\n3. knowledge_tags 只能從下列詞彙表選 3-5 個：\n   命宮, 兄弟宮, 夫妻宮, 子女宮, 財帛宮, 疾厄宮, 遷移宮, 交友宮, 官祿宮, 田宅宮, 福德宮, 父母宮,\n   紫微, 天府, 七殺, 破軍, 貪狼, 天機, 太陰, 天同, 天梁, 太陽, 巨門,\n   化祿, 化權, 化科, 化忌, 四化,\n   三方四正, 大限, 流年, 廟旺, 落陷, 煞星, 格局, 論斷方法,\n   財運, 感情, 婚姻, 職場, 事業, 健康, 人際, 心理, 精神生活, 化解\n4. selected_sources 從候選中挑 2-4 篇你真正會在文中引用回應的文章，title 與 link 必須原封不動照抄候選清單，不得自行編造。"
+            },
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"topic\": {\n      \"type\": \"string\",\n      \"description\": \"主題名\"\n    },\n    \"angle\": {\n      \"type\": \"string\",\n      \"description\": \"一句話說明切入觀點\"\n    },\n    \"knowledge_tags\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"3-5 個詞彙表內的 tag\"\n    },\n    \"selected_sources\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"title\": {\n            \"type\": \"string\"\n          },\n          \"link\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\n          \"title\",\n          \"link\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"description\": \"2-4 篇原封照抄的候選文章\"\n    }\n  },\n  \"required\": [\n    \"topic\",\n    \"angle\",\n    \"knowledge_tags\",\n    \"selected_sources\"\n  ],\n  \"additionalProperties\": false\n}"
+            }
+          },
+          "temperature": 0.3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        980,
+        300
+      ],
+      "id": "llm-topic-select",
+      "name": "選題主編",
+      "credentials": {
+        "openAiApi": {
+          "id": "pcAm2yc2bIRwI0xA",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let sel = $input.first().json.output[0].content[0].text;\nif (typeof sel === 'string') {\n  sel = JSON.parse(sel.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\n}\nif (!sel.topic || !Array.isArray(sel.knowledge_tags) || !Array.isArray(sel.selected_sources) || sel.selected_sources.length < 2) {\n  throw new Error('選題輸出格式不正確：' + JSON.stringify(sel).slice(0, 200));\n}\nreturn [{ json: sel }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        300
+      ],
+      "id": "code-select-parse",
+      "name": "解析選題"
+    },
+    {
+      "parameters": {
+        "url": "https://aiziwei.online/api/knowledge",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "tags",
+              "value": "={{ $json.knowledge_tags.join(',') }}"
+            },
+            {
+              "name": "limit",
+              "value": "5"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1420,
+        300
+      ],
+      "id": "http-knowledge",
+      "name": "知識庫檢索"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sel = $('解析選題').first().json;\nconst entries = $input.first().json.entries || [];\nif (entries.length === 0) throw new Error('知識庫查無相關條目，請檢查 knowledge_tags');\nconst recentTitles = $('選題素材').first().json.recentTitles || [];\nconst prompt = `主題：${sel.topic}\n切角：${sel.angle}\n\n外部來源（文末「## 參考資料」須逐篇附上連結）：\n${JSON.stringify(sel.selected_sources, null, 1)}\n\n知識庫條目（理論依據，引用論點時標明 source）：\n${JSON.stringify(entries, null, 1)}\n\n近期已發文標題（新標題句式不得與其相似）：\n${JSON.stringify(recentTitles)}`;\nreturn [{ json: { prompt } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1640,
+        300
+      ],
+      "id": "code-write-prep",
+      "name": "寫作素材"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5.6-luna",
+          "mode": "list",
+          "cachedResultName": "GPT-5.6-LUNA"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "你是「AI 紫微斗數」網站（aiziwei.online）的專欄作者，筆名「王老師」。以繁體中文寫一篇時事策展觀點文。\n\n【硬性要求】\n1. 字數 1,800-2,500 字（不含標題）。\n2. 以提供的知識庫條目為理論根據；引用其論點時標明出處（例：依王亭之《中州派紫微斗數》理論架構）。\n3. 對外部來源文章「引用並評論」，不得改寫轉載其內容；文中提及時自然帶出。\n4. 文章結構：時事引入 → 紫微斗數觀點解析（用知識庫理論）→ 給讀者的具體建議 → 結語。\n5. 文末依序加：\n   ## 參考資料\n   - [來源標題](連結)（每篇外部來源一行，連結原封照抄）\n   最後一行固定免責聲明：本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考。\n6. 標題 20-30 字、含 SEO 關鍵字，句式不得與近期已發文相似。\n7. 結語可自然提及一次本站分析工具：https://aiziwei.online/zh-TW/analysis（不得過度推銷）。\n\n【文風要求】\n- 禁用「首先、其次、最後、總之、不僅如此、值得注意的是」等 AI 陳腔濫調；禁用破折號與 Emoji。\n- 口語自然、有觀點，但嚴禁偽造個人親身經歷或資歷（不得自稱執業多年、不得虛構個案）。\n- 段落長短錯落，重要結論可獨立成段。"
+            },
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"20-30 字、含 SEO 關鍵字的標題\"\n    },\n    \"content\": {\n      \"type\": \"string\",\n      \"description\": \"Markdown 全文，含「## 參考資料」與免責聲明\"\n    },\n    \"tags\": {\n      \"type\": \"string\",\n      \"description\": \"3-5 個中文標籤，半角逗號分隔\"\n    }\n  },\n  \"required\": [\n    \"title\",\n    \"content\",\n    \"tags\"\n  ],\n  \"additionalProperties\": false\n}"
+            }
+          },
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        1860,
+        300
+      ],
+      "id": "llm-write",
+      "name": "王老師寫作",
+      "credentials": {
+        "openAiApi": {
+          "id": "pcAm2yc2bIRwI0xA",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let a = $input.first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nconst recentTitles = $('選題素材').first().json.recentTitles || [];\nconst errors = [];\nconst content = a.content || '';\nconst len = content.replace(/\\s/g, '').length;\nif (len < 1800) errors.push(`字數不足：${len} < 1800`);\nif (!/## 參考資料/.test(content)) errors.push('缺少「## 參考資料」區塊');\nconst linkCount = (content.match(/\\[[^\\]]+\\]\\(https?:\\/\\/[^)]+\\)/g) || []).length;\nif (linkCount < 2) errors.push(`參考連結不足：${linkCount} < 2`);\nif (!content.includes('本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考')) errors.push('缺少免責聲明');\nfunction overlap(s1, s2) {\n  const set1 = new Set(s1.split(''));\n  const same = s2.split('').filter(c => set1.has(c)).length;\n  return same / Math.max(s2.length, 1);\n}\nfor (const t of recentTitles) {\n  if (overlap(t, a.title || '') >= 0.6) { errors.push(`標題與近期文章過近：${t}`); break; }\n}\nreturn [{ json: { passed: errors.length === 0, errors, article: a } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2080,
+        300
+      ],
+      "id": "code-gate-1",
+      "name": "品質閘門"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.passed }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2300,
+        300
+      ],
+      "id": "if-gate-passed",
+      "name": "是否通過?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const gate = $input.first().json;\nconst base = $('寫作素材').first().json.prompt;\nconst prompt = `${base}\n\n【重要】上一版文章未通過品質檢查，原因如下，請重寫並完全符合所有硬性要求：\n- ${gate.errors.join('\\n- ')}`;\nreturn [{ json: { prompt } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2520,
+        500
+      ],
+      "id": "code-retry-prep",
+      "name": "重寫素材"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5.6-luna",
+          "mode": "list",
+          "cachedResultName": "GPT-5.6-LUNA"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "你是「AI 紫微斗數」網站（aiziwei.online）的專欄作者，筆名「王老師」。以繁體中文寫一篇時事策展觀點文。\n\n【硬性要求】\n1. 字數 1,800-2,500 字（不含標題）。\n2. 以提供的知識庫條目為理論根據；引用其論點時標明出處（例：依王亭之《中州派紫微斗數》理論架構）。\n3. 對外部來源文章「引用並評論」，不得改寫轉載其內容；文中提及時自然帶出。\n4. 文章結構：時事引入 → 紫微斗數觀點解析（用知識庫理論）→ 給讀者的具體建議 → 結語。\n5. 文末依序加：\n   ## 參考資料\n   - [來源標題](連結)（每篇外部來源一行，連結原封照抄）\n   最後一行固定免責聲明：本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考。\n6. 標題 20-30 字、含 SEO 關鍵字，句式不得與近期已發文相似。\n7. 結語可自然提及一次本站分析工具：https://aiziwei.online/zh-TW/analysis（不得過度推銷）。\n\n【文風要求】\n- 禁用「首先、其次、最後、總之、不僅如此、值得注意的是」等 AI 陳腔濫調；禁用破折號與 Emoji。\n- 口語自然、有觀點，但嚴禁偽造個人親身經歷或資歷（不得自稱執業多年、不得虛構個案）。\n- 段落長短錯落，重要結論可獨立成段。"
+            },
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"20-30 字、含 SEO 關鍵字的標題\"\n    },\n    \"content\": {\n      \"type\": \"string\",\n      \"description\": \"Markdown 全文，含「## 參考資料」與免責聲明\"\n    },\n    \"tags\": {\n      \"type\": \"string\",\n      \"description\": \"3-5 個中文標籤，半角逗號分隔\"\n    }\n  },\n  \"required\": [\n    \"title\",\n    \"content\",\n    \"tags\"\n  ],\n  \"additionalProperties\": false\n}"
+            }
+          },
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        2740,
+        500
+      ],
+      "id": "llm-rewrite",
+      "name": "王老師重寫",
+      "credentials": {
+        "openAiApi": {
+          "id": "pcAm2yc2bIRwI0xA",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let a = $input.first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nconst recentTitles = $('選題素材').first().json.recentTitles || [];\nconst errors = [];\nconst content = a.content || '';\nconst len = content.replace(/\\s/g, '').length;\nif (len < 1800) errors.push(`字數不足：${len} < 1800`);\nif (!/## 參考資料/.test(content)) errors.push('缺少「## 參考資料」區塊');\nconst linkCount = (content.match(/\\[[^\\]]+\\]\\(https?:\\/\\/[^)]+\\)/g) || []).length;\nif (linkCount < 2) errors.push(`參考連結不足：${linkCount} < 2`);\nif (!content.includes('本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考')) errors.push('缺少免責聲明');\nfunction overlap(s1, s2) {\n  const set1 = new Set(s1.split(''));\n  const same = s2.split('').filter(c => set1.has(c)).length;\n  return same / Math.max(s2.length, 1);\n}\nfor (const t of recentTitles) {\n  if (overlap(t, a.title || '') >= 0.6) { errors.push(`標題與近期文章過近：${t}`); break; }\n}\nif (errors.length > 0) {\n  throw new Error('重寫後仍未通過品質檢查，本週不發文：' + errors.join('；'));\n}\nreturn [{ json: { passed: true, article: a } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2960,
+        500
+      ],
+      "id": "code-gate-2",
+      "name": "品質閘門（重寫後）"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://aiziwei.online/api/blog/create",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title",
+              "value": "={{ $json.article.title }}"
+            },
+            {
+              "name": "content",
+              "value": "={{ $json.article.content }}"
+            },
+            {
+              "name": "tags",
+              "value": "=紫微斗數,AI紫微斗數,{{ $json.article.tags }}"
+            },
+            {
+              "name": "status",
+              "value": "published"
+            },
+            {
+              "name": "language",
+              "value": "zh-TW"
+            },
+            {
+              "name": "author",
+              "value": "王老師"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        3180,
+        300
+      ],
+      "id": "http-publish",
+      "name": "發布文章",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "YjFdtoLhLzElm6YM",
+          "name": "ziwei_blog_api_token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@aiziwei.online",
+        "toEmail": "ziziandydy@gmail.com",
+        "subject": "=【AI紫微】本週文章已發布：{{ $json.data.title }}",
+        "text": "=文章連結：https://aiziwei.online{{ $json.data.url }}\n\n請抽查：署名王老師、文末有「## 參考資料」與免責聲明。",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        3400,
+        300
+      ],
+      "id": "email-success",
+      "name": "成功通知",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## 紫微策展週刊 1.0\n\n每週一 09:00 產出一篇時事策展觀點文。\n\n**與舊 3.0 的差異**：每週一篇、3 路 RSS 候選由 LLM 選題、呼叫 /api/knowledge 取中州派理論並標出處、文末附參考資料連結、品質閘門（字數/引用/免責/標題重複）未過自動重寫一次、署名王老師。\n\n**上線核對清單**：\n1. 停用（Deactivate）舊的「紫微擬人寫手 3.0」，不要刪除\n2. 手動 Execute 一次驗證各節點\n3. 檢查測試文章：署名、參考資料、免責聲明\n4. 「成功通知」節點需設定 SMTP credential 後再啟用（停用不影響發文）\n5. 失敗（候選不足/兩次品檢不過）會拋錯，由既有 Error Workflow 通知\n6. Activate 並確認 workflow timezone 為 Asia/Taipei",
+        "height": 420,
+        "width": 480
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -180
+      ],
+      "id": "sticky-readme",
+      "name": "說明"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "每週一 09:00 啟動": {
+      "main": [
+        [
+          {
+            "node": "RSS 紫微斗數",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS 運勢命理",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS ETtoday 運勢",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS 紫微斗數": {
+      "main": [
+        [
+          {
+            "node": "合併候選",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS 運勢命理": {
+      "main": [
+        [
+          {
+            "node": "合併候選",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "RSS ETtoday 運勢": {
+      "main": [
+        [
+          {
+            "node": "合併候選",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "合併候選": {
+      "main": [
+        [
+          {
+            "node": "去重過濾",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "去重過濾": {
+      "main": [
+        [
+          {
+            "node": "取近期文章",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "取近期文章": {
+      "main": [
+        [
+          {
+            "node": "取近期標題",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "取近期標題": {
+      "main": [
+        [
+          {
+            "node": "選題素材",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "選題素材": {
+      "main": [
+        [
+          {
+            "node": "選題主編",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "選題主編": {
+      "main": [
+        [
+          {
+            "node": "解析選題",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "解析選題": {
+      "main": [
+        [
+          {
+            "node": "知識庫檢索",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "知識庫檢索": {
+      "main": [
+        [
+          {
+            "node": "寫作素材",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "寫作素材": {
+      "main": [
+        [
+          {
+            "node": "王老師寫作",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "王老師寫作": {
+      "main": [
+        [
+          {
+            "node": "品質閘門",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "品質閘門": {
+      "main": [
+        [
+          {
+            "node": "是否通過?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "是否通過?": {
+      "main": [
+        [
+          {
+            "node": "發布文章",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "重寫素材",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "重寫素材": {
+      "main": [
+        [
+          {
+            "node": "王老師重寫",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "王老師重寫": {
+      "main": [
+        [
+          {
+            "node": "品質閘門（重寫後）",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "品質閘門（重寫後）": {
+      "main": [
+        [
+          {
+            "node": "發布文章",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "發布文章": {
+      "main": [
+        [
+          {
+            "node": "成功通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "k4pQNJ91Ev07sdo0",
+    "timezone": "Asia/Taipei"
+  },
+  "meta": {
+    "instanceId": ""
+  },
+  "tags": []
+}

@@ -131,7 +131,7 @@ User message（用 expression 帶入）：
 模型：Claude Sonnet 等級。System prompt：
 
 ```
-你是「AI 紫微斗數」網站的專欄作者，署名「AI 紫微編輯室」。以繁體中文寫一篇策展觀點文。
+你是「AI 紫微斗數」網站的專欄作者，署名「王老師」。以繁體中文寫一篇策展觀點文。
 
 硬性要求：
 1. 字數 1,800–2,500 字（不含標題）。
@@ -211,12 +211,12 @@ return [{ json: { passed: true, article: a } }];
   "tags": "={{ $json.article.tags }}",
   "status": "published",
   "language": "zh-TW",
-  "author": "AI 紫微編輯室",
+  "author": "王老師",
   "slug": "={{ $json.article.slug }}"
 }
 ```
 
-註：`author` 欄位已於 2026-07-25 加入 API；未帶時預設即為「AI 紫微編輯室」。
+註：`author` 欄位已於 2026-07-25 加入 API；未帶時預設即為「王老師」。
 
 ## Node 10：Email 通知
 
@@ -229,6 +229,6 @@ return [{ json: { passed: true, article: a } }];
 
 - [ ] **關閉舊的每日發文 workflow**（Deactivate，不要刪除，保留紀錄）。
 - [ ] 新 workflow 手動 Execute 一次，確認每個節點輸出正常。
-- [ ] 檢查發布的測試文章：署名顯示「AI 紫微編輯室」、文末有「## 參考資料」與免責聲明。
+- [ ] 檢查發布的測試文章：署名顯示「王老師」、文末有「## 參考資料」與免責聲明。
 - [ ] 測試文章確認後可保留或刪除（admin 後台）。
 - [ ] Activate 新 workflow，確認 timezone 為 Asia/Taipei。

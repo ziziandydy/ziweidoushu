@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     published_at TIMESTAMP,
     slug VARCHAR(500) UNIQUE NOT NULL,
-    author VARCHAR(100) NOT NULL DEFAULT 'AI 紫微編輯室'
+    author VARCHAR(100) NOT NULL DEFAULT '王老師'
 );
 
 -- 建立索引以提升查詢效能
