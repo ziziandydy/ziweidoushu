@@ -169,8 +169,7 @@
               "type": "json_schema",
               "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"topic\": {\n      \"type\": \"string\",\n      \"description\": \"主題名\"\n    },\n    \"angle\": {\n      \"type\": \"string\",\n      \"description\": \"一句話說明切入觀點\"\n    },\n    \"knowledge_tags\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"3-5 個詞彙表內的 tag\"\n    },\n    \"selected_sources\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"title\": {\n            \"type\": \"string\"\n          },\n          \"link\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\n          \"title\",\n          \"link\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"description\": \"2-4 篇原封照抄的候選文章\"\n    }\n  },\n  \"required\": [\n    \"topic\",\n    \"angle\",\n    \"knowledge_tags\",\n    \"selected_sources\"\n  ],\n  \"additionalProperties\": false\n}"
             }
-          },
-          "temperature": 0.3
+          }
         }
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
@@ -267,8 +266,7 @@
               "type": "json_schema",
               "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"20-30 字、含 SEO 關鍵字的標題\"\n    },\n    \"content\": {\n      \"type\": \"string\",\n      \"description\": \"Markdown 全文，含「## 參考資料」與免責聲明\"\n    },\n    \"tags\": {\n      \"type\": \"string\",\n      \"description\": \"3-5 個中文標籤，半角逗號分隔\"\n    }\n  },\n  \"required\": [\n    \"title\",\n    \"content\",\n    \"tags\"\n  ],\n  \"additionalProperties\": false\n}"
             }
-          },
-          "temperature": 0.7
+          }
         }
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
@@ -358,8 +356,7 @@
               "type": "json_schema",
               "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"20-30 字、含 SEO 關鍵字的標題\"\n    },\n    \"content\": {\n      \"type\": \"string\",\n      \"description\": \"Markdown 全文，含「## 參考資料」與免責聲明\"\n    },\n    \"tags\": {\n      \"type\": \"string\",\n      \"description\": \"3-5 個中文標籤，半角逗號分隔\"\n    }\n  },\n  \"required\": [\n    \"title\",\n    \"content\",\n    \"tags\"\n  ],\n  \"additionalProperties\": false\n}"
             }
-          },
-          "temperature": 0.7
+          }
         }
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
