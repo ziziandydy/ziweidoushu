@@ -25,15 +25,18 @@ Schedule Trigger（週一 09:00）
 - Rule：Every Week → Monday → 09:00
 - Timezone：`Asia/Taipei`（在 workflow settings 設定）
 
-## Node 2：RSS 蒐集（RSS Read × 3 → Merge）
+## Node 2：RSS 蒐集（RSS Read × 4 → Merge）
 
-三個 RSS Read 節點，URL 分別為：
+四個 RSS Read 節點，URL 分別為：
 
 1. `https://news.google.com/rss/search?q=紫微斗數&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`
 2. `https://news.google.com/rss/search?q=運勢%20命理&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`
-3. `https://news.google.com/rss/search?q=占星%20星座%20運勢&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`
+3. `https://feeds.feedburner.com/ettoday/fortune`（ETtoday 運勢分類，單一媒體直連）
+4. `https://www.bing.com/news/search?q=運勢%20命理&format=RSS`（Bing News 聚合，與 Google 排序邏輯互補）
 
-三路接進一個 **Merge** 節點（mode: Append）。
+四路接進一個 **Merge** 節點（mode: Append，numberInputs: 4）。
+
+已測試淘汰的來源（2026-07 驗證）：Yahoo 奇摩與 PTT 的 RSS 已不存在；udn RSS feed 的標題與日期中繼資料損壞（pubDate 全為 1970），會被 7 天過濾器整批排除。
 
 ## Node 3：Code — 去重過濾
 

@@ -65,7 +65,21 @@
     },
     {
       "parameters": {
-        "numberInputs": 3
+        "url": "https://www.bing.com/news/search?q=%E9%81%8B%E5%8B%A2%20%E5%91%BD%E7%90%86&format=RSS",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        -340,
+        700
+      ],
+      "id": "rss-bing",
+      "name": "RSS Bing 運勢命理"
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
       },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
@@ -448,7 +462,7 @@
     },
     {
       "parameters": {
-        "content": "## 紫微策展週刊 1.0\n\n每週一 09:00 產出一篇時事策展觀點文。\n\n**與舊 3.0 的差異**：每週一篇、3 路 RSS 候選由 LLM 選題、呼叫 /api/knowledge 取中州派理論並標出處、文末附參考資料連結、品質閘門（字數/引用/免責/標題重複）未過自動重寫一次、署名王老師。\n\n**上線核對清單**：\n1. 停用（Deactivate）舊的「紫微擬人寫手 3.0」，不要刪除\n2. 手動 Execute 一次驗證各節點\n3. 檢查測試文章：署名、參考資料、免責聲明\n4. 「成功通知」節點需設定 SMTP credential 後再啟用（停用不影響發文）\n5. 失敗（候選不足/兩次品檢不過）會拋錯，由既有 Error Workflow 通知\n6. Activate 並確認 workflow timezone 為 Asia/Taipei",
+        "content": "## 紫微策展週刊 1.0\n\n每週一 09:00 產出一篇時事策展觀點文。\n\n**與舊 3.0 的差異**：每週一篇、4 路 RSS（Google News×2、ETtoday、Bing News）候選由 LLM 選題、呼叫 /api/knowledge 取中州派理論並標出處、文末附參考資料連結、品質閘門（字數/引用/免責/標題重複）未過自動重寫一次、署名王老師。\n\n**上線核對清單**：\n1. 停用（Deactivate）舊的「紫微擬人寫手 3.0」，不要刪除\n2. 手動 Execute 一次驗證各節點\n3. 檢查測試文章：署名、參考資料、免責聲明\n4. 「成功通知」節點需設定 SMTP credential 後再啟用（停用不影響發文）\n5. 失敗（候選不足/兩次品檢不過）會拋錯，由既有 Error Workflow 通知\n6. Activate 並確認 workflow timezone 為 Asia/Taipei",
         "height": 420,
         "width": 480
       },
@@ -479,6 +493,11 @@
           },
           {
             "node": "RSS ETtoday 運勢",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS Bing 運勢命理",
             "type": "main",
             "index": 0
           }
@@ -514,6 +533,17 @@
             "node": "合併候選",
             "type": "main",
             "index": 2
+          }
+        ]
+      ]
+    },
+    "RSS Bing 運勢命理": {
+      "main": [
+        [
+          {
+            "node": "合併候選",
+            "type": "main",
+            "index": 3
           }
         ]
       ]
