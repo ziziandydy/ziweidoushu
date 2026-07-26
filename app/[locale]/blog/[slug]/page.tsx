@@ -1,5 +1,5 @@
 
-import { getBlogPost } from '../../../lib/blog';
+import { getBlogPost, getAlternateLanguageSlug } from '../../../lib/blog';
 import BlogPost from '../../../components/blog/BlogPost';
 import { notFound } from 'next/navigation';
 
@@ -9,9 +9,20 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
     if (!post) return { title: 'Not Found' };
 
     const isEn = params.locale === 'en';
+    const alternate = await getAlternateLanguageSlug(post);
+    const languages: Record<string, string> = {
+        [params.locale === 'en' ? 'en' : 'zh-TW']: `https://aiziwei.online/${params.locale}/blog/${post.slug}`,
+    };
+    if (alternate) {
+        languages[alternate.locale] = `https://aiziwei.online/${alternate.locale}/blog/${alternate.slug}`;
+    }
+
     return {
         title: `${post.title} | ${isEn ? 'AI Zi Wei Dou Shu Blog' : '紫微斗數 AI 部落格'}`,
         description: post.excerpt,
+        alternates: {
+            languages,
+        },
         openGraph: {
             images: [{ url: 'https://aiziwei.online/og-image.png', width: 1200, height: 630 }],
         },

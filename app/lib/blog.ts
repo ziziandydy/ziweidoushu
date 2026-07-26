@@ -2,7 +2,7 @@ import { sql } from '@vercel/postgres';
 import { notFound } from 'next/navigation';
 
 export type BlogPost = {
-    id: number;
+    id: string;
     title: string;
     excerpt: string;
     content: string;
@@ -13,6 +13,7 @@ export type BlogPost = {
     slug: string;
     language: string;
     author: string;
+    translated_from?: string | null;
 };
 
 export type PaginationParams = {
@@ -105,6 +106,30 @@ export async function getBlogPost(slug: string, locale: string = 'zh-TW'): Promi
         return (result.rows[0] as BlogPost) || null;
     } catch (error) {
         console.error('Failed to fetch blog post:', error);
+        return null;
+    }
+}
+
+// 找出同一篇文章的另一語言版本 slug，供 hreflang alternate 標籤使用
+export async function getAlternateLanguageSlug(post: BlogPost): Promise<{ locale: string; slug: string } | null> {
+    try {
+        if (post.language === 'en' && post.translated_from) {
+            const result = await sql`
+        SELECT slug FROM blog_posts
+        WHERE id = ${post.translated_from} AND status = 'published'
+      `;
+            if (result.rows[0]) return { locale: 'zh-TW', slug: result.rows[0].slug };
+            return null;
+        }
+
+        const result = await sql`
+      SELECT slug FROM blog_posts
+      WHERE translated_from = ${post.id} AND language = 'en' AND status = 'published'
+    `;
+        if (result.rows[0]) return { locale: 'en', slug: result.rows[0].slug };
+        return null;
+    } catch (error) {
+        console.error('Failed to fetch alternate language slug:', error);
         return null;
     }
 }
