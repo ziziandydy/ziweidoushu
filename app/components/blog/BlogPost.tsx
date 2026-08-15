@@ -8,10 +8,15 @@ import { AdSidebarLeft, AdSidebarRight } from '../ads/AdSidebar';
 export default function BlogPost({ post, lang }: { post: any, lang: string }) {
     if (!post) notFound();
 
+    // The pre-migration editor supported a `[TOC]` shortcode rendered client-side
+    // via marked.js; that logic never made it into this SSR renderer, so any
+    // legacy post still containing the literal marker would show it as raw text.
+    const content = (post.content || '').replace(/^\[TOC\]\s*\n+/, '');
+
     // Split into two halves at the nearest paragraph boundary so an ad can sit
     // mid-article without a runtime DOM-injection pass (the old static page
     // used insertBefore() at render time, which doesn't map cleanly to SSR).
-    const paragraphBlocks = (post.content || '').split(/\n\s*\n/);
+    const paragraphBlocks = content.split(/\n\s*\n/);
     const midpoint = Math.max(1, Math.floor(paragraphBlocks.length / 2));
     const hasSecondHalf = paragraphBlocks.length > 1;
     const firstHalfHtml = marked.parse(paragraphBlocks.slice(0, midpoint).join('\n\n')) as string;
