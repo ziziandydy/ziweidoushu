@@ -33,6 +33,8 @@ export default async function HomePage({ params }: Props) {
     const { locale } = await params;
     const isEn = locale === 'en';
     const analysisHref = `/${locale}/analysis`;
+    const aboutHref = `/${locale}/about`;
+    const currentYear = new Date().getFullYear();
 
     const t = isEn ? {
         hero: {
@@ -89,10 +91,11 @@ export default async function HomePage({ params }: Props) {
             disclaimer: '⚠️ This service is for entertainment and cultural learning purposes only, and should not be used as the basis for important life decisions.',
         },
         footer: {
-            copyright: '© 2024 AI Zi Wei Dou Shu | Based on Traditional Zhongzhou School Theory',
+            copyright: `© ${currentYear} AI Zi Wei Dou Shu | Based on Traditional Zhongzhou School Theory`,
             privacy: 'Privacy Policy',
             pricing: 'Pricing',
             analysis: 'Start Analysis',
+            about: 'About Us',
         },
     } : {
         hero: {
@@ -149,10 +152,11 @@ export default async function HomePage({ params }: Props) {
             disclaimer: '⚠️ 本服務僅供娛樂和文化學習參考，不應作為重要人生決策的依據',
         },
         footer: {
-            copyright: '© 2024 AI 紫微斗數命盤計算系統 | 基於傳統中州派理論',
+            copyright: `© ${currentYear} AI 紫微斗數命盤計算系統 | 基於傳統中州派理論`,
             privacy: '隱私政策',
             pricing: '價格方案',
             analysis: '開始分析',
+            about: '關於我們',
         },
     };
 
@@ -267,6 +271,9 @@ export default async function HomePage({ params }: Props) {
                             </Link>
                             <Link href={analysisHref} className="text-gray-400 hover:text-white transition-colors">
                                 {t.footer.analysis}
+                            </Link>
+                            <Link href={aboutHref} className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.about}
                             </Link>
                         </div>
                     </div>
