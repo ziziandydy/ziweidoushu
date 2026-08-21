@@ -182,7 +182,8 @@ module.exports = {
                 },
             }
             addUtilities(newUtilities)
-        }
+        },
+        require('@tailwindcss/typography'),
     ],
     // 暗黑模式配置
     darkMode: ['class', '[data-theme="dark"]'],

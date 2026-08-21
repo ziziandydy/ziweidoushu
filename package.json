@@ -47,6 +47,7 @@
     "verify-migration": "node scripts/verify-migration.js"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.20",
     "@tsconfig/node18": "^18.2.4",
     "@types/jest": "^29.5.11",
     "@types/node": "^20.19.0",
