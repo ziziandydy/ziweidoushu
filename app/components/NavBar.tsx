@@ -9,18 +9,15 @@ export default function NavBar({ locale }: { locale: string }) {
     const t = isEn ? {
         siteName: 'AI Zi Wei Dou Shu',
         blog: '📝 Blog',
-        about: 'ℹ️ About',
         startAnalysis: '🚀 Start Analysis',
     } : {
         siteName: 'AI 紫微斗數',
         blog: '📝 部落格',
-        about: 'ℹ️ 關於',
         startAnalysis: '🚀 開始分析命盤',
     };
 
     const analysisHref = `/${locale}/analysis`;
     const blogHref = `/${locale}/blog`;
-    const aboutHref = `/${locale}/about`;
     const homeHref = `/${locale}/`;
 
     return (
@@ -66,14 +63,6 @@ export default function NavBar({ locale }: { locale: string }) {
                         className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-lg hover:bg-purple-50 transition-all font-medium text-sm sm:text-base"
                     >
                         {t.blog}
-                    </Link>
-
-                    {/* About link */}
-                    <Link
-                        href={aboutHref}
-                        className="hidden sm:block text-gray-700 hover:text-purple-600 px-3 py-2 rounded-lg hover:bg-purple-50 transition-all font-medium text-sm sm:text-base"
-                    >
-                        {t.about}
                     </Link>
 
                     {/* CTA */}
