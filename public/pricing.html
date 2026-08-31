@@ -32,47 +32,7 @@
     <meta name="theme-color" content="#9333ea">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="alternate icon" href="/favicon.ico">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        ziwei: {
-                            purple: '#9333ea',
-                            gold: '#f59e0b',
-                            blue: '#3b82f6',
-                            green: '#10b981'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .animate-fade-in {
-            animation: fadeIn 0.8s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #9333ea 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-    </style>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body class="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 min-h-screen">
@@ -80,7 +40,7 @@
     <nav class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm shadow-sm z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-2">
-                <svg class="w-8 h-8 text-ziwei-purple" fill="currentColor" viewBox="0 0 24 24">
+                <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
                 </svg>
                 <a href="/" class="text-xl font-bold gradient-text">AI 紫微斗數</a>
@@ -208,7 +168,7 @@
         <!-- 方案對比表格 -->
         <section class="container mx-auto px-4 py-16">
             <div class="max-w-4xl mx-auto">
-                <h2 class="text-3xl font-bold text-center mb-8 text-ziwei-purple">方案功能對比</h2>
+                <h2 class="text-3xl font-bold text-center mb-8 text-purple-600">方案功能對比</h2>
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                     <table class="w-full">
                         <thead class="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
@@ -258,7 +218,7 @@
         <!-- 常見問題 -->
         <section class="container mx-auto px-4 py-16">
             <div class="max-w-4xl mx-auto">
-                <h2 class="text-3xl font-bold text-center mb-12 text-ziwei-purple">常見問題</h2>
+                <h2 class="text-3xl font-bold text-center mb-12 text-purple-600">常見問題</h2>
                 <div class="space-y-6">
                     <div class="bg-white rounded-xl shadow-lg p-6">
                         <h3 class="text-xl font-bold text-gray-800 mb-3">Q1: 免費次數何時重置？</h3>

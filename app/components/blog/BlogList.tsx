@@ -44,21 +44,6 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-12">
-            {/* Top Banner Ad */}
-            <AdUnit
-                slot="7607800035"
-                style={{ display: 'inline-block', width: 728, height: 90 }}
-                wrapperClassName="hidden md:flex md:justify-center my-8"
-                label={t.advertisement}
-            />
-            <AdUnit
-                slot="7607800035"
-                format="fluid"
-                layoutKey="-fb+5w+4e-db+86"
-                wrapperClassName="md:hidden my-6"
-                label={t.advertisement}
-            />
-
             <div className="flex flex-wrap justify-center gap-2 mb-8">
                 <Link href={basePath} className={`px-4 py-2 rounded-full transition-colors ${!currentTag ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 border hover:bg-purple-500 hover:text-white'}`}>
                     {t.allPosts}
@@ -100,8 +85,8 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
                                 </Link>
                             </article>
 
-                            {/* Inline ad every 3rd post */}
-                            {(index + 1) % 3 === 0 && index < posts.length - 1 && (
+                            {/* Inline ad every 6th post */}
+                            {(index + 1) % 6 === 0 && index < posts.length - 1 && (
                                 <div className="col-span-1 md:col-span-2 lg:col-span-3 my-4">
                                     <AdUnit
                                         slot="7607800035"

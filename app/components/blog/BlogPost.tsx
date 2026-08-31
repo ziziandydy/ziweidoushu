@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { marked } from 'marked';
 import AdUnit from '../ads/AdUnit';
-import { AdSidebarLeft, AdSidebarRight } from '../ads/AdSidebar';
+import { AdSidebarRight } from '../ads/AdSidebar';
 
 export default function BlogPost({ post, lang }: { post: any, lang: string }) {
     if (!post) notFound();
@@ -48,7 +48,6 @@ export default function BlogPost({ post, lang }: { post: any, lang: string }) {
 
     return (
         <>
-            <AdSidebarLeft label={t.advertisement} />
             <AdSidebarRight label={t.advertisement} />
 
             <article className="max-w-4xl mx-auto px-4 py-12">
@@ -72,15 +71,6 @@ export default function BlogPost({ post, lang }: { post: any, lang: string }) {
                     </div>
                 </div>
 
-                {/* Mobile Top Ad */}
-                <AdUnit
-                    slot="7607800035"
-                    format="fluid"
-                    layoutKey="-fb+5w+4e-db+86"
-                    wrapperClassName="xl:hidden my-8"
-                    label={t.advertisement}
-                />
-
                 <div
                     className="prose prose-lg max-w-none bg-white rounded-lg shadow-sm p-8"
                     dangerouslySetInnerHTML={{ __html: firstHalfHtml }}
@@ -103,15 +93,6 @@ export default function BlogPost({ post, lang }: { post: any, lang: string }) {
                         />
                     </>
                 )}
-
-                {/* Mobile Bottom Ad */}
-                <AdUnit
-                    slot="5671756041"
-                    format="fluid"
-                    layoutKey="-fb+5w+4e-db+86"
-                    wrapperClassName="xl:hidden my-8"
-                    label={t.advertisement}
-                />
 
                 <div className="mt-12 text-center">
                     <Link href={basePath} className="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
