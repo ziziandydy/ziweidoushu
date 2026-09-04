@@ -53,7 +53,7 @@
 
 ## 🌐 線上體驗
 
-**🔗 立即試用**: [https://ziweidoushy.vercel.app](https://ziweidoushu.vercel.app)
+**🔗 立即試用**: [https://www.aiziwei.online](https://www.aiziwei.online)（繁中／英文雙語）
 
 **使用流程**：
 1. 📝 **填寫基本資料**（姓名、性別、出生年月日時）
@@ -115,26 +115,37 @@ POST /api/analyze
 
 ## 🏗️ 專案架構
 
-### 🎨 前端 (Static Web App)
+網站主體已從純靜態 HTML 遷移至 **Next.js App Router**，少數頁面仍透過 `vercel.json` rewrite 服務靜態檔案。
+
+### 🎨 前端 (Next.js App Router)
 ```
-public/
-├── index.html           # 主要用戶界面
-├── favicon.svg         # 品牌圖標
-├── ads.txt             # Google AdSense 授權
-└── api/               # 前端API代理
-    ├── destiny-calculator.js
-    ├── ai-analyzer.js
-    └── qa-system.js
+app/
+├── layout.tsx                # Root layout（GTM/AdSense/Groundhog 追蹤腳本）
+├── [locale]/                 # zh-TW / en 雙語路由
+│   ├── page.tsx               # 首頁
+│   ├── analysis/               # 命盤分析 + AI 問答（QASection.tsx）
+│   ├── blog/                   # 部落格列表 + 文章頁（SSR）
+│   ├── about/                  # 關於本站
+│   ├── pricing/                # 價格方案
+│   └── privacy-policy/         # 隱私政策
+└── components/                # NavBar、Blog 元件等共用元件
 ```
 
-### ⚡ 後端 (Serverless Functions)
+少數頁面（後台管理、付款結果頁）仍是 `public/` 下的靜態 HTML，由 `vercel.json` rewrite 或 `api/page.js` 服務。
+
+### ⚡ 後端 (Vercel Serverless Functions)
 ```
 api/
-├── calculate.js         # 命盤計算
-├── analyze.js          # AI分析 (ChatGPT)
-├── question.js         # 問答系統
-├── health.js           # 健康檢查
-└── status.js           # 服務狀態
+├── calculate.js         # 命盤計算（呼叫 src/ 核心引擎）
+├── analyze.js           # AI 分析（OpenAI）
+├── question.js          # 問答系統
+├── ecpay.js              # 綠界金流（action=create|callback|return）
+├── knowledge.js          # 中州派知識庫查詢（供 n8n 部落格寫作使用）
+├── blog/                 # 部落格文章 CRUD
+├── admin/                # 後台管理 API
+├── auth/                  # JWT 驗證
+├── health.js
+└── page.js               # 靜態頁面 rewrite 出口 + sitemap.xml 產生
 ```
 
 ### 🔧 核心模組 (TypeScript)
@@ -145,6 +156,11 @@ src/
 ├── criteria/           # 條件判斷
 └── util/               # 工具函數
 ```
+編譯輸出至 `build/`，供 `api/calculate.js` 直接 `require`。
+
+### 📝 部落格系統
+
+每週一自動發文（`docs/n8n-weekly-blog-workflow.json` 可匯入 n8n）：RSS 選題 → 比對 `lib/knowledge/` 知識庫 → AI 寫作 → 品質閘門 → 寫入 Vercel Postgres `blog_posts`（zh-TW + en 雙語）。詳見 `docs/` 下的相關規劃文件。
 
 ## 🚀 部署設置
 
@@ -152,60 +168,28 @@ src/
 
 1. **Fork 此專案到您的 GitHub**
 2. **連接 Vercel**: 匯入 GitHub 專案
-3. **配置環境變數**: 設置 `OPENAI_API_KEY`
+3. **配置環境變數**（完整清單見 `.env.example`）
 4. **自動部署**: 每次 push 到 main 分支自動部署
 
 ### 🔧 環境變數
 
 ```bash
-OPENAI_API_KEY=your-openai-api-key-here
+OPENAI_API_KEY=            # AI 命盤分析
+POSTGRES_URL=               # Vercel Postgres（部落格 + 後台）
+POSTGRES_URL_NON_POOLING=
+JWT_SECRET=                 # 後台管理員登入
+ECPAY_MERCHANT_ID=          # 綠界金流
+ECPAY_HASH_KEY=
+ECPAY_HASH_IV=
 ```
 
-## 🎯 最新功能更新 (v2.1.0 - 2024)
+## 🎯 主要功能沿革
 
-Airic Yu (Original Author)
-- Owner of Myfortel 紫微斗數起盤網站(舊版) ( https://www.myfortel.com/ )
-- Owner of Myfortel 紫微斗數起盤網站(新版) ( https://airicyu.github.io/myfortel/ )
-- Author of 紫微斗數排盤 library for Java ( https://github.com/airicyu/Fortel )
-- Author of 紫微斗數排盤 library for JS ( https://www.npmjs.com/package/fortel-ziweidousju )
-
-### 🆕 **v2.1.0 重大更新**
-
-#### 🚀 **AI 升級**
-- ✅ **GPT-4o 模型**: 升級至 OpenAI 最新 GPT-4o，回應更準確、更快速
-- ✅ **Thread 對話系統**: 連續對話功能，自動記憶上下文，提供更連貫的分析
-- ✅ **智能命盤整合**: 每次問答自動帶入完整命盤資料，回應更精準
-
-#### 🔒 **安全性強化**
-- ✅ **後端 Credit 驗證**: Credit 管理移至後端，防止繞過
-- ✅ **CORS 限制**: 限制 API 訪問來源，防止濫用
-- ✅ **輸入清理**: 完整的 XSS 防護和輸入驗證
-- ✅ **錯誤處理**: 不暴露敏感信息的安全錯誤處理
-
-#### 🐛 **Bug 修復**
-- ✅ 修復 api/question.js 語法錯誤
-- ✅ 修復 destiny-calculator.js 重複鍵定義
-- ✅ 改進農曆轉換算法（移除隨機數）
-- ✅ 整合真實 TypeScript 計算引擎到 API
-
-### 💬 Q&A 系統
-- ✅ 後端 Credit 計費機制 (3次/月)
-- ✅ Thread 連續對話功能
-- ✅ 預設問題快速提問
-- ✅ 付費解鎖模式 (1小時無限)
-- ✅ 安全的用戶狀態管理
-
-### 💰 商業化功能
-- ✅ Google AdSense 優化整合
-- ✅ Google Analytics + Groundhog 追蹤
-- ✅ 側邊欄廣告位置優化
-- ✅ 完整的 ads.txt 合規配置
-
-### 🎨 UX 改進
-- ✅ 自動滾動到頁面頂部
-- ✅ 西曆預設選擇 (更符合習慣)
-- ✅ 移除調試元素，產品化界面
-- ✅ 響應式設計優化
+原作者 Airic Yu 提供核心排盤引擎（`fortel-ziweidoushu`），後續由 iTubai 擴充為完整的 AI 命理網站：
+- GPT-4o 深度分析、Thread 連續問答、命盤自動帶入
+- 後端 Credit 計費（3 次/月免費）+ 綠界金流付費解鎖
+- Google AdSense / Analytics / Groundhog 追蹤整合
+- Next.js 遷移、雙語（zh-TW/en）SEO 優化、每週策展部落格系統
 
 ## 📋 許可證
 
