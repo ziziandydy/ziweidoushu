@@ -53,8 +53,10 @@ async function generateSitemap(req, res) {
       { url: '/blog', priority: '0.9', changefreq: 'daily' },
       { url: '/zh-TW/about', priority: '0.5', changefreq: 'monthly' },
       { url: '/en/about', priority: '0.5', changefreq: 'monthly' },
-      { url: '/privacy-policy.html', priority: '0.5', changefreq: 'monthly' },
-      { url: '/pricing.html', priority: '0.7', changefreq: 'monthly' },
+      { url: '/zh-TW/privacy-policy', priority: '0.5', changefreq: 'monthly' },
+      { url: '/en/privacy-policy', priority: '0.5', changefreq: 'monthly' },
+      { url: '/zh-TW/pricing', priority: '0.7', changefreq: 'monthly' },
+      { url: '/en/pricing', priority: '0.7', changefreq: 'monthly' },
       { url: '/payment-success', priority: '0.3', changefreq: 'monthly' },
       { url: '/payment-failed', priority: '0.3', changefreq: 'monthly' },
     ];

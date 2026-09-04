@@ -75,7 +75,7 @@ export default function QASection({ locale, t, userProfile, destinyData, initial
         if (container) container.scrollTop = container.scrollHeight;
     }, [messages, sending]);
 
-    const pricingHref = '/pricing.html';
+    const pricingHref = `/${locale}/pricing`;
 
     const consumeCredit = (): boolean => {
         const cookieId = getCookieId();

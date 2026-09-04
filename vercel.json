@@ -5,6 +5,36 @@
       "source": "/about",
       "destination": "/zh-TW/about",
       "permanent": false
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/zh-TW/privacy-policy",
+      "permanent": false
+    },
+    {
+      "source": "/pricing",
+      "destination": "/zh-TW/pricing",
+      "permanent": false
+    },
+    {
+      "source": "/privacy-policy.html",
+      "destination": "/zh-TW/privacy-policy",
+      "permanent": true
+    },
+    {
+      "source": "/pricing.html",
+      "destination": "/zh-TW/pricing",
+      "permanent": true
+    },
+    {
+      "source": "/:locale(en|zh-TW)/privacy-policy.html",
+      "destination": "/:locale/privacy-policy",
+      "permanent": true
+    },
+    {
+      "source": "/:locale(en|zh-TW)/pricing.html",
+      "destination": "/:locale/pricing",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -15,30 +45,6 @@
     {
       "source": "/sitemap.xml",
       "destination": "/api/page?page=sitemap"
-    },
-    {
-      "source": "/privacy-policy",
-      "destination": "/privacy-policy.html"
-    },
-    {
-      "source": "/(en|zh-TW)/privacy-policy",
-      "destination": "/privacy-policy.html"
-    },
-    {
-      "source": "/(en|zh-TW)/privacy-policy.html",
-      "destination": "/privacy-policy.html"
-    },
-    {
-      "source": "/pricing",
-      "destination": "/pricing.html"
-    },
-    {
-      "source": "/(en|zh-TW)/pricing",
-      "destination": "/pricing.html"
-    },
-    {
-      "source": "/(en|zh-TW)/pricing.html",
-      "destination": "/pricing.html"
     },
     {
       "source": "/admin-login",
