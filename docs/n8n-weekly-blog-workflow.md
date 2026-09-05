@@ -238,6 +238,8 @@ User message：`{{ $json.content }}`（審查素材節點的輸出）
 
 品質閘門讀到 `review.natural === false` 時，會把 `AI 文筆審查未通過：<reasons>` 加進 `errors`，跟其他檢查共用同一次重寫機會——重寫分支若再次沒過，一樣會拋錯終止並寄失敗通知，不會自動發布沒過關的文章。
 
+> ⚠️ **2026-09-05 真實測試踩到的雷**：「文筆審查」節點跟「王老師寫作」一樣，是 `@n8n/n8n-nodes-langchain.openAi` 節點，原始輸出一樣包在 `output[0].content[0].text` 裡面，**不是**扁平的 `{natural, reasons}`。第一版「品質閘門」程式碼直接寫 `const review = $input.first().json;`，忘了解開這層包裝，導致 `review.natural` 永遠是 `undefined`、判斷式恆為 false，關卡形同虛設——實測時「文筆審查」正確判定一篇文章 `natural: false` 並列出具體問題，但「品質閘門」還是回報 `passed: true` 讓文章發布了。現在的版本已修正為跟解析 `a`（文章本體）一樣，先 `let review = $input.first().json.output[0].content[0].text;` 解開再 `JSON.parse`。**日後只要修改這兩個 Code 節點，務必記得這一層包裝**，不要只測「有沒有報錯」，要實際跑一次確認 `natural: false` 真的會被 `errors` 抓到。
+
 後接 **IF** 節點（`{{ $json.passed }}` is true）：
 - true → Node 9 發布
 - false → 回 Node 7 重試（用 IF + 一個「retryCount」旗標實作，僅重試一次；n8n 可在 Node 7 前加 Set 節點記 `retry = ($json.retry || 0) + 1`，`retry > 1` 時走 Node 10 失敗通知並終止）。
