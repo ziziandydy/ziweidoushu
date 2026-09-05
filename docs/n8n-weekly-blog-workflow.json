@@ -295,7 +295,8 @@
         300
       ],
       "id": "code-gate-1",
-      "name": "品質閘門"
+      "name": "品質閘門",
+      "jsCode": "let a = $('王老師寫作').first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nconst review = $input.first().json;\nconst recentTitles = $('選題素材').first().json.recentTitles || [];\nconst errors = [];\nconst content = a.content || '';\nconst len = content.replace(/\\s/g, '').length;\nif (len < 1800) errors.push(`字數不足：${len} < 1800`);\nif (!/## 參考資料/.test(content)) errors.push('缺少「## 參考資料」區塊');\nconst linkCount = (content.match(/\\[[^\\]]+\\]\\(https?:\\/\\/[^)]+\\)/g) || []).length;\nif (linkCount < 2) errors.push(`參考連結不足：${linkCount} < 2`);\nif (!content.includes('本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考')) errors.push('缺少免責聲明');\nif (review.natural === false) errors.push('AI 文筆審查未通過：' + (review.reasons || []).join('；'));\nfunction overlap(s1, s2) {\n  const set1 = new Set(s1.split(''));\n  const same = s2.split('').filter(c => set1.has(c)).length;\n  return same / Math.max(s2.length, 1);\n}\nfor (const t of recentTitles) {\n  if (overlap(t, a.title || '') >= 0.6) { errors.push(`標題與近期文章過近：${t}`); break; }\n}\nreturn [{ json: { passed: errors.length === 0, errors, article: a } }];"
     },
     {
       "parameters": {
@@ -385,7 +386,8 @@
         500
       ],
       "id": "code-gate-2",
-      "name": "品質閘門（重寫後）"
+      "name": "品質閘門（重寫後）",
+      "jsCode": "let a = $('王老師重寫').first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nconst review = $input.first().json;\nconst recentTitles = $('選題素材').first().json.recentTitles || [];\nconst errors = [];\nconst content = a.content || '';\nconst len = content.replace(/\\s/g, '').length;\nif (len < 1800) errors.push(`字數不足：${len} < 1800`);\nif (!/## 參考資料/.test(content)) errors.push('缺少「## 參考資料」區塊');\nconst linkCount = (content.match(/\\[[^\\]]+\\]\\(https?:\\/\\/[^)]+\\)/g) || []).length;\nif (linkCount < 2) errors.push(`參考連結不足：${linkCount} < 2`);\nif (!content.includes('本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考')) errors.push('缺少免責聲明');\nif (review.natural === false) errors.push('AI 文筆審查未通過：' + (review.reasons || []).join('；'));\nfunction overlap(s1, s2) {\n  const set1 = new Set(s1.split(''));\n  const same = s2.split('').filter(c => set1.has(c)).length;\n  return same / Math.max(s2.length, 1);\n}\nfor (const t of recentTitles) {\n  if (overlap(t, a.title || '') >= 0.6) { errors.push(`標題與近期文章過近：${t}`); break; }\n}\nif (errors.length > 0) {\n  throw new Error('重寫後仍未通過品質檢查，本週不發文：' + errors.join('；'));\n}\nreturn [{ json: { passed: true, article: a } }];"
     },
     {
       "parameters": {
@@ -471,6 +473,120 @@
       ],
       "id": "sticky-readme",
       "name": "說明"
+    },
+    {
+      "parameters": {
+        "jsCode": "let a = $input.first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nreturn [{ json: { content: a.content || '' } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1970,
+        220
+      ],
+      "id": "code-review-extract-1",
+      "name": "審查素材"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "cachedResultName": "GPT-5.6-LUNA",
+          "mode": "list",
+          "value": "gpt-5.6-luna"
+        },
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"natural\": {\n      \"type\": \"boolean\",\n      \"description\": \"讀起來是否像人寫的，沒有明顯 AI 陳腔濫調或制式套路\"\n    },\n    \"reasons\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"若 natural 為 false，逐條列出具體問題與對應原文片段，供重寫參考\"\n    }\n  },\n  \"required\": [\"natural\", \"reasons\"],\n  \"additionalProperties\": false\n}",
+              "type": "json_schema"
+            }
+          }
+        },
+        "builtInTools": {},
+        "responses": {
+          "values": [
+            {
+              "content": "你是嚴格的中文編輯，專門抓文章裡的「機器味」。收到一篇命理觀點文章全文，請判斷它讀起來是否像人寫的，而非罐頭 AI 文章。\n\n檢查重點（命中任一項明顯問題就判定 natural=false）：\n1. 是否只有空泛的正確廢話（例如「凡事都要謹慎面對」這種放諸四海皆準、沒有具體判斷的話），缺乏具體、可驗證的觀點\n2. 是否使用「首先、其次、最後、總之、不僅如此、值得注意的是、綜上所述」等 AI 陳腔濫調轉折詞\n3. 段落結構是否重複單調（例如每段都套用同一種「現象 → 星曜理論 → 建議」公式三次以上）\n4. 是否有破折號（—）或 Emoji 堆疊\n5. 語氣是否像教科書條列，而非自然口語\n\nreasons 請具體引用原文片段，讓作者知道要改哪裡；natural=true 時 reasons 給空陣列即可。",
+              "role": "system"
+            },
+            {
+              "content": "={{ $json.content }}"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        2080,
+        220
+      ],
+      "id": "llm-review-1",
+      "name": "文筆審查",
+      "credentials": {
+        "openAiApi": {
+          "id": "pcAm2yc2bIRwI0xA",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let a = $input.first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nreturn [{ json: { content: a.content || '' } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2960,
+        420
+      ],
+      "id": "code-review-extract-2",
+      "name": "審查素材（重寫後）"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "cachedResultName": "GPT-5.6-LUNA",
+          "mode": "list",
+          "value": "gpt-5.6-luna"
+        },
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"natural\": {\n      \"type\": \"boolean\",\n      \"description\": \"讀起來是否像人寫的，沒有明顯 AI 陳腔濫調或制式套路\"\n    },\n    \"reasons\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"若 natural 為 false，逐條列出具體問題與對應原文片段，供重寫參考\"\n    }\n  },\n  \"required\": [\"natural\", \"reasons\"],\n  \"additionalProperties\": false\n}",
+              "type": "json_schema"
+            }
+          }
+        },
+        "builtInTools": {},
+        "responses": {
+          "values": [
+            {
+              "content": "你是嚴格的中文編輯，專門抓文章裡的「機器味」。收到一篇命理觀點文章全文，請判斷它讀起來是否像人寫的，而非罐頭 AI 文章。\n\n檢查重點（命中任一項明顯問題就判定 natural=false）：\n1. 是否只有空泛的正確廢話（例如「凡事都要謹慎面對」這種放諸四海皆準、沒有具體判斷的話），缺乏具體、可驗證的觀點\n2. 是否使用「首先、其次、最後、總之、不僅如此、值得注意的是、綜上所述」等 AI 陳腔濫調轉折詞\n3. 段落結構是否重複單調（例如每段都套用同一種「現象 → 星曜理論 → 建議」公式三次以上）\n4. 是否有破折號（—）或 Emoji 堆疊\n5. 語氣是否像教科書條列，而非自然口語\n\nreasons 請具體引用原文片段，讓作者知道要改哪裡；natural=true 時 reasons 給空陣列即可。",
+              "role": "system"
+            },
+            {
+              "content": "={{ $json.content }}"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        3070,
+        420
+      ],
+      "id": "llm-review-2",
+      "name": "文筆審查（重寫後）",
+      "credentials": {
+        "openAiApi": {
+          "id": "pcAm2yc2bIRwI0xA",
+          "name": "OpenAi account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -648,7 +764,7 @@
       "main": [
         [
           {
-            "node": "品質閘門",
+            "node": "審查素材",
             "type": "main",
             "index": 0
           }
@@ -699,7 +815,7 @@
       "main": [
         [
           {
-            "node": "品質閘門（重寫後）",
+            "node": "審查素材（重寫後）",
             "type": "main",
             "index": 0
           }
@@ -722,6 +838,50 @@
         [
           {
             "node": "成功通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "審查素材": {
+      "main": [
+        [
+          {
+            "node": "文筆審查",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "文筆審查": {
+      "main": [
+        [
+          {
+            "node": "品質閘門",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "審查素材（重寫後）": {
+      "main": [
+        [
+          {
+            "node": "文筆審查（重寫後）",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "文筆審查（重寫後）": {
+      "main": [
+        [
+          {
+            "node": "品質閘門（重寫後）",
             "type": "main",
             "index": 0
           }
