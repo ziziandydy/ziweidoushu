@@ -224,7 +224,7 @@ return [{ json: { passed: true, article: a } }];
 
 **Code — 審查素材**：從上一個 LLM 節點的原始輸出擷取 `content` 純文字，去掉 JSON 外殼，方便下一個節點直接讀取全文。
 
-**LLM — 文筆審查**（模型與寫作節點相同，一樣不能帶 `temperature` 參數）：
+**LLM — 文筆審查**（2026-09-13 起改用 `gpt-4o` + `temperature: 0`，見下方更新說明；原本跟寫作節點共用 `gpt-5.6-luna`）：
 
 System prompt：
 ```
@@ -249,6 +249,8 @@ User message：`{{ $json.content }}`（審查素材節點的輸出）
 品質閘門讀到 `review.natural === false` 時，會把 `AI 文筆審查未通過：<reasons>` 加進 `errors`，跟其他檢查共用同一次重寫機會——重寫分支若再次沒過，一樣會拋錯終止並寄失敗通知，不會自動發布沒過關的文章。
 
 > ⚠️ **2026-09-05 真實測試踩到的雷**：「文筆審查」節點跟「王老師寫作」一樣，是 `@n8n/n8n-nodes-langchain.openAi` 節點，原始輸出一樣包在 `output[0].content[0].text` 裡面，**不是**扁平的 `{natural, reasons}`。第一版「品質閘門」程式碼直接寫 `const review = $input.first().json;`，忘了解開這層包裝，導致 `review.natural` 永遠是 `undefined`、判斷式恆為 false，關卡形同虛設——實測時「文筆審查」正確判定一篇文章 `natural: false` 並列出具體問題，但「品質閘門」還是回報 `passed: true` 讓文章發布了。現在的版本已修正為跟解析 `a`（文章本體）一樣，先 `let review = $input.first().json.output[0].content[0].text;` 解開再 `JSON.parse`。**日後只要修改這兩個 Code 節點，務必記得這一層包裝**，不要只測「有沒有報錯」，要實際跑一次確認 `natural: false` 真的會被 `errors` 抓到。
+
+> ⚠️ **2026-09-13 更新：審查模型改用 `gpt-4o` + `temperature: 0`，原因是 `gpt-5.6-luna` 預設溫度下判斷極不穩定**。用外部腳本對同一篇未改動的文章連續送審，`natural` 的結果會在 true/false 之間大幅翻轉（曾經連續兩次分別測出 0/3 通過與 3/3 通過），比文件裡原本記錄的「審查器偶爾雜訊」嚴重得多，代表這道品質閘門先前很可能一直帶著接近隨機的判斷在把關。診斷後發現 `gpt-5.6-luna` 不支援 `temperature` 參數，沒辦法直接鎖定它；改把「文筆審查」「文筆審查（重寫後）」兩個節點的 `modelId` 換成 `gpt-4o`、並在 `options` 加 `temperature: 0`（王老師寫作/重寫這兩個「寫作」節點維持用 `gpt-5.6-luna`，不受影響）。改完用 pinData 把「審查素材」的輸出鎖定成同一篇文章，連續執行 3 次驗證，`文筆審查` 與 `品質閘門` 的結果三次完全一致，確認判斷已經穩定下來。另外發現一個有趣但非關鍵的現象：n8n 這個節點呼叫的是 OpenAI **Responses API**（從輸出結構 `output[0].content[0].text` 看得出來），跟一般拿 API Key 直接打 Chat Completions API 測試時，即使模型、溫度、system prompt 逐字相同，兩邊對同一篇文章可能給出不同結論——這是端點本身的校準差異，不是不穩定，測試時不要混用兩種端點的結果互相比較。
 
 後接 **IF** 節點（`{{ $json.passed }}` is true）：
 - true → Node 9 發布
@@ -297,6 +299,6 @@ User message：`{{ $json.content }}`（審查素材節點的輸出）
 1. 在 n8n 開啟「紫微策展週刊 1.0」，**先把整個 workflow 另存一份備份**（Download / Export，或另開分頁保留舊版畫布）。
 2. 用最新的 `n8n-weekly-blog-workflow.json` 執行 Import（會建立新節點：審查素材、文筆審查、審查素材（重寫後）、文筆審查（重寫後），並覆蓋「品質閘門」「品質閘門（重寫後）」的程式碼）。
 3. **比對已知雷點**：匯入若把既有節點改名（加「1」後綴），所有 Code 節點裡 `$('節點名稱')` 的硬編碼引用都要逐一打開檢查有沒有跟著失聯（尤其是「品質閘門」新增的 `$('王老師寫作')`、「品質閘門（重寫後）」的 `$('王老師重寫')`，以及原本就有的 `$('選題素材')`）。
-4. 「文筆審查」「文筆審查（重寫後）」兩個 OpenAI 節點匯入後要重新綁定 Credential（`OpenAi account`），並確認**沒有**帶 `temperature` 參數（gpt-5.6-luna 不支援）。
+4. 「文筆審查」「文筆審查（重寫後）」兩個 OpenAI 節點匯入後要重新綁定 Credential（`OpenAi account`），並確認模型是 `gpt-4o`、`options.temperature` 是 `0`（2026-09-13 起的設定，跟寫作節點的 `gpt-5.6-luna` 不同，不要搞混）。
 5. 手動 Execute 一次，確認「文筆審查」有正常輸出 `{natural, reasons}`，且刻意寫一段套版感很重的文字測試 `natural: false` 時「品質閘門」真的會擋下來、觸發重寫。
 6. 全部確認後記得在右上角點 **Publish**（存檔不等於生效）。

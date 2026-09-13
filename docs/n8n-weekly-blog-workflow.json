@@ -489,9 +489,9 @@
       "parameters": {
         "modelId": {
           "__rl": true,
-          "cachedResultName": "GPT-5.6-LUNA",
+          "cachedResultName": "gpt-4o",
           "mode": "list",
-          "value": "gpt-5.6-luna"
+          "value": "gpt-4o"
         },
         "options": {
           "textFormat": {
@@ -499,7 +499,8 @@
               "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"natural\": {\n      \"type\": \"boolean\",\n      \"description\": \"讀起來是否像人寫的，沒有明顯 AI 陳腔濫調或制式套路\"\n    },\n    \"reasons\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"若 natural 為 false，逐條列出具體問題與對應原文片段，供重寫參考\"\n    }\n  },\n  \"required\": [\"natural\", \"reasons\"],\n  \"additionalProperties\": false\n}",
               "type": "json_schema"
             }
-          }
+          },
+          "temperature": 0
         },
         "builtInTools": {},
         "responses": {
@@ -546,9 +547,9 @@
       "parameters": {
         "modelId": {
           "__rl": true,
-          "cachedResultName": "GPT-5.6-LUNA",
+          "cachedResultName": "gpt-4o",
           "mode": "list",
-          "value": "gpt-5.6-luna"
+          "value": "gpt-4o"
         },
         "options": {
           "textFormat": {
@@ -556,7 +557,8 @@
               "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"natural\": {\n      \"type\": \"boolean\",\n      \"description\": \"讀起來是否像人寫的，沒有明顯 AI 陳腔濫調或制式套路\"\n    },\n    \"reasons\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"若 natural 為 false，逐條列出具體問題與對應原文片段，供重寫參考\"\n    }\n  },\n  \"required\": [\"natural\", \"reasons\"],\n  \"additionalProperties\": false\n}",
               "type": "json_schema"
             }
-          }
+          },
+          "temperature": 0
         },
         "builtInTools": {},
         "responses": {
