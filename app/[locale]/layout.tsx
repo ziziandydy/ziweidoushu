@@ -1,5 +1,8 @@
 import React from 'react';
+import { notFound } from 'next/navigation';
 import NavBar from '../components/NavBar';
+
+const SUPPORTED_LOCALES = ['zh-TW', 'en'];
 
 export default async function LocaleLayout({
     children,
@@ -9,6 +12,10 @@ export default async function LocaleLayout({
     params: Promise<{ locale: string }>;
 }) {
     const { locale } = await params;
+
+    if (!SUPPORTED_LOCALES.includes(locale)) {
+        notFound();
+    }
 
     return (
         <>

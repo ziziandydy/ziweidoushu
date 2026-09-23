@@ -21,6 +21,7 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
         title: `${post.title} | ${isEn ? 'AI Zi Wei Dou Shu Blog' : '紫微斗數 AI 部落格'}`,
         description: post.excerpt,
         alternates: {
+            canonical: `https://aiziwei.online/${params.locale}/blog/${post.slug}`,
             languages,
         },
         openGraph: {

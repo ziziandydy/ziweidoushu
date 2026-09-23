@@ -100,7 +100,7 @@ export async function getBlogPost(slug: string, locale: string = 'zh-TW'): Promi
     const language = locale === 'en' ? 'en' : 'zh-TW';
     try {
         const result = await sql`
-      SELECT * FROM blog_posts
+      SELECT *, LEFT(content, 200) as excerpt FROM blog_posts
       WHERE slug = ${slug} AND language = ${language} AND status = 'published'
     `;
         return (result.rows[0] as BlogPost) || null;
