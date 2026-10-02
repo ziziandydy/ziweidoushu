@@ -50,20 +50,21 @@ async function generateSitemap(req, res) {
       { url: '', priority: '1.0', changefreq: 'weekly' },
       { url: '/zh-TW/analysis', priority: '0.9', changefreq: 'weekly' },
       { url: '/en/analysis', priority: '0.9', changefreq: 'weekly' },
-      { url: '/blog', priority: '0.9', changefreq: 'daily' },
+      { url: '/zh-TW/blog', priority: '0.9', changefreq: 'daily' },
+      { url: '/en/blog', priority: '0.9', changefreq: 'daily' },
       { url: '/zh-TW/about', priority: '0.5', changefreq: 'monthly' },
       { url: '/en/about', priority: '0.5', changefreq: 'monthly' },
       { url: '/zh-TW/privacy-policy', priority: '0.5', changefreq: 'monthly' },
       { url: '/en/privacy-policy', priority: '0.5', changefreq: 'monthly' },
       { url: '/zh-TW/pricing', priority: '0.7', changefreq: 'monthly' },
       { url: '/en/pricing', priority: '0.7', changefreq: 'monthly' },
-      { url: '/payment-success', priority: '0.3', changefreq: 'monthly' },
-      { url: '/payment-failed', priority: '0.3', changefreq: 'monthly' },
+      { url: '/payment-success.html', priority: '0.3', changefreq: 'monthly' },
+      { url: '/payment-failed.html', priority: '0.3', changefreq: 'monthly' },
     ];
 
     // 獲取所有已發布的部落格文章
     const result = await sql`
-      SELECT slug, published_at, updated_at
+      SELECT slug, language, published_at, updated_at
       FROM blog_posts
       WHERE status = 'published'
       ORDER BY published_at DESC
@@ -84,7 +85,7 @@ ${staticPages.map(page => `    <url>
         <priority>${page.priority}</priority>
     </url>`).join('\n')}
 ${blogPosts.map(post => `    <url>
-        <loc>https://aiziwei.online/blog/${escapeXml(post.slug)}</loc>
+        <loc>https://aiziwei.online/${post.language || 'zh-TW'}/blog/${escapeXml(post.slug)}</loc>
         <lastmod>${formatDate(post.updated_at || post.published_at)}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>

@@ -40,7 +40,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/zh-TW/"
+      "destination": "/zh-TW"
     },
     {
       "source": "/sitemap.xml",
