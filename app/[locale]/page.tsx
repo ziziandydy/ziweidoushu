@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         },
         twitter: { card: 'summary_large_image', images: ['https://aiziwei.online/og-image.png'] },
         alternates: {
-            canonical: `https://aiziwei.online/${locale}/`,
-            languages: { 'zh-TW': 'https://aiziwei.online/zh-TW/', 'en': 'https://aiziwei.online/en/' },
+            canonical: `https://aiziwei.online/${locale}`,
+            languages: { 'zh-TW': 'https://aiziwei.online/zh-TW', 'en': 'https://aiziwei.online/en' },
         },
     };
 }
