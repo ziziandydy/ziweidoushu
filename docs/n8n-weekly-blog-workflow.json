@@ -3,11 +3,25 @@
   "nodes": [
     {
       "parameters": {
+        "url": "https://www.bing.com/news/search?q=%E9%81%8B%E5%8B%A2%20%E5%91%BD%E7%90%86&format=RSS",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        4912,
+        2576
+      ],
+      "id": "a443170b-e775-41a3-b763-0ea93729e8b9",
+      "name": "RSS Bing 運勢命理"
+    },
+    {
+      "parameters": {
         "rule": {
           "interval": [
             {
               "field": "cronExpression",
-              "expression": "0 9 * * 1"
+              "expression": "0 9 * * 1,4"
             }
           ]
         }
@@ -15,11 +29,11 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.1,
       "position": [
-        -560,
-        300
+        4400,
+        1700
       ],
-      "id": "trigger-weekly-monday",
-      "name": "每週一 09:00 啟動"
+      "id": "e6ad23f4-b9ca-4e64-872e-4e47650d5cc5",
+      "name": "每週一、四 09:00 啟動"
     },
     {
       "parameters": {
@@ -29,10 +43,10 @@
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
       "position": [
-        -340,
-        100
+        4912,
+        1984
       ],
-      "id": "rss-ziwei",
+      "id": "7e18dea2-6a32-4a96-9f8c-4b1876eabb9a",
       "name": "RSS 紫微斗數"
     },
     {
@@ -43,10 +57,10 @@
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
       "position": [
-        -340,
-        300
+        4912,
+        2176
       ],
-      "id": "rss-fortune",
+      "id": "7d6cb4f1-b6f9-4d6e-9cfe-8446591b59bf",
       "name": "RSS 運勢命理"
     },
     {
@@ -57,25 +71,11 @@
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
       "position": [
-        -340,
-        500
+        4912,
+        2384
       ],
-      "id": "rss-ettoday",
+      "id": "73293bfb-7868-42fb-aab3-e58c00f57a88",
       "name": "RSS ETtoday 運勢"
-    },
-    {
-      "parameters": {
-        "url": "https://www.bing.com/news/search?q=%E9%81%8B%E5%8B%A2%20%E5%91%BD%E7%90%86&format=RSS",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.rssFeedRead",
-      "typeVersion": 1,
-      "position": [
-        -340,
-        700
-      ],
-      "id": "rss-bing",
-      "name": "RSS Bing 運勢命理"
     },
     {
       "parameters": {
@@ -84,10 +84,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        -120,
-        300
+        5136,
+        2176
       ],
-      "id": "merge-candidates",
+      "id": "44b867d1-adbf-471e-8c34-a410dca76c06",
       "name": "合併候選"
     },
     {
@@ -97,50 +97,37 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        100,
-        300
+        5360,
+        2176
       ],
-      "id": "code-dedup",
+      "id": "f15d37be-c4ba-441f-91ff-5f11ac2a66ca",
       "name": "去重過濾"
     },
     {
       "parameters": {
-        "url": "https://aiziwei.online/api/blog/list?limit=10&language=zh-TW",
+        "url": "https://aiziwei.online/api/blog/list?limit=100&language=zh-TW",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        320,
-        300
+        4688,
+        1700
       ],
-      "id": "http-recent-posts",
+      "id": "45852c43-a74c-475a-aff9-794361f4a859",
       "name": "取近期文章"
     },
     {
       "parameters": {
-        "jsCode": "const j = $input.first().json;\nconst posts = (j.data && j.data.posts) || j.posts || [];\nreturn [{ json: { recentTitles: posts.map(p => p.title) } }];"
+        "jsCode": "const candidates = $input.all().map(i => i.json);\nconst recentTitles = $('排程決策').first().json.recentTitles || [];\nconst prompt = `候選文章：\n${JSON.stringify(candidates, null, 1)}\n\n近期已發文標題：\n${JSON.stringify(recentTitles)}`;\nreturn [{ json: { prompt, recentTitles } }];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        540,
-        300
+        6016,
+        2176
       ],
-      "id": "code-recent-titles",
-      "name": "取近期標題"
-    },
-    {
-      "parameters": {
-        "jsCode": "const candidates = $('去重過濾').all().map(i => i.json);\nconst recentTitles = $input.first().json.recentTitles || [];\nconst prompt = `候選文章：\n${JSON.stringify(candidates, null, 1)}\n\n近期已發文標題：\n${JSON.stringify(recentTitles)}`;\nreturn [{ json: { prompt, recentTitles } }];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        760,
-        300
-      ],
-      "id": "code-select-prep",
+      "id": "b3dc9646-4963-4b6b-8c20-f174da93077b",
       "name": "選題素材"
     },
     {
@@ -175,10 +162,10 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2,
       "position": [
-        980,
-        300
+        6240,
+        2176
       ],
-      "id": "llm-topic-select",
+      "id": "ce9470fd-02df-49d3-a7ba-3e721c977d68",
       "name": "選題主編",
       "credentials": {
         "openAiApi": {
@@ -194,10 +181,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1200,
-        300
+        6512,
+        2176
       ],
-      "id": "code-select-parse",
+      "id": "8896263f-7426-4e21-beb6-02977370e1ef",
       "name": "解析選題"
     },
     {
@@ -221,23 +208,23 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1420,
-        300
+        6672,
+        2176
       ],
-      "id": "http-knowledge",
+      "id": "bd9ecb26-e795-4fb8-a9f0-b9fce7be3eda",
       "name": "知識庫檢索"
     },
     {
       "parameters": {
-        "jsCode": "const sel = $('解析選題').first().json;\nconst entries = $input.first().json.entries || [];\nif (entries.length === 0) throw new Error('知識庫查無相關條目，請檢查 knowledge_tags');\nconst recentTitles = $('選題素材').first().json.recentTitles || [];\nconst prompt = `主題：${sel.topic}\n切角：${sel.angle}\n\n外部來源（文末「## 參考資料」須逐篇附上連結）：\n${JSON.stringify(sel.selected_sources, null, 1)}\n\n知識庫條目（理論依據，引用論點時標明 source）：\n${JSON.stringify(entries, null, 1)}\n\n近期已發文標題（新標題句式不得與其相似）：\n${JSON.stringify(recentTitles)}`;\nreturn [{ json: { prompt } }];"
+        "jsCode": "const sel = $('統一選題').first().json;\nconst plan = $('排程決策').first().json;\nconst entries = $input.first().json.entries || [];\nif (entries.length === 0) throw new Error('知識庫查無相關條目，請檢查 knowledge_tags');\nconst BRIEF = {\n  news: '時事觀點：引用並評論外部新聞，提出紫微斗數角度的具體判斷。',\n  life: '人生議題：寫一個各國讀者都會遇到的生活問題（感情、金錢、工作、家庭、人生階段、身心），用紫微斗數提供看待方式；不要依附台灣在地新聞，但文中也不要刻意寫「各地讀者」「不同國家的人」這類字眼。',\n  lesson: '紫微入門：教學文，讓沒學過的讀者讀完能真正理解一個概念，並澄清常見誤解。',\n  monthly: '流月四化：本月運勢專欄，用一句主題當開場，說明本月四化星各自引動的生活面向；必須提醒流月要疊合個人命盤，不做生肖式吉凶排名。',\n  solar_term: '二十四節氣：結合節氣的季節特性與宮位象徵，談作息、心態與留意事項；不談開運、不做吉凶斷語。',\n  annual: '年度四化：明年流年四化總覽，談整體氛圍與不同命盤結構的人各自要留意什麼；避免生肖排名式預言。',\n};\nconst sources = sel.selected_sources || [];\n// 依標籤與主題字詞重合度挑出最相關的舊文，提高站內連結命中率\nconst kw = new Set([...(sel.knowledge_tags || []), ...String(sel.topic || '').split('')]);\nconst score = l => (l.tags || []).filter(t => kw.has(t)).length * 3 + l.title.split('').filter(c => kw.has(c)).length;\nconst suggested = [...plan.linkables].sort((x, y) => score(y) - score(x)).slice(0, 6);\nconst prompt = `文章類型：${sel.type_label}\n寫作任務：${BRIEF[sel.type]}\n主題：${sel.topic}\n切角：${sel.angle}\n${sel.case_idea ? `案例方向：${sel.case_idea}\\n` : ''}${sel.facts ? `本篇必須使用、不得更改的事實資料：\\n${JSON.stringify(sel.facts, null, 1)}\\n` : ''}\n外部來源${sources.length ? '（文中具名引述，文末「## 參考資料」逐篇附上連結）' : '：本篇沒有外部來源，「## 參考資料」改列理論出處書目，不需要連結'}：\n${JSON.stringify(sources, null, 1)}\n\n站內連結：內文必須插入 ${sel.min_internal}-4 個站內連結（少於 ${sel.min_internal} 個會被退稿），只能使用下列網址並原封照抄。\n建議優先使用（與本篇最相關）：\n${JSON.stringify(suggested, null, 1)}\n完整舊文清單：\n${JSON.stringify(plan.linkables.map(l => ({ title: l.title, url: l.url })), null, 1)}\n\n知識庫條目（理論依據，引用論點時標明 source）：\n${JSON.stringify(entries, null, 1)}\n\n近期已發文標題（新標題句式不得與其相似）：\n${JSON.stringify(plan.recentTitles)}`;\nreturn [{ json: { prompt } }];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1640,
-        300
+        6896,
+        2176
       ],
-      "id": "code-write-prep",
+      "id": "d5b7431b-96d7-425a-bd30-fd54b06a15ab",
       "name": "寫作素材"
     },
     {
@@ -252,7 +239,7 @@
           "values": [
             {
               "role": "system",
-              "content": "你是「AI 紫微斗數」網站（aiziwei.online）的專欄作者，筆名「王老師」。以繁體中文寫一篇時事策展觀點文。\n\n【硬性要求】\n1. 字數 1,800-2,500 字（不含標題）。\n2. 以提供的知識庫條目為理論根據；引用其論點時標明出處（例：依王亭之《中州派紫微斗數》理論架構），但同一句出處說明在全文不要出現超過 2 次，改用其他方式帶出理論（例如直接講星曜/宮位名稱，不必每次都覆誦來源全名）。\n3. 對外部來源文章「引用並評論」，不得改寫轉載其內容；文中提及時自然帶出。\n4. 全文只圍繞一個具體切角展開一條連貫論證，不要切成「時事→理論→建議→結語」這種固定分段公式，也不要把知識庫裡查到的每個相關宮位都輪流講一遍。寧可深入講 2-3 個最相關的宮位或概念，把它們揉進同一條論證線裡，也不要為了資訊完整而逐項條列。判斷標準：拿掉小標題後，文章應該讀起來像一篇連貫的評論，而不是把幾段各自獨立的說明接在一起。\n5. 文末依序加：\n   ## 參考資料\n   - [來源標題](連結)（每篇外部來源一行，連結原封照抄）\n   最後一行固定免責聲明：本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考。\n6. 標題 20-30 字、含 SEO 關鍵字，句式不得與近期已發文相似。\n7. 結語可自然提及一次本站分析工具：https://aiziwei.online/zh-TW/analysis（不得過度推銷），但不要用「總之」「綜上所述」這類總結語氣帶出，直接自然銜接即可。\n\n【文風要求】\n- 禁用「首先、其次、最後、總之、不僅如此、值得注意的是、綜上所述」等 AI 陳腔濫調；禁用破折號與 Emoji。\n- 不要用「這也是為什麼」「這提醒我們」這類句式重複超過一次。\n- 口語自然、有觀點，敢下具體判斷，避免「凡事都要謹慎」「保持理性看待」這類放諸四海皆準卻沒有實質內容的話。\n- 段落長短錯落，重要結論可獨立成段，但嚴禁偽造個人親身經歷或資歷（不得自稱執業多年、不得虛構個案）。\n\n【參考範例（僅供語氣參考，勿抄襲主題或句子）】\n以下是本站一篇被認可為自然、非公式化的文章開頭，注意它從頭到尾只追一條論證線（質疑一則新聞案例的完整性），沒有分段條列不同宮位：\n\n「近期「玄戰」相關報道，再度把紫微斗數推上熱議位置。UHK 港生活以〈玄戰｜麥兆恒紫微斗數100%命中案例詳情　神準算出當事人父親心臟病逝〉為題，聚焦於一宗被描述為算出亡父心臟病死因的案例。這類報道可以評論，也應該評論，但不能把新聞標題當成完整的論證。案例是否有完整出生資料、推演過程是否事前留下紀錄，這些都會影響我們如何理解「命中」。」"
+              "content": "你是「AI 紫微斗數」網站（aiziwei.online）的專欄作者，筆名「王老師」。以繁體中文寫一篇專欄文章，文章類型、主題與素材見使用者訊息。\n\n【硬性要求】\n1. 字數 1,800-2,500 字（不含標題）。\n2. 以提供的知識庫條目為理論根據；引用其論點時標明出處（例：依王亭之《中州派紫微斗數》理論架構），但同一句出處說明在全文不要出現超過 2 次，改用其他方式帶出理論（例如直接講星曜/宮位名稱，不必每次都覆誦來源全名）。\n3. 外部來源只能「具名引述並回應」：提到時點名作者或網站與文章名（例如「Joey Yap 在〈某篇文章〉裡認為……」），接著提出你自己的看法。不得改寫轉載其內容，也不得把別人的案例、命例或觀察寫成你自己的經驗。引述內容只能根據使用者訊息提供的標題與摘要（summary），不得推測摘要沒寫的內容；外文術語不確定中文對應時保留原文（例如八字的 Companion 是比劫，不是伴侶），不要自行意譯。\n4. 全文只圍繞一個具體切角展開一條連貫論證，不要切成「時事→理論→建議→結語」這種固定分段公式，也不要把知識庫裡查到的每個相關宮位都輪流講一遍。寧可深入講 2-3 個最相關的宮位或概念，把它們揉進同一條論證線裡，也不要為了資訊完整而逐項條列。判斷標準：拿掉小標題後，文章應該讀起來像一篇連貫的評論，而不是把幾段各自獨立的說明接在一起。\n5. 文末依序加：\n   ## 參考資料\n   - [來源標題](連結)（每篇外部來源一行，連結原封照抄）\n   若使用者訊息說明本篇沒有外部來源，改列理論出處書目（例如：王亭之《中州派紫微斗數》），不需要連結。\n   最後一行固定免責聲明：本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考。\n6. 標題 20-30 字、含 SEO 關鍵字，句式不得與近期已發文相似。\n7. 結語可自然提及一次本站分析工具：https://aiziwei.online/zh-TW/analysis（不得過度推銷），但不要用「總之」「綜上所述」這類總結語氣帶出，直接自然銜接即可。\n8. 站內連結：依使用者訊息要求的數量，在內文自然插入站內舊文連結，格式為 [自然的錨文字](網址)。網址只能從使用者提供的站內舊文清單原封照抄，不得自行組合或修改；只在前文確實講過相關概念的地方加，錨文字不要寫「點此」「這篇文章」。站內連結不要放進「## 參考資料」。\n9. 案例：需要舉例時，只能用歷史人物、文學或神話角色，或出生資料公開的公眾人物。只有出生年份時只談生年四化，不得捏造出生月日、時辰或完整命盤；不得虛構匿名個案、讀者來信或諮詢經驗。\n10. 使用者訊息若提供「事實資料」（例如四化星、節氣日期），必須照用，不得更改。\n\n【文風要求】\n- 禁用「首先、其次、最後、總之、不僅如此、值得注意的是、綜上所述」等 AI 陳腔濫調；禁用破折號與 Emoji。\n- 不要用「這也是為什麼」「這提醒我們」這類句式重複超過一次；「不是 A，而是 B」這種對比句全文最多 2 次。\n- 口語自然、有觀點，敢下具體判斷，避免「凡事都要謹慎」「保持理性看待」這類放諸四海皆準卻沒有實質內容的話。\n- 段落長短錯落，重要結論可獨立成段，但嚴禁偽造個人親身經歷或資歷（不得自稱執業多年、不得虛構個案）。\n\n【參考範例（僅供語氣參考，勿抄襲主題或句子）】\n以下是本站一篇被認可為自然、非公式化的文章開頭，注意它從頭到尾只追一條論證線（質疑一則新聞案例的完整性），沒有分段條列不同宮位：\n\n「近期「玄戰」相關報道，再度把紫微斗數推上熱議位置。UHK 港生活以〈玄戰｜麥兆恒紫微斗數100%命中案例詳情　神準算出當事人父親心臟病逝〉為題，聚焦於一宗被描述為算出亡父心臟病死因的案例。這類報道可以評論，也應該評論，但不能把新聞標題當成完整的論證。案例是否有完整出生資料、推演過程是否事前留下紀錄，這些都會影響我們如何理解「命中」。」"
             },
             {
               "content": "={{ $json.prompt }}"
@@ -272,10 +259,10 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2,
       "position": [
-        1860,
-        300
+        7120,
+        2176
       ],
-      "id": "llm-write",
+      "id": "6dd3aba6-fb8a-4d49-8540-4750bc263f4a",
       "name": "王老師寫作",
       "credentials": {
         "openAiApi": {
@@ -286,15 +273,15 @@
     },
     {
       "parameters": {
-        "jsCode": "let a = $('王老師寫作').first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nlet review = $input.first().json.output[0].content[0].text;\nif (typeof review === 'string') review = JSON.parse(review.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nconst recentTitles = $('選題素材').first().json.recentTitles || [];\nconst errors = [];\nconst content = a.content || '';\nconst len = content.replace(/\\s/g, '').length;\nif (len < 1800) errors.push(`字數不足：${len} < 1800`);\nif (!/## 參考資料/.test(content)) errors.push('缺少「## 參考資料」區塊');\nconst linkCount = (content.match(/\\[[^\\]]+\\]\\(https?:\\/\\/[^)]+\\)/g) || []).length;\nif (linkCount < 2) errors.push(`參考連結不足：${linkCount} < 2`);\nif (!content.includes('本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考')) errors.push('缺少免責聲明');\nif (review.natural === false) errors.push('AI 文筆審查未通過：' + (review.reasons || []).join('；'));\nfunction overlap(s1, s2) {\n  const set1 = new Set(s1.split(''));\n  const same = s2.split('').filter(c => set1.has(c)).length;\n  return same / Math.max(s2.length, 1);\n}\nfor (const t of recentTitles) {\n  if (overlap(t, a.title || '') >= 0.6) { errors.push(`標題與近期文章過近：${t}`); break; }\n}\nreturn [{ json: { passed: errors.length === 0, errors, article: a } }];"
+        "jsCode": "let a = $('王老師寫作').first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\n// 文筆審查是 OpenAI 節點，結果包在 output[0].content[0].text 裡，必須解開\nlet review = $input.first().json;\ntry {\n  const t = review.output[0].content[0].text;\n  review = typeof t === 'string' ? JSON.parse(t) : t;\n} catch (e) { review = {}; }\nconst sel = $('統一選題').first().json;\nconst plan = $('排程決策').first().json;\nconst errors = [];\nconst content = a.content || '';\nconst len = content.replace(/\\s/g, '').length;\nif (len < 1800) errors.push(`字數不足：${len} < 1800`);\nconst refIdx = content.indexOf('## 參考資料');\nif (refIdx === -1) errors.push('缺少「## 參考資料」區塊');\nconst body = refIdx === -1 ? content : content.slice(0, refIdx);\nconst refs = refIdx === -1 ? '' : content.slice(refIdx);\nconst refLinks = (refs.match(/\\[[^\\]]+\\]\\(https?:\\/\\/[^)]+\\)/g) || []).length;\nif (refLinks < sel.min_refs) errors.push(`參考連結不足：${refLinks} < ${sel.min_refs}`);\nfor (const s of sel.selected_sources || []) {\n  if (!content.includes(s.link)) errors.push(`參考資料缺少選定來源：${s.title}`);\n}\nif (!content.includes('本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考')) errors.push('缺少免責聲明');\nconst BANNED = ['首先', '其次', '總之', '不僅如此', '值得注意的是', '綜上所述', '這提醒我們'];\nconst hit = BANNED.filter(x => content.includes(x));\nif (hit.length) errors.push('使用禁用詞：' + hit.join('、'));\nif (/—/.test(content)) errors.push('含破折號');\nif (/\\p{Extended_Pictographic}/u.test(content)) errors.push('含 Emoji');\nif (typeof review.natural !== 'boolean') errors.push('文筆審查結果無法解析');\nelse if (review.natural === false) errors.push('AI 文筆審查未通過：' + (review.reasons || []).join('；'));\n// 站內連結：必須來自清單，不得捏造\nconst norm = u => { let x = u.replace('://www.', '://'); try { x = decodeURIComponent(x); } catch (e) {} return x.replace(/\\/$/, ''); };\nconst allowed = new Set(plan.linkables.map(l => norm(l.url)));\nconst internal = [...body.matchAll(/\\]\\((https?:\\/\\/(?:www\\.)?aiziwei\\.online\\/(?:zh-TW|en)\\/blog\\/[^)\\s]+)\\)/g)].map(m => norm(m[1]));\nconst bad = internal.filter(u => !allowed.has(u));\nif (bad.length) errors.push('站內連結不在舊文清單內：' + bad.join('、'));\nconst uniq = new Set(internal);\nif (uniq.size < sel.min_internal) errors.push(`站內連結不足：${uniq.size} < ${sel.min_internal}`);\nif (uniq.size > 5) errors.push(`站內連結過多：${uniq.size} > 5`);\nfunction overlap(s1, s2) {\n  const set1 = new Set(s1.split(''));\n  const same = s2.split('').filter(c => set1.has(c)).length;\n  return same / Math.max(s2.length, 1);\n}\nfor (const t of plan.recentTitles) {\n  if (overlap(t, a.title || '') >= 0.6) { errors.push(`標題與近期文章過近：${t}`); break; }\n}\nreturn [{ json: { passed: errors.length === 0, errors, article: a } }];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2080,
-        300
+        8032,
+        2176
       ],
-      "id": "code-gate-1",
+      "id": "7a1a3e40-0a98-4b06-ba5b-bad02af99bdd",
       "name": "品質閘門"
     },
     {
@@ -311,23 +298,23 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        2300,
-        300
+        8240,
+        2176
       ],
-      "id": "if-gate-passed",
+      "id": "a3ec3cdc-25ea-4c7c-8ad2-c22190b9cfa8",
       "name": "是否通過?"
     },
     {
       "parameters": {
-        "jsCode": "const gate = $input.first().json;\nconst base = $('寫作素材').first().json.prompt;\nconst prompt = `${base}\n\n【重要】上一版文章未通過品質檢查，原因如下，請重寫並完全符合所有硬性要求：\n- ${gate.errors.join('\\n- ')}`;\nreturn [{ json: { prompt } }];"
+        "jsCode": "const gate = $input.first().json;\nconst sel = $('統一選題').first().json;\nconst base = $('寫作素材').first().json.prompt;\nconst a = gate.article || {};\nconst prompt = `${base}\n\n【上一版草稿】\n標題：${a.title || ''}\n\n${a.content || ''}\n\n【修改指示】上一版未通過品質檢查。請以這份草稿為基礎修改，保留論點與已經寫好的段落，只改出問題的地方，不要整篇換成另一篇文章。\n修改後仍必須：文末保留「## 參考資料」與最後一行免責聲明；內文站內連結至少 ${sel.min_internal} 個（只能用站內舊文清單的網址）；字數 1,800-2,500 字。\n未通過的原因：\n- ${gate.errors.join('\\n- ')}`;\nreturn [{ json: { prompt } }];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2520,
-        500
+        8256,
+        2496
       ],
-      "id": "code-retry-prep",
+      "id": "de090e6a-2a4e-4742-8d78-3038419251e8",
       "name": "重寫素材"
     },
     {
@@ -342,7 +329,7 @@
           "values": [
             {
               "role": "system",
-              "content": "你是「AI 紫微斗數」網站（aiziwei.online）的專欄作者，筆名「王老師」。以繁體中文寫一篇時事策展觀點文。\n\n【硬性要求】\n1. 字數 1,800-2,500 字（不含標題）。\n2. 以提供的知識庫條目為理論根據；引用其論點時標明出處（例：依王亭之《中州派紫微斗數》理論架構），但同一句出處說明在全文不要出現超過 2 次，改用其他方式帶出理論（例如直接講星曜/宮位名稱，不必每次都覆誦來源全名）。\n3. 對外部來源文章「引用並評論」，不得改寫轉載其內容；文中提及時自然帶出。\n4. 全文只圍繞一個具體切角展開一條連貫論證，不要切成「時事→理論→建議→結語」這種固定分段公式，也不要把知識庫裡查到的每個相關宮位都輪流講一遍。寧可深入講 2-3 個最相關的宮位或概念，把它們揉進同一條論證線裡，也不要為了資訊完整而逐項條列。判斷標準：拿掉小標題後，文章應該讀起來像一篇連貫的評論，而不是把幾段各自獨立的說明接在一起。\n5. 文末依序加：\n   ## 參考資料\n   - [來源標題](連結)（每篇外部來源一行，連結原封照抄）\n   最後一行固定免責聲明：本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考。\n6. 標題 20-30 字、含 SEO 關鍵字，句式不得與近期已發文相似。\n7. 結語可自然提及一次本站分析工具：https://aiziwei.online/zh-TW/analysis（不得過度推銷），但不要用「總之」「綜上所述」這類總結語氣帶出，直接自然銜接即可。\n\n【文風要求】\n- 禁用「首先、其次、最後、總之、不僅如此、值得注意的是、綜上所述」等 AI 陳腔濫調；禁用破折號與 Emoji。\n- 不要用「這也是為什麼」「這提醒我們」這類句式重複超過一次。\n- 口語自然、有觀點，敢下具體判斷，避免「凡事都要謹慎」「保持理性看待」這類放諸四海皆準卻沒有實質內容的話。\n- 段落長短錯落，重要結論可獨立成段，但嚴禁偽造個人親身經歷或資歷（不得自稱執業多年、不得虛構個案）。\n\n【參考範例（僅供語氣參考，勿抄襲主題或句子）】\n以下是本站一篇被認可為自然、非公式化的文章開頭，注意它從頭到尾只追一條論證線（質疑一則新聞案例的完整性），沒有分段條列不同宮位：\n\n「近期「玄戰」相關報道，再度把紫微斗數推上熱議位置。UHK 港生活以〈玄戰｜麥兆恒紫微斗數100%命中案例詳情　神準算出當事人父親心臟病逝〉為題，聚焦於一宗被描述為算出亡父心臟病死因的案例。這類報道可以評論，也應該評論，但不能把新聞標題當成完整的論證。案例是否有完整出生資料、推演過程是否事前留下紀錄，這些都會影響我們如何理解「命中」。」"
+              "content": "你是「AI 紫微斗數」網站（aiziwei.online）的專欄作者，筆名「王老師」。以繁體中文寫一篇專欄文章，文章類型、主題與素材見使用者訊息。\n\n【硬性要求】\n1. 字數 1,800-2,500 字（不含標題）。\n2. 以提供的知識庫條目為理論根據；引用其論點時標明出處（例：依王亭之《中州派紫微斗數》理論架構），但同一句出處說明在全文不要出現超過 2 次，改用其他方式帶出理論（例如直接講星曜/宮位名稱，不必每次都覆誦來源全名）。\n3. 外部來源只能「具名引述並回應」：提到時點名作者或網站與文章名（例如「Joey Yap 在〈某篇文章〉裡認為……」），接著提出你自己的看法。不得改寫轉載其內容，也不得把別人的案例、命例或觀察寫成你自己的經驗。引述內容只能根據使用者訊息提供的標題與摘要（summary），不得推測摘要沒寫的內容；外文術語不確定中文對應時保留原文（例如八字的 Companion 是比劫，不是伴侶），不要自行意譯。\n4. 全文只圍繞一個具體切角展開一條連貫論證，不要切成「時事→理論→建議→結語」這種固定分段公式，也不要把知識庫裡查到的每個相關宮位都輪流講一遍。寧可深入講 2-3 個最相關的宮位或概念，把它們揉進同一條論證線裡，也不要為了資訊完整而逐項條列。判斷標準：拿掉小標題後，文章應該讀起來像一篇連貫的評論，而不是把幾段各自獨立的說明接在一起。\n5. 文末依序加：\n   ## 參考資料\n   - [來源標題](連結)（每篇外部來源一行，連結原封照抄）\n   若使用者訊息說明本篇沒有外部來源，改列理論出處書目（例如：王亭之《中州派紫微斗數》），不需要連結。\n   最後一行固定免責聲明：本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考。\n6. 標題 20-30 字、含 SEO 關鍵字，句式不得與近期已發文相似。\n7. 結語可自然提及一次本站分析工具：https://aiziwei.online/zh-TW/analysis（不得過度推銷），但不要用「總之」「綜上所述」這類總結語氣帶出，直接自然銜接即可。\n8. 站內連結：依使用者訊息要求的數量，在內文自然插入站內舊文連結，格式為 [自然的錨文字](網址)。網址只能從使用者提供的站內舊文清單原封照抄，不得自行組合或修改；只在前文確實講過相關概念的地方加，錨文字不要寫「點此」「這篇文章」。站內連結不要放進「## 參考資料」。\n9. 案例：需要舉例時，只能用歷史人物、文學或神話角色，或出生資料公開的公眾人物。只有出生年份時只談生年四化，不得捏造出生月日、時辰或完整命盤；不得虛構匿名個案、讀者來信或諮詢經驗。\n10. 使用者訊息若提供「事實資料」（例如四化星、節氣日期），必須照用，不得更改。\n\n【文風要求】\n- 禁用「首先、其次、最後、總之、不僅如此、值得注意的是、綜上所述」等 AI 陳腔濫調；禁用破折號與 Emoji。\n- 不要用「這也是為什麼」「這提醒我們」這類句式重複超過一次；「不是 A，而是 B」這種對比句全文最多 2 次。\n- 口語自然、有觀點，敢下具體判斷，避免「凡事都要謹慎」「保持理性看待」這類放諸四海皆準卻沒有實質內容的話。\n- 段落長短錯落，重要結論可獨立成段，但嚴禁偽造個人親身經歷或資歷（不得自稱執業多年、不得虛構個案）。\n\n【參考範例（僅供語氣參考，勿抄襲主題或句子）】\n以下是本站一篇被認可為自然、非公式化的文章開頭，注意它從頭到尾只追一條論證線（質疑一則新聞案例的完整性），沒有分段條列不同宮位：\n\n「近期「玄戰」相關報道，再度把紫微斗數推上熱議位置。UHK 港生活以〈玄戰｜麥兆恒紫微斗數100%命中案例詳情　神準算出當事人父親心臟病逝〉為題，聚焦於一宗被描述為算出亡父心臟病死因的案例。這類報道可以評論，也應該評論，但不能把新聞標題當成完整的論證。案例是否有完整出生資料、推演過程是否事前留下紀錄，這些都會影響我們如何理解「命中」。」"
             },
             {
               "content": "={{ $json.prompt }}"
@@ -362,10 +349,10 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2,
       "position": [
-        2740,
-        500
+        8416,
+        2496
       ],
-      "id": "llm-rewrite",
+      "id": "08056040-821f-4523-9be4-d02616575f70",
       "name": "王老師重寫",
       "credentials": {
         "openAiApi": {
@@ -376,15 +363,15 @@
     },
     {
       "parameters": {
-        "jsCode": "let a = $('王老師重寫').first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nlet review = $input.first().json.output[0].content[0].text;\nif (typeof review === 'string') review = JSON.parse(review.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nconst recentTitles = $('選題素材').first().json.recentTitles || [];\nconst errors = [];\nconst content = a.content || '';\nconst len = content.replace(/\\s/g, '').length;\nif (len < 1800) errors.push(`字數不足：${len} < 1800`);\nif (!/## 參考資料/.test(content)) errors.push('缺少「## 參考資料」區塊');\nconst linkCount = (content.match(/\\[[^\\]]+\\]\\(https?:\\/\\/[^)]+\\)/g) || []).length;\nif (linkCount < 2) errors.push(`參考連結不足：${linkCount} < 2`);\nif (!content.includes('本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考')) errors.push('缺少免責聲明');\nif (review.natural === false) errors.push('AI 文筆審查未通過：' + (review.reasons || []).join('；'));\nfunction overlap(s1, s2) {\n  const set1 = new Set(s1.split(''));\n  const same = s2.split('').filter(c => set1.has(c)).length;\n  return same / Math.max(s2.length, 1);\n}\nfor (const t of recentTitles) {\n  if (overlap(t, a.title || '') >= 0.6) { errors.push(`標題與近期文章過近：${t}`); break; }\n}\nif (errors.length > 0) {\n  throw new Error('重寫後仍未通過品質檢查，本週不發文：' + errors.join('；'));\n}\nreturn [{ json: { passed: true, article: a } }];"
+        "jsCode": "let a = $('王老師重寫').first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\n// 文筆審查是 OpenAI 節點，結果包在 output[0].content[0].text 裡，必須解開\nlet review = $input.first().json;\ntry {\n  const t = review.output[0].content[0].text;\n  review = typeof t === 'string' ? JSON.parse(t) : t;\n} catch (e) { review = {}; }\nconst sel = $('統一選題').first().json;\nconst plan = $('排程決策').first().json;\nconst errors = [];\nconst content = a.content || '';\nconst len = content.replace(/\\s/g, '').length;\nif (len < 1800) errors.push(`字數不足：${len} < 1800`);\nconst refIdx = content.indexOf('## 參考資料');\nif (refIdx === -1) errors.push('缺少「## 參考資料」區塊');\nconst body = refIdx === -1 ? content : content.slice(0, refIdx);\nconst refs = refIdx === -1 ? '' : content.slice(refIdx);\nconst refLinks = (refs.match(/\\[[^\\]]+\\]\\(https?:\\/\\/[^)]+\\)/g) || []).length;\nif (refLinks < sel.min_refs) errors.push(`參考連結不足：${refLinks} < ${sel.min_refs}`);\nfor (const s of sel.selected_sources || []) {\n  if (!content.includes(s.link)) errors.push(`參考資料缺少選定來源：${s.title}`);\n}\nif (!content.includes('本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考')) errors.push('缺少免責聲明');\nconst BANNED = ['首先', '其次', '總之', '不僅如此', '值得注意的是', '綜上所述', '這提醒我們'];\nconst hit = BANNED.filter(x => content.includes(x));\nif (hit.length) errors.push('使用禁用詞：' + hit.join('、'));\nif (/—/.test(content)) errors.push('含破折號');\nif (/\\p{Extended_Pictographic}/u.test(content)) errors.push('含 Emoji');\nif (typeof review.natural !== 'boolean') errors.push('文筆審查結果無法解析');\nelse if (review.natural === false) errors.push('AI 文筆審查未通過：' + (review.reasons || []).join('；'));\n// 站內連結：必須來自清單，不得捏造\nconst norm = u => { let x = u.replace('://www.', '://'); try { x = decodeURIComponent(x); } catch (e) {} return x.replace(/\\/$/, ''); };\nconst allowed = new Set(plan.linkables.map(l => norm(l.url)));\nconst internal = [...body.matchAll(/\\]\\((https?:\\/\\/(?:www\\.)?aiziwei\\.online\\/(?:zh-TW|en)\\/blog\\/[^)\\s]+)\\)/g)].map(m => norm(m[1]));\nconst bad = internal.filter(u => !allowed.has(u));\nif (bad.length) errors.push('站內連結不在舊文清單內：' + bad.join('、'));\nconst uniq = new Set(internal);\nif (uniq.size < sel.min_internal) errors.push(`站內連結不足：${uniq.size} < ${sel.min_internal}`);\nif (uniq.size > 5) errors.push(`站內連結過多：${uniq.size} > 5`);\nfunction overlap(s1, s2) {\n  const set1 = new Set(s1.split(''));\n  const same = s2.split('').filter(c => set1.has(c)).length;\n  return same / Math.max(s2.length, 1);\n}\nfor (const t of plan.recentTitles) {\n  if (overlap(t, a.title || '') >= 0.6) { errors.push(`標題與近期文章過近：${t}`); break; }\n}\nif (errors.length > 0) {\n  throw new Error('重寫後仍未通過品質檢查，本次不發文：' + errors.join('；'));\n}\nreturn [{ json: { passed: true, article: a } }];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2960,
-        500
+        9248,
+        2496
       ],
-      "id": "code-gate-2",
+      "id": "49494509-9a17-482a-99c6-4fbeec5a7bd4",
       "name": "品質閘門（重寫後）"
     },
     {
@@ -406,7 +393,7 @@
             },
             {
               "name": "tags",
-              "value": "=紫微斗數,AI紫微斗數,{{ $json.article.tags }}"
+              "value": "={{ [...new Set(['紫微斗數', 'AI紫微斗數', ...$('統一選題').first().json.series_tag.split(','), ...String($json.article.tags).split(',')].map(t => t.trim()).filter(Boolean))].join(',') }}"
             },
             {
               "name": "status",
@@ -427,35 +414,18 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        3180,
-        300
+        9552,
+        2160
       ],
-      "id": "http-publish",
+      "id": "4dcc83f5-9f48-44e8-a836-65e12fc268df",
       "name": "發布文章",
       "credentials": {
         "httpBearerAuth": {
           "id": "YjFdtoLhLzElm6YM",
           "name": "ziwei_blog_api_token"
         }
-      }
-    },
-    {
-      "parameters": {
-        "fromEmail": "noreply@aiziwei.online",
-        "toEmail": "ziziandydy@gmail.com",
-        "subject": "=【AI紫微】本週文章已發布：{{ $json.data.title }}",
-        "text": "=文章連結：https://aiziwei.online{{ $json.data.url }}\n\n請抽查：署名王老師、文末有「## 參考資料」與免責聲明。",
-        "options": {}
       },
-      "type": "n8n-nodes-base.emailSend",
-      "typeVersion": 2.1,
-      "position": [
-        3400,
-        300
-      ],
-      "id": "email-success",
-      "name": "成功通知",
-      "disabled": true
+      "disabled": false
     },
     {
       "parameters": {
@@ -466,10 +436,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -560,
-        -180
+        4688,
+        1696
       ],
-      "id": "sticky-readme",
+      "id": "88db364b-1d88-41b2-ba69-cbb2b7e63d97",
       "name": "說明"
     },
     {
@@ -479,8 +449,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1970,
-        220
+        7488,
+        2176
       ],
       "id": "code-review-extract-1",
       "name": "審查素材"
@@ -493,33 +463,33 @@
           "mode": "list",
           "value": "gpt-4o"
         },
-        "options": {
-          "textFormat": {
-            "textOptions": {
-              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"natural\": {\n      \"type\": \"boolean\",\n      \"description\": \"讀起來是否像人寫的，沒有明顯 AI 陳腔濫調或制式套路\"\n    },\n    \"reasons\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"若 natural 為 false，逐條列出具體問題與對應原文片段，供重寫參考\"\n    }\n  },\n  \"required\": [\"natural\", \"reasons\"],\n  \"additionalProperties\": false\n}",
-              "type": "json_schema"
-            }
-          },
-          "temperature": 0
-        },
-        "builtInTools": {},
         "responses": {
           "values": [
             {
-              "content": "你是嚴格的中文編輯，專門抓文章裡的「機器味」。收到一篇命理觀點文章全文，請判斷它讀起來是否像人寫的，而非罐頭 AI 文章。\n\n檢查重點（命中任一項明顯問題就判定 natural=false）：\n1. 是否只有空泛的正確廢話（例如「凡事都要謹慎面對」這種放諸四海皆準、沒有具體判斷的話），缺乏具體、可驗證的觀點\n2. 是否使用「首先、其次、最後、總之、不僅如此、值得注意的是、綜上所述」等 AI 陳腔濫調轉折詞\n3. 段落結構是否重複單調（例如每段都套用同一種「現象 → 星曜理論 → 建議」公式三次以上）\n4. 是否有破折號（—）或 Emoji 堆疊\n5. 語氣是否像教科書條列，而非自然口語\n\nreasons 請具體引用原文片段，讓作者知道要改哪裡；natural=true 時 reasons 給空陣列即可。",
-              "role": "system"
+              "role": "system",
+              "content": "你是嚴格的中文編輯，專門抓文章裡的「機器味」。收到一篇命理專欄文章全文，請判斷它讀起來是否像人寫的，而非罐頭 AI 文章。\n（禁用詞、破折號、Emoji 已由程式另外檢查，你不需要檢查這些。）\n\n檢查重點（命中任一項明顯問題就判定 natural=false）：\n1. 是否只有空泛的正確廢話（例如「凡事都要謹慎面對」這種放諸四海皆準、沒有具體判斷的話），缺乏具體、可驗證的觀點\n2. 段落結構是否重複單調（例如每段都套用同一種「現象 → 星曜理論 → 建議」公式三次以上）\n3. 語氣是否像教科書條列，而非自然口語\n\nreasons 每一條格式為「問題類型（空泛／結構重複／教科書語氣）：哪裡不對，附上原文片段」，片段必須逐字出自文章，不得改寫或自行編造；沒有把握能引用原文的問題就不要列。natural=true 時 reasons 給空陣列即可。"
             },
             {
               "content": "={{ $json.content }}"
             }
           ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"natural\": {\n      \"type\": \"boolean\",\n      \"description\": \"讀起來是否像人寫的，沒有明顯 AI 陳腔濫調或制式套路\"\n    },\n    \"reasons\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"若 natural 為 false，逐條列出具體問題與對應原文片段，供重寫參考\"\n    }\n  },\n  \"required\": [\"natural\", \"reasons\"],\n  \"additionalProperties\": false\n}"
+            }
+          },
+          "temperature": 0
         }
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2,
       "position": [
-        2080,
-        220
+        7680,
+        2176
       ],
       "id": "llm-review-1",
       "name": "文筆審查",
@@ -537,8 +507,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2960,
-        420
+        8720,
+        2496
       ],
       "id": "code-review-extract-2",
       "name": "審查素材（重寫後）"
@@ -551,33 +521,33 @@
           "mode": "list",
           "value": "gpt-4o"
         },
-        "options": {
-          "textFormat": {
-            "textOptions": {
-              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"natural\": {\n      \"type\": \"boolean\",\n      \"description\": \"讀起來是否像人寫的，沒有明顯 AI 陳腔濫調或制式套路\"\n    },\n    \"reasons\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"若 natural 為 false，逐條列出具體問題與對應原文片段，供重寫參考\"\n    }\n  },\n  \"required\": [\"natural\", \"reasons\"],\n  \"additionalProperties\": false\n}",
-              "type": "json_schema"
-            }
-          },
-          "temperature": 0
-        },
-        "builtInTools": {},
         "responses": {
           "values": [
             {
-              "content": "你是嚴格的中文編輯，專門抓文章裡的「機器味」。收到一篇命理觀點文章全文，請判斷它讀起來是否像人寫的，而非罐頭 AI 文章。\n\n檢查重點（命中任一項明顯問題就判定 natural=false）：\n1. 是否只有空泛的正確廢話（例如「凡事都要謹慎面對」這種放諸四海皆準、沒有具體判斷的話），缺乏具體、可驗證的觀點\n2. 是否使用「首先、其次、最後、總之、不僅如此、值得注意的是、綜上所述」等 AI 陳腔濫調轉折詞\n3. 段落結構是否重複單調（例如每段都套用同一種「現象 → 星曜理論 → 建議」公式三次以上）\n4. 是否有破折號（—）或 Emoji 堆疊\n5. 語氣是否像教科書條列，而非自然口語\n\nreasons 請具體引用原文片段，讓作者知道要改哪裡；natural=true 時 reasons 給空陣列即可。",
-              "role": "system"
+              "role": "system",
+              "content": "你是嚴格的中文編輯，專門抓文章裡的「機器味」。收到一篇命理專欄文章全文，請判斷它讀起來是否像人寫的，而非罐頭 AI 文章。\n（禁用詞、破折號、Emoji 已由程式另外檢查，你不需要檢查這些。）\n\n檢查重點（命中任一項明顯問題就判定 natural=false）：\n1. 是否只有空泛的正確廢話（例如「凡事都要謹慎面對」這種放諸四海皆準、沒有具體判斷的話），缺乏具體、可驗證的觀點\n2. 段落結構是否重複單調（例如每段都套用同一種「現象 → 星曜理論 → 建議」公式三次以上）\n3. 語氣是否像教科書條列，而非自然口語\n\nreasons 每一條格式為「問題類型（空泛／結構重複／教科書語氣）：哪裡不對，附上原文片段」，片段必須逐字出自文章，不得改寫或自行編造；沒有把握能引用原文的問題就不要列。natural=true 時 reasons 給空陣列即可。"
             },
             {
               "content": "={{ $json.content }}"
             }
           ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"natural\": {\n      \"type\": \"boolean\",\n      \"description\": \"讀起來是否像人寫的，沒有明顯 AI 陳腔濫調或制式套路\"\n    },\n    \"reasons\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"若 natural 為 false，逐條列出具體問題與對應原文片段，供重寫參考\"\n    }\n  },\n  \"required\": [\"natural\", \"reasons\"],\n  \"additionalProperties\": false\n}"
+            }
+          },
+          "temperature": 0
         }
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2,
       "position": [
-        3070,
-        420
+        8896,
+        2496
       ],
       "id": "llm-review-2",
       "name": "文筆審查（重寫後）",
@@ -587,32 +557,679 @@
           "name": "OpenAi account"
         }
       }
+    },
+    {
+      "parameters": {
+        "chatId": "850700458",
+        "text": "=【AI紫微】已發布（{{ $('統一選題').first().json.type_label }}）：{{ $json.data.title }}{{ $('排程決策').first().json.warnings.length ? '\\n⚠️ ' + $('排程決策').first().json.warnings.join('；') : '' }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        9952,
+        2160
+      ],
+      "id": "8ea047bf-c039-48ab-bc03-96454337333b",
+      "name": "Send a text message",
+      "webhookId": "8a4aee9c-eb4b-425f-bf52-79b1cd5a5e75",
+      "credentials": {
+        "telegramApi": {
+          "id": "DL3qUg6LCTetekDw",
+          "name": "Telegram account !"
+        }
+      },
+      "disabled": false
+    },
+    {
+      "parameters": {
+        "jsCode": "// 排程決策：依日期與近期已發文決定本次文章類型，並準備站內連結清單\n// 手動測試時可把 FORCE 改成 'news' | 'life' | 'lesson' | 'monthly' | 'solar_term' | 'annual'，測完務必改回 ''\nconst FORCE = '';\n\nconst res = $input.first().json;\nconst posts = (res.data && res.data.posts) || res.posts || [];\n\nconst DAY = 86400000;\nconst tp = new Date(Date.now() + 8 * 3600 * 1000); // Asia/Taipei\nconst today = tp.toISOString().slice(0, 10);\nconst weekday = tp.getUTCDay(); // 1=週一, 4=週四\nconst diff = (a, b) => Math.round((Date.parse(a + 'T00:00:00Z') - Date.parse(b + 'T00:00:00Z')) / DAY);\n\n// 二十四節氣（lunar-javascript 產生，已轉繁體）\nconst SOLAR_TERMS = [\n  ['2026-10-08','寒露'],['2026-10-23','霜降'],['2026-11-07','立冬'],['2026-11-22','小雪'],['2026-12-07','大雪'],['2026-12-22','冬至'],\n  ['2027-01-05','小寒'],['2027-01-20','大寒'],['2027-02-04','立春'],['2027-02-19','雨水'],['2027-03-06','驚蟄'],['2027-03-21','春分'],\n  ['2027-04-05','清明'],['2027-04-20','穀雨'],['2027-05-06','立夏'],['2027-05-21','小滿'],['2027-06-06','芒種'],['2027-06-21','夏至'],\n  ['2027-07-07','小暑'],['2027-07-23','大暑'],['2027-08-08','立秋'],['2027-08-23','處暑'],['2027-09-08','白露'],['2027-09-23','秋分'],\n  ['2027-10-08','寒露'],['2027-10-23','霜降'],['2027-11-07','立冬'],['2027-11-22','小雪'],['2027-12-07','大雪'],['2027-12-22','冬至'],\n];\n// 節氣對應的宮位焦點（knowledge_tags 用）\nconst TERM_FOCUS = {\n  '寒露':['疾厄宮','福德宮','健康'],'霜降':['田宅宮','財帛宮','財運'],'立冬':['田宅宮','福德宮','精神生活'],'小雪':['交友宮','兄弟宮','人際'],\n  '大雪':['父母宮','子女宮','人際'],'冬至':['命宮','福德宮','心理'],'小寒':['財帛宮','官祿宮','財運'],'大寒':['疾厄宮','福德宮','健康'],\n  '立春':['命宮','官祿宮','事業'],'雨水':['夫妻宮','福德宮','感情'],'驚蟄':['官祿宮','遷移宮','職場'],'春分':['夫妻宮','交友宮','感情'],\n  '清明':['父母宮','田宅宮','精神生活'],'穀雨':['財帛宮','福德宮','財運'],'立夏':['遷移宮','官祿宮','事業'],'小滿':['財帛宮','田宅宮','財運'],\n  '芒種':['官祿宮','交友宮','職場'],'夏至':['疾厄宮','命宮','健康'],'小暑':['交友宮','兄弟宮','人際'],'大暑':['福德宮','疾厄宮','心理'],\n  '立秋':['財帛宮','官祿宮','財運'],'處暑':['疾厄宮','福德宮','健康'],'白露':['遷移宮','命宮','論斷方法'],'秋分':['夫妻宮','兄弟宮','感情'],\n};\n// 農曆月首日；月干依五虎遁由年干推得（紫微流月用農曆月，不用節氣月）\nconst LUNAR_MONTHS = [\n  ['2026-10-10','九月','戊戌','丙午'],['2026-11-09','十月','己亥','丙午'],['2026-12-09','十一月','庚子','丙午'],['2027-01-08','十二月','辛丑','丙午'],\n  ['2027-02-06','正月','壬寅','丁未'],['2027-03-08','二月','癸卯','丁未'],['2027-04-07','三月','甲辰','丁未'],['2027-05-06','四月','乙巳','丁未'],\n  ['2027-06-05','五月','丙午','丁未'],['2027-07-04','六月','丁未','丁未'],['2027-08-02','七月','戊申','丁未'],['2027-09-01','八月','己酉','丁未'],\n  ['2027-09-30','九月','庚戌','丁未'],['2027-10-29','十月','辛亥','丁未'],['2027-11-28','十一月','壬子','丁未'],['2027-12-28','十二月','癸丑','丁未'],\n];\n// 年度四化文：日期起算 17 天內發布\nconst ANNUAL = [['2026-11-23','丁未','2027'],['2027-11-22','戊申','2028']];\n// 中州派（王亭之）十干四化：祿、權、科、忌\nconst SIHUA = {\n  '甲':['廉貞','破軍','武曲','太陽'],'乙':['天機','天梁','紫微','太陰'],'丙':['天同','天機','文昌','廉貞'],'丁':['太陰','天同','天機','巨門'],\n  '戊':['貪狼','太陰','右弼','天機'],'己':['武曲','貪狼','天梁','文曲'],'庚':['太陽','武曲','太陰','天同'],'辛':['巨門','太陽','文曲','文昌'],\n  '壬':['天梁','紫微','左輔','武曲'],'癸':['破軍','巨門','太陰','貪狼'],\n};\nconst STAR_TAGS = ['紫微','天府','七殺','破軍','貪狼','天機','太陰','天同','天梁','太陽','巨門'];\nconst sihuaOf = stem => { const s = SIHUA[stem]; return { 化祿: s[0], 化權: s[1], 化科: s[2], 化忌: s[3] }; };\nconst sihuaTags = stem => ['四化', ...SIHUA[stem].filter(x => STAR_TAGS.includes(x))].slice(0, 5);\n\n// 紫微入門連載（依序發布，已有的主星詳解不重複）\nconst LESSONS = [\n  { topic: '四化是什麼：化祿、化權、化科、化忌怎麼流動', tags: ['四化','化祿','化權','化科','化忌'] },\n  { topic: '三方四正：為什麼看一個宮位要同時看四個', tags: ['三方四正','命宮','論斷方法'] },\n  { topic: '廟旺與落陷：同一顆星為什麼表現天差地遠', tags: ['廟旺','落陷','論斷方法'] },\n  { topic: '大限怎麼讀：每十年換一次人生舞台', tags: ['大限','論斷方法','命宮'] },\n  { topic: '流年與流月：短期運勢怎麼看才不流於迷信', tags: ['流年','四化','論斷方法'] },\n  { topic: '天機星詳解：智慧、變動與想太多', tags: ['天機','命宮','心理'], extra: '十四主星' },\n  { topic: '命宮無主星怎麼看：借星安宮的邏輯', tags: ['命宮','格局','論斷方法'] },\n  { topic: '煞星不等於壞事：擎羊、陀羅、火星、鈴星的另一面', tags: ['煞星','化解','論斷方法'] },\n  { topic: '貪狼星詳解：慾望、才藝與桃花', tags: ['貪狼','感情','命宮'], extra: '十四主星' },\n  { topic: '格局是什麼：命盤裡的星曜組合怎麼成局', tags: ['格局','論斷方法','三方四正'] },\n  { topic: '巨門星詳解：口才、懷疑與是非', tags: ['巨門','人際','命宮'], extra: '十四主星' },\n  { topic: '常見問題：出生時辰不確定，命盤還能看嗎', tags: ['命宮','論斷方法'] },\n  { topic: '天梁星詳解：庇蔭、原則與老成', tags: ['天梁','命宮','人際'], extra: '十四主星' },\n  { topic: '常見問題：雙胞胎命盤相同，人生為什麼不同', tags: ['論斷方法','大限','命宮'] },\n  { topic: '七殺星詳解：魄力、孤獨與開創', tags: ['七殺','事業','命宮'], extra: '十四主星' },\n  { topic: '常見問題：農曆閏月出生的人怎麼排盤', tags: ['論斷方法','命宮'] },\n];\n\nconst SERIES = ['二十四節氣','流月四化','年度四化','人生議題','紫微入門','時事觀點'];\nconst pubDate = p => String(p.published_at || p.created_at || '').slice(0, 10);\nconst tagged = (t, days) => posts.some(p => (p.tags || []).includes(t) && diff(today, pubDate(p)) <= days);\n// 舊文沒有系列標籤，一律視為時事觀點\nconst isNews = p => (p.tags || []).includes('時事觀點') || !(p.tags || []).some(t => SERIES.includes(t));\nconst lastNewsDays = Math.min(...posts.filter(isNews).map(p => diff(today, pubDate(p))), 9999);\n// 連載從 2026-10-01 起算；之前的入門舊文不佔講次\nconst lessonCount = posts.filter(p => (p.tags || []).includes('紫微入門') && pubDate(p) >= '2026-10-01').length;\n\nconst warnings = [];\nconst tableEnd = SOLAR_TERMS[SOLAR_TERMS.length - 1][0];\nif (diff(tableEnd, today) < 60) warnings.push(`曆法表將於 ${tableEnd} 用完，請更新「排程決策」節點`);\n\nconst term = SOLAR_TERMS.find(([d]) => diff(d, today) >= 0 && diff(d, today) <= 3);\nconst month = LUNAR_MONTHS.find(([d]) => diff(today, d) <= 6 && diff(d, today) <= 3);\nconst annual = ANNUAL.find(([d]) => diff(today, d) >= 0 && diff(today, d) <= 17);\n\nlet type;\nif (FORCE) type = FORCE;\nelse if (term && !tagged('二十四節氣', 7)) type = 'solar_term';\nelse if (month && !tagged('流月四化', 20)) type = 'monthly';\nelse if (annual && !tagged('年度四化', 300)) type = 'annual';\nelse if (weekday === 4 && lastNewsDays >= 25) type = 'news';\nelse if (weekday === 4 && lessonCount < LESSONS.length) type = 'lesson';\nelse type = 'life';\n\nlet plan;\nif (type === 'solar_term') {\n  const t = term || SOLAR_TERMS.find(([d]) => diff(d, today) >= 0);\n  plan = {\n    route: 'direct', type, type_label: '二十四節氣', series_tag: '二十四節氣',\n    topic: `${t[1]}節氣：從紫微斗數看這段時間的身心與節奏`,\n    angle: `${t[1]}（${t[0]}）前後的季節變化，連結${TERM_FOCUS[t[1]].slice(0, 2).join('與')}所象徵的生活面向，談作息、心態與該留意的事，不談開運、不做吉凶斷語`,\n    knowledge_tags: TERM_FOCUS[t[1]], facts: { 節氣: t[1], 日期: t[0] },\n  };\n} else if (type === 'monthly') {\n  const m = month || LUNAR_MONTHS.find(([d]) => diff(d, today) >= 0);\n  const stem = m[2][0];\n  plan = {\n    route: 'direct', type, type_label: '流月四化', series_tag: '流月四化',\n    topic: `農曆${m[1]}（${m[2]}月）流月四化`,\n    angle: `本月月干「${stem}」引動的四化星，對命盤中有這些星的人分別意味著什麼；用一句主題帶出本月重點，再說明化祿、化權、化科、化忌各自落在生活哪個面向，並提醒流月必須疊合個人命盤才有意義`,\n    knowledge_tags: sihuaTags(stem),\n    facts: { 農曆月份: `${m[3]}年${m[1]}`, 月干支: m[2], 起始日: m[0], 四化: sihuaOf(stem), 理論依據: '中州派（王亭之）十干四化' },\n  };\n} else if (type === 'annual') {\n  const a = annual || ANNUAL.find(([d]) => diff(d, today) >= 0);\n  const stem = a[1][0];\n  plan = {\n    route: 'direct', type, type_label: '年度四化', series_tag: '年度四化',\n    topic: `${a[2]} ${a[1]}年流年四化總覽`,\n    angle: `${a[1]}年天干「${stem}」的流年四化，對整體氛圍與不同命盤結構的人各有什麼意義；避免生肖排名式的吉凶預言`,\n    knowledge_tags: sihuaTags(stem),\n    facts: { 年份: `${a[2]}（${a[1]}年）`, 四化: sihuaOf(stem), 理論依據: '中州派（王亭之）十干四化' },\n  };\n} else if (type === 'lesson') {\n  const l = LESSONS[lessonCount % LESSONS.length];\n  plan = {\n    route: 'direct', type, type_label: '紫微入門', series_tag: l.extra ? `紫微入門,${l.extra}` : '紫微入門',\n    topic: l.topic, angle: '寫給完全沒學過紫微斗數的讀者，用生活例子講清楚一個概念，並說明常見誤解',\n    knowledge_tags: l.tags, facts: { 連載: `紫微入門第 ${lessonCount + 1} 講` },\n  };\n} else if (type === 'news') {\n  plan = { route: 'news', type, type_label: '時事觀點', series_tag: '時事觀點' };\n} else {\n  plan = { route: 'life', type: 'life', type_label: '人生議題', series_tag: '人生議題' };\n}\n\nplan.make_english = plan.type !== 'news';\nplan.min_refs = plan.type === 'news' ? 2 : plan.type === 'life' ? 1 : 0;\n\nconst linkables = posts.map(p => ({\n  title: p.title,\n  url: 'https://aiziwei.online' + (p.url || `/zh-TW/blog/${p.slug}`),\n  tags: (p.tags || []).filter(t => t !== '紫微斗數' && t !== 'AI紫微斗數').slice(0, 5),\n}));\nplan.min_internal = linkables.length >= 5 ? 2 : 0;\n\nreturn [{ json: {\n  route: plan.route, plan, today, warnings,\n  recentTitles: posts.slice(0, 15).map(p => p.title),\n  linkables: linkables.slice(0, 40),\n} }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4960,
+        1700
+      ],
+      "id": "f8e72158-9248-4623-9dd0-8227c275068e",
+      "name": "排程決策"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.route }}",
+              "value2": "news"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        5200,
+        1700
+      ],
+      "id": "7d2dde70-d4c9-481f-969a-ae09ead2283c",
+      "name": "是否時事?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.route }}",
+              "value2": "life"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        5440,
+        1900
+      ],
+      "id": "0b8851d8-e971-4d35-9611-facd92f29045",
+      "name": "是否人生議題?"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 國際命理部落格 RSS（不含台灣、中國、香港來源）\nconst FEEDS = [\n  { site: 'Natalia Pugacheva', country: '俄羅斯', url: 'https://npugacheva.com/feed/' },\n  { site: 'Joey Yap', country: '馬來西亞', url: 'https://home.joeyyap.com/feed/' },\n  { site: 'RenerQi', country: '馬來西亞', url: 'https://www.renerqi.com/feed/' },\n  { site: 'Master Sean Chan', country: '新加坡', url: 'https://www.masterseanchan.com/feed/' },\n  { site: 'Singapore Feng Shui Master', country: '新加坡', url: 'https://tcfengshui.com/feed/' },\n  { site: 'Fengshui Discovery', country: '新加坡', url: 'https://www.fengshuidiscovery.com/blog?format=rss' },\n];\nreturn FEEDS.map(f => ({ json: f }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5680,
+        2900
+      ],
+      "id": "d296b7e4-7e24-48c2-967a-0297b5c8de13",
+      "name": "國際來源清單"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text",
+              "outputPropertyName": "data"
+            }
+          },
+          "timeout": 20000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        5920,
+        2900
+      ],
+      "id": "3b83a699-7189-4e6f-953a-f4c975999775",
+      "name": "抓國際 RSS",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 解析國際 RSS（HTTP 回傳純文字 XML），近 120 天、每站最多 4 篇、總數最多 24 篇\nconst feeds = $('國際來源清單').all().map(i => i.json);\nconst now = Date.now();\nconst WINDOW = 120 * 86400000;\nconst strip = s => String(s || '').replace(/<!\\[CDATA\\[([\\s\\S]*?)\\]\\]>/g, '$1').replace(/<[^>]+>/g, ' ')\n  .replace(/&amp;/g, '&').replace(/&#8217;|&rsquo;/g, \"'\").replace(/&#8220;|&#8221;|&quot;/g, '\"').replace(/&#\\d+;|&[a-z]+;/g, ' ')\n  .replace(/\\s+/g, ' ').trim();\nconst pick = (block, tag) => { const m = block.match(new RegExp(`<${tag}[^>]*>([\\\\s\\\\S]*?)</${tag}>`, 'i')); return m ? m[1] : ''; };\nconst candidates = [];\nconst failed = [];\n$input.all().forEach((item, idx) => {\n  const feed = feeds[idx] || {};\n  const xml = typeof item.json.data === 'string' ? item.json.data : '';\n  if (!xml) { failed.push(feed.site); return; }\n  const blocks = xml.match(/<item[\\s>][\\s\\S]*?<\\/item>|<entry[\\s>][\\s\\S]*?<\\/entry>/gi) || [];\n  let n = 0;\n  for (const b of blocks) {\n    const title = strip(pick(b, 'title'));\n    let link = strip(pick(b, 'link'));\n    if (!link) { const m = b.match(/<link[^>]*href=\"([^\"]+)\"/i); link = m ? m[1] : ''; }\n    const date = strip(pick(b, 'pubDate') || pick(b, 'published') || pick(b, 'updated'));\n    const t = Date.parse(date);\n    if (!title || !/^https?:\\/\\//.test(link) || !t || now - t > WINDOW) continue;\n    candidates.push({ site: feed.site, country: feed.country, title, link, date: new Date(t).toISOString().slice(0, 10),\n      snippet: strip(pick(b, 'description') || pick(b, 'summary')).slice(0, 300) });\n    if (++n >= 4) break;\n  }\n});\nreturn [{ json: { candidates: candidates.slice(0, 24), failed } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6160,
+        2900
+      ],
+      "id": "0f81e24f-053f-469f-8cba-5b546b319f23",
+      "name": "國際去重"
+    },
+    {
+      "parameters": {
+        "jsCode": "const plan = $('排程決策').first().json;\nconst { candidates } = $input.first().json;\nconst prompt = `近期國際命理部落格文章（可選 0-2 篇具名引述，也可以都不用）：\n${JSON.stringify(candidates, null, 1)}\n\n近期已發文標題（新主題不得與其語意重複）：\n${JSON.stringify(plan.recentTitles)}`;\nreturn [{ json: { prompt, candidates } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6400,
+        2900
+      ],
+      "id": "946b1b18-99f9-4201-852a-1e3c39f0ec3e",
+      "name": "國際選題素材"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5.6-luna",
+          "mode": "list",
+          "cachedResultName": "GPT-5.6-LUNA"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "你是「AI 紫微斗數」網站（aiziwei.online）的內容主編，負責「人生議題」專欄選題。這個專欄寫給各國讀者，題目必須是任何國家的人都會遇到的生活問題，不依附台灣或任何單一地區的新聞。\n\n可選的題材方向（擇一，並收斂成一個具體切角）：\n感情模式與伴侶選擇、金錢觀與存錢、轉職與工作倦怠、30 歲 / 40 歲 / 退休等人生階段轉折、與父母或子女的相處、友誼與人脈、身心與作息、居住與「家」的意義、失落後重新開始、自我認識。\n\n你會收到一批國際命理部落格（俄羅斯、馬來西亞、新加坡等）的近期文章，以及本站近期已發文標題。\n\n規則：\n1. 新主題不得與近期已發文標題語意重複（連相似的切角都不行）。\n2. 國際文章只是靈感與可具名引述的對象：若某篇真的與你選的主題相關，可放進 selected_sources（0-2 篇），title 與 link 必須原封不動照抄候選清單；不相關就給空陣列，不要硬湊。\n3. case_idea 提供一個可用的案例方向：只能是歷史人物、文學或神話角色，或出生資料公開的公眾人物；不需要案例時給空字串。不得建議虛構個案。\n4. knowledge_tags 只能從下列詞彙表選 3-5 個：\n   命宮, 兄弟宮, 夫妻宮, 子女宮, 財帛宮, 疾厄宮, 遷移宮, 交友宮, 官祿宮, 田宅宮, 福德宮, 父母宮,\n   紫微, 天府, 七殺, 破軍, 貪狼, 天機, 太陰, 天同, 天梁, 太陽, 巨門,\n   化祿, 化權, 化科, 化忌, 四化,\n   三方四正, 大限, 流年, 廟旺, 落陷, 煞星, 格局, 論斷方法,\n   財運, 感情, 婚姻, 職場, 事業, 健康, 人際, 心理, 精神生活, 化解"
+            },
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"topic\": {\n      \"type\": \"string\",\n      \"description\": \"主題名\"\n    },\n    \"angle\": {\n      \"type\": \"string\",\n      \"description\": \"一句話說明本篇的具體切角\"\n    },\n    \"knowledge_tags\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"3-5 個詞彙表內的標籤\"\n    },\n    \"selected_sources\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"title\": {\n            \"type\": \"string\"\n          },\n          \"link\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\n          \"title\",\n          \"link\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"description\": \"0-2 篇要具名引述的國際文章，照抄候選清單\"\n    },\n    \"case_idea\": {\n      \"type\": \"string\",\n      \"description\": \"案例方向（歷史/文學/公眾人物），不需要時給空字串\"\n    }\n  },\n  \"required\": [\n    \"topic\",\n    \"angle\",\n    \"knowledge_tags\",\n    \"selected_sources\",\n    \"case_idea\"\n  ],\n  \"additionalProperties\": false\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        6640,
+        2900
+      ],
+      "id": "6ee38f17-52fb-4c21-86e3-044c22693a9d",
+      "name": "國際選題主編",
+      "credentials": {
+        "openAiApi": {
+          "id": "pcAm2yc2bIRwI0xA",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let sel = $input.first().json.output[0].content[0].text;\nif (typeof sel === 'string') sel = JSON.parse(sel.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nconst candidates = $('國際選題素材').first().json.candidates || [];\nconst known = new Map(candidates.map(c => [c.link, c]));\n// 只保留確實存在於候選清單的來源，避免模型捏造網址\nconst sources = (sel.selected_sources || []).filter(s => known.has(s.link))\n  .map(s => { const c = known.get(s.link); return { title: c.title, link: s.link, site: c.site, date: c.date, summary: c.snippet }; });\nif (!sel.topic || !Array.isArray(sel.knowledge_tags) || sel.knowledge_tags.length === 0) {\n  throw new Error('國際選題輸出格式不正確：' + JSON.stringify(sel).slice(0, 200));\n}\nreturn [{ json: { ...sel, selected_sources: sources } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6880,
+        2900
+      ],
+      "id": "dc0bf784-d2de-4cf4-9390-269372ff30d8",
+      "name": "解析國際選題"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 統一選題：把三條選題分支（時事 / 人生議題 / 直接排程）整理成同一格式\nconst plan = $('排程決策').first().json.plan;\nconst sel = { ...plan, selected_sources: [], case_idea: '', facts: plan.facts || null };\nif (plan.route !== 'direct') {\n  const x = $input.first().json;\n  sel.topic = x.topic;\n  sel.angle = x.angle;\n  sel.knowledge_tags = x.knowledge_tags;\n  sel.selected_sources = x.selected_sources || [];\n  sel.case_idea = x.case_idea || '';\n}\n// 人生議題若沒有選到國際來源，就不強制參考連結\nif (sel.type === 'life' && sel.selected_sources.length === 0) sel.min_refs = 0;\nif (!sel.topic || !Array.isArray(sel.knowledge_tags) || sel.knowledge_tags.length === 0) {\n  throw new Error('選題結果不完整：' + JSON.stringify(sel).slice(0, 200));\n}\nreturn [{ json: sel }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7120,
+        1900
+      ],
+      "id": "6c8d66b1-8d9e-4bf0-9965-e96e52a1bdc6",
+      "name": "統一選題"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('統一選題').first().json.make_english }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        10200,
+        2600
+      ],
+      "id": "408f041a-fa19-467d-aecc-2974a82b7742",
+      "name": "是否出英文版?"
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "hours"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        10440,
+        2600
+      ],
+      "id": "797d2c5f-0c9f-48b7-a7e2-17e102cb9d23",
+      "name": "等待一小時",
+      "webhookId": "fdd9cbf6-e781-49ea-9fec-71be96c8cc92"
+    },
+    {
+      "parameters": {
+        "url": "https://aiziwei.online/api/blog/list?limit=100&language=en",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        10680,
+        2600
+      ],
+      "id": "a3c9ad27-a146-47ec-ba73-955060e8f35d",
+      "name": "取英文文章"
+    },
+    {
+      "parameters": {
+        "jsCode": "const zh = $('發布文章').first().json.data;\nconst sel = $('統一選題').first().json;\nconst res = $input.first().json;\nconst posts = (res.data && res.data.posts) || res.posts || [];\nconst linkables = posts.slice(0, 40).map(p => ({\n  title: p.title,\n  url: 'https://aiziwei.online' + (p.url || `/en/blog/${p.slug}`),\n}));\nconst minInternal = linkables.length >= 5 ? 2 : 0;\nconst kw = new Set(String(zh.title + ' ' + (sel.knowledge_tags || []).join(' ')).toLowerCase().match(/[a-z]{4,}/g) || []);\nconst tagMap = { '命宮': 'life', '夫妻宮': 'spouse', '財帛宮': 'wealth', '福德宮': 'fortune', '疾厄宮': 'health', '官祿宮': 'career', '交友宮': 'friends', '四化': 'transformations', '化忌': 'hua', '流年': 'year' };\n(sel.knowledge_tags || []).forEach(t => tagMap[t] && kw.add(tagMap[t]));\nconst score = l => (l.title.toLowerCase().match(/[a-z]{4,}/g) || []).filter(x => kw.has(x)).length;\nconst suggested = [...linkables].sort((x, y) => score(y) - score(x)).slice(0, 6);\nconst prompt = `Article type: ${sel.type}\n${sel.facts ? `Facts that must stay unchanged:\\n${JSON.stringify(sel.facts, null, 1)}\\n` : ''}\nPublished Traditional Chinese article (rewrite it for international readers, do not translate line by line):\nTITLE: ${zh.title}\n\n${zh.content}\n\nInternal links: the body must contain ${minInternal} to 4 internal links (fewer than ${minInternal} is rejected), using only these URLs exactly as written.\nSuggested (most relevant):\n${JSON.stringify(suggested, null, 1)}\nFull English post list:\n${JSON.stringify(linkables, null, 1)}\n\nRecent English titles (the new title must not resemble them):\n${JSON.stringify(linkables.slice(0, 15).map(l => l.title))}`;\nreturn [{ json: { prompt, linkables, minInternal, zhId: zh.id } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        10920,
+        2600
+      ],
+      "id": "3a4f6a9b-4a1b-422e-a46a-2d0be6ec14a5",
+      "name": "英文素材"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5.6-luna",
+          "mode": "list",
+          "cachedResultName": "GPT-5.6-LUNA"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You write the English edition of the \"王老師\" (Master Wang) column on aiziwei.online, a Zi Wei Dou Shu (Purple Star Astrology) site. You receive an article already published in Traditional Chinese. Write an English edition for international readers. This is a localized rewrite, not a translation: keep the core argument, the facts and the cited sources, but write natural English, briefly explain any Taiwanese or Chinese cultural context a reader outside Asia would need, and drop details that only make sense locally.\n\nHard requirements:\n1. 1,000 to 1,600 words.\n2. On first use, give a term in English with the Chinese in parentheses, e.g. Life Palace (命宮), Hua Ji (化忌). After that use English only. Keep Chinese characters to a minimum.\n3. External sources may only be quoted with named attribution (name the author or site and the article) followed by your own view. Keep every source link from the Chinese article unchanged.\n4. Insert internal links to the English posts list provided, in the number requested, formatted as [natural anchor text](URL). Copy URLs exactly from that list; never link to Chinese posts and never invent URLs. Do not put internal links in References.\n5. End with a \"## References\" section listing each external source as - [Title](link). If the Chinese article cites only books, list them in English without links. The final line must be exactly: This content was AI-assisted and reviewed by our editorial team. For entertainment and cultural reference only.\n6. Title: 8 to 14 words, SEO friendly, not similar to the recent English titles.\n7. You may mention https://aiziwei.online/en/analysis once, naturally.\n8. Examples may only use historical figures, literary or mythological characters, or public figures with public birth data. If only the birth year is known, discuss only the birth-year four transformations; never invent birth times, charts, clients or personal experience.\n\nStyle:\n- One connected argument, not a sequence of separate explanations. No formulaic \"news, theory, advice, conclusion\" structure.\n- Never use: Firstly, Moreover, Furthermore, In conclusion, It's worth noting, In today's world, Delve, Navigate the complexities. No em dashes. No emoji.\n- Use \"it's not X, it's Y\" at most twice.\n- Make concrete claims; avoid empty advice such as \"stay balanced\" or \"be mindful\".\n- Vary paragraph length."
+            },
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"8-14 word SEO-friendly English title\"\n    },\n    \"content\": {\n      \"type\": \"string\",\n      \"description\": \"Full Markdown article including ## References and the disclaimer\"\n    },\n    \"tags\": {\n      \"type\": \"string\",\n      \"description\": \"3-5 English tags, comma separated\"\n    }\n  },\n  \"required\": [\n    \"title\",\n    \"content\",\n    \"tags\"\n  ],\n  \"additionalProperties\": false\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        11160,
+        2600
+      ],
+      "id": "9c69cbf4-3df0-4ba5-bc55-0d6b1b30c09b",
+      "name": "英文改寫",
+      "credentials": {
+        "openAiApi": {
+          "id": "pcAm2yc2bIRwI0xA",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let a = $input.first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nreturn [{ json: { content: a.content || '' } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        11400,
+        2600
+      ],
+      "id": "cc51128b-f9e8-454e-9109-c5017f98edb9",
+      "name": "英文審查素材"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "cachedResultName": "gpt-4o",
+          "mode": "list",
+          "value": "gpt-4o"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a strict English editor who detects machine-written prose. You receive the full text of an astrology column. Decide whether it reads like a human writer rather than a generic AI article.\n(Banned phrases, em dashes and emoji are checked separately by code; do not check them.)\n\nMark natural=false if any of these is clearly present:\n1. Empty, universally true advice with no concrete, checkable claim.\n2. Repetitive paragraph structure (the same \"phenomenon, star theory, advice\" pattern three or more times).\n3. A textbook, bullet-point tone instead of natural prose.\n\nFormat every reason as \"Problem type (empty advice / repetitive structure / textbook tone): what is wrong, then a passage copied word for word from the article\"; never paraphrase or invent a quote, and leave out any issue you cannot quote. When natural=true, return an empty reasons array."
+            },
+            {
+              "content": "={{ $json.content }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"natural\": {\n      \"type\": \"boolean\",\n      \"description\": \"讀起來是否像人寫的，沒有明顯 AI 陳腔濫調或制式套路\"\n    },\n    \"reasons\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"若 natural 為 false，逐條列出具體問題與對應原文片段，供重寫參考\"\n    }\n  },\n  \"required\": [\"natural\", \"reasons\"],\n  \"additionalProperties\": false\n}"
+            }
+          },
+          "temperature": 0
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        11640,
+        2600
+      ],
+      "id": "4e9a1b00-4415-4999-a566-95fe10e1e67f",
+      "name": "英文文筆審查",
+      "credentials": {
+        "openAiApi": {
+          "id": "pcAm2yc2bIRwI0xA",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let a = $('英文改寫').first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nlet review = $input.first().json;\ntry {\n  const t = review.output[0].content[0].text;\n  review = typeof t === 'string' ? JSON.parse(t) : t;\n} catch (e) { review = {}; }\nconst ctx = $('英文素材').first().json;\nconst sel = $('統一選題').first().json;\nconst errors = [];\nconst content = a.content || '';\nconst words = (content.match(/[A-Za-z][A-Za-z'-]*/g) || []).length;\nif (words < 900) errors.push(`Too short: ${words} < 900 words`);\nconst refIdx = content.indexOf('## References');\nif (refIdx === -1) errors.push('Missing \"## References\" section');\nconst body = refIdx === -1 ? content : content.slice(0, refIdx);\nconst refs = refIdx === -1 ? '' : content.slice(refIdx);\nconst refLinks = (refs.match(/\\[[^\\]]+\\]\\(https?:\\/\\/[^)]+\\)/g) || []).length;\nif (refLinks < sel.min_refs) errors.push(`Not enough reference links: ${refLinks} < ${sel.min_refs}`);\nfor (const s of sel.selected_sources || []) {\n  if (!content.includes(s.link)) errors.push(`References missing source: ${s.title}`);\n}\nif (!content.includes('This content was AI-assisted and reviewed by our editorial team. For entertainment and cultural reference only.')) errors.push('Missing disclaimer');\nconst cjk = (content.match(/[一-鿿]/g) || []).length;\nif (cjk > 60) errors.push(`Too many Chinese characters: ${cjk} > 60`);\nif (/—/.test(content)) errors.push('Contains em dash');\nconst BANNED = ['Firstly', 'Moreover', 'Furthermore', 'In conclusion', \"It's worth noting\", 'It is worth noting', \"In today's world\", 'delve', 'Delve'];\nconst hit = BANNED.filter(x => content.includes(x));\nif (hit.length) errors.push('Banned phrases: ' + hit.join(', '));\nif (/\\p{Extended_Pictographic}/u.test(content)) errors.push('Contains emoji');\nif (typeof review.natural !== 'boolean') errors.push('Style review result could not be parsed');\nelse if (review.natural === false) errors.push('Style review failed: ' + (review.reasons || []).join('; '));\nconst norm = u => { let x = u.replace('://www.', '://'); try { x = decodeURIComponent(x); } catch (e) {} return x.replace(/\\/$/, ''); };\nconst allowed = new Set(ctx.linkables.map(l => norm(l.url)));\nconst internal = [...body.matchAll(/\\]\\((https?:\\/\\/(?:www\\.)?aiziwei\\.online\\/(?:zh-TW|en)\\/blog\\/[^)\\s]+)\\)/g)].map(m => norm(m[1]));\nconst bad = internal.filter(u => !allowed.has(u));\nif (bad.length) errors.push('Internal links not in the English post list: ' + bad.join(', '));\nconst uniq = new Set(internal);\nif (uniq.size < ctx.minInternal) errors.push(`Not enough internal links: ${uniq.size} < ${ctx.minInternal}`);\nif (uniq.size > 5) errors.push(`Too many internal links: ${uniq.size} > 5`);\nconst tw = s => new Set(s.toLowerCase().match(/[a-z]+/g) || []);\nconst nt = tw(a.title || '');\nfor (const l of ctx.linkables.slice(0, 15)) {\n  const ot = tw(l.title); const same = [...nt].filter(x => ot.has(x) && x.length > 3).length;\n  if (nt.size && same / nt.size >= 0.6) { errors.push(`Title too close to: ${l.title}`); break; }\n}\nreturn [{ json: { passed: errors.length === 0, errors, article: a } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        11880,
+        2600
+      ],
+      "id": "9433f94a-2c1b-4908-8c34-c7be81a366f5",
+      "name": "英文品質閘門"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.passed }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        12120,
+        2600
+      ],
+      "id": "826509c9-b100-4950-8a1e-eaa98384f979",
+      "name": "英文是否通過?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const gate = $input.first().json;\nconst ctx = $('英文素材').first().json;\nconst a = gate.article || {};\nconst prompt = `${ctx.prompt}\n\nPREVIOUS ENGLISH DRAFT:\nTITLE: ${a.title || ''}\n\n${a.content || ''}\n\nREVISION INSTRUCTIONS: the draft above failed the quality check. Revise this draft rather than writing a different article: keep its argument and the paragraphs that work, and fix only what is listed below.\nThe revised version must still end with \"## References\" and the exact disclaimer line, include at least ${ctx.minInternal} internal links from the English post list, and run 1,000 to 1,600 words.\nReasons it failed:\n- ${gate.errors.join('\\n- ')}`;\nreturn [{ json: { prompt } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        12360,
+        2900
+      ],
+      "id": "b9748fda-fe82-42a4-b4d0-950f5ccb03be",
+      "name": "英文重寫素材"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5.6-luna",
+          "mode": "list",
+          "cachedResultName": "GPT-5.6-LUNA"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You write the English edition of the \"王老師\" (Master Wang) column on aiziwei.online, a Zi Wei Dou Shu (Purple Star Astrology) site. You receive an article already published in Traditional Chinese. Write an English edition for international readers. This is a localized rewrite, not a translation: keep the core argument, the facts and the cited sources, but write natural English, briefly explain any Taiwanese or Chinese cultural context a reader outside Asia would need, and drop details that only make sense locally.\n\nHard requirements:\n1. 1,000 to 1,600 words.\n2. On first use, give a term in English with the Chinese in parentheses, e.g. Life Palace (命宮), Hua Ji (化忌). After that use English only. Keep Chinese characters to a minimum.\n3. External sources may only be quoted with named attribution (name the author or site and the article) followed by your own view. Keep every source link from the Chinese article unchanged.\n4. Insert internal links to the English posts list provided, in the number requested, formatted as [natural anchor text](URL). Copy URLs exactly from that list; never link to Chinese posts and never invent URLs. Do not put internal links in References.\n5. End with a \"## References\" section listing each external source as - [Title](link). If the Chinese article cites only books, list them in English without links. The final line must be exactly: This content was AI-assisted and reviewed by our editorial team. For entertainment and cultural reference only.\n6. Title: 8 to 14 words, SEO friendly, not similar to the recent English titles.\n7. You may mention https://aiziwei.online/en/analysis once, naturally.\n8. Examples may only use historical figures, literary or mythological characters, or public figures with public birth data. If only the birth year is known, discuss only the birth-year four transformations; never invent birth times, charts, clients or personal experience.\n\nStyle:\n- One connected argument, not a sequence of separate explanations. No formulaic \"news, theory, advice, conclusion\" structure.\n- Never use: Firstly, Moreover, Furthermore, In conclusion, It's worth noting, In today's world, Delve, Navigate the complexities. No em dashes. No emoji.\n- Use \"it's not X, it's Y\" at most twice.\n- Make concrete claims; avoid empty advice such as \"stay balanced\" or \"be mindful\".\n- Vary paragraph length."
+            },
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"8-14 word SEO-friendly English title\"\n    },\n    \"content\": {\n      \"type\": \"string\",\n      \"description\": \"Full Markdown article including ## References and the disclaimer\"\n    },\n    \"tags\": {\n      \"type\": \"string\",\n      \"description\": \"3-5 English tags, comma separated\"\n    }\n  },\n  \"required\": [\n    \"title\",\n    \"content\",\n    \"tags\"\n  ],\n  \"additionalProperties\": false\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        12600,
+        2900
+      ],
+      "id": "cecea793-bf4d-494f-8a6f-6003ed144f9a",
+      "name": "英文重寫",
+      "credentials": {
+        "openAiApi": {
+          "id": "pcAm2yc2bIRwI0xA",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let a = $input.first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nreturn [{ json: { content: a.content || '' } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        12840,
+        2900
+      ],
+      "id": "6fbc23c2-2c2e-4b34-ab54-bd89aca91580",
+      "name": "英文審查素材（重寫後）"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "cachedResultName": "gpt-4o",
+          "mode": "list",
+          "value": "gpt-4o"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a strict English editor who detects machine-written prose. You receive the full text of an astrology column. Decide whether it reads like a human writer rather than a generic AI article.\n(Banned phrases, em dashes and emoji are checked separately by code; do not check them.)\n\nMark natural=false if any of these is clearly present:\n1. Empty, universally true advice with no concrete, checkable claim.\n2. Repetitive paragraph structure (the same \"phenomenon, star theory, advice\" pattern three or more times).\n3. A textbook, bullet-point tone instead of natural prose.\n\nFormat every reason as \"Problem type (empty advice / repetitive structure / textbook tone): what is wrong, then a passage copied word for word from the article\"; never paraphrase or invent a quote, and leave out any issue you cannot quote. When natural=true, return an empty reasons array."
+            },
+            {
+              "content": "={{ $json.content }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"natural\": {\n      \"type\": \"boolean\",\n      \"description\": \"讀起來是否像人寫的，沒有明顯 AI 陳腔濫調或制式套路\"\n    },\n    \"reasons\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"若 natural 為 false，逐條列出具體問題與對應原文片段，供重寫參考\"\n    }\n  },\n  \"required\": [\"natural\", \"reasons\"],\n  \"additionalProperties\": false\n}"
+            }
+          },
+          "temperature": 0
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        13080,
+        2900
+      ],
+      "id": "0eb8cb4a-9209-4bae-9997-817e82bf23a6",
+      "name": "英文文筆審查（重寫後）",
+      "credentials": {
+        "openAiApi": {
+          "id": "pcAm2yc2bIRwI0xA",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let a = $('英文重寫').first().json.output[0].content[0].text;\nif (typeof a === 'string') a = JSON.parse(a.replace(/^```json\\s*/i, '').replace(/```\\s*$/, ''));\nlet review = $input.first().json;\ntry {\n  const t = review.output[0].content[0].text;\n  review = typeof t === 'string' ? JSON.parse(t) : t;\n} catch (e) { review = {}; }\nconst ctx = $('英文素材').first().json;\nconst sel = $('統一選題').first().json;\nconst errors = [];\nconst content = a.content || '';\nconst words = (content.match(/[A-Za-z][A-Za-z'-]*/g) || []).length;\nif (words < 900) errors.push(`Too short: ${words} < 900 words`);\nconst refIdx = content.indexOf('## References');\nif (refIdx === -1) errors.push('Missing \"## References\" section');\nconst body = refIdx === -1 ? content : content.slice(0, refIdx);\nconst refs = refIdx === -1 ? '' : content.slice(refIdx);\nconst refLinks = (refs.match(/\\[[^\\]]+\\]\\(https?:\\/\\/[^)]+\\)/g) || []).length;\nif (refLinks < sel.min_refs) errors.push(`Not enough reference links: ${refLinks} < ${sel.min_refs}`);\nfor (const s of sel.selected_sources || []) {\n  if (!content.includes(s.link)) errors.push(`References missing source: ${s.title}`);\n}\nif (!content.includes('This content was AI-assisted and reviewed by our editorial team. For entertainment and cultural reference only.')) errors.push('Missing disclaimer');\nconst cjk = (content.match(/[一-鿿]/g) || []).length;\nif (cjk > 60) errors.push(`Too many Chinese characters: ${cjk} > 60`);\nif (/—/.test(content)) errors.push('Contains em dash');\nconst BANNED = ['Firstly', 'Moreover', 'Furthermore', 'In conclusion', \"It's worth noting\", 'It is worth noting', \"In today's world\", 'delve', 'Delve'];\nconst hit = BANNED.filter(x => content.includes(x));\nif (hit.length) errors.push('Banned phrases: ' + hit.join(', '));\nif (/\\p{Extended_Pictographic}/u.test(content)) errors.push('Contains emoji');\nif (typeof review.natural !== 'boolean') errors.push('Style review result could not be parsed');\nelse if (review.natural === false) errors.push('Style review failed: ' + (review.reasons || []).join('; '));\nconst norm = u => { let x = u.replace('://www.', '://'); try { x = decodeURIComponent(x); } catch (e) {} return x.replace(/\\/$/, ''); };\nconst allowed = new Set(ctx.linkables.map(l => norm(l.url)));\nconst internal = [...body.matchAll(/\\]\\((https?:\\/\\/(?:www\\.)?aiziwei\\.online\\/(?:zh-TW|en)\\/blog\\/[^)\\s]+)\\)/g)].map(m => norm(m[1]));\nconst bad = internal.filter(u => !allowed.has(u));\nif (bad.length) errors.push('Internal links not in the English post list: ' + bad.join(', '));\nconst uniq = new Set(internal);\nif (uniq.size < ctx.minInternal) errors.push(`Not enough internal links: ${uniq.size} < ${ctx.minInternal}`);\nif (uniq.size > 5) errors.push(`Too many internal links: ${uniq.size} > 5`);\nconst tw = s => new Set(s.toLowerCase().match(/[a-z]+/g) || []);\nconst nt = tw(a.title || '');\nfor (const l of ctx.linkables.slice(0, 15)) {\n  const ot = tw(l.title); const same = [...nt].filter(x => ot.has(x) && x.length > 3).length;\n  if (nt.size && same / nt.size >= 0.6) { errors.push(`Title too close to: ${l.title}`); break; }\n}\nreturn [{ json: { passed: errors.length === 0, errors, article: a } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        13320,
+        2900
+      ],
+      "id": "1cfa85c9-fb92-4431-b6e6-92e6ee481237",
+      "name": "英文品質閘門（重寫後）"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.passed }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        13560,
+        2900
+      ],
+      "id": "e96c3c07-d1a0-4a59-b531-fc4c340168d5",
+      "name": "英文重寫是否通過?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://aiziwei.online/api/blog/create",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title",
+              "value": "={{ $json.article.title }}"
+            },
+            {
+              "name": "content",
+              "value": "={{ $json.article.content }}"
+            },
+            {
+              "name": "tags",
+              "value": "={{ [...new Set(['Zi Wei Dou Shu', ...String($json.article.tags).split(',')].map(t => t.trim()).filter(Boolean))].join(',') }}"
+            },
+            {
+              "name": "status",
+              "value": "published"
+            },
+            {
+              "name": "language",
+              "value": "en"
+            },
+            {
+              "name": "author",
+              "value": "王老師"
+            },
+            {
+              "name": "translated_from",
+              "value": "={{ $('英文素材').first().json.zhId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        13800,
+        2600
+      ],
+      "id": "c62316e1-94a4-4016-805c-e30125308719",
+      "name": "發布英文版",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "YjFdtoLhLzElm6YM",
+          "name": "ziwei_blog_api_token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "850700458",
+        "text": "=【AI紫微】英文版已發布：{{ $json.data.title }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        14040,
+        2600
+      ],
+      "id": "10cef06e-97aa-4495-a3d4-334ee484b037",
+      "name": "英文發布通知",
+      "webhookId": "e1dd317b-3d17-4a1a-818d-102fcbeab31a",
+      "credentials": {
+        "telegramApi": {
+          "id": "DL3qUg6LCTetekDw",
+          "name": "Telegram account !"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "850700458",
+        "text": "=【AI紫微】英文版重寫後仍未通過，本次只發中文：{{ $json.errors.join('；') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        13800,
+        3100
+      ],
+      "id": "6d3dc2c2-3f91-427d-bbaf-6ce84db7eb3b",
+      "name": "英文未通過通知",
+      "webhookId": "ce4fa062-76ac-4936-bd43-c03b91743f36",
+      "credentials": {
+        "telegramApi": {
+          "id": "DL3qUg6LCTetekDw",
+          "name": "Telegram account !"
+        }
+      }
     }
   ],
   "pinData": {},
   "connections": {
-    "每週一 09:00 啟動": {
+    "RSS Bing 運勢命理": {
       "main": [
         [
           {
-            "node": "RSS 紫微斗數",
+            "node": "合併候選",
             "type": "main",
-            "index": 0
-          },
-          {
-            "node": "RSS 運勢命理",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "RSS ETtoday 運勢",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "RSS Bing 運勢命理",
-            "type": "main",
-            "index": 0
+            "index": 3
           }
         ]
       ]
@@ -650,55 +1267,11 @@
         ]
       ]
     },
-    "RSS Bing 運勢命理": {
-      "main": [
-        [
-          {
-            "node": "合併候選",
-            "type": "main",
-            "index": 3
-          }
-        ]
-      ]
-    },
     "合併候選": {
       "main": [
         [
           {
             "node": "去重過濾",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "去重過濾": {
-      "main": [
-        [
-          {
-            "node": "取近期文章",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "取近期文章": {
-      "main": [
-        [
-          {
-            "node": "取近期標題",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "取近期標題": {
-      "main": [
-        [
-          {
-            "node": "選題素材",
             "type": "main",
             "index": 0
           }
@@ -721,28 +1294,6 @@
         [
           {
             "node": "解析選題",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "解析選題": {
-      "main": [
-        [
-          {
-            "node": "知識庫檢索",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "知識庫檢索": {
-      "main": [
-        [
-          {
-            "node": "寫作素材",
             "type": "main",
             "index": 0
           }
@@ -833,17 +1384,6 @@
         ]
       ]
     },
-    "發布文章": {
-      "main": [
-        [
-          {
-            "node": "成功通知",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "審查素材": {
       "main": [
         [
@@ -887,12 +1427,413 @@
           }
         ]
       ]
+    },
+    "每週一、四 09:00 啟動": {
+      "main": [
+        [
+          {
+            "node": "取近期文章",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "取近期文章": {
+      "main": [
+        [
+          {
+            "node": "排程決策",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "排程決策": {
+      "main": [
+        [
+          {
+            "node": "是否時事?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "是否時事?": {
+      "main": [
+        [
+          {
+            "node": "RSS 紫微斗數",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS 運勢命理",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS ETtoday 運勢",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS Bing 運勢命理",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "是否人生議題?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "是否人生議題?": {
+      "main": [
+        [
+          {
+            "node": "國際來源清單",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "統一選題",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "去重過濾": {
+      "main": [
+        [
+          {
+            "node": "選題素材",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "解析選題": {
+      "main": [
+        [
+          {
+            "node": "統一選題",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "國際來源清單": {
+      "main": [
+        [
+          {
+            "node": "抓國際 RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "抓國際 RSS": {
+      "main": [
+        [
+          {
+            "node": "國際去重",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "國際去重": {
+      "main": [
+        [
+          {
+            "node": "國際選題素材",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "國際選題素材": {
+      "main": [
+        [
+          {
+            "node": "國際選題主編",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "國際選題主編": {
+      "main": [
+        [
+          {
+            "node": "解析國際選題",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "解析國際選題": {
+      "main": [
+        [
+          {
+            "node": "統一選題",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "統一選題": {
+      "main": [
+        [
+          {
+            "node": "知識庫檢索",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "知識庫檢索": {
+      "main": [
+        [
+          {
+            "node": "寫作素材",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "發布文章": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "是否出英文版?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "是否出英文版?": {
+      "main": [
+        [
+          {
+            "node": "等待一小時",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "等待一小時": {
+      "main": [
+        [
+          {
+            "node": "取英文文章",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "取英文文章": {
+      "main": [
+        [
+          {
+            "node": "英文素材",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "英文素材": {
+      "main": [
+        [
+          {
+            "node": "英文改寫",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "英文改寫": {
+      "main": [
+        [
+          {
+            "node": "英文審查素材",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "英文審查素材": {
+      "main": [
+        [
+          {
+            "node": "英文文筆審查",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "英文文筆審查": {
+      "main": [
+        [
+          {
+            "node": "英文品質閘門",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "英文品質閘門": {
+      "main": [
+        [
+          {
+            "node": "英文是否通過?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "英文是否通過?": {
+      "main": [
+        [
+          {
+            "node": "發布英文版",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "英文重寫素材",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "英文重寫素材": {
+      "main": [
+        [
+          {
+            "node": "英文重寫",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "英文重寫": {
+      "main": [
+        [
+          {
+            "node": "英文審查素材（重寫後）",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "英文審查素材（重寫後）": {
+      "main": [
+        [
+          {
+            "node": "英文文筆審查（重寫後）",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "英文文筆審查（重寫後）": {
+      "main": [
+        [
+          {
+            "node": "英文品質閘門（重寫後）",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "英文品質閘門（重寫後）": {
+      "main": [
+        [
+          {
+            "node": "英文重寫是否通過?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "英文重寫是否通過?": {
+      "main": [
+        [
+          {
+            "node": "發布英文版",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "英文未通過通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "發布英文版": {
+      "main": [
+        [
+          {
+            "node": "英文發布通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
-    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate",
+    "availableInMCP": false,
     "errorWorkflow": "k4pQNJ91Ev07sdo0",
     "timezone": "Asia/Taipei"
   },
