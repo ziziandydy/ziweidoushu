@@ -22,9 +22,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             images: [{ url: 'https://aiziwei.online/og-image.png', width: 1200, height: 630 }],
         },
         twitter: { card: 'summary_large_image', images: ['https://aiziwei.online/og-image.png'] },
+        // 中文首頁以根網址為 canonical：/ 由 vercel.json rewrite 到 /zh-TW，兩者內容相同，
+        // Google 也一直選根網址（www → apex 308 後即為 https://aiziwei.online/）
         alternates: {
-            canonical: `https://aiziwei.online/${locale}`,
-            languages: { 'zh-TW': 'https://aiziwei.online/zh-TW', 'en': 'https://aiziwei.online/en' },
+            canonical: isEn ? 'https://aiziwei.online/en' : 'https://aiziwei.online/',
+            languages: {
+                'zh-TW': 'https://aiziwei.online/',
+                'en': 'https://aiziwei.online/en',
+                'x-default': 'https://aiziwei.online/',
+            },
         },
     };
 }

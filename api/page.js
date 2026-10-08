@@ -47,7 +47,7 @@ async function generateSitemap(req, res) {
   try {
     // 靜態頁面
     const staticPages = [
-      { url: '', priority: '1.0', changefreq: 'weekly' },
+      { url: '/', priority: '1.0', changefreq: 'weekly' },
       { url: '/zh-TW/analysis', priority: '0.9', changefreq: 'weekly' },
       { url: '/en/analysis', priority: '0.9', changefreq: 'weekly' },
       { url: '/zh-TW/blog', priority: '0.9', changefreq: 'daily' },
