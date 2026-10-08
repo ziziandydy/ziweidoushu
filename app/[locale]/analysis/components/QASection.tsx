@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CalculationResult, UserProfile } from '../types';
 import { AnalysisDict } from '../translations';
+import { trackEvent } from '../../../lib/analytics';
 
 export interface ChatMessage {
     type: 'user' | 'assistant';
@@ -137,6 +138,7 @@ export default function QASection({ locale, t, userProfile, destinyData, initial
             if (result.success) {
                 if (result.threadId) threadIdRef.current = result.threadId;
                 setMessages(prev => [...prev, { type: 'assistant', text: result.answer }]);
+                trackEvent('question_asked', { locale });
             } else {
                 setMessages(prev => [...prev, { type: 'assistant', text: result.error || t.qa.chat.genericError }]);
             }
@@ -165,6 +167,7 @@ export default function QASection({ locale, t, userProfile, destinyData, initial
         }
 
         setPaymentLoading(true);
+        trackEvent('begin_checkout', { locale, currency: 'TWD' });
         try {
             const cookieId = getCookieId();
             const response = await fetch('/api/ecpay?action=create', {

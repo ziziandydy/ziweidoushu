@@ -8,6 +8,7 @@ import DetailedAnalysis from './components/DetailedAnalysis';
 import { CalculationResult, UserProfile } from './types';
 import { AnalysisDict } from './translations';
 import { ChatMessage, PAYMENT_RESTORE_KEY } from './components/QASection';
+import { trackEvent } from '../../lib/analytics';
 
 interface RestoreState {
     userProfile?: UserProfile;
@@ -58,6 +59,7 @@ export default function AnalysisClient({ locale, t }: AnalysisClientProps) {
         setRestoredSections(null);
         setCurrentStep(2);
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        trackEvent('chart_calculated', { locale });
     };
 
     const goToStep = (step: number) => {

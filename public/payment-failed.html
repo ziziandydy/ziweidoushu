@@ -24,6 +24,12 @@
             50% { opacity: 0.5; }
         }
     </style>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){if(w.navigator.webdriver)return;w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WJJN3TGM');</script>
 </head>
 <body class="bg-gradient-to-br from-red-50 to-orange-50 min-h-screen flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
@@ -151,13 +157,12 @@
             goToAnalysis();
         }
 
-        // 追蹤付款失敗事件（Google Analytics）
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'payment_failed', {
-                error_message: errorMessage,
-                order_id: orderId || 'unknown'
-            });
-        }
+        // 追蹤付款失敗事件：推到 GTM dataLayer，由「GA4 - 自訂事件」tag 轉送 GA4
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            event: 'payment_failed',
+            transaction_id: orderId || 'unknown'
+        });
     </script>
 </body>
 </html>
