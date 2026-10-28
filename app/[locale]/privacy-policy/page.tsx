@@ -180,7 +180,7 @@ export default async function PrivacyPolicyPage({ params }: Props) {
                         <div className="bg-gray-50 p-4 rounded-lg">
                             <p className="text-gray-700">
                                 <strong>Website:</strong> <a href="https://aiziwei.online/" className="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">https://aiziwei.online/</a><br />
-                                <strong>Email:</strong> <a href="mailto:andismtu@gmail.com" className="text-blue-600 hover:text-blue-800">andismtu@gmail.com</a><br />
+                                <strong>Email:</strong> <a href="mailto:support@aiziwei.online" className="text-blue-600 hover:text-blue-800">support@aiziwei.online</a><br />
                                 <strong>Support form:</strong> <a href="https://forms.gle/KnwbQqyRGBVFqBPQ6" className="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">https://forms.gle/KnwbQqyRGBVFqBPQ6</a>
                             </p>
                         </div>
@@ -357,7 +357,7 @@ export default async function PrivacyPolicyPage({ params }: Props) {
                     <div className="bg-gray-50 p-4 rounded-lg">
                         <p className="text-gray-700">
                             <strong>網站：</strong> <a href="https://aiziwei.online/" className="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">https://aiziwei.online/</a><br />
-                            <strong>郵件：</strong> <a href="mailto:andismtu@gmail.com" className="text-blue-600 hover:text-blue-800">andismtu@gmail.com</a><br />
+                            <strong>郵件：</strong> <a href="mailto:support@aiziwei.online" className="text-blue-600 hover:text-blue-800">support@aiziwei.online</a><br />
                             <strong>客服表單：</strong> <a href="https://forms.gle/KnwbQqyRGBVFqBPQ6" className="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">https://forms.gle/KnwbQqyRGBVFqBPQ6</a>
                         </p>
                     </div>

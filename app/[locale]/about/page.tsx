@@ -34,7 +34,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: strin
                     <h2>Author</h2>
                     <p><strong>Wang Laoshi (王老師)</strong> — the site&apos;s editorial pen name. Articles are drafted with AI assistance from curated sources and our knowledge base, then reviewed by the site operator.</p>
                     <h2>Contact</h2>
-                    <p>Email: andismtu@gmail.com · <a href="https://forms.gle/KnwbQqyRGBVFqBPQ6">Support form</a> · <a href="/privacy-policy">Privacy policy</a></p>
+                    <p>Email: support@aiziwei.online · <a href="https://forms.gle/KnwbQqyRGBVFqBPQ6">Support form</a> · <a href="/privacy-policy">Privacy policy</a></p>
                 </article>
             </main>
         );
@@ -52,7 +52,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: strin
                 <h2>作者</h2>
                 <p><strong>王老師</strong> — 本站專欄筆名。文章由 AI 依據策展素材與知識庫起草，站長監督並定期抽查修正。</p>
                 <h2>聯絡我們</h2>
-                <p>Email：andismtu@gmail.com · <a href="https://forms.gle/KnwbQqyRGBVFqBPQ6">支援表單</a> · <a href="/privacy-policy">隱私政策</a></p>
+                <p>Email：support@aiziwei.online · <a href="https://forms.gle/KnwbQqyRGBVFqBPQ6">支援表單</a> · <a href="/privacy-policy">隱私政策</a></p>
             </article>
         </main>
     );
