@@ -6,6 +6,14 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
         description: isEn
             ? 'Who we are, our methodology, and our content policy.'
             : '認識 AI 紫微斗數：站點宗旨、理論方法與內容政策。',
+        alternates: {
+            canonical: `https://aiziwei.online/${locale}/about`,
+            languages: {
+                'zh-TW': 'https://aiziwei.online/zh-TW/about',
+                'en': 'https://aiziwei.online/en/about',
+                'x-default': 'https://aiziwei.online/zh-TW/about',
+            },
+        },
     };
 }
 

@@ -4,17 +4,41 @@
 
 ## 核心服務
 
-- 命盤分析：https://aiziwei.online/analysis.html — 輸入生辰八字即可獲得 AI 深度命盤解讀（免費每月 3 次）
-- 定價方案：https://aiziwei.online/pricing.html — 免費（每月 3 次問答）/ NT$199（1 小時無限問答）
+- 命盤分析：https://aiziwei.online/zh-TW/analysis — 輸入生辰八字即可獲得 AI 深度命盤解讀（免費每月 3 次）
+- 定價方案：https://aiziwei.online/zh-TW/pricing — 免費（每月 3 次問答）/ NT$199（1 小時無限問答）
 
 ## 內容資源
 
-- 部落格：https://aiziwei.online/blog — 紫微斗數知識庫，涵蓋十二宮位解析、流日運勢、命理應用
+- 部落格：https://aiziwei.online/zh-TW/blog — 紫微斗數知識庫，涵蓋十二宮位解析、流日運勢、命理應用
 
 ## 關於
 
 - 門派：中州派（傳統紫微斗數正統流派）
 - AI 模型：OpenAI GPT-4o
 - 語言：繁體中文（主）、英文
-- 隱私政策：https://aiziwei.online/privacy-policy.html
+- 關於本站：https://aiziwei.online/zh-TW/about
+- 隱私政策：https://aiziwei.online/zh-TW/privacy-policy
 - 聯絡：support@aiziwei.online
+
+---
+
+# AI Zi Wei Dou Shu (English)
+
+> An AI-powered Zi Wei Dou Shu (Purple Star Astrology) chart analysis service, built on the Zhongzhou school's classical theory and GPT-4o, with interpretations in Traditional Chinese and English.
+
+## Core services
+
+- Chart analysis: https://aiziwei.online/en/analysis — enter a birth date and time for an AI reading of your chart (free: 3 Q&A per month)
+- Pricing: https://aiziwei.online/en/pricing — Free (3 Q&A per month) / NT$199 (1 hour of unlimited Q&A)
+
+## Content
+
+- Blog: https://aiziwei.online/en/blog — Zi Wei Dou Shu knowledge base: the twelve palaces, daily and seasonal fortune, practical applications
+
+## About
+
+- School: Zhongzhou school (a traditional Zi Wei Dou Shu lineage)
+- AI model: OpenAI GPT-4o
+- Languages: Traditional Chinese (primary), English
+- About: https://aiziwei.online/en/about
+- Privacy policy: https://aiziwei.online/en/privacy-policy

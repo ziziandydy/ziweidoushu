@@ -166,8 +166,50 @@ export default async function HomePage({ params }: Props) {
         },
     };
 
+    const orgName = isEn ? 'AI Zi Wei Dou Shu' : 'AI 紫微斗數';
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            {
+                '@type': 'Organization',
+                '@id': 'https://aiziwei.online/#organization',
+                name: orgName,
+                url: 'https://aiziwei.online',
+                logo: {
+                    '@type': 'ImageObject',
+                    url: 'https://aiziwei.online/favicon.svg',
+                },
+            },
+            {
+                '@type': 'WebSite',
+                '@id': 'https://aiziwei.online/#website',
+                name: orgName,
+                url: 'https://aiziwei.online',
+                inLanguage: isEn ? 'en' : 'zh-TW',
+                publisher: { '@id': 'https://aiziwei.online/#organization' },
+            },
+            {
+                '@type': 'SoftwareApplication',
+                '@id': 'https://aiziwei.online/#app',
+                name: orgName,
+                url: 'https://aiziwei.online/' + locale + '/analysis',
+                applicationCategory: 'LifestyleApplication',
+                operatingSystem: 'Web',
+                inLanguage: isEn ? 'en' : 'zh-TW',
+                description: isEn
+                    ? 'Zi Wei Dou Shu chart analysis based on the Zhongzhou school, powered by GPT-4o. Free plan: 3 Q&A per month.'
+                    : '採用中州派理論、以 GPT-4o 驅動的紫微斗數命盤分析。免費方案每月 3 次問答。',
+                publisher: { '@id': 'https://aiziwei.online/#organization' },
+            },
+        ],
+    };
+
     return (
         <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <main>
                 {/* Hero */}
                 <section className="container mx-auto px-4 py-16 text-center">

@@ -32,6 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             languages: {
                 'zh-TW': 'https://aiziwei.online/zh-TW/analysis',
                 'en': 'https://aiziwei.online/en/analysis',
+                'x-default': 'https://aiziwei.online/zh-TW/analysis',
             },
         },
     };

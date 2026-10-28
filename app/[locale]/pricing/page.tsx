@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             languages: {
                 [locale]: `https://aiziwei.online/${locale}/pricing`,
                 [otherLocale]: `https://aiziwei.online/${otherLocale}/pricing`,
+                'x-default': 'https://aiziwei.online/zh-TW/pricing',
             },
         },
     };
@@ -90,8 +91,40 @@ export default async function PricingPage({ params }: Props) {
     const paidFeatures = isEn ? paidFeaturesEn : paidFeaturesZh;
     const faq = isEn ? faqEn : faqZh;
 
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: isEn ? 'AI Zi Wei Dou Shu' : 'AI 紫微斗數',
+        url: `https://aiziwei.online/${locale}`,
+        applicationCategory: 'LifestyleApplication',
+        operatingSystem: 'Web',
+        inLanguage: isEn ? 'en' : 'zh-TW',
+        offers: [
+            {
+                '@type': 'Offer',
+                name: isEn ? 'Free Plan' : '免費方案',
+                description: isEn ? '3 free Q&A sessions per month' : '每月 3 次免費問答',
+                price: '0',
+                priceCurrency: 'TWD',
+                url: `https://aiziwei.online/${locale}/pricing`,
+            },
+            {
+                '@type': 'Offer',
+                name: isEn ? 'Paid Unlock Plan' : '付費解鎖方案',
+                description: isEn ? '1 hour of unlimited Q&A' : '1 小時無限問答',
+                price: '199',
+                priceCurrency: 'TWD',
+                url: `https://aiziwei.online/${locale}/pricing`,
+            },
+        ],
+    };
+
     return (
         <main>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <section className="container mx-auto px-4 py-16 text-center">
                 <h1 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">
                     {isEn ? '💰 Pricing' : '💰 價格方案'}

@@ -15,6 +15,7 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
     };
     if (alternate) {
         languages[alternate.locale] = `https://aiziwei.online/${alternate.locale}/blog/${alternate.slug}`;
+        languages['x-default'] = languages['zh-TW'];
     }
 
     return {

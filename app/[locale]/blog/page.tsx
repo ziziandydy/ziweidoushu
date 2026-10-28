@@ -21,6 +21,7 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
             languages: {
                 [params.locale]: `https://aiziwei.online/${params.locale}/blog${qs}`,
                 [otherLocale]: `https://aiziwei.online/${otherLocale}/blog${qs}`,
+                'x-default': `https://aiziwei.online/zh-TW/blog${qs}`,
             },
         },
     };
