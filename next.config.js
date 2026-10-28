@@ -2,6 +2,10 @@
 const nextConfig = {
     reactStrictMode: true,
 
+    experimental: {
+        globalNotFound: true,
+    },
+
     typescript: {
         ignoreBuildErrors: true,
     },
