@@ -17,13 +17,6 @@ export const metadata = {
 
 const SUPPORTED_LOCALES = ['zh-TW', 'en'];
 
-// 不支援的 locale 直接 404（由 app/global-not-found.tsx 輸出完整文件）
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-    return SUPPORTED_LOCALES.map((locale) => ({ locale }));
-}
-
 export default async function LocaleLayout({
     children,
     params,
