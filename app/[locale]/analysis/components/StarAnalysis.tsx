@@ -47,14 +47,14 @@ export default function StarAnalysis({ t, destinyInfo, onBack, onNext }: StarAna
                     const starColor = getEnergyColor(normalizedEnergy);
 
                     return (
-                        <div key={palace.palaceIndex} className={`bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 ${starColor.border} p-4 rounded shadow-sm`}>
+                        <div key={palace.palaceIndex} className={`bg-ink-50 border-l-4 ${starColor.border} p-4 rounded shadow-sm`}>
                             <h3 className="font-bold text-lg mb-2">{palaceName}</h3>
-                            <p className="text-gray-700 mb-2">{description}</p>
+                            <p className="text-ink-700 mb-2">{description}</p>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-500">{t.stars.majorStars}: {majorStarsDisplay}</span>
+                                <span className="text-sm text-ink-500">{t.stars.majorStars}: {majorStarsDisplay}</span>
                                 <div className="flex items-center">
                                     <span className="text-sm font-medium mr-2">{t.stars.energy}:</span>
-                                    <div className="w-16 bg-gray-200 rounded-full h-2">
+                                    <div className="w-16 bg-ink-200 rounded-full h-2">
                                         <div className={`${starColor.color} h-2 rounded-full`} style={{ width: `${normalizedEnergy}%` }}></div>
                                     </div>
                                     <span className="text-xs ml-2">{normalizedEnergy}%</span>
@@ -68,13 +68,13 @@ export default function StarAnalysis({ t, destinyInfo, onBack, onNext }: StarAna
             <div className="flex space-x-4 mt-6">
                 <button
                     onClick={onBack}
-                    className="flex-1 bg-gray-500 text-white py-3 rounded-lg font-medium hover:bg-gray-600 transition-all duration-200"
+                    className="btn-secondary flex-1 py-3"
                 >
                     {t.stars.back}
                 </button>
                 <button
                     onClick={onNext}
-                    className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-medium hover:bg-purple-700 transition-all duration-200"
+                    className="btn-primary flex-1 py-3"
                 >
                     {t.stars.next}
                 </button>

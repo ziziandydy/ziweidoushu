@@ -38,7 +38,7 @@
 - **紅色撞色規則：** 主色是紅，錯誤狀態不能只靠顏色。所有錯誤訊息一律「圖示（Phosphor `WarningCircle`）加文字」，錯誤色用 `#B42318`（比主色更正紅），並搭配錯誤框線。命盤星曜亮度的紅色分級（`red-400`）保留不動。
 - **形狀：** 按鈕與輸入框 `rounded-lg`（8px），卡片與容器 `rounded-xl`（12px），語言切換與頭像 `rounded-full`。
 - **字型：** `next/font/google` 自架。Noto Sans TC（400、500、700）用於介面與內文；Noto Serif TC（600）只用於部落格列表標題、首頁最新文章標題、文章頁標題。`display: 'swap'`。
-- **圖示：** emoji 一律移除；改用 Phosphor（Server Component 用 `@phosphor-icons/react/dist/ssr`），`weight="regular"`。不得手繪 SVG 圖示（標誌除外）。
+- **圖示：** emoji 一律移除（含翻譯字串裡的）；改用 Phosphor，**一律逐一引入**：client 元件 `@phosphor-icons/react/dist/csr/<Icon>`、Server Component `@phosphor-icons/react/dist/ssr/<Icon>`。從套件根目錄引入在本專案 `moduleResolution: nodenext` 下型別解析不到，而 `next.config.js` 的 `ignoreBuildErrors: true` 會把錯誤藏起來，每個 task 都要跑 `npx tsc --noEmit -p .` 確認 `.next/` 以外沒有錯誤。不得手繪 SVG 圖示（標誌除外）。
 - **互動：** 按鈕與連結有 hover、`active:scale-[0.98]`、`focus-visible` 外框；動畫只用 CSS `transform`／`opacity`，尊重 `prefers-reduced-motion`。
 - **用詞：** 頁面說明統一「AI 輔助、人工監督」（英文 `AI-assisted, human-supervised`）。文章免責聲明 `本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考` 不得更動。繁中「——」是正常標點。
 - **範圍外：** 深色模式；analysis 版面重設計（本輪只 token）；NavBar 語言切換永遠連到 `/blog`（既有問題）；`api/blog/list.js` 接受公開的 `status`／`includeAll` 參數，可讀到草稿與已下架文章（既有安全問題，改版後另開任務）。

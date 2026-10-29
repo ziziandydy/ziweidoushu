@@ -9,6 +9,7 @@ import { CalculationResult, UserProfile } from './types';
 import { AnalysisDict } from './translations';
 import { ChatMessage, PAYMENT_RESTORE_KEY } from './components/QASection';
 import { trackEvent } from '../../lib/analytics';
+import { takeBirthInput } from '../../lib/birthHandoff';
 
 interface RestoreState {
     userProfile?: UserProfile;
@@ -28,11 +29,17 @@ export default function AnalysisClient({ locale, t }: AnalysisClientProps) {
     const [destinyData, setDestinyData] = useState<CalculationResult | null>(null);
     const [restoredChat, setRestoredChat] = useState<ChatMessage[]>([]);
     const [restoredSections, setRestoredSections] = useState<{ title: string; content: string[] }[] | null>(null);
+    const [handoffProfile, setHandoffProfile] = useState<UserProfile | null>(null);
 
     // Returning from an ECPay payment lands on ?restore=true — resume where the user left off.
+    // Otherwise pick up birth data the homepage form handed over and calculate right away.
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-        if (params.get('restore') !== 'true') return;
+        if (params.get('restore') !== 'true') {
+            const handed = takeBirthInput();
+            if (handed) setHandoffProfile(handed);
+            return;
+        }
 
         try {
             const stateJSON = sessionStorage.getItem(PAYMENT_RESTORE_KEY);
@@ -79,14 +86,14 @@ export default function AnalysisClient({ locale, t }: AnalysisClientProps) {
             <div className="container mx-auto px-4 py-6">
                 {/* Header */}
                 <div className="text-center mb-6">
-                    <h1 className="text-3xl font-bold gradient-text">{t.header.title}</h1>
-                    <p className="text-gray-600 mt-2">{t.header.subtitle}</p>
+                    <h1 className="text-3xl font-bold text-ink-900">{t.header.title}</h1>
+                    <p className="text-ink-600 mt-2">{t.header.subtitle}</p>
                 </div>
 
                 {/* Intro */}
                 {currentStep === 1 && (
-                    <div className="max-w-2xl mx-auto bg-purple-50 border border-purple-200 rounded-lg p-4 mb-8">
-                        <p className="text-sm text-gray-700 leading-relaxed">{t.intro}</p>
+                    <div className="max-w-2xl mx-auto bg-brand-50 border border-brand-100 rounded-xl p-4 mb-8">
+                        <p className="text-sm text-ink-700 leading-relaxed">{t.intro}</p>
                     </div>
                 )}
 
@@ -94,10 +101,10 @@ export default function AnalysisClient({ locale, t }: AnalysisClientProps) {
                 <div className="flex justify-center mb-8 space-x-4">
                     {steps.map(step => (
                         <div key={step.id} className="flex items-center">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${currentStep === step.id ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${currentStep === step.id ? 'bg-brand-600 text-white' : 'bg-ink-100 text-ink-500'}`}>
                                 {step.id}
                             </div>
-                            <span className={`ml-2 font-medium hidden md:block ${currentStep === step.id ? 'text-blue-600' : 'text-gray-400'}`}>
+                            <span className={`ml-2 font-medium hidden md:block ${currentStep === step.id ? 'text-brand-700' : 'text-ink-400'}`}>
                                 {step.label}
                             </span>
                         </div>
@@ -105,9 +112,16 @@ export default function AnalysisClient({ locale, t }: AnalysisClientProps) {
                 </div>
 
                 <div className="flex items-center justify-center">
-                    <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-6 min-h-[500px]">
+                    <div className="w-full max-w-2xl surface p-6 min-h-[500px]">
                         {currentStep === 1 && (
-                            <AnalysisForm locale={locale} t={t} onCalculated={handleCalculated} />
+                            <AnalysisForm
+                                key={handoffProfile ? 'handoff' : 'blank'}
+                                locale={locale}
+                                t={t}
+                                onCalculated={handleCalculated}
+                                initialProfile={handoffProfile}
+                                autoSubmit={!!handoffProfile}
+                            />
                         )}
 
                         {currentStep === 2 && destinyData && userProfile && (
@@ -143,7 +157,7 @@ export default function AnalysisClient({ locale, t }: AnalysisClientProps) {
                 </div>
 
                 {/* Footer disclaimer */}
-                <div className="max-w-2xl mx-auto mt-8 text-center text-xs text-gray-500 space-y-2">
+                <div className="max-w-2xl mx-auto mt-8 text-center text-xs text-ink-500 space-y-2">
                     <p>
                         <strong>{t.footer.disclaimerTitle}</strong>：{t.footer.disclaimer}
                     </p>

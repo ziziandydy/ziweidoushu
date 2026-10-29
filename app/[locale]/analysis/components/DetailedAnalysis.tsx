@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import { WarningCircle } from '@phosphor-icons/react/dist/csr/WarningCircle';
 import { CalculationResult, UserProfile } from '../types';
 import { AnalysisDict } from '../translations';
 import { requestAnalysis } from '../services/aiService';
@@ -52,32 +53,24 @@ export default function DetailedAnalysis({
         return () => { cancelled = true; };
     }, [userProfile, destinyData, retryKey]);
 
-    const getSectionIcon = (title: string) => {
-        if (title.includes('主星')) return 'text-yellow-500';
-        if (title.includes('格局')) return 'text-green-500';
-        if (title.includes('命宮')) return 'text-blue-500';
-        if (title.includes('總結')) return 'text-purple-500';
-        return 'text-purple-500';
-    };
-
     return (
         <div className="animate-fade-in space-y-6">
-            <h2 className="text-2xl font-bold mb-6 text-center text-purple-800">
+            <h2 className="text-2xl font-bold mb-6 text-center text-ink-900">
                 {t.analysis.titleWithName.replace('{name}', userProfile.name)}
             </h2>
 
             {loading && (
-                <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 p-6 rounded-lg flex justify-center items-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mr-3"></div>
-                    <span className="text-purple-700 font-medium">{t.analysis.loading}</span>
+                <div className="bg-brand-50 border border-brand-100 p-6 rounded-xl flex justify-center items-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600 mr-3"></div>
+                    <span className="text-brand-700 font-medium">{t.analysis.loading}</span>
                 </div>
             )}
 
             {error && (
-                <div className="bg-red-50 border border-red-200 p-6 rounded-lg">
-                    <h3 className="text-red-800 font-bold mb-2">{t.analysis.serviceUnavailable}</h3>
-                    <p className="text-red-600">{error}</p>
-                    <button onClick={() => setRetryKey(k => k + 1)} className="mt-4 text-sm text-red-600 underline">
+                <div role="alert" className="bg-white border border-danger/30 p-6 rounded-xl">
+                    <h3 className="error-text font-bold mb-2"><WarningCircle size={20} weight="fill" className="mt-px shrink-0" aria-hidden="true" />{t.analysis.serviceUnavailable}</h3>
+                    <p className="text-ink-700">{error}</p>
+                    <button onClick={() => setRetryKey(k => k + 1)} className="mt-4 link text-sm">
                         {t.analysis.retryButton}
                     </button>
                 </div>
@@ -86,12 +79,9 @@ export default function DetailedAnalysis({
             {!loading && !error && (
                 <div className="space-y-6">
                     {analysisSections.map((section, idx) => (
-                        <div key={idx} className="bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 border-2 border-blue-200 p-6 rounded-xl shadow-lg">
-                            <div className="flex items-center mb-4">
-                                <div className={`${getSectionIcon(section.title)} text-lg mr-3`}>🌟</div>
-                                <h3 className="text-xl font-bold text-purple-800">{section.title}</h3>
-                            </div>
-                            <div className="text-gray-800 leading-relaxed space-y-2">
+                        <div key={idx} className="bg-white border border-ink-100 p-6 rounded-xl">
+                            <h3 className="text-xl font-bold text-ink-900 mb-4 pb-3 border-b border-ink-100">{section.title}</h3>
+                            <div className="text-ink-800 leading-relaxed space-y-2">
                                 {section.content.map((line, i) => (
                                     <div key={i}>{line}</div>
                                 ))}
@@ -113,7 +103,7 @@ export default function DetailedAnalysis({
             <div className="flex space-x-4 mt-6">
                 <button
                     onClick={onBack}
-                    className="w-full bg-gray-500 text-white py-3 rounded-lg font-medium hover:bg-gray-600 transition-all duration-200"
+                    className="btn-secondary w-full py-3"
                 >
                     {t.analysis.back}
                 </button>

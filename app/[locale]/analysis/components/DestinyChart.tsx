@@ -33,30 +33,30 @@ export default function DestinyChart({ t, destinyInfo, userInfo, onStarAnalysisC
         <div className="animate-fade-in">
             <h2 className="text-2xl font-bold mb-6 text-center">{t.chart.title}</h2>
 
-            <div className="bg-gray-50 rounded-lg p-4 mb-6">
+            <div className="bg-ink-50 rounded-lg p-4 mb-6">
                 <div className="grid grid-cols-4 gap-2 text-xs relative aspect-square md:aspect-auto">
                     {palaceMapping.map((palaceIndex, gridIndex) => {
                         // Center info occupies the middle 2x2 — rendered once at grid index 5
                         if (gridIndex === 5) {
                             return (
-                                <div key="center-info" className="bg-white border-2 border-purple-300 p-4 rounded text-center col-span-2 row-span-2 flex flex-col justify-center items-center shadow-sm">
-                                    <div className="font-bold text-purple-800 text-sm mb-2">{t.chart.centerTitle}</div>
+                                <div key="center-info" className="bg-white border-2 border-brand-200 p-4 rounded text-center col-span-2 row-span-2 flex flex-col justify-center items-center shadow-sm">
+                                    <div className="font-bold text-ink-900 text-sm mb-2">{t.chart.centerTitle}</div>
                                     <div className="grid grid-cols-2 gap-4 w-full">
                                         <div>
-                                            <div className="text-xs text-gray-600 mb-1">{t.chart.destinyLord}</div>
-                                            <div className="text-xl font-bold text-purple-600">{destinyInfo.destinyMaster?.name || '紫微'}</div>
+                                            <div className="text-xs text-ink-600 mb-1">{t.chart.destinyLord}</div>
+                                            <div className="text-xl font-bold text-brand-700">{destinyInfo.destinyMaster?.name || '紫微'}</div>
                                         </div>
                                         <div>
-                                            <div className="text-xs text-gray-600 mb-1">{t.chart.bodyLord}</div>
-                                            <div className="text-xl font-bold text-purple-600">{destinyInfo.bodyMaster?.name || '天府'}</div>
+                                            <div className="text-xs text-ink-600 mb-1">{t.chart.bodyLord}</div>
+                                            <div className="text-xl font-bold text-brand-700">{destinyInfo.bodyMaster?.name || '天府'}</div>
                                         </div>
                                     </div>
                                     {destinyInfo.element && (
-                                        <div className="mt-2 text-xs text-gray-600">
-                                            {t.chart.element}：<span className="font-medium text-purple-700">{destinyInfo.element}</span>
+                                        <div className="mt-2 text-xs text-ink-600">
+                                            {t.chart.element}：<span className="font-medium text-brand-700">{destinyInfo.element}</span>
                                         </div>
                                     )}
-                                    <div className="mt-3 text-xs text-gray-500">
+                                    <div className="mt-3 text-xs text-ink-500">
                                         {userInfo.birthYear}/{userInfo.birthMonth}/{userInfo.birthDay}<br />
                                         {userInfo.birthHour} {userInfo.gender === 'M' ? t.form.gender.male : t.form.gender.female}
                                     </div>
@@ -74,10 +74,10 @@ export default function DestinyChart({ t, destinyInfo, userInfo, onStarAnalysisC
                         const majorStarsText = palace?.majorStars.map(s => s.name).join('') || '';
 
                         return (
-                            <div key={gridIndex} className="bg-white border border-gray-300 p-2 rounded text-center flex flex-col justify-between h-24 md:h-32 shadow-sm hover:shadow-md transition-shadow cursor-default">
-                                <div className="font-bold text-blue-800 text-xs mb-1">{palaceName}</div>
-                                <div className="text-sm font-bold text-purple-600 mb-1 break-words">{majorStarsText || '-'}</div>
-                                <div className="text-xs text-gray-500 mt-auto">{ageRange}</div>
+                            <div key={gridIndex} className="bg-white border border-ink-300 p-2 rounded text-center flex flex-col justify-between h-24 md:h-32 shadow-sm hover:shadow-md transition-shadow cursor-default">
+                                <div className="font-bold text-ink-700 text-xs mb-1">{palaceName}</div>
+                                <div className="text-sm font-bold text-brand-700 mb-1 break-words">{majorStarsText || '-'}</div>
+                                <div className="text-xs text-ink-500 mt-auto">{ageRange}</div>
                             </div>
                         );
                     })}
@@ -87,7 +87,7 @@ export default function DestinyChart({ t, destinyInfo, userInfo, onStarAnalysisC
             <div className="flex space-x-4">
                 <button
                     onClick={onStarAnalysisClick}
-                    className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-medium hover:bg-purple-700 transition-all duration-200 shadow-md"
+                    className="btn-primary flex-1 py-3"
                 >
                     {t.chart.nextStep}
                 </button>

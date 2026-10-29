@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { WarningCircle } from '@phosphor-icons/react/dist/csr/WarningCircle';
 import { CalculationResult, UserProfile } from '../types';
 import { AnalysisDict } from '../translations';
 import { calculateDestiny } from '../services/calculateService';
@@ -9,6 +10,10 @@ interface AnalysisFormProps {
     locale: string;
     t: AnalysisDict;
     onCalculated: (profile: UserProfile, result: CalculationResult) => void;
+    /** Birth data handed over from the homepage form; prefills the fields. */
+    initialProfile?: UserProfile | null;
+    /** Submit once on mount, the same way a click on the button would. */
+    autoSubmit?: boolean;
 }
 
 const HOUR_VALUES = [
@@ -16,15 +21,16 @@ const HOUR_VALUES = [
     '午時', '未時', '申時', '酉時', '戌時', '亥時',
 ];
 
-export default function AnalysisForm({ locale, t, onCalculated }: AnalysisFormProps) {
-    const [name, setName] = useState('');
-    const [gender, setGender] = useState<'M' | 'F'>('M');
-    const [calendarType, setCalendarType] = useState<'solar' | 'lunar'>('solar');
-    const [birthYear, setBirthYear] = useState<number>(0);
-    const [birthMonth, setBirthMonth] = useState<number>(0);
-    const [birthDay, setBirthDay] = useState<number>(0);
-    const [birthHour, setBirthHour] = useState<string>('');
-    const [isLeapMonth, setIsLeapMonth] = useState(false);
+export default function AnalysisForm({ locale, t, onCalculated, initialProfile, autoSubmit }: AnalysisFormProps) {
+    const [name, setName] = useState(initialProfile?.name ?? '');
+    const [gender, setGender] = useState<'M' | 'F'>(initialProfile?.gender ?? 'M');
+    const [calendarType, setCalendarType] = useState<'solar' | 'lunar'>(initialProfile?.calendarType ?? 'solar');
+    const [birthYear, setBirthYear] = useState<number>(initialProfile?.birthYear ?? 0);
+    const [birthMonth, setBirthMonth] = useState<number>(initialProfile?.birthMonth ?? 0);
+    const [birthDay, setBirthDay] = useState<number>(initialProfile?.birthDay ?? 0);
+    const [birthHour, setBirthHour] = useState<string>(initialProfile?.birthHour ?? '');
+    const [isLeapMonth, setIsLeapMonth] = useState(initialProfile?.isLeapMonth ?? false);
+    const autoSubmitted = useRef(false);
     const [calculating, setCalculating] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -66,38 +72,45 @@ export default function AnalysisForm({ locale, t, onCalculated }: AnalysisFormPr
         }
     };
 
+    // Homepage handoff: submit once with the prefilled data (ref guards against the dev double effect)
+    useEffect(() => {
+        if (!autoSubmit || !initialProfile || autoSubmitted.current) return;
+        autoSubmitted.current = true;
+        handleSubmit();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const choice = (selected: boolean) =>
+        `flex-1 py-3 rounded-lg border transition-colors font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 ${selected
+            ? 'bg-brand-600 text-white border-brand-600'
+            : 'bg-white text-ink-700 border-ink-300 hover:bg-ink-50'}`;
+
     return (
         <div className="animate-fade-in space-y-6">
-            <h2 className="text-2xl font-bold mb-6 flex items-center">
-                <span className="mr-2 text-blue-500">📝</span>
+            <h2 className="text-2xl font-bold text-ink-900 mb-6">
                 {t.form.title}
             </h2>
 
             {/* Name & Gender */}
             <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block mb-2 font-medium">{t.form.name.label}</label>
+                    <label htmlFor="birth-name" className="block mb-2 font-medium text-ink-800">{t.form.name.label}</label>
                     <input
+                        id="birth-name"
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className={`field py-3 ${error && !name ? 'field-error' : ''}`}
                         placeholder={t.form.name.placeholder}
                     />
                 </div>
                 <div>
-                    <label className="block mb-2 font-medium">{t.form.gender.label}</label>
+                    <label className="block mb-2 font-medium text-ink-800">{t.form.gender.label}</label>
                     <div className="flex space-x-2">
-                        <button
-                            onClick={() => setGender('M')}
-                            className={`flex-1 py-3 rounded-lg border transition-colors font-medium ${gender === 'M' ? 'bg-blue-500 text-white border-blue-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
-                        >
+                        <button type="button" onClick={() => setGender('M')} className={choice(gender === 'M')}>
                             {t.form.gender.male}
                         </button>
-                        <button
-                            onClick={() => setGender('F')}
-                            className={`flex-1 py-3 rounded-lg border transition-colors font-medium ${gender === 'F' ? 'bg-blue-500 text-white border-blue-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
-                        >
+                        <button type="button" onClick={() => setGender('F')} className={choice(gender === 'F')}>
                             {t.form.gender.female}
                         </button>
                     </div>
@@ -106,18 +119,12 @@ export default function AnalysisForm({ locale, t, onCalculated }: AnalysisFormPr
 
             {/* Calendar Type */}
             <div>
-                <label className="block mb-2 font-medium">{t.form.calendarType.label}</label>
+                <label className="block mb-2 font-medium text-ink-800">{t.form.calendarType.label}</label>
                 <div className="flex space-x-2">
-                    <button
-                        onClick={() => setCalendarType('solar')}
-                        className={`flex-1 py-3 rounded-lg border transition-colors font-medium ${calendarType === 'solar' ? 'bg-green-500 text-white border-green-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
-                    >
+                    <button type="button" onClick={() => setCalendarType('solar')} className={choice(calendarType === 'solar')}>
                         {t.form.calendarType.solar}
                     </button>
-                    <button
-                        onClick={() => setCalendarType('lunar')}
-                        className={`flex-1 py-3 rounded-lg border transition-colors font-medium ${calendarType === 'lunar' ? 'bg-green-500 text-white border-green-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
-                    >
+                    <button type="button" onClick={() => setCalendarType('lunar')} className={choice(calendarType === 'lunar')}>
                         {t.form.calendarType.lunar}
                     </button>
                 </div>
@@ -126,33 +133,36 @@ export default function AnalysisForm({ locale, t, onCalculated }: AnalysisFormPr
             {/* Date */}
             <div className="grid md:grid-cols-3 gap-4">
                 <div>
-                    <label className="block mb-2 font-medium">{t.form.birthYear.label}</label>
+                    <label htmlFor="birth-year" className="block mb-2 font-medium text-ink-800">{t.form.birthYear.label}</label>
                     <select
+                        id="birth-year"
                         value={birthYear || ''}
                         onChange={(e) => setBirthYear(Number(e.target.value))}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className={`field py-3 ${error && !birthYear ? 'field-error' : ''}`}
                     >
                         <option value="">{t.form.birthYear.placeholder}</option>
                         {years.map(y => <option key={y} value={y}>{y}{t.form.birthYear.suffix}</option>)}
                     </select>
                 </div>
                 <div>
-                    <label className="block mb-2 font-medium">{t.form.birthMonth.label}</label>
+                    <label htmlFor="birth-month" className="block mb-2 font-medium text-ink-800">{t.form.birthMonth.label}</label>
                     <select
+                        id="birth-month"
                         value={birthMonth || ''}
                         onChange={(e) => setBirthMonth(Number(e.target.value))}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className={`field py-3 ${error && !birthMonth ? 'field-error' : ''}`}
                     >
                         <option value="">{t.form.birthMonth.placeholder}</option>
                         {months.map(m => <option key={m} value={m}>{m}{t.form.birthMonth.suffix}</option>)}
                     </select>
                 </div>
                 <div>
-                    <label className="block mb-2 font-medium">{t.form.birthDay.label}</label>
+                    <label htmlFor="birth-day" className="block mb-2 font-medium text-ink-800">{t.form.birthDay.label}</label>
                     <select
+                        id="birth-day"
                         value={birthDay || ''}
                         onChange={(e) => setBirthDay(Number(e.target.value))}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className={`field py-3 ${error && !birthDay ? 'field-error' : ''}`}
                     >
                         <option value="">{t.form.birthDay.placeholder}</option>
                         {days.map(d => <option key={d} value={d}>{d}{t.form.birthDay.suffix}</option>)}
@@ -162,11 +172,12 @@ export default function AnalysisForm({ locale, t, onCalculated }: AnalysisFormPr
 
             {/* Hour */}
             <div>
-                <label className="block mb-2 font-medium">{t.form.birthHour.label}</label>
+                <label htmlFor="birth-hour" className="block mb-2 font-medium text-ink-800">{t.form.birthHour.label}</label>
                 <select
+                    id="birth-hour"
                     value={birthHour}
                     onChange={(e) => setBirthHour(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className={`field py-3 ${error && !birthHour ? 'field-error' : ''}`}
                 >
                     <option value="">{t.form.birthHour.placeholder}</option>
                     {HOUR_VALUES.map(h => <option key={h} value={h}>{t.form.hourOptions[h] || h}</option>)}
@@ -181,26 +192,27 @@ export default function AnalysisForm({ locale, t, onCalculated }: AnalysisFormPr
                         checked={isLeapMonth}
                         onChange={(e) => setIsLeapMonth(e.target.checked)}
                         id="leap-month"
-                        className="rounded ring-purple-500"
+                        className="rounded accent-brand-600"
                     />
-                    <label htmlFor="leap-month" className="text-sm text-gray-600">{t.form.leapMonth}</label>
+                    <label htmlFor="leap-month" className="text-sm text-ink-600">{t.form.leapMonth}</label>
                 </div>
             )}
 
             {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3">
-                    {error}
+                <div role="alert" className="error-text rounded-lg border border-danger/30 bg-white p-3">
+                    <WarningCircle size={20} weight="fill" className="mt-px shrink-0" aria-hidden="true" />
+                    <span>{error}</span>
                 </div>
             )}
 
             {/* Submit */}
             <div className="mt-8">
                 <button
+                    type="button"
                     onClick={handleSubmit}
                     disabled={calculating}
-                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 rounded-lg font-medium text-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 shadow-lg flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="btn-primary w-full py-4 text-lg"
                 >
-                    <span className="mr-2">⭐</span>
                     {calculating ? t.form.calculating : t.form.calculate}
                 </button>
             </div>
