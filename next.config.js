@@ -13,7 +13,7 @@ const nextConfig = {
     // api/ 下的 Vercel Functions 不會被 next dev 服務；開發時代理到 production API
     async rewrites() {
         if (process.env.NODE_ENV !== 'production') {
-            return [{ source: '/api/:path*', destination: 'https://www.aiziwei.online/api/:path*' }];
+            return [{ source: '/api/:path*', destination: 'https://aiziwei.online/api/:path*' }];
         }
         return [];
     },
