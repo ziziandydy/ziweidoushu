@@ -9,6 +9,8 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
             ? 'Who we are, our methodology, and our content policy.'
             : '認識 AI 紫微斗數：站點宗旨、理論方法與內容政策。',
         openGraph: {
+            type: 'website',
+            url: `https://aiziwei.online/${locale}/about`,
             images: [{ url: OG_IMAGE_URL, width: 1200, height: 630 }],
         },
         twitter: {

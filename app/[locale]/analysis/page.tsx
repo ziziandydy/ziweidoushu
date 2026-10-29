@@ -20,6 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         openGraph: {
             title: t.meta.ogTitle,
             description: t.meta.ogDescription,
+            type: 'website',
+            url: `https://aiziwei.online/${locale}/analysis`,
             images: [{ url: OG_IMAGE_URL, width: 1200, height: 630 }],
         },
         twitter: {

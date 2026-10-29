@@ -27,6 +27,8 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
             languages,
         },
         openGraph: {
+            type: 'article',
+            url: `https://aiziwei.online/${params.locale}/blog/${post.slug}`,
             images: [{ url: OG_IMAGE_URL, width: 1200, height: 630 }],
         },
         twitter: {

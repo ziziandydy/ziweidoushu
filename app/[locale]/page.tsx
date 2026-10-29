@@ -22,6 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             ? 'Combining traditional Zhongzhou school theory with modern AI technology for accurate destiny analysis.'
             : '結合傳統中州派理論與現代 AI 技術，提供精準的命理分析。支援農曆西曆轉換，自動計算命盤，並提供 AI 深度解析。',
         openGraph: {
+            type: 'website',
+            url: isEn ? 'https://aiziwei.online/en' : 'https://aiziwei.online/',
             images: [{ url: OG_IMAGE_URL, width: 1200, height: 630 }],
         },
         twitter: { card: 'summary_large_image', images: [OG_IMAGE_URL] },
