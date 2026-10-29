@@ -43,8 +43,8 @@ export default async function LocaleLayout({
                     ></iframe>
                 </noscript>
                 <NavBar locale={locale} />
-                {/* pt-20 compensates for the fixed nav height */}
-                <div className="pt-20">
+                {/* pt-16 compensates for the fixed nav height (h-16) */}
+                <div className="pt-16">
                     {children}
                 </div>
 
