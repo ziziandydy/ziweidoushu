@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Check } from '@phosphor-icons/react/dist/ssr/Check';
 import type { Metadata } from 'next';
 
 type Props = { params: Promise<{ locale: string }> };
@@ -125,112 +126,107 @@ export default async function PricingPage({ params }: Props) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
-            <section className="container mx-auto px-4 py-16 text-center">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">
-                    {isEn ? '💰 Pricing' : '💰 價格方案'}
+            <section className="max-w-6xl mx-auto px-4 pt-14 pb-8">
+                <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-ink-900">
+                    {isEn ? 'Pricing' : '價格方案'}
                 </h1>
-                <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
+                <p className="mt-4 text-lg text-ink-600 max-w-2xl">
                     {isEn ? 'Choose the plan that fits your destiny analysis needs' : '選擇最適合您的紫微斗數命理分析方案'}
                 </p>
             </section>
 
-            <section className="container mx-auto px-4 py-8">
-                <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-                    <div className="bg-white rounded-2xl shadow-xl p-8">
-                        <div className="text-center mb-6">
-                            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span className="text-3xl">🎁</span>
-                            </div>
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">{isEn ? 'Free Plan' : '免費方案'}</h2>
-                            <div className="text-4xl font-bold text-green-600 mb-2">NT$ 0</div>
-                            <p className="text-gray-600">{isEn ? 'Free forever' : '永久免費'}</p>
+            <section className="max-w-6xl mx-auto px-4 pb-14">
+                <div className="grid gap-6 md:grid-cols-2 md:items-stretch">
+                    <div className="surface p-8 grid grid-rows-[auto_1fr_auto] gap-6">
+                        <div>
+                            <h2 className="text-lg font-medium text-ink-700">{isEn ? 'Free Plan' : '免費方案'}</h2>
+                            <div className="mt-3 text-4xl font-bold tracking-tight text-ink-900 tabular-nums">NT$ 0</div>
+                            <p className="mt-2 text-ink-600">{isEn ? 'Free forever' : '永久免費'}</p>
                         </div>
-                        <div className="space-y-4 mb-8">
+                        <ul className="grid gap-3 content-start text-ink-700">
                             {freeFeatures.map((f) => (
-                                <div key={f} className="flex items-start">
-                                    <span className="text-green-500 mr-3 text-xl">✓</span>
-                                    <span className="text-gray-700">{f}</span>
-                                </div>
+                                <li key={f} className="flex items-start gap-3">
+                                    <Check size={20} weight="bold" className="mt-0.5 shrink-0 text-brand-600" aria-hidden="true" />
+                                    <span>{f}</span>
+                                </li>
                             ))}
-                        </div>
-                        <Link href={analysisHref} className="block w-full bg-green-500 text-white py-3 rounded-lg font-medium hover:bg-green-600 transition-all text-center">
+                        </ul>
+                        <Link href={analysisHref} className="btn-secondary w-full py-3">
                             {isEn ? 'Start now' : '立即開始使用'}
                         </Link>
                     </div>
 
-                    <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl shadow-2xl p-8 text-white relative border-4 border-purple-400">
-                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                            <span className="bg-yellow-400 text-purple-900 px-4 py-1 rounded-full text-sm font-bold shadow-lg">
-                                {isEn ? '⭐ Recommended' : '⭐ 推薦方案'}
-                            </span>
+                    <div className="rounded-xl bg-brand-600 p-8 text-white grid grid-rows-[auto_1fr_auto] gap-6">
+                        <div>
+                            <h2 className="flex items-center gap-3 text-lg font-medium text-white/90">
+                                {isEn ? 'Paid Unlock Plan' : '付費解鎖方案'}
+                                <span className="rounded-md bg-white/20 px-2.5 py-0.5 text-xs font-medium">{isEn ? 'Recommended' : '推薦方案'}</span>
+                            </h2>
+                            <div className="mt-3 text-4xl font-bold tracking-tight tabular-nums">NT$ 199</div>
+                            <p className="mt-2 text-white/85">{isEn ? '1 hour of unlimited Q&A' : '1 小時無限問答'}</p>
                         </div>
-                        <div className="text-center mb-6">
-                            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span className="text-3xl">💎</span>
-                            </div>
-                            <h2 className="text-3xl font-bold mb-2">{isEn ? 'Paid Unlock Plan' : '付費解鎖方案'}</h2>
-                            <div className="text-5xl font-bold mb-2">NT$ 199</div>
-                            <p className="text-white/90">{isEn ? '1 hour of unlimited Q&A' : '1 小時無限問答'}</p>
-                        </div>
-                        <div className="space-y-4 mb-8">
+                        <ul className="grid gap-3 content-start">
                             {paidFeatures.map((f) => (
-                                <div key={f} className="flex items-start">
-                                    <span className="text-yellow-300 mr-3 text-xl">✓</span>
+                                <li key={f} className="flex items-start gap-3">
+                                    <Check size={20} weight="bold" className="mt-0.5 shrink-0" aria-hidden="true" />
                                     <span>{f}</span>
-                                </div>
+                                </li>
                             ))}
-                        </div>
-                        <Link href={analysisHref} className="block w-full bg-white text-purple-600 py-3 rounded-lg font-bold hover:bg-gray-100 transition-all text-center shadow-lg">
+                        </ul>
+                        <Link
+                            href={analysisHref}
+                            className="inline-flex w-full items-center justify-center rounded-lg bg-white py-3 font-medium text-brand-700 transition hover:bg-brand-50 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-600"
+                        >
                             {isEn ? 'Go to analysis & unlock' : '前往分析頁面付費解鎖'}
                         </Link>
                     </div>
                 </div>
             </section>
 
-            <section className="container mx-auto px-4 py-16">
-                <div className="max-w-4xl mx-auto">
-                    <h2 className="text-3xl font-bold text-center mb-8 text-purple-600">
+            <section className="bg-white border-y border-ink-100">
+                <div className="max-w-6xl mx-auto px-4 py-14">
+                    <h2 className="text-2xl font-bold text-ink-900 mb-6">
                         {isEn ? 'Plan Comparison' : '方案功能對比'}
                     </h2>
-                    <div className="bg-white rounded-xl shadow-lg overflow-x-auto">
-                        <table className="w-full">
-                            <thead className="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
-                                <tr>
-                                    <th className="px-6 py-4 text-left">{isEn ? 'Feature' : '功能項目'}</th>
-                                    <th className="px-6 py-4 text-center">{isEn ? 'Free' : '免費方案'}</th>
-                                    <th className="px-6 py-4 text-center">{isEn ? 'Paid' : '付費方案'}</th>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left">
+                            <thead>
+                                <tr className="border-b-2 border-ink-900 text-sm text-ink-600">
+                                    <th scope="col" className="py-3 pr-2 sm:pr-4 font-medium">{isEn ? 'Feature' : '功能項目'}</th>
+                                    <th scope="col" className="py-3 px-2 sm:px-4 font-medium text-center">{isEn ? 'Free' : '免費方案'}</th>
+                                    <th scope="col" className="py-3 pl-2 sm:pl-4 font-medium text-center text-brand-700">{isEn ? 'Paid' : '付費方案'}</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-200">
+                            <tbody className="divide-y divide-ink-100 text-ink-700">
                                 <tr>
-                                    <td className="px-6 py-4 font-medium text-gray-800">{isEn ? 'Chart calculation' : '命盤計算'}</td>
-                                    <td className="px-6 py-4 text-center text-green-600">✓</td>
-                                    <td className="px-6 py-4 text-center text-purple-600">✓</td>
-                                </tr>
-                                <tr className="bg-gray-50">
-                                    <td className="px-6 py-4 font-medium text-gray-800">{isEn ? 'Initial AI analysis' : 'AI 初始解析'}</td>
-                                    <td className="px-6 py-4 text-center text-green-600">✓</td>
-                                    <td className="px-6 py-4 text-center text-purple-600">✓</td>
+                                    <th scope="row" className="py-4 pr-2 sm:pr-4 font-medium text-ink-900">{isEn ? 'Chart calculation' : '命盤計算'}</th>
+                                    <td className="py-4 px-2 sm:px-4 text-center"><Check size={18} weight="bold" className="inline text-ink-700" aria-label={isEn ? 'Included' : '包含'} /></td>
+                                    <td className="py-4 pl-2 sm:pl-4 text-center"><Check size={18} weight="bold" className="inline text-brand-600" aria-label={isEn ? 'Included' : '包含'} /></td>
                                 </tr>
                                 <tr>
-                                    <td className="px-6 py-4 font-medium text-gray-800">{isEn ? 'Free Q&A sessions / month' : '每月免費問答次數'}</td>
-                                    <td className="px-6 py-4 text-center">{isEn ? '3' : '3 次'}</td>
-                                    <td className="px-6 py-4 text-center">{isEn ? '3' : '3 次'}</td>
-                                </tr>
-                                <tr className="bg-gray-50">
-                                    <td className="px-6 py-4 font-medium text-gray-800">{isEn ? 'Q&A during paid session' : '付費時段問答次數'}</td>
-                                    <td className="px-6 py-4 text-center text-gray-400">-</td>
-                                    <td className="px-6 py-4 text-center text-purple-600 font-bold">{isEn ? 'Unlimited' : '無限'}</td>
+                                    <th scope="row" className="py-4 pr-2 sm:pr-4 font-medium text-ink-900">{isEn ? 'Initial AI analysis' : 'AI 初始解析'}</th>
+                                    <td className="py-4 px-2 sm:px-4 text-center"><Check size={18} weight="bold" className="inline text-ink-700" aria-label={isEn ? 'Included' : '包含'} /></td>
+                                    <td className="py-4 pl-2 sm:pl-4 text-center"><Check size={18} weight="bold" className="inline text-brand-600" aria-label={isEn ? 'Included' : '包含'} /></td>
                                 </tr>
                                 <tr>
-                                    <td className="px-6 py-4 font-medium text-gray-800">{isEn ? 'Continuous conversation' : '連續對話功能'}</td>
-                                    <td className="px-6 py-4 text-center text-gray-400">-</td>
-                                    <td className="px-6 py-4 text-center text-purple-600">✓</td>
+                                    <th scope="row" className="py-4 pr-2 sm:pr-4 font-medium text-ink-900">{isEn ? 'Free Q&A sessions / month' : '每月免費問答次數'}</th>
+                                    <td className="py-4 px-2 sm:px-4 text-center tabular-nums">{isEn ? '3' : '3 次'}</td>
+                                    <td className="py-4 pl-2 sm:pl-4 text-center tabular-nums">{isEn ? '3' : '3 次'}</td>
                                 </tr>
-                                <tr className="bg-gray-50">
-                                    <td className="px-6 py-4 font-medium text-gray-800">{isEn ? 'In-depth Q&A' : '深度問答'}</td>
-                                    <td className="px-6 py-4 text-center text-gray-400">{isEn ? 'Limited' : '有限'}</td>
-                                    <td className="px-6 py-4 text-center text-purple-600">{isEn ? 'Unlimited' : '無限'}</td>
+                                <tr>
+                                    <th scope="row" className="py-4 pr-2 sm:pr-4 font-medium text-ink-900">{isEn ? 'Q&A during paid session' : '付費時段問答次數'}</th>
+                                    <td className="py-4 px-2 sm:px-4 text-center text-ink-400">-</td>
+                                    <td className="py-4 pl-2 sm:pl-4 text-center font-bold text-brand-700">{isEn ? 'Unlimited' : '無限'}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" className="py-4 pr-2 sm:pr-4 font-medium text-ink-900">{isEn ? 'Continuous conversation' : '連續對話功能'}</th>
+                                    <td className="py-4 px-2 sm:px-4 text-center text-ink-400">-</td>
+                                    <td className="py-4 pl-2 sm:pl-4 text-center"><Check size={18} weight="bold" className="inline text-brand-600" aria-label={isEn ? 'Included' : '包含'} /></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" className="py-4 pr-2 sm:pr-4 font-medium text-ink-900">{isEn ? 'In-depth Q&A' : '深度問答'}</th>
+                                    <td className="py-4 px-2 sm:px-4 text-center text-ink-500">{isEn ? 'Limited' : '有限'}</td>
+                                    <td className="py-4 pl-2 sm:pl-4 text-center font-medium text-brand-700">{isEn ? 'Unlimited' : '無限'}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -238,36 +234,32 @@ export default async function PricingPage({ params }: Props) {
                 </div>
             </section>
 
-            <section className="container mx-auto px-4 py-16">
-                <div className="max-w-4xl mx-auto">
-                    <h2 className="text-3xl font-bold text-center mb-12 text-purple-600">
-                        {isEn ? 'FAQ' : '常見問題'}
-                    </h2>
-                    <div className="space-y-6">
-                        {faq.map((item) => (
-                            <div key={item.q} className="bg-white rounded-xl shadow-lg p-6">
-                                <h3 className="text-xl font-bold text-gray-800 mb-3">{item.q}</h3>
-                                <p className="text-gray-700 leading-relaxed">{item.a}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+            <section className="max-w-6xl mx-auto px-4 py-14">
+                <h2 className="text-2xl font-bold text-ink-900 mb-6">
+                    {isEn ? 'FAQ' : '常見問題'}
+                </h2>
+                <dl className="border-b border-ink-200">
+                    {faq.map((item) => (
+                        <div key={item.q} className="grid gap-2 md:grid-cols-[280px_minmax(0,1fr)] md:gap-12 border-t border-ink-200 py-5">
+                            <dt className="font-medium text-ink-900">{item.q}</dt>
+                            <dd className="text-ink-600 leading-relaxed max-w-[65ch]">{item.a}</dd>
+                        </div>
+                    ))}
+                </dl>
             </section>
 
-            <section className="container mx-auto px-4 py-16">
-                <div className="max-w-4xl mx-auto bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 rounded-2xl shadow-2xl p-12 text-center text-white">
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                        {isEn ? 'Ready to explore your destiny?' : '準備好開始探索您的命運了嗎？'}
-                    </h2>
-                    <p className="text-xl mb-8 text-white/90">
-                        {isEn ? (
-                            <>Try AI Zi Wei Dou Shu analysis now<br />Start free, upgrade anytime</>
-                        ) : (
-                            <>立即體驗 AI 紫微斗數命理分析<br />免費開始，隨時升級</>
-                        )}
-                    </p>
-                    <Link href={analysisHref} className="inline-block bg-white text-purple-600 px-10 py-5 rounded-lg text-xl font-bold hover:bg-gray-100 transition-all shadow-lg">
-                        {isEn ? '🚀 Start analysis' : '🚀 立即開始分析'}
+            <section className="bg-white border-t border-ink-100">
+                <div className="max-w-6xl mx-auto px-4 py-14 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h2 className="text-2xl font-bold text-ink-900">
+                            {isEn ? 'Ready to explore your destiny?' : '準備好開始探索您的命運了嗎？'}
+                        </h2>
+                        <p className="mt-2 text-ink-600">
+                            {isEn ? 'Try AI Zi Wei Dou Shu analysis now. Start free, upgrade anytime.' : '立即體驗 AI 紫微斗數命理分析，免費開始，隨時升級。'}
+                        </p>
+                    </div>
+                    <Link href={analysisHref} className="btn-primary px-8 py-3 shrink-0">
+                        {isEn ? 'Start analysis' : '立即開始分析'}
                     </Link>
                 </div>
             </section>
