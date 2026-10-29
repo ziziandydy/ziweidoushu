@@ -200,7 +200,7 @@ export default async function HomePage({ params }: Props) {
                 url: 'https://aiziwei.online',
                 logo: {
                     '@type': 'ImageObject',
-                    url: 'https://aiziwei.online/favicon.svg',
+                    url: 'https://aiziwei.online/logo-mark.svg',
                 },
             },
             {

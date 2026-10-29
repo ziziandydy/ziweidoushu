@@ -64,7 +64,7 @@ export default async function LocalizedBlogPostPage(props: { params: Promise<{ l
             url: 'https://aiziwei.online',
             logo: {
                 '@type': 'ImageObject',
-                url: 'https://aiziwei.online/favicon.svg',
+                url: 'https://aiziwei.online/logo-mark.svg',
             },
         },
         keywords: post.tags?.join(', '),

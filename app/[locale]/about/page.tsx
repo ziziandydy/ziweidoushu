@@ -33,7 +33,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: strin
             '@id': 'https://aiziwei.online/#organization',
             name: isEn ? 'AI Zi Wei Dou Shu' : 'AI 紫微斗數',
             url: 'https://aiziwei.online',
-            logo: { '@type': 'ImageObject', url: 'https://aiziwei.online/favicon.svg' },
+            logo: { '@type': 'ImageObject', url: 'https://aiziwei.online/logo-mark.svg' },
         },
     };
     const jsonLdScript = (
