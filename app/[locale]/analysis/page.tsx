@@ -2,6 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import AnalysisClient from './AnalysisClient';
 import { getAnalysisDict } from './translations';
+import { OG_IMAGE_URL } from '../../lib/ogImage';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -19,13 +20,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         openGraph: {
             title: t.meta.ogTitle,
             description: t.meta.ogDescription,
-            images: [{ url: 'https://aiziwei.online/og-image.png', width: 1200, height: 630 }],
+            images: [{ url: OG_IMAGE_URL, width: 1200, height: 630 }],
         },
         twitter: {
             card: 'summary_large_image',
             title: t.meta.ogTitle,
             description: t.meta.ogDescription,
-            images: ['https://aiziwei.online/og-image.png'],
+            images: [OG_IMAGE_URL],
         },
         alternates: {
             canonical: `https://aiziwei.online/${locale}/analysis`,

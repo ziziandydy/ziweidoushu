@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Check } from '@phosphor-icons/react/dist/ssr/Check';
 import type { Metadata } from 'next';
+import { OG_IMAGE_URL } from '../../lib/ogImage';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -17,9 +18,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             ? 'AI Zi Wei Dou Shu offers a free plan and a paid plan. The free plan includes 3 Q&A sessions per month; the paid plan (NT$199) unlocks 1 hour of unlimited Q&A.'
             : 'AI 紫微斗數提供免費和付費兩種方案。免費方案每月可進行 3 次問答，付費方案 NT$ 199 可解鎖 1 小時無限問答。立即了解詳細方案內容。',
         openGraph: {
-            images: [{ url: 'https://aiziwei.online/og-image.png', width: 1200, height: 630 }],
+            images: [{ url: OG_IMAGE_URL, width: 1200, height: 630 }],
         },
-        twitter: { card: 'summary_large_image', images: ['https://aiziwei.online/og-image.png'] },
+        twitter: { card: 'summary_large_image', images: [OG_IMAGE_URL] },
         alternates: {
             canonical: `https://aiziwei.online/${locale}/pricing`,
             languages: {

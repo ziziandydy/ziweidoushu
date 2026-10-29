@@ -2,6 +2,7 @@
 import { getBlogPost, getAlternateLanguageSlug } from '../../../lib/blog';
 import BlogPost from '../../../components/blog/BlogPost';
 import { notFound } from 'next/navigation';
+import { OG_IMAGE_URL } from '../../../lib/ogImage';
 
 export async function generateMetadata(props: { params: Promise<{ locale: string, slug: string }> }) {
     const params = await props.params;
@@ -26,11 +27,11 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
             languages,
         },
         openGraph: {
-            images: [{ url: 'https://aiziwei.online/og-image.png', width: 1200, height: 630 }],
+            images: [{ url: OG_IMAGE_URL, width: 1200, height: 630 }],
         },
         twitter: {
             card: 'summary_large_image',
-            images: ['https://aiziwei.online/og-image.png'],
+            images: [OG_IMAGE_URL],
         },
     }
 }

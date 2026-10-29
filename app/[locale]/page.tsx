@@ -3,6 +3,7 @@ import Link from 'next/link';
 import HomeBirthForm from '../components/home/HomeBirthForm';
 import LatestPosts from '../components/home/LatestPosts';
 import type { Metadata } from 'next';
+import { OG_IMAGE_URL } from '../lib/ogImage';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -21,9 +22,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             ? 'Combining traditional Zhongzhou school theory with modern AI technology for accurate destiny analysis.'
             : '結合傳統中州派理論與現代 AI 技術，提供精準的命理分析。支援農曆西曆轉換，自動計算命盤，並提供 AI 深度解析。',
         openGraph: {
-            images: [{ url: 'https://aiziwei.online/og-image.png', width: 1200, height: 630 }],
+            images: [{ url: OG_IMAGE_URL, width: 1200, height: 630 }],
         },
-        twitter: { card: 'summary_large_image', images: ['https://aiziwei.online/og-image.png'] },
+        twitter: { card: 'summary_large_image', images: [OG_IMAGE_URL] },
         // 中文首頁以根網址為 canonical：/ 由 vercel.json rewrite 到 /zh-TW，兩者內容相同，
         // Google 也一直選根網址（www → apex 308 後即為 https://aiziwei.online/）
         alternates: {
