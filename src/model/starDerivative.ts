@@ -64,17 +64,18 @@ class StarDerivative {
         ][sky.index]
     }
 
+    // 中州派（王亭之）：戊右弼科、庚太陰科、壬左輔科，與部落格、知識庫一致
     static getFameStar(sky: Sky): Readonly<MajorStar | MinorStar> {
         return [
             MajorStar.MAJOR_STAR_GOLD,
             MajorStar.MAJOR_STAR_EMPEROR,
             MinorStar.MINOR_STAR_CLEVER,
             MajorStar.MAJOR_STAR_CHANGE,
-            MajorStar.MAJOR_STAR_SUN,
+            MinorStar.MINOR_STAR_SUPPORT_RIGHT,
             MajorStar.MAJOR_STAR_RULE,
-            MajorStar.MAJOR_STAR_TREASURY,
+            MajorStar.MAJOR_STAR_MOON,
             MinorStar.MINOR_STAR_SKILL,
-            MajorStar.MAJOR_STAR_TREASURY,
+            MinorStar.MINOR_STAR_SUPPORT_LEFT,
             MajorStar.MAJOR_STAR_MOON,
         ][sky.index]
     }

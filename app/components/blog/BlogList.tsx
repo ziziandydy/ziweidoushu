@@ -3,6 +3,9 @@ import Link from 'next/link';
 import AdUnit from '../ads/AdUnit';
 
 const VISIBLE_TAGS = 6;
+// 中文版預設顯示的專欄系列（n8n 排程的系列標籤）；有文章才會出現，其餘標籤收在「更多」。
+// 英文標籤沒有固定系列，維持依使用次數。
+const FEATURED_TAGS_ZH = ['紫微入門', '人生議題', '流月四化', '年度四化', '二十四節氣', '時事觀點'];
 
 export default function BlogList({ posts, pagination, lang, currentTag, allTags }: {
     posts: any[],
@@ -47,8 +50,9 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
         return markdown.replace(/[#*_`\[\]]/g, '').substring(0, 150) + '...';
     };
 
-    // allTags arrives sorted by use. Keep the current tag visible even when it is outside the top few.
-    const topTags = allTags.slice(0, VISIBLE_TAGS);
+    // Column tags first (zh); otherwise allTags arrives sorted by use. Keep the current tag visible even when it is outside the top few.
+    const featuredTags = lang === 'en' ? [] : FEATURED_TAGS_ZH.filter(tag => allTags.includes(tag));
+    const topTags = featuredTags.length > 0 ? featuredTags : allTags.slice(0, VISIBLE_TAGS);
     const shownTags = currentTag && !topTags.includes(currentTag) ? [...topTags, currentTag] : topTags;
     const moreTags = allTags.filter(tag => !shownTags.includes(tag));
 

@@ -54,6 +54,11 @@ module.exports = async function handler(req, res) {
           error: '需要登入才能查看未發布的文章'
         });
       }
+      res.setHeader('Cache-Control', 'private, no-store');
+    } else {
+      // 已發布文章的公開列表：CDN 快取 5 分鐘（過期後先回舊資料並背景更新），首頁每次載入就不必打資料庫
+      res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+      res.setHeader('Vary', 'Origin');
     }
 
     console.log('📊 查詢參數:', { page: pageNum, limit: limitNum, tag, status, includeAll, language: finalLanguage });

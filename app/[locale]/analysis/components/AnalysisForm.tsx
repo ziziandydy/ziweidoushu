@@ -5,6 +5,7 @@ import { WarningCircle } from '@phosphor-icons/react/dist/csr/WarningCircle';
 import { CalculationResult, UserProfile } from '../types';
 import { AnalysisDict, HOUR_VALUES } from '../translations';
 import { calculateDestiny } from '../services/calculateService';
+import { birthYearOptions } from '../../../lib/birthYears';
 
 interface AnalysisFormProps {
     locale: string;
@@ -29,8 +30,9 @@ export default function AnalysisForm({ locale, t, onCalculated, initialProfile, 
     const [calculating, setCalculating] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
+    // Filled after mount so the prerendered HTML never carries a stale year list
+    const [years, setYears] = useState<number[]>([]);
+    useEffect(() => { setYears(birthYearOptions()); }, []);
     const months = Array.from({ length: 12 }, (_, i) => i + 1);
     const [days, setDays] = useState<number[]>([]);
 

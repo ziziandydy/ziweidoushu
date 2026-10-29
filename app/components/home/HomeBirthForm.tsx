@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { WarningCircle } from '@phosphor-icons/react/dist/csr/WarningCircle';
 import { getAnalysisDict, HOUR_VALUES } from '../../[locale]/analysis/translations';
 import { saveBirthInput } from '../../lib/birthHandoff';
+import { birthYearOptions } from '../../lib/birthYears';
 
 // 首頁第一屏的排盤表單：欄位與驗證同 analysis 頁，送出後把資料交給 analysis 頁自動排盤
 export default function HomeBirthForm({ locale, title, submitLabel }: { locale: string; title: string; submitLabel: string }) {
@@ -24,8 +25,9 @@ export default function HomeBirthForm({ locale, title, submitLabel }: { locale: 
     const [error, setError] = useState<string | null>(null);
     const [submitting, setSubmitting] = useState(false);
 
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
+    // Filled after mount so the prerendered HTML never carries a stale year list
+    const [years, setYears] = useState<number[]>([]);
+    useEffect(() => { setYears(birthYearOptions()); }, []);
     const months = Array.from({ length: 12 }, (_, i) => i + 1);
     const [days, setDays] = useState<number[]>([]);
 

@@ -95,11 +95,11 @@ class StarDerivative {
             majorStar_1.MajorStar.MAJOR_STAR_EMPEROR,
             minorStar_1.MinorStar.MINOR_STAR_CLEVER,
             majorStar_1.MajorStar.MAJOR_STAR_CHANGE,
-            majorStar_1.MajorStar.MAJOR_STAR_SUN,
+            minorStar_1.MinorStar.MINOR_STAR_SUPPORT_RIGHT,
             majorStar_1.MajorStar.MAJOR_STAR_RULE,
-            majorStar_1.MajorStar.MAJOR_STAR_TREASURY,
+            majorStar_1.MajorStar.MAJOR_STAR_MOON,
             minorStar_1.MinorStar.MINOR_STAR_SKILL,
-            majorStar_1.MajorStar.MAJOR_STAR_TREASURY,
+            minorStar_1.MinorStar.MINOR_STAR_SUPPORT_LEFT,
             majorStar_1.MajorStar.MAJOR_STAR_MOON,
         ][sky.index];
     }

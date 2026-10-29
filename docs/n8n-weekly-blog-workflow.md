@@ -34,7 +34,7 @@ Schedule Trigger（週一、週四 09:00，Asia/Taipei）
 | 人生議題 | 其餘（主要是週一） | `人生議題` | 有 |
 
 - 曆法表（節氣、農曆月首）寫在排程決策節點內，涵蓋到 2027-12；剩 60 天時 Telegram 通知會附警告，需用 `lunar-javascript` 重產並補上。流月月干依五虎遁由年干推得（紫微流月用農曆月，不用節氣月）。
-- 四化採中州派（王亭之）：戊右弼科、庚太陰科、壬左輔科。**注意：本站排盤引擎 `build/main.js` 用的是戊太陽科、庚天府科、壬天府科**，兩者不一致。
+- 四化採中州派（王亭之）：戊右弼科、庚太陰科、壬左輔科。排盤引擎 `src/model/starDerivative.ts` 與編譯檔 `build/model/starDerivative.js` 已於 2026-10-29 對齊此表（`tsconfig` 為 noEmit，`npm run build:ts` 不會輸出，改引擎後要手動同步 `build/`），測試在 `test/starDerivative.test.ts`。
 - 手動測試某一類型：把排程決策裡的 `FORCE` 改成該類型，測完務必改回 `''`。
 
 **國際來源（人生議題用，不含台灣、中國、香港）**：Natalia Pugacheva（俄）、Joey Yap（馬）、RenerQi（馬）、Master Sean Chan（新）、Singapore Feng Shui Master（新）、Fengshui Discovery（新）。只取近 120 天、每站 ≤4 篇；抓取失敗的站會被略過（`onError: continueRegularOutput`）。主編可選 0–2 篇「具名引述」，網址必須存在於候選清單，否則在「解析國際選題」被濾掉。
