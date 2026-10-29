@@ -60,7 +60,7 @@ export default function NavBar({ locale }: { locale: string }) {
 
     return (
         <nav className="fixed top-0 left-0 right-0 bg-white border-b border-ink-100 z-50">
-            <div className="container mx-auto px-4 h-16 flex justify-between items-center">
+            <div className="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
                 <Link href={homeHref} className="flex items-center gap-2.5" onClick={closeMenu}>
                     <img src="/logo-mark.svg" alt="" width={30} height={30} className="w-[30px] h-[30px]" />
                     <span className="text-lg font-bold text-ink-900">

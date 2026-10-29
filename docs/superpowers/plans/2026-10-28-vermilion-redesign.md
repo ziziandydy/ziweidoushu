@@ -36,6 +36,8 @@
   `brand` 50 `#FBF2EF`、100 `#F5E0D9`、200 `#EBC0B2`、300 `#DC9580`、400 `#D9785E`、500 `#B54E33`、600 `#9C3D25`、700 `#80321F`、800 `#64281A`、900 `#4A1E14`；
   `ink` 50 `#F6F6F8`、100 `#ECECF0`、200 `#D9D9E0`、300 `#B9B9C4`、400 `#8C8C9B`、500 `#6A6A7A`、600 `#4E4E5C`、700 `#3A3A46`、800 `#26262F`、900 `#17171E`。
 - **紅色撞色規則：** 主色是紅，錯誤狀態不能只靠顏色。所有錯誤訊息一律「圖示（Phosphor `WarningCircle`）加文字」，錯誤色用 `#B42318`（比主色更正紅），並搭配錯誤框線。命盤星曜亮度的紅色分級（`red-400`）保留不動。
+- **版寬：** `tailwind.config.js` 關閉了 `container`（`corePlugins.container: false`），`container mx-auto` 不會限制寬度。頁面區塊一律用 `max-w-6xl mx-auto px-4`，導覽列同寬對齊。
+- **日期：** `published_at` 存的是不帶時區的時間；客戶端格式化日期一律加 `timeZone: 'UTC'`，才會和伺服器端渲染的部落格列表一致。
 - **形狀：** 按鈕與輸入框 `rounded-lg`（8px），卡片與容器 `rounded-xl`（12px），語言切換與頭像 `rounded-full`。
 - **字型：** `next/font/google` 自架。Noto Sans TC（400、500、700）用於介面與內文；Noto Serif TC（600）只用於部落格列表標題、首頁最新文章標題、文章頁標題。`display: 'swap'`。
 - **圖示：** emoji 一律移除（含翻譯字串裡的）；改用 Phosphor，**一律逐一引入**：client 元件 `@phosphor-icons/react/dist/csr/<Icon>`、Server Component `@phosphor-icons/react/dist/ssr/<Icon>`。從套件根目錄引入在本專案 `moduleResolution: nodenext` 下型別解析不到，而 `next.config.js` 的 `ignoreBuildErrors: true` 會把錯誤藏起來，每個 task 都要跑 `npx tsc --noEmit -p .` 確認 `.next/` 以外沒有錯誤。不得手繪 SVG 圖示（標誌除外）。

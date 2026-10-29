@@ -1,3 +1,9 @@
+// 十二時辰的值（送給 /api/calculate 的原始值，顯示文字見各語系 hourOptions）
+export const HOUR_VALUES = [
+    '子時', '丑時', '寅時', '卯時', '辰時', '巳時',
+    '午時', '未時', '申時', '酉時', '戌時', '亥時',
+];
+
 export interface AnalysisDict {
     meta: {
         title: string;

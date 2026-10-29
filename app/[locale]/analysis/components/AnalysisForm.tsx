@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { WarningCircle } from '@phosphor-icons/react/dist/csr/WarningCircle';
 import { CalculationResult, UserProfile } from '../types';
-import { AnalysisDict } from '../translations';
+import { AnalysisDict, HOUR_VALUES } from '../translations';
 import { calculateDestiny } from '../services/calculateService';
 
 interface AnalysisFormProps {
@@ -15,11 +15,6 @@ interface AnalysisFormProps {
     /** Submit once on mount, the same way a click on the button would. */
     autoSubmit?: boolean;
 }
-
-const HOUR_VALUES = [
-    '子時', '丑時', '寅時', '卯時', '辰時', '巳時',
-    '午時', '未時', '申時', '酉時', '戌時', '亥時',
-];
 
 export default function AnalysisForm({ locale, t, onCalculated, initialProfile, autoSubmit }: AnalysisFormProps) {
     const [name, setName] = useState(initialProfile?.name ?? '');
