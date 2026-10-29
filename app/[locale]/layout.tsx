@@ -8,8 +8,13 @@ import '../../public/styles.css'; // Import the global styles directly from publ
 export const metadata = {
     title: 'AI 紫微斗數 - 現代化的命理分析系統',
     description: '結合傳統中州派理論與 AI 技術，提供精準的命理分析。',
+    // Safari does not use SVG tab icons, so the .ico is listed explicitly next to the SVG
     icons: {
-        icon: '/favicon.svg',
+        icon: [
+            { url: '/favicon.ico', sizes: 'any' },
+            { url: '/favicon.svg', type: 'image/svg+xml' },
+        ],
+        apple: '/apple-touch-icon.png',
     },
     other: {
         'google-adsense-account': 'ca-pub-3240143153468832',
