@@ -45,7 +45,7 @@
 
 ## Review Focus
 
-1. `public/styles.css` 沒重編或沒提交 → 頁面無樣式：Task 1 起每個 task 的驗證都要確認檔案含 `.bg-brand-600`。
+1. `public/styles.css` 沒重編或沒提交 → 頁面無樣式：Tailwind 只輸出頁面實際用到的 class（`@layer components` 也一樣），所以從 Task 3 起，每個 task 都要確認該 task 新用到的 class（如 `.btn-primary`、`.bg-brand-600`）已出現在 `public/styles.css`。
 2. 首頁交接資料殘留或被重複使用（重新整理 analysis 頁又自動排一次、換人填卻沿用舊資料）：`takeBirthInput()` 讀完即刪除，測試釘住。
 3. sessionStorage 不可用（隱私模式、被封鎖）時首頁表單不能壞掉：存取包 try/catch，失敗時退回導向 analysis 頁讓使用者重填，測試釘住。
 4. 最新文章 API 失敗或回傳空陣列：區塊顯示「所有文章」連結而非空白或錯誤，Task 5 驗證。
@@ -78,7 +78,7 @@
 - [ ] **Step 3:** `tailwind.config.js` 移除 `zodiac`、覆寫的 `blue`、`china`，加入 `brand`、`ink`、`danger`；`fontFamily.sans`／`serif` 指向 CSS 變數。
 - [ ] **Step 4:** `input.css` 刪 `.gradient-text`；在 `@layer components` 定義共用 class（主按鈕 `bg-brand-600 hover:bg-brand-700 text-white rounded-lg`，`.field-error` 為 `border-danger` 加錯誤文字樣式）；`body` 改 `bg-ink-50 text-ink-800`。
 - [ ] **Step 5:** `layout.tsx` 以 `next/font/google` 載入兩個字型並把變數掛到 `<html>`，`<body>` 移除漸層。`npm i @phosphor-icons/react`。
-- [ ] **Step 6:** `npm run build:css`，確認 `public/styles.css` 含 `.bg-brand-600`；`npm run build` 成功。
+- [ ] **Step 6:** `npm run build:css`，確認 `public/styles.css` 的 `body` 規則已是 `ink-50` 底色與 `var(--font-sans)`（新 class 要等頁面用到才會被編入）；`npm run build` 成功，路由分類不變。
 - [ ] **Step 7:** Commit `feat(design): vermilion tokens, fonts and palette gate`（閘門此時仍失敗，Task 10 要求通過）。
 
 ### Task 2: 命盤格標誌、favicon 與分享圖

@@ -2,6 +2,7 @@ import React from 'react';
 import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import NavBar from '../components/NavBar';
+import { fontVariables } from '../lib/fonts';
 import '../../public/styles.css'; // Import the global styles directly from public (or we should ideally move input.css to app)
 
 export const metadata = {
@@ -31,8 +32,8 @@ export default async function LocaleLayout({
     }
 
     return (
-        <html lang={locale}>
-            <body className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 min-h-screen">
+        <html lang={locale} className={fontVariables}>
+            <body className="min-h-screen">
                 <noscript>
                     <iframe
                         src="https://www.googletagmanager.com/ns.html?id=GTM-WJJN3TGM"

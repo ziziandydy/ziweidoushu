@@ -9,44 +9,38 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                // 紫微斗數主題色
-                zodiac: {
-                    50: '#faf5ff',
-                    100: '#f3e8ff',
-                    200: '#e9d5ff',
-                    300: '#d8b4fe',
-                    400: '#c084fc',
-                    500: '#a855f7',
-                    600: '#9333ea',
-                    700: '#7c3aed',
-                    800: '#6b21a8',
-                    900: '#581c87',
+                // 主色：朱砂（全站唯一強調色，主色 600）
+                brand: {
+                    50: '#FBF2EF',
+                    100: '#F5E0D9',
+                    200: '#EBC0B2',
+                    300: '#DC9580',
+                    400: '#D9785E',
+                    500: '#B54E33',
+                    600: '#9C3D25',
+                    700: '#80321F',
+                    800: '#64281A',
+                    900: '#4A1E14',
                 },
-                // 增強的藍色調
-                blue: {
-                    50: '#eff6ff',
-                    100: '#dbeafe',
-                    200: '#bfdbfe',
-                    300: '#93c5fd',
-                    400: '#60a5fa',
-                    500: '#3b82f6',
-                    600: '#2563eb',
-                    700: '#1d4ed8',
-                    800: '#1e40af',
-                    900: '#1e3a8a',
+                // 中性色：帶墨紫色調的墨
+                ink: {
+                    50: '#F6F6F8',
+                    100: '#ECECF0',
+                    200: '#D9D9E0',
+                    300: '#B9B9C4',
+                    400: '#8C8C9B',
+                    500: '#6A6A7A',
+                    600: '#4E4E5C',
+                    700: '#3A3A46',
+                    800: '#26262F',
+                    900: '#17171E',
                 },
-                // 傳統中國色彩
-                china: {
-                    red: '#dc2626',      // 中國紅
-                    gold: '#f59e0b',     // 金黃
-                    jade: '#10b981',    // 玉綠
-                    porcelain: '#f3f4f6', // 瓷白
-                    ink: '#1f2937',     // 墨黑
-                }
+                // 錯誤狀態：比主色更正紅，且一律搭配圖示與文字
+                danger: '#B42318',
             },
             fontFamily: {
-                'chinese': ['Microsoft YaHei', 'SimHei', 'SimSun', 'serif'],
-                'sans': ['Inter', 'system-ui', 'sans-serif'],
+                'sans': ['var(--font-sans)', 'PingFang TC', 'Microsoft JhengHei', 'system-ui', 'sans-serif'],
+                'serif': ['var(--font-serif)', 'Songti TC', 'PMingLiU', 'serif'],
                 'mono': ['JetBrains Mono', 'Fira Code', 'monospace'],
             },
             fontSize: {
@@ -66,7 +60,7 @@ module.exports = {
                 '5xl': '2.5rem',
             },
             boxShadow: {
-                'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
+                'soft': '0 12px 32px -18px rgba(23, 23, 30, 0.28)',
                 'medium': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
                 'large': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
                 'xl-soft': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
@@ -135,19 +129,6 @@ module.exports = {
         // 自定義插件
         function ({ addUtilities, theme }) {
             const newUtilities = {
-                // 文字漸變效果
-                '.text-gradient-primary': {
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    '-webkit-background-clip': 'text',
-                    'background-clip': 'text',
-                    '-webkit-text-fill-color': 'transparent',
-                },
-                '.text-gradient-gold': {
-                    background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)',
-                    '-webkit-background-clip': 'text',
-                    'background-clip': 'text',
-                    '-webkit-text-fill-color': 'transparent',
-                },
                 // 玻璃效應
                 '.glass-effect': {
                     background: 'rgba(255, 255, 255, 0.25)',

@@ -9,17 +9,45 @@
   }
 
   body {
-    @apply antialiased;
+    @apply antialiased bg-ink-50 text-ink-800 font-sans;
   }
 }
 
-/* Custom components */
+/* Shared components: one definition each so pages don't drift */
 @layer components {
-  .gradient-text {
-    @apply bg-gradient-to-r from-purple-600 to-blue-600;
-    @apply bg-clip-text text-transparent;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 font-medium text-white transition;
+    @apply hover:bg-brand-700 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:bg-ink-200 disabled:text-ink-500 disabled:active:scale-100;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-ink-300 bg-white px-5 py-2.5 font-medium text-ink-800 transition;
+    @apply hover:bg-ink-100 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2;
+  }
+  .surface {
+    @apply rounded-xl border border-ink-100 bg-white;
+  }
+  .field {
+    @apply w-full rounded-lg border border-ink-300 bg-white px-3 py-2.5 text-ink-800 placeholder:text-ink-500;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-1;
+  }
+  .field-error {
+    @apply border-danger;
+  }
+  .error-text {
+    @apply flex items-start gap-1.5 text-sm text-danger;
+  }
+  .link {
+    @apply text-brand-600 underline underline-offset-4 hover:text-brand-700;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
