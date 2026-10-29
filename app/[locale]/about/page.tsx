@@ -21,9 +21,29 @@ export default async function AboutPage(props: { params: Promise<{ locale: strin
     const { locale } = await props.params;
     const isEn = locale === 'en';
 
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'AboutPage',
+        name: isEn ? 'About AI Zi Wei Dou Shu' : '關於本站',
+        url: `https://aiziwei.online/${locale}/about`,
+        inLanguage: isEn ? 'en' : 'zh-TW',
+        // Same Organization as the homepage graph and the BlogPosting publisher
+        mainEntity: {
+            '@type': 'Organization',
+            '@id': 'https://aiziwei.online/#organization',
+            name: isEn ? 'AI Zi Wei Dou Shu' : 'AI 紫微斗數',
+            url: 'https://aiziwei.online',
+            logo: { '@type': 'ImageObject', url: 'https://aiziwei.online/favicon.svg' },
+        },
+    };
+    const jsonLdScript = (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    );
+
     if (isEn) {
         return (
             <main className="max-w-[44rem] mx-auto px-4 py-12">
+                {jsonLdScript}
                 <article className="prose prose-lg max-w-none prose-headings:font-bold prose-headings:text-ink-900 prose-p:text-ink-800 prose-p:leading-[1.95] prose-strong:text-ink-900 prose-a:text-brand-600 prose-a:underline-offset-4 hover:prose-a:text-brand-700">
                     <h1>About AI Zi Wei Dou Shu</h1>
                     <p>AI Zi Wei Dou Shu (aiziwei.online) combines the Zhongzhou school of Zi Wei Dou Shu (Purple Star Astrology) with AI analysis to help readers explore this Chinese metaphysical tradition.</p>
@@ -42,6 +62,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: strin
 
     return (
         <main className="max-w-[44rem] mx-auto px-4 py-12">
+            {jsonLdScript}
             <article className="prose prose-lg max-w-none prose-headings:font-bold prose-headings:text-ink-900 prose-p:text-ink-800 prose-p:leading-[1.95] prose-strong:text-ink-900 prose-a:text-brand-600 prose-a:underline-offset-4 hover:prose-a:text-brand-700">
                 <h1>關於本站</h1>
                 <p>AI 紫微斗數（aiziwei.online）結合中州派紫微斗數理論與 AI 技術，提供命盤分析工具與命理知識內容，希望讓更多人以現代方式認識這門傳統學問。</p>

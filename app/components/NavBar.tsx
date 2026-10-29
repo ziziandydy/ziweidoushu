@@ -38,6 +38,15 @@ export default function NavBar({ locale }: { locale: string }) {
     const isBlog = pathname.startsWith(blogHref);
     const isPricing = pathname.startsWith(pricingHref);
 
+    // Language switch lands on the same page in the other language. Articles have a different slug in each
+    // language, so an article (or anything we cannot map) falls back to that language's blog list.
+    const switchHref = (target: 'zh-TW' | 'en') => {
+        if (isHome) return target === 'zh-TW' ? '/' : '/en';
+        if (pathname.startsWith(`${blogHref}/`)) return `/${target}/blog`;
+        const rest = pathname.startsWith(`/${locale}`) ? pathname.slice(locale.length + 1) : pathname;
+        return `/${target}${rest === '/' ? '' : rest}`;
+    };
+
     const navLink = (active: boolean) =>
         `px-1 py-2 font-medium transition-colors ${active
             ? 'text-ink-900 shadow-[inset_0_-2px_0_theme(colors.brand.600)]'
@@ -48,12 +57,12 @@ export default function NavBar({ locale }: { locale: string }) {
             {!isEn ? (
                 <span className="px-3 py-1 rounded-full bg-white shadow-sm text-ink-900 font-medium text-sm">中文</span>
             ) : (
-                <Link href="/zh-TW/blog" onClick={closeMenu} className="px-3 py-1 rounded-full text-ink-500 hover:text-ink-800 text-sm transition-colors">中文</Link>
+                <Link href={switchHref('zh-TW')} onClick={closeMenu} className="px-3 py-1 rounded-full text-ink-500 hover:text-ink-800 text-sm transition-colors">中文</Link>
             )}
             {isEn ? (
                 <span className="px-3 py-1 rounded-full bg-white shadow-sm text-ink-900 font-medium text-sm">EN</span>
             ) : (
-                <Link href="/en/blog" onClick={closeMenu} className="px-3 py-1 rounded-full text-ink-500 hover:text-ink-800 text-sm transition-colors">EN</Link>
+                <Link href={switchHref('en')} onClick={closeMenu} className="px-3 py-1 rounded-full text-ink-500 hover:text-ink-800 text-sm transition-colors">EN</Link>
             )}
         </div>
     );

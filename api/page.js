@@ -48,6 +48,7 @@ async function generateSitemap(req, res) {
     // 靜態頁面
     const staticPages = [
       { url: '/', priority: '1.0', changefreq: 'weekly' },
+      { url: '/en', priority: '1.0', changefreq: 'weekly' },
       { url: '/zh-TW/analysis', priority: '0.9', changefreq: 'weekly' },
       { url: '/en/analysis', priority: '0.9', changefreq: 'weekly' },
       { url: '/zh-TW/blog', priority: '0.9', changefreq: 'daily' },
@@ -58,8 +59,6 @@ async function generateSitemap(req, res) {
       { url: '/en/privacy-policy', priority: '0.5', changefreq: 'monthly' },
       { url: '/zh-TW/pricing', priority: '0.7', changefreq: 'monthly' },
       { url: '/en/pricing', priority: '0.7', changefreq: 'monthly' },
-      { url: '/payment-success.html', priority: '0.3', changefreq: 'monthly' },
-      { url: '/payment-failed.html', priority: '0.3', changefreq: 'monthly' },
     ];
 
     // 獲取所有已發布的部落格文章

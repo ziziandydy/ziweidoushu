@@ -41,5 +41,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function AnalysisPage({ params }: Props) {
     const { locale } = await params;
     const t = getAnalysisDict(locale);
-    return <AnalysisClient locale={locale} t={t} />;
+    const isEn = locale === 'en';
+    // Same entity values as the homepage SoftwareApplication; name and description are text visible on this page
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: isEn ? 'AI Zi Wei Dou Shu' : 'AI 紫微斗數',
+        url: `https://aiziwei.online/${locale}/analysis`,
+        description: t.header.subtitle,
+        applicationCategory: 'LifestyleApplication',
+        operatingSystem: 'Web',
+        inLanguage: isEn ? 'en' : 'zh-TW',
+    };
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <AnalysisClient locale={locale} t={t} />
+        </>
+    );
 }
