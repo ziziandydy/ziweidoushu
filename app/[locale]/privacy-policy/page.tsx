@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { OG_IMAGE_URL } from '../../lib/ogImage';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -15,6 +16,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         description: isEn
             ? 'How AI Zi Wei Dou Shu collects, uses, and protects your personal data. Chart data is kept only for the browser session.'
             : 'AI 紫微斗數的隱私政策說明，詳細說明我們如何收集、使用和保護您的個人資料。命盤數據僅在瀏覽器會話期間保留，重視用戶隱私權。',
+        openGraph: {
+            images: [{ url: OG_IMAGE_URL, width: 1200, height: 630 }],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            images: [OG_IMAGE_URL],
+        },
         alternates: {
             canonical: `https://aiziwei.online/${locale}/privacy-policy`,
             languages: {
