@@ -1,13 +1,14 @@
 /**
  * Vercel Serverless Function - List Blog Posts
  * API Route: GET /api/blog/list
- * Authentication: Public (no auth required)
+ * Authentication: Public for published posts; includeAll / non-published status require a Bearer token
  *
  * 取得文章列表，支援分頁和標籤篩選
  */
 
 const { sql } = require('@vercel/postgres');
 const { setCorsHeaders, handleOptions } = require('../../lib/cors');
+const { verifyBearerToken } = require('../../lib/auth');
 
 module.exports = async function handler(req, res) {
   console.log('📚 Blog List API');
@@ -42,6 +43,18 @@ module.exports = async function handler(req, res) {
     // 驗證語言參數
     const validLanguages = ['zh-TW', 'en'];
     const finalLanguage = validLanguages.includes(language) ? language : 'zh-TW';
+
+    // 草稿與已下架文章只給管理員／API token；匿名請求一律只看已發布
+    if (includeAll === 'true' || status !== 'published') {
+      try {
+        await verifyBearerToken(req.headers.authorization);
+      } catch (authError) {
+        return res.status(401).json({
+          success: false,
+          error: '需要登入才能查看未發布的文章'
+        });
+      }
+    }
 
     console.log('📊 查詢參數:', { page: pageNum, limit: limitNum, tag, status, includeAll, language: finalLanguage });
 

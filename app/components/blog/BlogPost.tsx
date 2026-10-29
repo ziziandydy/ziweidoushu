@@ -39,7 +39,7 @@ export default function BlogPost({ post, lang }: { post: any, lang: string }) {
         advertisement: '廣告'
     };
 
-    const basePath = lang === 'en' ? '/en/blog' : '/blog';
+    const basePath = lang === 'en' ? '/en/blog' : '/zh-TW/blog';
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString(lang === 'en' ? 'en-US' : 'zh-TW', {

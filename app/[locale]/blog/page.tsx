@@ -1,6 +1,7 @@
 
 import { getBlogPosts } from '../../lib/blog';
 import BlogList from '../../components/blog/BlogList';
+import { OG_IMAGE_URL } from '../../lib/ogImage';
 
 export async function generateMetadata(props: { params: Promise<{ locale: string }>, searchParams: Promise<{ page?: string; tag?: string }> }) {
     const params = await props.params;
@@ -16,6 +17,13 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
     return {
         title: isEn ? 'AI Zi Wei Dou Shu Blog | Explore Destiny' : '紫微斗數 AI 部落格 | 探索命理智慧',
         description: isEn ? 'Explore destiny wisdom, daily fortune and star analysis' : '探索紫微斗數命理智慧，每日更新運勢與星曜解析',
+        openGraph: {
+            images: [{ url: OG_IMAGE_URL, width: 1200, height: 630 }],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            images: [OG_IMAGE_URL],
+        },
         alternates: {
             canonical: `https://aiziwei.online/${params.locale}/blog${qs}`,
             languages: {
