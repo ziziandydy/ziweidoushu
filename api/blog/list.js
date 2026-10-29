@@ -116,6 +116,7 @@ module.exports = async function handler(req, res) {
             LEFT(content, 200) as excerpt
           FROM blog_posts
           WHERE status = ${status}
+          AND (published_at IS NULL OR published_at <= NOW())
           AND tags @> ${JSON.stringify([tag])}::jsonb
           AND language = ${finalLanguage}
           ORDER BY published_at DESC NULLS LAST, created_at DESC
@@ -127,6 +128,7 @@ module.exports = async function handler(req, res) {
           SELECT COUNT(*) as total
           FROM blog_posts
           WHERE status = ${status}
+          AND (published_at IS NULL OR published_at <= NOW())
           AND tags @> ${JSON.stringify([tag])}::jsonb
           AND language = ${finalLanguage}
         `;
@@ -175,6 +177,7 @@ module.exports = async function handler(req, res) {
             LEFT(content, 200) as excerpt
           FROM blog_posts
           WHERE status = ${status}
+          AND (published_at IS NULL OR published_at <= NOW())
           AND language = ${finalLanguage}
           ORDER BY published_at DESC NULLS LAST, created_at DESC
           LIMIT ${limitNum}
@@ -185,6 +188,7 @@ module.exports = async function handler(req, res) {
           SELECT COUNT(*) as total
           FROM blog_posts
           WHERE status = ${status}
+          AND (published_at IS NULL OR published_at <= NOW())
           AND language = ${finalLanguage}
         `;
       }

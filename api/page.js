@@ -65,7 +65,7 @@ async function generateSitemap(req, res) {
     const result = await sql`
       SELECT slug, language, published_at, updated_at
       FROM blog_posts
-      WHERE status = 'published'
+      WHERE status = 'published' AND (published_at IS NULL OR published_at <= NOW())
       ORDER BY published_at DESC
     `;
 

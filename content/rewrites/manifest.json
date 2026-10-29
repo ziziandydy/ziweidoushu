@@ -1,0 +1,197 @@
+{
+  "rewrites": [
+    {
+      "file": "01-ziwei.md",
+      "id": "10b72f1e-96a1-4344-8f7d-c4e69846c03b",
+      "expectTitleIncludes": "紫微星詳解",
+      "newTitle": null,
+      "tags": [
+        "紫微星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ]
+    },
+    {
+      "file": "02-tianfu.md",
+      "id": "e640e38b-5640-4f3d-80b5-61647ba3a73a",
+      "expectTitleIncludes": "天府星詳解",
+      "newTitle": null,
+      "tags": [
+        "天府星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ]
+    },
+    {
+      "file": "03-tianxiang.md",
+      "id": "185b5983-d0c8-4d34-9cb8-d0c0cfdd4f1e",
+      "expectTitleIncludes": "天相星詳解",
+      "newTitle": null,
+      "tags": [
+        "天相星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ]
+    },
+    {
+      "file": "04-lianzhen.md",
+      "id": "ced9b39b-fa1f-4f4a-99ed-1f37991d16c7",
+      "expectTitleIncludes": "廉貞星詳解",
+      "newTitle": "廉貞星詳解：囚星的創業魄力與感情熱度",
+      "tags": [
+        "廉貞星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ]
+    },
+    {
+      "file": "05-taiyin.md",
+      "id": "ee603389-9686-4da1-b922-4b798b8cd3a1",
+      "expectTitleIncludes": "太陰星詳解",
+      "newTitle": null,
+      "tags": [
+        "太陰星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ]
+    },
+    {
+      "file": "06-tiantong.md",
+      "id": "455a7fae-092e-4df8-b02b-66da7efeeecb",
+      "expectTitleIncludes": "天同星詳解",
+      "newTitle": null,
+      "tags": [
+        "天同星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ]
+    },
+    {
+      "file": "07-wuqu.md",
+      "id": "e437f914-63d5-44f7-9808-83e0d8773fbe",
+      "expectTitleIncludes": "武曲星詳解",
+      "newTitle": null,
+      "tags": [
+        "武曲星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ]
+    },
+    {
+      "file": "08-taiyang.md",
+      "id": "be765381-6b04-4e83-b8c3-70ecfcf9b0ff",
+      "expectTitleIncludes": "太陽星詳解",
+      "newTitle": null,
+      "tags": [
+        "太陽星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ]
+    },
+    {
+      "file": "09-pojun.md",
+      "id": "4cccbfb5-dfb4-4f1c-8a6f-e49fc2ea02f9",
+      "expectTitleIncludes": "破軍星詳解",
+      "newTitle": null,
+      "tags": [
+        "破軍星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ]
+    },
+    {
+      "file": "10-dayun.md",
+      "id": "c6839b69-4430-4e85-87a6-96b06c230932",
+      "expectTitleIncludes": "大運趨勢分析",
+      "newTitle": "2026-2027年紫微流年趨勢分析：掌握丙午與丁未年的四化重點",
+      "tags": null
+    },
+    {
+      "file": "11-wuxing.md",
+      "id": "80f34946-2129-46af-9f45-5f9e5977cadd",
+      "expectTitleIncludes": "紫微五行與天干地支",
+      "newTitle": null,
+      "tags": null
+    },
+    {
+      "file": "12-gongwei.md",
+      "id": "5256e7d1-aec8-4214-a7ec-ab1dbe1d18db",
+      "expectTitleIncludes": "紫微十二宮位完全解析",
+      "newTitle": null,
+      "tags": null
+    },
+    {
+      "file": "13-ruman.md",
+      "id": "1bfc7701-2b1c-4bfa-a72b-adfb82f49b71",
+      "expectTitleIncludes": "紫微斗數入門完全指南",
+      "newTitle": "紫微斗數入門完全指南：從零開始看懂命盤的結構",
+      "tags": null
+    }
+  ],
+  "new": [
+    {
+      "file": "n1-tianji.md",
+      "title": "天機星詳解：智星的分析力與想太多的代價",
+      "tags": [
+        "天機星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ],
+      "publishedAt": "2026-10-31T01:00:00Z"
+    },
+    {
+      "file": "n2-tanlang.md",
+      "title": "貪狼星詳解：慾望之星的魅力與取捨",
+      "tags": [
+        "貪狼星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ],
+      "publishedAt": "2026-11-03T01:00:00Z"
+    },
+    {
+      "file": "n3-jumen.md",
+      "title": "巨門星詳解：暗星的口才、疑心與研究力",
+      "tags": [
+        "巨門星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ],
+      "publishedAt": "2026-11-06T01:00:00Z"
+    },
+    {
+      "file": "n4-tianliang.md",
+      "title": "天梁星詳解：蔭星的庇護力與管太多的界線",
+      "tags": [
+        "天梁星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ],
+      "publishedAt": "2026-11-08T01:00:00Z"
+    },
+    {
+      "file": "n5-qisha.md",
+      "title": "七殺星詳解：將星的決斷力與孤獨感",
+      "tags": [
+        "七殺星",
+        "十四主星",
+        "紫微入門",
+        "命盤教學"
+      ],
+      "publishedAt": "2026-11-11T01:00:00Z"
+    }
+  ]
+}

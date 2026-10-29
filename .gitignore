@@ -108,3 +108,6 @@ dist
 .vercel
 .env*.local
 .gstack/
+
+# content rewrite backups (contain pre-rewrite post bodies)
+content/rewrites/_backup*

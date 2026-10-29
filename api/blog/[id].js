@@ -180,7 +180,7 @@ async function handleGet(id, res) {
   const result = await sql`
     SELECT * FROM blog_posts
     WHERE (slug = ${id} OR id::text = ${id})
-    AND status = 'published'
+    AND status = 'published' AND (published_at IS NULL OR published_at <= NOW())
   `;
 
   if (result.rows.length === 0) {

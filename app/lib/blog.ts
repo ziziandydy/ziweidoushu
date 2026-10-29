@@ -42,13 +42,13 @@ export async function getBlogPosts({ page = 1, tag, limit = 9, locale = 'zh-TW' 
             countResult = await sql`
         SELECT COUNT(*) as total
         FROM blog_posts
-        WHERE status = 'published' AND language = ${language} AND tags @> jsonb_build_array(${tag}::text)
+        WHERE status = 'published' AND (published_at IS NULL OR published_at <= NOW()) AND language = ${language} AND tags @> jsonb_build_array(${tag}::text)
       `;
         } else {
             countResult = await sql`
         SELECT COUNT(*) as total
         FROM blog_posts
-        WHERE status = 'published' AND language = ${language}
+        WHERE status = 'published' AND (published_at IS NULL OR published_at <= NOW()) AND language = ${language}
       `;
         }
 
@@ -61,7 +61,7 @@ export async function getBlogPosts({ page = 1, tag, limit = 9, locale = 'zh-TW' 
             postsResult = await sql`
         SELECT id, title, LEFT(content, 200) as excerpt, content, tags, published_at, created_at, slug, language, author
         FROM blog_posts
-        WHERE status = 'published' AND language = ${language} AND tags @> jsonb_build_array(${tag}::text)
+        WHERE status = 'published' AND (published_at IS NULL OR published_at <= NOW()) AND language = ${language} AND tags @> jsonb_build_array(${tag}::text)
         ORDER BY published_at DESC
         LIMIT ${limit} OFFSET ${offset}
       `;
@@ -69,7 +69,7 @@ export async function getBlogPosts({ page = 1, tag, limit = 9, locale = 'zh-TW' 
             postsResult = await sql`
         SELECT id, title, LEFT(content, 200) as excerpt, content, tags, published_at, created_at, slug, language, author
         FROM blog_posts
-        WHERE status = 'published' AND language = ${language}
+        WHERE status = 'published' AND (published_at IS NULL OR published_at <= NOW()) AND language = ${language}
         ORDER BY published_at DESC
         LIMIT ${limit} OFFSET ${offset}
       `;
@@ -79,7 +79,7 @@ export async function getBlogPosts({ page = 1, tag, limit = 9, locale = 'zh-TW' 
         const tagsResult = await sql`
       SELECT tag, COUNT(*) AS uses
       FROM blog_posts, jsonb_array_elements_text(tags) AS tag
-      WHERE status = 'published' AND language = ${language}
+      WHERE status = 'published' AND (published_at IS NULL OR published_at <= NOW()) AND language = ${language}
       GROUP BY tag
       ORDER BY uses DESC, tag
     `;
@@ -103,7 +103,7 @@ export async function getBlogPost(slug: string, locale: string = 'zh-TW'): Promi
     try {
         const result = await sql`
       SELECT *, LEFT(content, 200) as excerpt FROM blog_posts
-      WHERE slug = ${slug} AND language = ${language} AND status = 'published'
+      WHERE slug = ${slug} AND language = ${language} AND status = 'published' AND (published_at IS NULL OR published_at <= NOW())
     `;
         return (result.rows[0] as BlogPost) || null;
     } catch (error) {
@@ -118,7 +118,7 @@ export async function getAlternateLanguageSlug(post: BlogPost): Promise<{ locale
         if (post.language === 'en' && post.translated_from) {
             const result = await sql`
         SELECT slug FROM blog_posts
-        WHERE id = ${post.translated_from} AND status = 'published'
+        WHERE id = ${post.translated_from} AND status = 'published' AND (published_at IS NULL OR published_at <= NOW())
       `;
             if (result.rows[0]) return { locale: 'zh-TW', slug: result.rows[0].slug };
             return null;
@@ -126,7 +126,7 @@ export async function getAlternateLanguageSlug(post: BlogPost): Promise<{ locale
 
         const result = await sql`
       SELECT slug FROM blog_posts
-      WHERE translated_from = ${post.id} AND language = 'en' AND status = 'published'
+      WHERE translated_from = ${post.id} AND language = 'en' AND status = 'published' AND (published_at IS NULL OR published_at <= NOW())
     `;
         if (result.rows[0]) return { locale: 'en', slug: result.rows[0].slug };
         return null;
