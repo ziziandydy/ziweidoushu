@@ -1,13 +1,8 @@
-import { Noto_Sans_TC, Noto_Serif_TC } from 'next/font/google';
+import { Noto_Serif_TC } from 'next/font/google';
 
-// 自架的繁中字型；serif 只用在部落格與文章標題
-export const fontSans = Noto_Sans_TC({
-    weight: ['400', '500', '700'],
-    subsets: ['latin'],
-    display: 'swap',
-    variable: '--font-sans',
-});
-
+// 只有部落格與文章標題用自架襯線字型（單一字重）。
+// 介面與內文用各平台內建的繁中字型（見 tailwind.config.js 的 fontFamily.sans）：
+// 自架 Noto Sans TC 三個字重會讓每頁多載入約 25 個字型檔、1.4 MB，首屏明顯變慢。
 export const fontSerif = Noto_Serif_TC({
     weight: ['600'],
     subsets: ['latin'],
@@ -15,4 +10,4 @@ export const fontSerif = Noto_Serif_TC({
     variable: '--font-serif',
 });
 
-export const fontVariables = `${fontSans.variable} ${fontSerif.variable}`;
+export const fontVariables = fontSerif.variable;

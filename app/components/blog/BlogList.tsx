@@ -78,7 +78,7 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
                 </div>
                 {moreTags.length > 0 && (
                     <details className="mt-3 group">
-                        <summary className="link cursor-pointer text-sm select-none list-none">{t.allTopics}</summary>
+                        <summary className="link cursor-pointer text-sm select-none list-none [&::-webkit-details-marker]:hidden">{t.allTopics}</summary>
                         <div className="mt-3 flex flex-wrap gap-2">
                             {moreTags.map(tag => (
                                 <Link key={tag} href={`${basePath}?tag=${encodeURIComponent(tag)}`} className={chip(false)}>

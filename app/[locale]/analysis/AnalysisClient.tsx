@@ -35,8 +35,8 @@ export default function AnalysisClient({ locale, t }: AnalysisClientProps) {
     // Otherwise pick up birth data the homepage form handed over and calculate right away.
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
+        const handed = takeBirthInput(); // always consume it so a stale entry cannot fire on a later visit
         if (params.get('restore') !== 'true') {
-            const handed = takeBirthInput();
             if (handed) setHandoffProfile(handed);
             return;
         }

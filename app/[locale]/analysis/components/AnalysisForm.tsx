@@ -38,6 +38,7 @@ export default function AnalysisForm({ locale, t, onCalculated, initialProfile, 
         if (birthYear && birthMonth) {
             const daysInMonth = new Date(birthYear, birthMonth, 0).getDate();
             setDays(Array.from({ length: daysInMonth }, (_, i) => i + 1));
+            setBirthDay(d => (d > daysInMonth ? 0 : d));
         } else {
             setDays([]);
         }

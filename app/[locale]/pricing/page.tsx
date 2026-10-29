@@ -158,10 +158,10 @@ export default async function PricingPage({ params }: Props) {
 
                     <div className="rounded-xl bg-brand-600 p-8 text-white grid grid-rows-[auto_1fr_auto] gap-6">
                         <div>
-                            <h2 className="flex items-center gap-3 text-lg font-medium text-white/90">
-                                {isEn ? 'Paid Unlock Plan' : '付費解鎖方案'}
+                            <div className="flex items-center gap-3">
+                                <h2 className="text-lg font-medium text-white/90">{isEn ? 'Paid Unlock Plan' : '付費解鎖方案'}</h2>
                                 <span className="rounded-md bg-white/20 px-2.5 py-0.5 text-xs font-medium">{isEn ? 'Recommended' : '推薦方案'}</span>
-                            </h2>
+                            </div>
                             <div className="mt-3 text-4xl font-bold tracking-tight tabular-nums">NT$ 199</div>
                             <p className="mt-2 text-white/85">{isEn ? '1 hour of unlimited Q&A' : '1 小時無限問答'}</p>
                         </div>
@@ -200,13 +200,13 @@ export default async function PricingPage({ params }: Props) {
                             <tbody className="divide-y divide-ink-100 text-ink-700">
                                 <tr>
                                     <th scope="row" className="py-4 pr-2 sm:pr-4 font-medium text-ink-900">{isEn ? 'Chart calculation' : '命盤計算'}</th>
-                                    <td className="py-4 px-2 sm:px-4 text-center"><Check size={18} weight="bold" className="inline text-ink-700" aria-label={isEn ? 'Included' : '包含'} /></td>
-                                    <td className="py-4 pl-2 sm:pl-4 text-center"><Check size={18} weight="bold" className="inline text-brand-600" aria-label={isEn ? 'Included' : '包含'} /></td>
+                                    <td className="py-4 px-2 sm:px-4 text-center"><Check size={18} weight="bold" className="inline text-ink-700" role="img" aria-label={isEn ? 'Included' : '包含'} /></td>
+                                    <td className="py-4 pl-2 sm:pl-4 text-center"><Check size={18} weight="bold" className="inline text-brand-600" role="img" aria-label={isEn ? 'Included' : '包含'} /></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" className="py-4 pr-2 sm:pr-4 font-medium text-ink-900">{isEn ? 'Initial AI analysis' : 'AI 初始解析'}</th>
-                                    <td className="py-4 px-2 sm:px-4 text-center"><Check size={18} weight="bold" className="inline text-ink-700" aria-label={isEn ? 'Included' : '包含'} /></td>
-                                    <td className="py-4 pl-2 sm:pl-4 text-center"><Check size={18} weight="bold" className="inline text-brand-600" aria-label={isEn ? 'Included' : '包含'} /></td>
+                                    <td className="py-4 px-2 sm:px-4 text-center"><Check size={18} weight="bold" className="inline text-ink-700" role="img" aria-label={isEn ? 'Included' : '包含'} /></td>
+                                    <td className="py-4 pl-2 sm:pl-4 text-center"><Check size={18} weight="bold" className="inline text-brand-600" role="img" aria-label={isEn ? 'Included' : '包含'} /></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" className="py-4 pr-2 sm:pr-4 font-medium text-ink-900">{isEn ? 'Free Q&A sessions / month' : '每月免費問答次數'}</th>
@@ -221,7 +221,7 @@ export default async function PricingPage({ params }: Props) {
                                 <tr>
                                     <th scope="row" className="py-4 pr-2 sm:pr-4 font-medium text-ink-900">{isEn ? 'Continuous conversation' : '連續對話功能'}</th>
                                     <td className="py-4 px-2 sm:px-4 text-center text-ink-400">-</td>
-                                    <td className="py-4 pl-2 sm:pl-4 text-center"><Check size={18} weight="bold" className="inline text-brand-600" aria-label={isEn ? 'Included' : '包含'} /></td>
+                                    <td className="py-4 pl-2 sm:pl-4 text-center"><Check size={18} weight="bold" className="inline text-brand-600" role="img" aria-label={isEn ? 'Included' : '包含'} /></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" className="py-4 pr-2 sm:pr-4 font-medium text-ink-900">{isEn ? 'In-depth Q&A' : '深度問答'}</th>

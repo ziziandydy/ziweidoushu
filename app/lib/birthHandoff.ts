@@ -15,7 +15,7 @@ function defaultStorage(): Storage | undefined {
 function isUserProfile(v: unknown): v is UserProfile {
     if (!v || typeof v !== 'object') return false;
     const p = v as Record<string, unknown>;
-    return typeof p.name === 'string' && p.name.trim() !== ''
+    return typeof p.name === 'string' && p.name !== ''
         && (p.gender === 'M' || p.gender === 'F')
         && typeof p.birthYear === 'number' && p.birthYear > 0
         && typeof p.birthMonth === 'number' && p.birthMonth > 0

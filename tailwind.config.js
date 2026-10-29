@@ -39,7 +39,7 @@ module.exports = {
                 danger: '#B42318',
             },
             fontFamily: {
-                'sans': ['var(--font-sans)', 'PingFang TC', 'Microsoft JhengHei', 'system-ui', 'sans-serif'],
+                'sans': ['PingFang TC', 'Microsoft JhengHei', 'Noto Sans CJK TC', 'Noto Sans TC', 'system-ui', 'sans-serif'],
                 'serif': ['var(--font-serif)', 'Songti TC', 'PMingLiU', 'serif'],
                 'mono': ['JetBrains Mono', 'Fira Code', 'monospace'],
             },

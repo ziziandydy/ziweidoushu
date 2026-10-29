@@ -22,7 +22,7 @@ export default function LatestPosts({ locale, heading, allLabel }: { locale: str
 
     // published_at is stored without a time zone; format in UTC so dates match the server-rendered blog list
     const formatDate = (s?: string) => (s ? new Date(s).toLocaleDateString(locale === 'en' ? 'en-US' : 'zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'UTC' }) : '');
-    const plain = (md?: string) => (md || '').replace(/[#*_`>\[\]]/g, '').replace(/\s+/g, ' ').trim().slice(0, 120);
+    const plain = (md?: string) => (md || '').replace(/\(https?:[^)]*\)/g, '').replace(/^\s*[-*]\s+/gm, '').replace(/[#*_`>\[\]]/g, '').replace(/\s+/g, ' ').trim().slice(0, 120);
 
     const empty = failed || (posts !== null && posts.length === 0);
 
