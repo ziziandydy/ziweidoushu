@@ -60,6 +60,9 @@ export default async function AboutPage(props: { params: Promise<{ locale: strin
                     <p>AI Zi Wei Dou Shu (aiziwei.online) combines the Zhongzhou school of Zi Wei Dou Shu (Purple Star Astrology) with AI analysis to help readers explore this Chinese metaphysical tradition.</p>
                     <h2>Methodology</h2>
                     <p>Our analysis follows the Zhongzhou school framework (based on Wang Tingzhi&apos;s classical works). An in-house knowledge base of classical principles guides every AI-generated analysis and article, and articles cite the theoretical sources they draw on.</p>
+                    <h2>Knowledge base and sources</h2>
+                    <p>The in-house knowledge base is our own written summary of the Zhongzhou framework, based on Wang Tingzhi&apos;s <em>Zhongzhou School Zi Wei Dou Shu</em> (王亭之《中州派紫微斗數》). It is paraphrased, not quoted from the book, and covers the twelve palaces, the major stars, the four transformations and the main chart-reading methods. Where an article draws on a specific external source, that source is named at the end of the article.</p>
+                    <p>Last updated: 29 October 2026.</p>
                     <h2>Content policy</h2>
                     <p>Blog articles are AI-assisted and human-supervised, written from curated public sources with references listed at the end of each article. All content is for entertainment and cultural learning purposes only — it is not professional advice.</p>
                     <h2>Author</h2>
@@ -79,6 +82,9 @@ export default async function AboutPage(props: { params: Promise<{ locale: strin
                 <p>AI 紫微斗數（aiziwei.online）結合中州派紫微斗數理論與 AI 技術，提供命盤分析工具與命理知識內容，希望讓更多人以現代方式認識這門傳統學問。</p>
                 <h2>理論方法</h2>
                 <p>本站以中州派（王亭之體系）為理論根據，站內建有整理自經典論述的知識庫，AI 分析與部落格文章皆以此為依據產出，並標明理論出處。</p>
+                <h2>知識庫與理論來源</h2>
+                <p>站內知識庫是本站依中州派架構自行整理的論述摘要，理論依據為王亭之《中州派紫微斗數》，內容為轉述整理而非原文抄錄，涵蓋十二宮位、主星、四化與主要論斷方法。文章若引用特定外部來源，會在文末標明。</p>
+                <p>最後更新：2026 年 10 月 29 日。</p>
                 <h2>內容政策</h2>
                 <p>部落格文章由 AI 輔助撰寫、人工監督，撰寫時參考外部公開文章並於文末附上引用來源。本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考，不構成專業建議。</p>
                 <h2>作者</h2>

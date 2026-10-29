@@ -126,25 +126,6 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
                                     </div>
                                 )}
                             </article>
-
-                            {/* Inline ad every 6th post */}
-                            {(index + 1) % 6 === 0 && index < posts.length - 1 && (
-                                <div className="my-4">
-                                    <AdUnit
-                                        slot="7607800035"
-                                        style={{ display: 'inline-block', width: 728, height: 90 }}
-                                        wrapperClassName="hidden md:flex md:justify-center"
-                                        label={t.advertisement}
-                                    />
-                                    <AdUnit
-                                        slot="7607800035"
-                                        format="auto"
-                                        fullWidthResponsive
-                                        wrapperClassName="md:hidden"
-                                        label={t.advertisement}
-                                    />
-                                </div>
-                            )}
                         </React.Fragment>
                     ))}
                     <div className="border-t border-ink-200" />
