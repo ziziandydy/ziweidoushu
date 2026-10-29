@@ -27,10 +27,10 @@ describe('Test generate sample boards', () => {
         expect(BoardCriteria.fromDescription(destinyBoard, '疾厄宮有七殺,文曲,天福,鳳閣,解神,旬空,解神,蜚廉,天傷,奏書,喪門,災煞')).toBe(true)
         expect(BoardCriteria.fromDescription(destinyBoard, '遷移宮有天梁化祿,天鉞,天喜,孤辰,劫煞,天空,三台,蜚廉,晦氣,劫煞')).toBe(true)
         expect(BoardCriteria.fromDescription(destinyBoard, '交友宮有紫微,天相,火星,封誥,陰煞,天使,喜神,太歲,華蓋')).toBe(true)
-        expect(BoardCriteria.fromDescription(destinyBoard, '事業宮有天機,巨門,左輔,天魁,天才,截空,病符,病符,息神')).toBe(true)
+        expect(BoardCriteria.fromDescription(destinyBoard, '事業宮有天機,巨門,左輔化科,天魁,天才,截空,病符,病符,息神')).toBe(true)
         expect(BoardCriteria.fromDescription(destinyBoard, '田宅宮有貪狼,天馬,天哭,截空,天月,大耗,弔客,歲驛')).toBe(true)
         expect(BoardCriteria.fromDescription(destinyBoard, '福德宮有太陽,太陰,地劫,寡宿,破碎,伏兵,天德,攀鞍')).toBe(true)
-        expect(BoardCriteria.fromDescription(destinyBoard, '父母宮有武曲化忌,天府化科,擎羊,鈴星,天姚,官府,白虎,將星')).toBe(true)
+        expect(BoardCriteria.fromDescription(destinyBoard, '父母宮有武曲化忌,天府,擎羊,鈴星,天姚,官府,白虎,將星')).toBe(true)
 
         expect(JSON.stringify(destinyBoard)).toBe(
             JSON.stringify({
@@ -199,7 +199,7 @@ describe('Test generate sample boards', () => {
                         lifeStage: '病',
                     },
                 ],
-                bornStarDerivativeMap: { 祿: '天梁', 權: '紫微', 科: '天府', 忌: '武曲' },
+                bornStarDerivativeMap: { 祿: '天梁', 權: '紫微', 科: '左輔', 忌: '武曲' },
             }),
         )
     })

@@ -25,11 +25,11 @@ describe('Test runtime', () => {
             [MajorStar.MAJOR_STAR_CHANGE, MajorStar.MAJOR_STAR_RULE, MajorStar.MAJOR_STAR_EMPEROR, MajorStar.MAJOR_STAR_MOON],
             [MajorStar.MAJOR_STAR_ENJOYMENT, MajorStar.MAJOR_STAR_CHANGE, MinorStar.MINOR_STAR_CLEVER, MajorStar.MAJOR_STAR_FIRE],
             [MajorStar.MAJOR_STAR_MOON, MajorStar.MAJOR_STAR_ENJOYMENT, MajorStar.MAJOR_STAR_CHANGE, MajorStar.MAJOR_STAR_ARGUMENT],
-            [MajorStar.MAJOR_STAR_GREED, MajorStar.MAJOR_STAR_MOON, MajorStar.MAJOR_STAR_SUN, MajorStar.MAJOR_STAR_CHANGE],
+            [MajorStar.MAJOR_STAR_GREED, MajorStar.MAJOR_STAR_MOON, MinorStar.MINOR_STAR_SUPPORT_RIGHT, MajorStar.MAJOR_STAR_CHANGE],
             [MajorStar.MAJOR_STAR_GOLD, MajorStar.MAJOR_STAR_GREED, MajorStar.MAJOR_STAR_RULE, MinorStar.MINOR_STAR_SKILL],
-            [MajorStar.MAJOR_STAR_SUN, MajorStar.MAJOR_STAR_GOLD, MajorStar.MAJOR_STAR_TREASURY, MajorStar.MAJOR_STAR_ENJOYMENT],
+            [MajorStar.MAJOR_STAR_SUN, MajorStar.MAJOR_STAR_GOLD, MajorStar.MAJOR_STAR_MOON, MajorStar.MAJOR_STAR_ENJOYMENT],
             [MajorStar.MAJOR_STAR_ARGUMENT, MajorStar.MAJOR_STAR_SUN, MinorStar.MINOR_STAR_SKILL, MinorStar.MINOR_STAR_CLEVER],
-            [MajorStar.MAJOR_STAR_RULE, MajorStar.MAJOR_STAR_EMPEROR, MajorStar.MAJOR_STAR_TREASURY, MajorStar.MAJOR_STAR_GOLD],
+            [MajorStar.MAJOR_STAR_RULE, MajorStar.MAJOR_STAR_EMPEROR, MinorStar.MINOR_STAR_SUPPORT_LEFT, MajorStar.MAJOR_STAR_GOLD],
             [MajorStar.MAJOR_STAR_PIONEER, MajorStar.MAJOR_STAR_ARGUMENT, MajorStar.MAJOR_STAR_MOON, MajorStar.MAJOR_STAR_GREED],
         ]
 
