@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>後台管理 | AI 紫微斗數</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>:root{--font-sans:"PingFang TC","Microsoft JhengHei",system-ui,sans-serif;--font-serif:"Songti TC",serif}</style>
+    <link rel="stylesheet" href="/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -87,7 +88,7 @@
         }
 
         .prose blockquote {
-            border-left: 4px solid #9333ea;
+            border-left: 4px solid #9C3D25;
             padding-left: 1em;
             color: #6b7280;
             font-style: italic;
@@ -104,7 +105,7 @@
         }
 
         .prose thead {
-            background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+            background: #f6f6f8;
         }
 
         .prose th {
@@ -112,7 +113,7 @@
             text-align: left;
             font-weight: 600;
             color: #374151;
-            border-bottom: 2px solid #9333ea;
+            border-bottom: 2px solid #9C3D25;
             border-right: 1px solid #e5e7eb;
         }
 
@@ -141,8 +142,8 @@
 
         /* 目錄 (TOC) 樣式 */
         .prose .toc {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-left: 4px solid #9333ea;
+            background: #f6f6f8;
+            border-left: 4px solid #9C3D25;
             border-radius: 0.5em;
             padding: 1.5em;
             margin: 2em 0;
@@ -152,9 +153,9 @@
         .prose .toc h2 {
             margin-top: 0;
             margin-bottom: 0.75em;
-            color: #9333ea;
+            color: #9C3D25;
             font-size: 1.25em;
-            border-bottom: 2px solid #9333ea;
+            border-bottom: 2px solid #9C3D25;
             padding-bottom: 0.5em;
         }
 
@@ -177,14 +178,14 @@
 
         .prose .toc li::before {
             content: '▸';
-            color: #9333ea;
+            color: #9C3D25;
             font-weight: bold;
             margin-right: 0.5em;
         }
 
         .prose .toc ul ul li::before {
             content: '▹';
-            color: #a855f7;
+            color: #B54E33;
         }
 
         .prose .toc a {
@@ -197,7 +198,7 @@
         }
 
         .prose .toc a:hover {
-            color: #7c3aed;
+            color: #80321F;
             background-color: #faf5ff;
             text-decoration: none;
             transform: translateX(3px);
@@ -205,18 +206,18 @@
     </style>
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-ink-50">
 
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-4">
-                <a href="/" class="text-2xl font-bold text-purple-600">AI 紫微斗數</a>
-                <span class="text-gray-400">|</span>
-                <span class="text-lg text-gray-600">後台管理</span>
+                <a href="/" class="text-2xl font-bold text-brand-600">AI 紫微斗數</a>
+                <span class="text-ink-400">|</span>
+                <span class="text-lg text-ink-600">後台管理</span>
             </div>
             <div class="flex items-center space-x-4">
-                <span id="userName" class="text-gray-600"></span>
+                <span id="userName" class="text-ink-600"></span>
                 <button onclick="logout()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
                     登出
                 </button>
@@ -230,11 +231,11 @@
         <!-- Tabs -->
         <div class="mb-6 flex space-x-4 border-b">
             <button onclick="showTab('list')" id="tabList"
-                class="tab-btn px-6 py-3 font-semibold text-purple-600 border-b-2 border-purple-600">
+                class="tab-btn px-6 py-3 font-semibold text-brand-600 border-b-2 border-brand-600">
                 文章列表
             </button>
             <button onclick="showTab('create')" id="tabCreate"
-                class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:text-purple-600">
+                class="tab-btn px-6 py-3 font-semibold text-ink-600 hover:text-brand-600">
                 新增文章
             </button>
         </div>
@@ -243,9 +244,9 @@
         <div id="listTab">
             <div class="bg-white rounded-lg shadow-sm p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">文章列表</h2>
+                    <h2 class="text-2xl font-bold text-ink-800">文章列表</h2>
                     <div id="batchActions" class="hidden flex items-center gap-2">
-                        <span id="selectedCount" class="text-gray-600 text-sm">已選 0 篇</span>
+                        <span id="selectedCount" class="text-ink-600 text-sm">已選 0 篇</span>
                         <button onclick="batchDelete()"
                             class="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
                             <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -256,23 +257,23 @@
 
                 <!-- Loading -->
                 <div id="listLoading" class="text-center py-12">
-                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
                 </div>
 
                 <!-- Articles Table -->
                 <div id="articlesTable" class="hidden overflow-x-auto">
                     <table class="w-full">
-                        <thead class="bg-gray-100">
+                        <thead class="bg-ink-100">
                             <tr>
                                 <th class="px-4 py-3 text-left w-12">
                                     <input type="checkbox" id="selectAll" onchange="toggleSelectAll()"
-                                        class="w-4 h-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500">
+                                        class="w-4 h-4 text-brand-600 rounded border-ink-300 focus:ring-brand-500">
                                 </th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">標題</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">標籤</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">狀態</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">發布時間</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">操作</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-ink-700">標題</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-ink-700">標籤</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-ink-700">狀態</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-ink-700">發布時間</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-ink-700">操作</th>
                             </tr>
                         </thead>
                         <tbody id="articlesBody" class="divide-y">
@@ -291,7 +292,7 @@
         <!-- Create/Edit Article Tab -->
         <div id="createTab" class="hidden">
             <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 id="formTitle" class="text-2xl font-bold text-gray-800 mb-6">新增文章</h2>
+                <h2 id="formTitle" class="text-2xl font-bold text-ink-800 mb-6">新增文章</h2>
 
                 <!-- Alert -->
                 <div id="formAlert" class="hidden mb-4 p-4 rounded-lg"></div>
@@ -302,35 +303,35 @@
 
                     <!-- Title -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">文章標題 *</label>
+                        <label class="block text-sm font-medium text-ink-700 mb-2">文章標題 *</label>
                         <input type="text" id="title" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            class="w-full px-4 py-2 border border-ink-300 rounded-lg focus:ring-2 focus:ring-brand-600 focus:border-transparent"
                             placeholder="請輸入文章標題">
                     </div>
 
                     <!-- Tags -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">標籤（用逗號分隔）</label>
+                        <label class="block text-sm font-medium text-ink-700 mb-2">標籤（用逗號分隔）</label>
                         <input type="text" id="tags"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            class="w-full px-4 py-2 border border-ink-300 rounded-lg focus:ring-2 focus:ring-brand-600 focus:border-transparent"
                             placeholder="例如：紫微斗數,AI,運勢">
                     </div>
 
                     <!-- Content Editor -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">內容（Markdown 格式）*</label>
+                        <label class="block text-sm font-medium text-ink-700 mb-2">內容（Markdown 格式）*</label>
                         <div class="grid grid-cols-2 gap-4">
                             <!-- Editor -->
                             <div>
                                 <textarea id="content" required
-                                    class="w-full h-96 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent font-mono text-sm"
+                                    class="w-full h-96 px-4 py-2 border border-ink-300 rounded-lg focus:ring-2 focus:ring-brand-600 focus:border-transparent font-mono text-sm"
                                     placeholder="請輸入 Markdown 格式內容..."></textarea>
                             </div>
                             <!-- Preview -->
                             <div>
-                                <div class="border border-gray-300 rounded-lg p-4 h-96 overflow-y-auto bg-gray-50">
+                                <div class="border border-ink-300 rounded-lg p-4 h-96 overflow-y-auto bg-ink-50">
                                     <div id="preview" class="prose prose-sm max-w-none">
-                                        <p class="text-gray-400">預覽將顯示在這裡...</p>
+                                        <p class="text-ink-400">預覽將顯示在這裡...</p>
                                     </div>
                                 </div>
                             </div>
@@ -339,9 +340,9 @@
 
                     <!-- Status -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">狀態</label>
+                        <label class="block text-sm font-medium text-ink-700 mb-2">狀態</label>
                         <select id="status"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+                            class="w-full px-4 py-2 border border-ink-300 rounded-lg focus:ring-2 focus:ring-brand-600 focus:border-transparent">
                             <option value="draft">草稿</option>
                             <option value="published">發布</option>
                         </select>
@@ -350,11 +351,11 @@
                     <!-- Buttons -->
                     <div class="flex space-x-4">
                         <button type="submit" id="saveBtn"
-                            class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold">
+                            class="px-6 py-3 bg-brand-600 text-white rounded-lg hover:bg-brand-700 font-semibold">
                             儲存文章
                         </button>
                         <button type="button" onclick="cancelEdit()"
-                            class="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 font-semibold">
+                            class="px-6 py-3 bg-ink-300 text-ink-700 rounded-lg hover:bg-ink-400 font-semibold">
                             取消
                         </button>
                     </div>
@@ -397,13 +398,13 @@
             tabs.forEach(t => {
                 document.getElementById(t + 'Tab').classList.toggle('hidden', t !== tab);
                 document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))
-                    .classList.toggle('text-purple-600', t === tab);
+                    .classList.toggle('text-brand-600', t === tab);
                 document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))
                     .classList.toggle('border-b-2', t === tab);
                 document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))
-                    .classList.toggle('border-purple-600', t === tab);
+                    .classList.toggle('border-brand-600', t === tab);
                 document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))
-                    .classList.toggle('text-gray-600', t !== tab);
+                    .classList.toggle('text-ink-600', t !== tab);
             });
 
             if (tab === 'list') {
@@ -457,43 +458,43 @@
             const tbody = document.getElementById('articlesBody');
             tbody.innerHTML = posts.map(post => {
                 return `
-                <tr class="hover:bg-gray-50 transition-colors">
+                <tr class="hover:bg-ink-50 transition-colors">
                     <td class="px-4 py-3">
                         <input type="checkbox" 
                                value="${post.id}" 
                                onchange="toggleSelect('${post.id}')"
-                               class="article-checkbox w-4 h-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500">
+                               class="article-checkbox w-4 h-4 text-brand-600 rounded border-ink-300 focus:ring-brand-500">
                     </td>
                     <td class="px-4 py-3">
                         ${post.slug ?
-                        `<a href="/blog/${post.slug}" target="_blank" class="text-purple-600 hover:underline font-medium">
+                        `<a href="/blog/${post.slug}" target="_blank" class="text-brand-600 hover:underline font-medium">
                                 ${escapeHtml(post.title)}
                             </a>` :
-                        `<span class="text-gray-600">${escapeHtml(post.title)}</span>
+                        `<span class="text-ink-600">${escapeHtml(post.title)}</span>
                              <span class="text-xs text-red-500 ml-2">(無 slug)</span>`
                     }
                     </td>
                     <td class="px-4 py-3">
                         <div class="flex flex-wrap gap-1">
                             ${post.tags.map(tag => `
-                                <span class="px-2 py-0.5 bg-purple-50 text-purple-700 text-xs rounded-full border border-purple-100">
+                                <span class="px-2 py-0.5 bg-brand-50 text-brand-700 text-xs rounded-full border border-brand-100">
                                     ${escapeHtml(tag)}
                                 </span>
                             `).join('')}
                         </div>
                     </td>
                     <td class="px-4 py-3">
-                        <span class="px-2.5 py-1 ${post.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'} text-xs font-medium rounded-full">
+                        <span class="px-2.5 py-1 ${post.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-ink-100 text-ink-700'} text-xs font-medium rounded-full">
                             ${post.status === 'published' ? '已發布' : '草稿'}
                         </span>
                     </td>
-                    <td class="px-4 py-3 text-sm text-gray-500">
+                    <td class="px-4 py-3 text-sm text-ink-500">
                         ${formatDate(post.published_at || post.created_at)}
                     </td>
                     <td class="px-4 py-3">
                         <div class="flex items-center gap-2">
                             <button onclick="editArticle('${post.id}')" 
-                                    class="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors"
+                                    class="p-1.5 text-brand-600 hover:text-ink-700 hover:bg-ink-100 rounded-lg transition-colors"
                                     title="編輯">
                                 <i data-lucide="pencil" class="w-4 h-4"></i>
                             </button>
@@ -593,13 +594,13 @@
 
             pagination.innerHTML = `
                 <button onclick="loadArticles(${page - 1})"
-                        class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                        class="px-4 py-2 bg-white border border-ink-300 rounded-lg hover:bg-ink-50 disabled:opacity-50"
                         ${!hasPrev ? 'disabled' : ''}>
                     上一頁
                 </button>
-                <span class="text-gray-700">第 ${page} / ${totalPages} 頁</span>
+                <span class="text-ink-700">第 ${page} / ${totalPages} 頁</span>
                 <button onclick="loadArticles(${page + 1})"
-                        class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                        class="px-4 py-2 bg-white border border-ink-300 rounded-lg hover:bg-ink-50 disabled:opacity-50"
                         ${!hasNext ? 'disabled' : ''}>
                     下一頁
                 </button>
@@ -742,7 +743,7 @@
             document.getElementById('articleForm').reset();
             document.getElementById('articleId').value = '';
             document.getElementById('formTitle').textContent = '新增文章';
-            document.getElementById('preview').innerHTML = '<p class="text-gray-400">預覽將顯示在這裡...</p>';
+            document.getElementById('preview').innerHTML = '<p class="text-ink-400">預覽將顯示在這裡...</p>';
             editingArticleId = null;
         }
 
@@ -872,7 +873,7 @@
                     preview.innerHTML = '<p class="text-red-500">Markdown 解析錯誤，請檢查語法</p>';
                 }
             } else {
-                preview.innerHTML = '<p class="text-gray-400">預覽將顯示在這裡...</p>';
+                preview.innerHTML = '<p class="text-ink-400">預覽將顯示在這裡...</p>';
             }
         }
 

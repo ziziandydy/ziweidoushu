@@ -6,7 +6,8 @@
     <title>付款失敗 - 紫微斗數命盤</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="alternate icon" href="/favicon.ico">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>:root{--font-sans:"PingFang TC","Microsoft JhengHei",system-ui,sans-serif;--font-serif:"Songti TC",serif}</style>
+    <link rel="stylesheet" href="/styles.css">
     <style>
         .error-icon {
             animation: shake 0.5s ease-in-out;
@@ -31,7 +32,7 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-WJJN3TGM');</script>
 </head>
-<body class="bg-gradient-to-br from-red-50 to-orange-50 min-h-screen flex items-center justify-center p-4">
+<body class="bg-ink-50 min-h-screen flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
         <!-- 失敗圖標 -->
         <div class="error-icon mb-6">
@@ -41,8 +42,8 @@
         </div>
 
         <!-- 標題 -->
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">付款失敗</h1>
-        <p class="text-gray-600 mb-6">很抱歉，您的付款未能完成</p>
+        <h1 class="text-3xl font-bold text-ink-800 mb-2">付款失敗</h1>
+        <p class="text-ink-600 mb-6">很抱歉，您的付款未能完成</p>
 
         <!-- 錯誤資訊 -->
         <div class="bg-red-50 rounded-lg p-6 mb-6 text-left">
@@ -54,14 +55,14 @@
                     </svg>
                     <p class="text-red-800" id="error-message">付款過程中發生錯誤</p>
                 </div>
-                <div class="text-gray-600 text-xs mt-4" id="order-info"></div>
+                <div class="text-ink-600 text-xs mt-4" id="order-info"></div>
             </div>
         </div>
 
         <!-- 常見原因 -->
-        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6 text-left">
-            <h3 class="text-sm font-semibold text-yellow-900 mb-2">可能的原因：</h3>
-            <ul class="text-sm text-yellow-800 space-y-1 list-disc list-inside">
+        <div class="bg-ink-100 rounded-lg p-4 mb-6 text-left">
+            <h3 class="text-sm font-semibold text-ink-900 mb-2">可能的原因：</h3>
+            <ul class="text-sm text-ink-700 space-y-1 list-disc list-inside">
                 <li>信用卡餘額不足</li>
                 <li>信用卡資訊輸入錯誤</li>
                 <li>銀行拒絕此筆交易</li>
@@ -71,12 +72,12 @@
         </div>
 
         <!-- 建議 -->
-        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 text-left">
+        <div class="bg-ink-100 rounded-lg p-4 mb-6 text-left">
             <div class="flex items-start">
-                <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-5 h-5 text-ink-500 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                 </svg>
-                <div class="text-sm text-blue-800">
+                <div class="text-sm text-ink-700">
                     <p class="font-medium mb-1">建議處理方式</p>
                     <p>請檢查您的信用卡狀態，或嘗試使用其他付款方式。如果問題持續發生，請聯繫您的發卡銀行。</p>
                 </div>
@@ -84,23 +85,23 @@
         </div>
 
         <!-- 自動跳轉提示 -->
-        <p class="text-sm text-gray-500 mb-4 countdown">
+        <p class="text-sm text-ink-500 mb-4 countdown">
             <span id="countdown">10</span> 秒後自動返回分析頁面...
         </p>
 
         <!-- 按鈕 -->
         <div class="space-y-3">
-            <button onclick="goToAnalysis()" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+            <button onclick="goToAnalysis()" class="w-full bg-brand-600 text-white py-3 rounded-lg font-medium hover:bg-brand-700 transition-all duration-200 shadow-lg hover:shadow-xl">
                 返回分析頁面
             </button>
-            <button onclick="retryPayment()" class="w-full bg-white border-2 border-purple-600 text-purple-600 py-3 rounded-lg font-medium hover:bg-purple-50 transition-all duration-200">
+            <button onclick="retryPayment()" class="w-full bg-white border-2 border-brand-600 text-brand-600 py-3 rounded-lg font-medium hover:bg-brand-50 transition-all duration-200">
                 重新嘗試付款
             </button>
         </div>
 
         <!-- 客服資訊 -->
-        <p class="text-xs text-gray-500 mt-6">
-            如有任何問題，請聯繫客服：<a href="mailto:support@aiziwei.online" class="text-purple-600 hover:underline">support@aiziwei.online</a>
+        <p class="text-xs text-ink-500 mt-6">
+            如有任何問題，請聯繫客服：<a href="mailto:support@aiziwei.online" class="text-brand-600 hover:underline">support@aiziwei.online</a>
         </p>
     </div>
 

@@ -6,7 +6,8 @@
     <title>付款成功 - 紫微斗數命盤</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="alternate icon" href="/favicon.ico">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>:root{--font-sans:"PingFang TC","Microsoft JhengHei",system-ui,sans-serif;--font-serif:"Songti TC",serif}</style>
+    <link rel="stylesheet" href="/styles.css">
     <style>
         .checkmark-circle {
             animation: scaleIn 0.5s ease-out;
@@ -36,7 +37,7 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-WJJN3TGM');</script>
 </head>
-<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen flex items-center justify-center p-4">
+<body class="bg-ink-50 min-h-screen flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
         <!-- 成功圖標 -->
         <div class="checkmark-circle mb-6">
@@ -46,39 +47,39 @@
         </div>
 
         <!-- 標題 -->
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">付款成功！</h1>
-        <p class="text-gray-600 mb-6">感謝您的支持，付費模式已啟用</p>
+        <h1 class="text-3xl font-bold text-ink-800 mb-2">付款成功！</h1>
+        <p class="text-ink-600 mb-6">感謝您的支持，付費模式已啟用</p>
 
         <!-- 訂單資訊 -->
-        <div class="bg-purple-50 rounded-lg p-6 mb-6 text-left">
-            <h2 class="text-lg font-semibold text-purple-900 mb-4">訂單詳情</h2>
+        <div class="bg-brand-50 rounded-lg p-6 mb-6 text-left">
+            <h2 class="text-lg font-semibold text-brand-900 mb-4">訂單詳情</h2>
             <div class="space-y-2 text-sm">
                 <div class="flex justify-between">
-                    <span class="text-gray-600">訂單編號：</span>
-                    <span class="font-medium text-gray-800" id="order-id">載入中...</span>
+                    <span class="text-ink-600">訂單編號：</span>
+                    <span class="font-medium text-ink-800" id="order-id">載入中...</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-600">付款金額：</span>
-                    <span class="font-medium text-gray-800">NT$ <span id="amount">199</span></span>
+                    <span class="text-ink-600">付款金額：</span>
+                    <span class="font-medium text-ink-800">NT$ <span id="amount">199</span></span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-600">服務時長：</span>
-                    <span class="font-medium text-purple-600">1 小時無限問答</span>
+                    <span class="text-ink-600">服務時長：</span>
+                    <span class="font-medium text-brand-600">1 小時無限問答</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-600">到期時間：</span>
-                    <span class="font-medium text-gray-800" id="expiry-time">計算中...</span>
+                    <span class="text-ink-600">到期時間：</span>
+                    <span class="font-medium text-ink-800" id="expiry-time">計算中...</span>
                 </div>
             </div>
         </div>
 
         <!-- 提示訊息 -->
-        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 text-left">
+        <div class="bg-ink-100 rounded-lg p-4 mb-6 text-left">
             <div class="flex items-start">
-                <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-5 h-5 text-ink-500 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                 </svg>
-                <div class="text-sm text-blue-800">
+                <div class="text-sm text-ink-700">
                     <p class="font-medium mb-1">付費模式已啟用</p>
                     <p>在接下來的 1 小時內，您可以無限次使用 AI 問答功能，深入探索您的命盤。</p>
                 </div>
@@ -86,12 +87,12 @@
         </div>
 
         <!-- 自動跳轉提示 -->
-        <p class="text-sm text-gray-500 mb-4 countdown">
+        <p class="text-sm text-ink-500 mb-4 countdown">
             <span id="countdown">5</span> 秒後自動返回分析頁面...
         </p>
 
         <!-- 按鈕 -->
-        <button onclick="goToAnalysis()" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+        <button onclick="goToAnalysis()" class="w-full bg-brand-600 text-white py-3 rounded-lg font-medium hover:bg-brand-700 transition-all duration-200 shadow-lg hover:shadow-xl">
             立即開始問答
         </button>
     </div>
