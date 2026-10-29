@@ -1,7 +1,8 @@
-
 import React from 'react';
 import Link from 'next/link';
 import AdUnit from '../ads/AdUnit';
+
+const VISIBLE_TAGS = 6;
 
 export default function BlogList({ posts, pagination, lang, currentTag, allTags }: {
     posts: any[],
@@ -11,16 +12,20 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
     allTags: string[]
 }) {
     const t = lang === 'en' ? {
+        heading: 'Blog',
+        subheading: 'Zi Wei Dou Shu knowledge, solar terms and monthly readings, and life topics.',
         allPosts: 'All',
-        readMore: 'Read More →',
+        allTopics: 'All topics',
         prevPage: 'Previous',
         nextPage: 'Next',
         pageOf: 'Page',
         noPosts: 'No posts available',
         advertisement: 'Advertisement'
     } : {
+        heading: '部落格',
+        subheading: '紫微斗數知識、節氣與流月、人生議題。',
         allPosts: '全部',
-        readMore: '閱讀更多 →',
+        allTopics: '全部主題',
         prevPage: '上一頁',
         nextPage: '下一頁',
         pageOf: '第',
@@ -42,52 +47,85 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
         return markdown.replace(/[#*_`\[\]]/g, '').substring(0, 150) + '...';
     };
 
+    // allTags arrives sorted by use. Keep the current tag visible even when it is outside the top few.
+    const topTags = allTags.slice(0, VISIBLE_TAGS);
+    const shownTags = currentTag && !topTags.includes(currentTag) ? [...topTags, currentTag] : topTags;
+    const moreTags = allTags.filter(tag => !shownTags.includes(tag));
+
+    const chip = (active: boolean) =>
+        `inline-block rounded-lg px-3.5 py-1.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 ${active
+            ? 'bg-brand-600 text-white'
+            : 'bg-white text-ink-700 border border-ink-200 hover:border-ink-400'}`;
+
+    const pageBtn = 'rounded-lg border border-ink-300 bg-white px-4 py-2 text-ink-800 hover:bg-ink-100 transition-colors';
+    const pageBtnOff = 'rounded-lg border border-ink-200 bg-white px-4 py-2 text-ink-400 cursor-not-allowed';
+
     return (
-        <div className="max-w-7xl mx-auto px-4 py-12">
-            <div className="flex flex-wrap justify-center gap-2 mb-8">
-                <Link href={basePath} className={`px-4 py-2 rounded-full transition-colors ${!currentTag ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 border hover:bg-purple-500 hover:text-white'}`}>
-                    {t.allPosts}
-                </Link>
-                {allTags.slice(0, 15).map(tag => (
-                    <Link key={tag} href={`${basePath}?tag=${encodeURIComponent(tag)}`} className={`px-4 py-2 rounded-full transition-colors ${currentTag === tag ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 border hover:bg-purple-500 hover:text-white'}`}>
-                        {tag}
-                    </Link>
-                ))}
-            </div>
+        <div className="max-w-6xl mx-auto px-4 py-12">
+            <header className="mb-8">
+                <h1 className="text-4xl font-bold tracking-tight text-ink-900">{t.heading}</h1>
+                <p className="mt-3 text-ink-600">{t.subheading}</p>
+            </header>
+
+            <nav aria-label={t.allTopics} className="mb-10">
+                <div className="flex flex-wrap items-center gap-2">
+                    <Link href={basePath} className={chip(!currentTag)}>{t.allPosts}</Link>
+                    {shownTags.map(tag => (
+                        <Link key={tag} href={`${basePath}?tag=${encodeURIComponent(tag)}`} className={chip(currentTag === tag)}>
+                            {tag}
+                        </Link>
+                    ))}
+                </div>
+                {moreTags.length > 0 && (
+                    <details className="mt-3 group">
+                        <summary className="link cursor-pointer text-sm select-none list-none">{t.allTopics}</summary>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                            {moreTags.map(tag => (
+                                <Link key={tag} href={`${basePath}?tag=${encodeURIComponent(tag)}`} className={chip(false)}>
+                                    {tag}
+                                </Link>
+                            ))}
+                        </div>
+                    </details>
+                )}
+            </nav>
 
             {posts.length === 0 ? (
-                <div className="text-center py-12">
-                    <p className="text-xl text-gray-500">{t.noPosts}</p>
+                <div className="py-12">
+                    <p className="text-xl text-ink-500">{t.noPosts}</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="max-w-3xl">
                     {posts.map((post, index) => (
                         <React.Fragment key={post.id}>
-                            <article className="bg-white rounded-lg shadow-md overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
-                                <Link href={`${basePath}/${post.slug}`} className="block p-6">
-                                    <h2 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2">
-                                        {post.title}
-                                    </h2>
-                                    <p className="text-gray-600 mb-4 line-clamp-3 text-sm">
+                            <article className="border-t border-ink-200 py-7">
+                                <Link href={`${basePath}/${post.slug}`} className="group block">
+                                    <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                                        <h2 className="font-serif font-semibold text-xl md:text-2xl leading-snug text-ink-900 group-hover:text-brand-700 transition-colors">
+                                            {post.title}
+                                        </h2>
+                                        <time dateTime={post.published_at || post.created_at} className="text-sm text-ink-500 tabular-nums whitespace-nowrap">
+                                            {formatDate(post.published_at || post.created_at)}
+                                        </time>
+                                    </div>
+                                    <p className="mt-2 text-ink-600 line-clamp-2 leading-relaxed">
                                         {extractPlainText(post.excerpt || post.content)}
                                     </p>
-                                    <div className="flex flex-wrap gap-2 mb-4">
-                                        {post.tags && post.tags.slice(0, 5).map((tag: string) => (
-                                            <span key={tag} className="px-2.5 py-1 bg-purple-100 text-purple-700 text-xs rounded-full">
+                                </Link>
+                                {post.tags && post.tags.length > 0 && (
+                                    <div className="mt-3 flex flex-wrap gap-2">
+                                        {post.tags.slice(0, 5).map((tag: string) => (
+                                            <span key={tag} className="rounded-md bg-ink-100 px-2.5 py-0.5 text-xs text-ink-600">
                                                 {tag}
                                             </span>
                                         ))}
                                     </div>
-                                    <div className="flex justify-between items-center text-sm text-gray-500">
-                                        <span>{formatDate(post.published_at || post.created_at)}</span>
-                                        <span className="text-purple-600 font-semibold">{t.readMore}</span>
-                                    </div>
-                                </Link>
+                                )}
                             </article>
 
                             {/* Inline ad every 6th post */}
                             {(index + 1) % 6 === 0 && index < posts.length - 1 && (
-                                <div className="col-span-1 md:col-span-2 lg:col-span-3 my-4">
+                                <div className="my-4">
                                     <AdUnit
                                         slot="7607800035"
                                         style={{ display: 'inline-block', width: 728, height: 90 }}
@@ -105,6 +143,7 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
                             )}
                         </React.Fragment>
                     ))}
+                    <div className="border-t border-ink-200" />
                 </div>
             )}
 
@@ -124,25 +163,25 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
             />
 
             {pagination.totalPages > 1 && (
-                <div className="flex justify-center items-center space-x-4 mt-12">
+                <div className="flex justify-center items-center gap-4 mt-12">
                     {pagination.hasPrev ? (
-                        <Link href={`${basePath}?page=${pagination.currentPage - 1}${currentTag ? `&tag=${encodeURIComponent(currentTag)}` : ''}`} className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <Link href={`${basePath}?page=${pagination.currentPage - 1}${currentTag ? `&tag=${encodeURIComponent(currentTag)}` : ''}`} className={pageBtn}>
                             {t.prevPage}
                         </Link>
                     ) : (
-                        <button className="px-4 py-2 bg-white border border-gray-300 rounded-lg opacity-50 cursor-not-allowed" disabled>
+                        <button type="button" className={pageBtnOff} disabled>
                             {t.prevPage}
                         </button>
                     )}
-                    <span className="text-gray-700">
+                    <span className="text-ink-600 tabular-nums">
                         {lang === 'en' ? `${t.pageOf} ${pagination.currentPage} / ${pagination.totalPages}` : `${t.pageOf} ${pagination.currentPage} / ${pagination.totalPages} 頁`}
                     </span>
                     {pagination.hasNext ? (
-                        <Link href={`${basePath}?page=${pagination.currentPage + 1}${currentTag ? `&tag=${encodeURIComponent(currentTag)}` : ''}`} className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <Link href={`${basePath}?page=${pagination.currentPage + 1}${currentTag ? `&tag=${encodeURIComponent(currentTag)}` : ''}`} className={pageBtn}>
                             {t.nextPage}
                         </Link>
                     ) : (
-                        <button className="px-4 py-2 bg-white border border-gray-300 rounded-lg opacity-50 cursor-not-allowed" disabled>
+                        <button type="button" className={pageBtnOff} disabled>
                             {t.nextPage}
                         </button>
                     )}

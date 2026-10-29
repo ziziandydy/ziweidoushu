@@ -5,6 +5,9 @@ import { marked } from 'marked';
 import AdUnit from '../ads/AdUnit';
 import { AdSidebarRight } from '../ads/AdSidebar';
 
+// Reading column: ~40 CJK characters wide, generous line height, ink text instead of the plugin's gray
+const PROSE = 'prose prose-lg max-w-none prose-headings:font-bold prose-headings:text-ink-900 prose-p:text-ink-800 prose-p:leading-[1.95] prose-li:text-ink-800 prose-strong:text-ink-900 prose-a:text-brand-600 prose-a:underline-offset-4 hover:prose-a:text-brand-700 prose-blockquote:border-brand-200 prose-blockquote:text-ink-600 prose-hr:border-ink-200';
+
 export default function BlogPost({ post, lang }: { post: any, lang: string }) {
     if (!post) notFound();
 
@@ -50,29 +53,27 @@ export default function BlogPost({ post, lang }: { post: any, lang: string }) {
         <>
             <AdSidebarRight label={t.advertisement} />
 
-            <article className="max-w-4xl mx-auto px-4 py-12">
-                <h1 className="text-4xl font-bold text-gray-900 mb-4">{post.title}</h1>
+            <article className="max-w-[44rem] mx-auto px-4 py-12">
+                <h1 className="font-serif font-semibold text-3xl md:text-4xl leading-snug text-ink-900 mb-5">{post.title}</h1>
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 text-gray-500 mb-8">
-                    <span className="text-sm font-medium">
-                        ✍️ {post.author || '王老師'}
-                    </span>
-                    <span className="hidden sm:inline">•</span>
-                    <time dateTime={post.published_at || post.created_at} className="text-sm">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-ink-500 pb-6 mb-8 border-b border-ink-200">
+                    <span className="font-medium text-ink-800">{post.author || '王老師'}</span>
+                    <time dateTime={post.published_at || post.created_at} className="tabular-nums">
                         {formatDate(post.published_at || post.created_at)}
                     </time>
-                    <span className="hidden sm:inline">•</span>
-                    <div className="flex flex-wrap gap-2">
-                        {post.tags && post.tags.map((tag: string) => (
-                            <Link key={tag} href={`${basePath}?tag=${encodeURIComponent(tag)}`} className="px-2.5 py-1 bg-purple-100 text-purple-700 text-xs rounded-full hover:bg-purple-200 transition-colors whitespace-nowrap">
-                                {tag}
-                            </Link>
-                        ))}
-                    </div>
+                    {post.tags && post.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                            {post.tags.map((tag: string) => (
+                                <Link key={tag} href={`${basePath}?tag=${encodeURIComponent(tag)}`} className="rounded-md bg-ink-100 px-2.5 py-0.5 text-xs text-ink-600 hover:bg-ink-200 transition-colors whitespace-nowrap">
+                                    {tag}
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <div
-                    className="prose prose-lg max-w-none bg-white rounded-lg shadow-sm p-8"
+                    className={PROSE}
                     dangerouslySetInnerHTML={{ __html: firstHalfHtml }}
                 />
 
@@ -88,14 +89,14 @@ export default function BlogPost({ post, lang }: { post: any, lang: string }) {
                         />
 
                         <div
-                            className="prose prose-lg max-w-none bg-white rounded-lg shadow-sm p-8"
+                            className={PROSE}
                             dangerouslySetInnerHTML={{ __html: secondHalfHtml }}
                         />
                     </>
                 )}
 
-                <div className="mt-12 text-center">
-                    <Link href={basePath} className="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                <div className="mt-12">
+                    <Link href={basePath} className="btn-secondary">
                         {t.backToBlog}
                     </Link>
                 </div>

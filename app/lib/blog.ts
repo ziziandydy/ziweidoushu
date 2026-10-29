@@ -75,11 +75,13 @@ export async function getBlogPosts({ page = 1, tag, limit = 9, locale = 'zh-TW' 
       `;
         }
 
-        // Fetch tags
+        // Fetch tags, most used first: the list page shows only the top few by default
         const tagsResult = await sql`
-      SELECT DISTINCT jsonb_array_elements_text(tags) as tag
-      FROM blog_posts
+      SELECT tag, COUNT(*) AS uses
+      FROM blog_posts, jsonb_array_elements_text(tags) AS tag
       WHERE status = 'published' AND language = ${language}
+      GROUP BY tag
+      ORDER BY uses DESC, tag
     `;
         const allTags = tagsResult.rows.map(row => row.tag);
 
