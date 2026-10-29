@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { List, X } from '@phosphor-icons/react';
+import { List } from '@phosphor-icons/react/dist/csr/List';
+import { X } from '@phosphor-icons/react/dist/csr/X';
 
 export default function NavBar({ locale }: { locale: string }) {
     const [menuOpen, setMenuOpen] = useState(false);
