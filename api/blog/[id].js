@@ -11,6 +11,7 @@
 
 const { sql } = require('@vercel/postgres');
 const { verifyBearerToken } = require('../../lib/auth');
+const { checkTitle } = require('../../lib/titleCheck');
 const { setCorsHeaders, handleOptions } = require('../../lib/cors');
 const slugify = require('slugify');
 
@@ -77,6 +78,15 @@ async function handleCreate(req, res) {
   // 驗證語言參數 (預設為 zh-TW)
   const validLanguages = ['zh-TW', 'en'];
   const finalLanguage = language && validLanguages.includes(language) ? language : 'zh-TW';
+
+  // 標題守門：長度、語言、過期年份、無法佐證的宣稱、機器翻譯範本
+  const titleProblems = checkTitle(finalTitle, finalLanguage);
+  if (titleProblems.length > 0) {
+    return res.status(400).json({
+      success: false,
+      error: '標題檢查未通過：' + titleProblems.join('；')
+    });
+  }
 
   // 驗證 translated_from 參數 (如果提供)
   if (translated_from) {
@@ -216,6 +226,14 @@ async function handleUpdate(id, req, res) {
   const values = [];
 
   if (finalTitle !== undefined) {
+    // 更新時依標題文字判斷語言（含中文字視為中文版）
+    const titleProblems = checkTitle(finalTitle, /[\u4e00-\u9fff]/.test(finalTitle) ? 'zh-TW' : 'en');
+    if (titleProblems.length > 0) {
+      return res.status(400).json({
+        success: false,
+        error: '標題檢查未通過：' + titleProblems.join('；')
+      });
+    }
     updates.push('title = $' + (values.length + 1));
     values.push(finalTitle);
 
@@ -407,6 +425,12 @@ async function autoTranslateToEnglish(zhPost) {
 
   if (!translated.title || !translated.content) {
     throw new Error('翻譯結果格式不正確');
+  }
+
+  // 翻譯出來的英文標題同樣要過守門，不過就不建立英文版（中文版不受影響）
+  const translatedTitleProblems = checkTitle(translated.title, 'en');
+  if (translatedTitleProblems.length > 0) {
+    throw new Error('英文標題檢查未通過：' + translatedTitleProblems.join('；'));
   }
 
   // 生成英文 slug

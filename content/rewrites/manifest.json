@@ -255,5 +255,146 @@
       "zhFile": "n5-qisha.md",
       "publishedAt": "2026-11-11T02:00:00Z"
     }
+  ],
+  "enRewrites": [
+    {
+      "file": "en-rw-ziwei.md",
+      "zhFile": "01-ziwei.md",
+      "newTitle": "Zi Wei Star Explained: Why the Emperor Star Needs a Court",
+      "tags": [
+        "Zi Wei",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ]
+    },
+    {
+      "file": "en-rw-tianfu.md",
+      "zhFile": "02-tianfu.md",
+      "newTitle": "Tian Fu Star Explained: The Treasury Star Who Manages Rather Than Earns",
+      "tags": [
+        "Tian Fu",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ]
+    },
+    {
+      "file": "en-rw-tianxiang.md",
+      "zhFile": "03-tianxiang.md",
+      "newTitle": "Tian Xiang Star Explained: The Seal Star That Takes the Shape of Its Neighbors",
+      "tags": [
+        "Tian Xiang",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ]
+    },
+    {
+      "file": "en-rw-lianzhen.md",
+      "zhFile": "04-lianzhen.md",
+      "newTitle": "Lian Zhen Star Explained: The Prisoner Star's Drive and Emotional Intensity",
+      "tags": [
+        "Lian Zhen",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ]
+    },
+    {
+      "file": "en-rw-taiyin.md",
+      "zhFile": "05-taiyin.md",
+      "newTitle": "Tai Yin Star Explained: Quiet Insight Under the Moon",
+      "tags": [
+        "Tai Yin",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ]
+    },
+    {
+      "file": "en-rw-tiantong.md",
+      "zhFile": "06-tiantong.md",
+      "newTitle": "Tian Tong Star Explained: The Blessing Star and Where Contentment Comes From",
+      "tags": [
+        "Tian Tong",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ]
+    },
+    {
+      "file": "en-rw-wuqu.md",
+      "zhFile": "07-wuqu.md",
+      "newTitle": "Wu Qu Star Explained: Financial Discipline and the Power to Execute",
+      "tags": [
+        "Wu Qu",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ]
+    },
+    {
+      "file": "en-rw-taiyang.md",
+      "zhFile": "08-taiyang.md",
+      "newTitle": "Tai Yang Star Explained: The Radiant Leader Who Must Learn to Say No",
+      "tags": [
+        "Tai Yang",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ]
+    },
+    {
+      "file": "en-rw-pojun.md",
+      "zhFile": "09-pojun.md",
+      "newTitle": "Po Jun Star Explained: Breaking Things to Make Room for Change",
+      "tags": [
+        "Po Jun",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ]
+    },
+    {
+      "file": "en-rw-annual.md",
+      "zhFile": "10-dayun.md",
+      "newTitle": "Zi Wei Dou Shu Annual Trends: The Bing-Wu Year 2026 and Ding-Wei Year 2027",
+      "tags": [
+        "Annual Forecast",
+        "Four Transformations",
+        "Zi Wei Dou Shu"
+      ]
+    },
+    {
+      "file": "en-rw-elements.md",
+      "zhFile": "11-wuxing.md",
+      "newTitle": "Heavenly Stems, Earthly Branches and Five Elements: How a Chart Is Built",
+      "tags": [
+        "Chart Basics",
+        "Five Elements",
+        "Zi Wei Dou Shu"
+      ]
+    },
+    {
+      "file": "en-rw-palaces.md",
+      "zhFile": "12-gongwei.md",
+      "newTitle": "Reading the Twelve Palaces: Four Questions and the Palaces That Answer Them",
+      "tags": [
+        "Twelve Palaces",
+        "Chart Basics",
+        "Zi Wei Dou Shu"
+      ]
+    },
+    {
+      "file": "en-rw-beginner.md",
+      "zhFile": "13-ruman.md",
+      "newTitle": "A Beginner's Guide to Zi Wei Dou Shu: Reading Your First Chart",
+      "tags": [
+        "Beginner Guide",
+        "Chart Basics",
+        "Zi Wei Dou Shu"
+      ]
+    }
   ]
 }

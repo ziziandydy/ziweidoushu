@@ -11,6 +11,8 @@
  * - Default is a dry run. Old content is backed up to content/rewrites/_backup-before.json
  *   (git-ignored) before any write.
  *
+ * - The 13 existing English counterparts (found through translated_from) get the same treatment;
+ *   their slugs stay, so URLs do not change.
  * - English editions of the five new articles are inserted right after their Chinese originals
  *   (translated_from = the Chinese post id), published one hour later, the same gap the n8n flow uses.
  *
@@ -23,6 +25,7 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env.local') });
 const { db } = require('@vercel/postgres');
+const { checkTitle } = require('../lib/titleCheck');
 
 const DIR = path.join(__dirname, '..', 'content', 'rewrites');
 const apply = process.argv.includes('--apply');
@@ -68,13 +71,43 @@ async function main() {
             if (!manifest.new.some(n => n.file === e.zhFile)) throw new Error(`No Chinese original for ${e.file}`);
         }
 
-        console.log(`${apply ? 'APPLY' : 'DRY RUN'}: ${manifest.rewrites.length} rewrites, ${manifest.new.length} new posts, ${(manifest.en || []).length} English editions\n`);
+        // Every title that will be written must pass the same guard the API enforces
+        const titleChecks = [
+            ...manifest.rewrites.filter(r => r.newTitle).map(r => [r.newTitle, 'zh-TW']),
+            ...manifest.new.map(n => [n.title, 'zh-TW']),
+            ...(manifest.en || []).map(e => [e.title, 'en']),
+            ...(manifest.enRewrites || []).map(e => [e.newTitle, 'en']),
+        ];
+        for (const [t, lang] of titleChecks) {
+            const problems = checkTitle(t, lang);
+            if (problems.length) throw new Error(`Title check failed for "${t}": ${problems.join('; ')}`);
+        }
+
+        // Resolve each existing English counterpart through translated_from
+        const enTargets = [];
+        for (const e of manifest.enRewrites || []) {
+            const zhRow = manifest.rewrites.find(r => r.file === e.zhFile);
+            if (!zhRow) throw new Error(`No Chinese rewrite for ${e.file}`);
+            const found = await client.query(
+                `SELECT id, title, slug, content FROM blog_posts WHERE translated_from = $1 AND language = 'en' AND status = 'published'`,
+                [zhRow.id]
+            );
+            if (found.rows.length !== 1) throw new Error(`Expected exactly one English counterpart for ${zhRow.expectTitleIncludes}, found ${found.rows.length}`);
+            enTargets.push({ ...e, row: found.rows[0] });
+        }
+
+        console.log(`${apply ? 'APPLY' : 'DRY RUN'}: ${manifest.rewrites.length} rewrites, ${manifest.new.length} new posts, ${(manifest.en || []).length} new English editions, ${(manifest.enRewrites || []).length} English rewrites\n`);
         for (const r of manifest.rewrites) {
             const row = byId.get(r.id);
             const content = read(r.file);
             const oldLen = row.content.replace(/\s/g, '').length;
             const newLen = content.replace(/\s/g, '').length;
             console.log(`  rewrite  ${row.title.slice(0, 22)}  ${oldLen} -> ${newLen} chars${r.newTitle ? `  title -> ${r.newTitle}` : ''}${r.tags ? '  tags updated' : ''}`);
+        }
+        for (const t of enTargets) {
+            const oldWords = (t.row.content.match(/[A-Za-z][A-Za-z'-]*/g) || []).length;
+            const newWords = (read(t.file).match(/[A-Za-z][A-Za-z'-]*/g) || []).length;
+            console.log(`  en-rewrite  ${t.row.title.slice(0, 40)}...  ${oldWords} -> ${newWords} words  title -> ${t.newTitle}  (slug kept: ${t.row.slug.slice(0, 30)}...)`);
         }
         for (const n of manifest.new) {
             console.log(`  new      ${n.title}  publish ${n.publishedAt}  slug ${slugOf(n.title)}`);
@@ -88,7 +121,8 @@ async function main() {
             return;
         }
 
-        fs.writeFileSync(path.join(DIR, '_backup-before.json'), JSON.stringify(before.rows, null, 2));
+        const enBefore = enTargets.map(t => t.row);
+        fs.writeFileSync(path.join(DIR, '_backup-before.json'), JSON.stringify({ zh: before.rows, en: enBefore }, null, 2));
         console.log('\nBackup written to content/rewrites/_backup-before.json');
 
         await client.query('BEGIN');
@@ -102,6 +136,12 @@ async function main() {
                      updated_at = NOW()
                  WHERE id = $4`,
                 [content, r.newTitle || null, r.tags ? JSON.stringify(r.tags) : null, r.id]
+            );
+        }
+        for (const t of enTargets) {
+            await client.query(
+                `UPDATE blog_posts SET content = $1, title = $2, tags = $3::jsonb, updated_at = NOW() WHERE id = $4`,
+                [read(t.file), t.newTitle, JSON.stringify(t.tags), t.row.id]
             );
         }
         const zhIdByFile = new Map();
