@@ -11,6 +11,9 @@
  * - Default is a dry run. Old content is backed up to content/rewrites/_backup-before.json
  *   (git-ignored) before any write.
  *
+ * - English editions of the five new articles are inserted right after their Chinese originals
+ *   (translated_from = the Chinese post id), published one hour later, the same gap the n8n flow uses.
+ *
  * Usage:
  *   node scripts/apply-content-rewrites.js           # dry run
  *   node scripts/apply-content-rewrites.js --apply   # write
@@ -58,7 +61,14 @@ async function main() {
             if (new Date(n.publishedAt) <= new Date()) console.warn(`  note: ${n.title} publish date is already past, it will be visible immediately`);
         }
 
-        console.log(`${apply ? 'APPLY' : 'DRY RUN'}: ${manifest.rewrites.length} rewrites, ${manifest.new.length} new posts\n`);
+        for (const e of manifest.en || []) {
+            const slug = slugOf(e.title);
+            const dup = await client.query(`SELECT 1 FROM blog_posts WHERE slug = $1 AND language = 'en'`, [slug]);
+            if (dup.rows.length) throw new Error(`English slug already exists: ${slug}`);
+            if (!manifest.new.some(n => n.file === e.zhFile)) throw new Error(`No Chinese original for ${e.file}`);
+        }
+
+        console.log(`${apply ? 'APPLY' : 'DRY RUN'}: ${manifest.rewrites.length} rewrites, ${manifest.new.length} new posts, ${(manifest.en || []).length} English editions\n`);
         for (const r of manifest.rewrites) {
             const row = byId.get(r.id);
             const content = read(r.file);
@@ -68,6 +78,9 @@ async function main() {
         }
         for (const n of manifest.new) {
             console.log(`  new      ${n.title}  publish ${n.publishedAt}  slug ${slugOf(n.title)}`);
+        }
+        for (const e of manifest.en || []) {
+            console.log(`  english  ${e.title}  publish ${e.publishedAt}  slug ${slugOf(e.title)}`);
         }
 
         if (!apply) {
@@ -91,11 +104,21 @@ async function main() {
                 [content, r.newTitle || null, r.tags ? JSON.stringify(r.tags) : null, r.id]
             );
         }
+        const zhIdByFile = new Map();
         for (const n of manifest.new) {
-            await client.query(
+            const ins = await client.query(
                 `INSERT INTO blog_posts (title, slug, content, tags, status, published_at, language, author)
-                 VALUES ($1, $2, $3, $4::jsonb, 'published', $5, 'zh-TW', '王老師')`,
+                 VALUES ($1, $2, $3, $4::jsonb, 'published', $5, 'zh-TW', '王老師')
+                 RETURNING id`,
                 [n.title, slugOf(n.title), read(n.file), JSON.stringify(n.tags), n.publishedAt]
+            );
+            zhIdByFile.set(n.file, ins.rows[0].id);
+        }
+        for (const e of manifest.en || []) {
+            await client.query(
+                `INSERT INTO blog_posts (title, slug, content, tags, status, published_at, language, translated_from, author)
+                 VALUES ($1, $2, $3, $4::jsonb, 'published', $5, 'en', $6, '王老師')`,
+                [e.title, slugOf(e.title), read(e.file), JSON.stringify(e.tags), e.publishedAt, zhIdByFile.get(e.zhFile)]
             );
         }
         await client.query('COMMIT');

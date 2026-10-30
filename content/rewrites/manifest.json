@@ -193,5 +193,67 @@
       ],
       "publishedAt": "2026-11-11T01:00:00Z"
     }
+  ],
+  "en": [
+    {
+      "file": "en-tianji.md",
+      "title": "Tian Ji Star Explained: Brilliant Analysis and the Cost of Overthinking",
+      "tags": [
+        "Tian Ji",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ],
+      "zhFile": "n1-tianji.md",
+      "publishedAt": "2026-10-31T02:00:00Z"
+    },
+    {
+      "file": "en-tanlang.md",
+      "title": "Tan Lang Star Explained: Desire, Charm, and the Art of Choosing",
+      "tags": [
+        "Tan Lang",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ],
+      "zhFile": "n2-tanlang.md",
+      "publishedAt": "2026-11-03T02:00:00Z"
+    },
+    {
+      "file": "en-jumen.md",
+      "title": "Ju Men Star Explained: Sharp Speech, Suspicion, and Research Talent",
+      "tags": [
+        "Ju Men",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ],
+      "zhFile": "n3-jumen.md",
+      "publishedAt": "2026-11-06T02:00:00Z"
+    },
+    {
+      "file": "en-tianliang.md",
+      "title": "Tian Liang Star Explained: Natural Protectors and the Limits of Caring",
+      "tags": [
+        "Tian Liang",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ],
+      "zhFile": "n4-tianliang.md",
+      "publishedAt": "2026-11-08T02:00:00Z"
+    },
+    {
+      "file": "en-qisha.md",
+      "title": "Qi Sha Star Explained: Decisive Generals and the Loneliness of Command",
+      "tags": [
+        "Qi Sha",
+        "Major Stars",
+        "Zi Wei Dou Shu",
+        "Star Guide"
+      ],
+      "zhFile": "n5-qisha.md",
+      "publishedAt": "2026-11-11T02:00:00Z"
+    }
   ]
 }
