@@ -111,3 +111,6 @@ dist
 
 # content rewrite backups (contain pre-rewrite post bodies)
 content/rewrites/_backup*
+
+# n8n API backups written by scripts/n8n/n8n_api.py
+.n8n-backups/

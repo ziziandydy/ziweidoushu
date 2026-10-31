@@ -41,6 +41,7 @@ Schedule Trigger（週一、週四 09:00，Asia/Taipei）
   - 規則 9 改為：允許最多一則**明確標示為虛構**的示範人物（第一次出現就寫明是為說明而設計、不是真人真事，並在理論依據行註記）；仍不得把虛構情節寫成真實個案、讀者來信、諮詢或親身經驗。閘門會用關鍵句型偵測疑似捏造的經歷（讀者來信、我的客戶、執業多年、`a client wrote me`、`my clients` 等）。
   - 這組規則抓不到標題的**事實錯誤**（例如把廉貞寫成「火星之力」），那仍需要人工審查。
   - 2026-10-30 修改前，線上版本與 repo 備份逐節點比對完全一致，備份存於當次 session；改的八個節點為：王老師寫作／重寫、品質閘門（含重寫後）、英文改寫／重寫、英文品質閘門（含重寫後）。
+- **用 API 改 workflow 的標準做法（2026-10-30 起）**：工具是 `scripts/n8n/n8n_api.py`（`status`／`backup`／`put <檔案>`）。API 金鑰放專案根目錄的 `.env.n8n.local`（一行 `N8N_API_KEY=...`，已被 `.gitignore` 的 `.env*.local` 排除；不要放 `.env.local`，那是 Vercel CLI 產生的，`vercel env pull` 會覆蓋）。`put` 會先把線上版本備份到 `.n8n-backups/`（git-ignored），寫入後確認 workflow 仍是啟用狀態。n8n 金鑰有到期日，401 通常就是過期，到 n8n 的 Settings > n8n API 重建即可。改之前務必先 `status`／`backup`，並和 repo 備份逐節點比對，避免被介面裡的舊畫面蓋掉。
 - 手動測試某一類型：把排程決策裡的 `FORCE` 改成該類型，測完務必改回 `''`。
 
 **國際來源（人生議題用，不含台灣、中國、香港）**：Natalia Pugacheva（俄）、Joey Yap（馬）、RenerQi（馬）、Master Sean Chan（新）、Singapore Feng Shui Master（新）、Fengshui Discovery（新）。只取近 120 天、每站 ≤4 篇；抓取失敗的站會被略過（`onError: continueRegularOutput`）。主編可選 0–2 篇「具名引述」，網址必須存在於候選清單，否則在「解析國際選題」被濾掉。
