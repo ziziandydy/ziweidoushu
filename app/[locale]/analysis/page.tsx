@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import AnalysisClient from './AnalysisClient';
 import { getAnalysisDict } from './translations';
 import { OG_IMAGE_URL } from '../../lib/ogImage';
+import { breadcrumbNode } from '../../lib/schema';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -46,8 +47,7 @@ export default async function AnalysisPage({ params }: Props) {
     const t = getAnalysisDict(locale);
     const isEn = locale === 'en';
     // Same entity values as the homepage SoftwareApplication; name and description are text visible on this page
-    const jsonLd = {
-        '@context': 'https://schema.org',
+    const app = {
         '@type': 'WebApplication',
         name: isEn ? 'AI Zi Wei Dou Shu' : 'AI 紫微斗數',
         url: `https://aiziwei.online/${locale}/analysis`,
@@ -55,6 +55,16 @@ export default async function AnalysisPage({ params }: Props) {
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Web',
         inLanguage: isEn ? 'en' : 'zh-TW',
+    };
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            app,
+            breadcrumbNode([
+                { name: isEn ? 'Home' : '首頁', path: `/${locale}` },
+                { name: isEn ? 'Analysis' : '命盤分析', path: `/${locale}/analysis` },
+            ]),
+        ],
     };
     return (
         <>

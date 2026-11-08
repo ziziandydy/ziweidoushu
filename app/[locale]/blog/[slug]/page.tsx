@@ -3,6 +3,7 @@ import { getBlogPost, getAlternateLanguageSlug } from '../../../lib/blog';
 import BlogPost from '../../../components/blog/BlogPost';
 import { notFound } from 'next/navigation';
 import { OG_IMAGE_URL } from '../../../lib/ogImage';
+import { orgId, breadcrumbNode } from '../../../lib/schema';
 
 export async function generateMetadata(props: { params: Promise<{ locale: string, slug: string }> }) {
     const params = await props.params;
@@ -47,8 +48,7 @@ export default async function LocalizedBlogPostPage(props: { params: Promise<{ l
     }
 
     const isEn = params.locale === 'en';
-    const jsonLd = {
-        '@context': 'https://schema.org',
+    const blogPosting = {
         '@type': 'BlogPosting',
         headline: post.title,
         description: post.excerpt,
@@ -61,16 +61,19 @@ export default async function LocalizedBlogPostPage(props: { params: Promise<{ l
             name: post.author || '王老師',
             url: `https://aiziwei.online/${params.locale}/about`,
         },
-        publisher: {
-            '@type': 'Organization',
-            name: isEn ? 'AI Zi Wei Dou Shu' : 'AI 紫微斗數',
-            url: 'https://aiziwei.online',
-            logo: {
-                '@type': 'ImageObject',
-                url: 'https://aiziwei.online/logo-mark.svg',
-            },
-        },
+        publisher: { '@id': orgId },
         keywords: post.tags?.join(', '),
+    };
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            blogPosting,
+            breadcrumbNode([
+                { name: isEn ? 'Home' : '首頁', path: `/${params.locale}` },
+                { name: isEn ? 'Blog' : '部落格', path: `/${params.locale}/blog` },
+                { name: post.title, path: `/${params.locale}/blog/${post.slug}` },
+            ]),
+        ],
     };
 
     return (

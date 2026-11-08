@@ -4,6 +4,7 @@ import HomeBirthForm from '../components/home/HomeBirthForm';
 import LatestPosts from '../components/home/LatestPosts';
 import type { Metadata } from 'next';
 import { OG_IMAGE_URL } from '../lib/ogImage';
+import { orgNode, faqNode } from '../lib/schema';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -196,16 +197,7 @@ export default async function HomePage({ params }: Props) {
     const jsonLd = {
         '@context': 'https://schema.org',
         '@graph': [
-            {
-                '@type': 'Organization',
-                '@id': 'https://aiziwei.online/#organization',
-                name: orgName,
-                url: 'https://aiziwei.online',
-                logo: {
-                    '@type': 'ImageObject',
-                    url: 'https://aiziwei.online/logo-mark.svg',
-                },
-            },
+            orgNode(isEn),
             {
                 '@type': 'WebSite',
                 '@id': 'https://aiziwei.online/#website',
@@ -227,6 +219,7 @@ export default async function HomePage({ params }: Props) {
                     : '採用中州派理論、以 GPT-4o 驅動的紫微斗數命盤分析。免費方案每月 3 次問答。',
                 publisher: { '@id': 'https://aiziwei.online/#organization' },
             },
+            faqNode(t.faq.items),
         ],
     };
 

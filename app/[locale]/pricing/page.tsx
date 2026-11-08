@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Check } from '@phosphor-icons/react/dist/ssr/Check';
 import type { Metadata } from 'next';
 import { OG_IMAGE_URL } from '../../lib/ogImage';
+import { breadcrumbNode, faqNode } from '../../lib/schema';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -95,8 +96,7 @@ export default async function PricingPage({ params }: Props) {
     const paidFeatures = isEn ? paidFeaturesEn : paidFeaturesZh;
     const faq = isEn ? faqEn : faqZh;
 
-    const jsonLd = {
-        '@context': 'https://schema.org',
+    const app = {
         '@type': 'SoftwareApplication',
         name: isEn ? 'AI Zi Wei Dou Shu' : 'AI 紫微斗數',
         url: `https://aiziwei.online/${locale}`,
@@ -120,6 +120,17 @@ export default async function PricingPage({ params }: Props) {
                 priceCurrency: 'TWD',
                 url: `https://aiziwei.online/${locale}/pricing`,
             },
+        ],
+    };
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            app,
+            faqNode(faq),
+            breadcrumbNode([
+                { name: isEn ? 'Home' : '首頁', path: `/${locale}` },
+                { name: isEn ? 'Pricing' : '價格方案', path: `/${locale}/pricing` },
+            ]),
         ],
     };
 

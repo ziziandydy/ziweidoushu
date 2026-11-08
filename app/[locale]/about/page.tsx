@@ -1,4 +1,5 @@
 import { OG_IMAGE_URL } from '../../lib/ogImage';
+import { orgNode, breadcrumbNode } from '../../lib/schema';
 
 export async function generateMetadata(props: { params: Promise<{ locale: string }> }) {
     const { locale } = await props.params;
@@ -34,18 +35,20 @@ export default async function AboutPage(props: { params: Promise<{ locale: strin
 
     const jsonLd = {
         '@context': 'https://schema.org',
-        '@type': 'AboutPage',
-        name: isEn ? 'About AI Zi Wei Dou Shu' : '關於本站',
-        url: `https://aiziwei.online/${locale}/about`,
-        inLanguage: isEn ? 'en' : 'zh-TW',
-        // Same Organization as the homepage graph and the BlogPosting publisher
-        mainEntity: {
-            '@type': 'Organization',
-            '@id': 'https://aiziwei.online/#organization',
-            name: isEn ? 'AI Zi Wei Dou Shu' : 'AI 紫微斗數',
-            url: 'https://aiziwei.online',
-            logo: { '@type': 'ImageObject', url: 'https://aiziwei.online/logo-mark.svg' },
-        },
+        '@graph': [
+            {
+                '@type': 'AboutPage',
+                name: isEn ? 'About AI Zi Wei Dou Shu' : '關於本站',
+                url: `https://aiziwei.online/${locale}/about`,
+                inLanguage: isEn ? 'en' : 'zh-TW',
+                // Same Organization node as the homepage graph
+                mainEntity: orgNode(isEn),
+            },
+            breadcrumbNode([
+                { name: isEn ? 'Home' : '首頁', path: `/${locale}` },
+                { name: isEn ? 'About' : '關於本站', path: `/${locale}/about` },
+            ]),
+        ],
     };
     const jsonLdScript = (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

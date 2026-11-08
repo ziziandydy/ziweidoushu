@@ -2,6 +2,7 @@
 import { getBlogPosts } from '../../lib/blog';
 import BlogList from '../../components/blog/BlogList';
 import { OG_IMAGE_URL } from '../../lib/ogImage';
+import { breadcrumbNode } from '../../lib/schema';
 
 export async function generateMetadata(props: { params: Promise<{ locale: string }>, searchParams: Promise<{ page?: string; tag?: string }> }) {
     const params = await props.params;
@@ -50,7 +51,35 @@ export default async function LocalizedBlogPage(props: { params: Promise<{ local
 
     const data = await getBlogPosts({ page, tag, locale });
 
+    const isEn = locale === 'en';
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            {
+                '@type': 'CollectionPage',
+                name: isEn ? 'AI Zi Wei Dou Shu Blog' : '紫微斗數 AI 部落格',
+                url: `https://aiziwei.online/${locale}/blog`,
+                inLanguage: isEn ? 'en' : 'zh-TW',
+                mainEntity: {
+                    '@type': 'ItemList',
+                    itemListElement: data.posts.map((post: any, i: number) => ({
+                        '@type': 'ListItem',
+                        position: i + 1,
+                        url: `https://aiziwei.online/${locale}/blog/${post.slug}`,
+                        name: post.title,
+                    })),
+                },
+            },
+            breadcrumbNode([
+                { name: isEn ? 'Home' : '首頁', path: `/${locale}` },
+                { name: isEn ? 'Blog' : '部落格', path: `/${locale}/blog` },
+            ]),
+        ],
+    };
+
     return (
+        <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <BlogList
             posts={data.posts}
             pagination={{
@@ -63,5 +92,6 @@ export default async function LocalizedBlogPage(props: { params: Promise<{ local
             currentTag={tag}
             allTags={data.allTags}
         />
+        </>
     );
 }
