@@ -18,7 +18,7 @@ export function orgNode(isEn: boolean) {
             url: 'https://forms.gle/KnwbQqyRGBVFqBPQ6',
             availableLanguage: ['zh-TW', 'en'],
         },
-        // Add `sameAs` here once the site has real public profiles to point at.
+        sameAs: ['https://www.facebook.com/profile.php?id=61596219577139'],
     };
 }
 
