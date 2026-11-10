@@ -3,6 +3,7 @@
 
   python3 scripts/n8n/fb_teaser_workflow.py create                # create it, INACTIVE, with a placeholder webhook
   python3 scripts/n8n/fb_teaser_workflow.py set-webhook <url>     # point the Make node at the real webhook
+  python3 scripts/n8n/fb_teaser_workflow.py update                # re-sync code/prompts, keep the webhook
   python3 scripts/n8n/fb_teaser_workflow.py activate | deactivate
 
 Flow: hourly -> list zh-TW posts -> pick the oldest post that was published >= 3h ago, not yet announced,
@@ -69,7 +70,8 @@ const hit = banned.filter(w => msg.includes(w));
 if (hit.length) errors.push('含禁用詞：' + hit.join('、'));
 if (errors.length) throw new Error('FB 預告文案未通過（第 ' + sd.fbTries[src.id] + ' 次，最多 3 次）：' + src.title + '｜' + errors.join('；'));
 msg += '\n\n（本文由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考。）';
-return [{ json: { message: msg, link: src.url, title: src.title, id: src.id } }];
+const link = src.url + '?utm_source=facebook&utm_medium=social&utm_campaign=blog_teaser';
+return [{ json: { message: msg, link, title: src.title, id: src.id } }];
 """
 
 RECORD = r"""
@@ -165,6 +167,15 @@ def main():
             if n['name'] == '送到 Make 發 FB':
                 n['parameters']['url'] = sys.argv[2]
         body = {k: w[k] for k in ('name', 'nodes', 'connections', 'settings')}
+        s, d = n8n_api.call('PUT', f'/workflows/{wid}', body)
+        print(s, 'ok' if s == 200 else d)
+    elif cmd == 'update':
+        # re-sync node code/prompts from this file, keeping the webhook URL already set in n8n
+        wid = find() or sys.exit('workflow not found')
+        s, w = n8n_api.call('GET', f'/workflows/{wid}')
+        url = next(n['parameters']['url'] for n in w['nodes'] if n['name'] == '送到 Make 發 FB')
+        fresh = build(url)
+        body = {k: fresh[k] for k in ('name', 'nodes', 'connections', 'settings')}
         s, d = n8n_api.call('PUT', f'/workflows/{wid}', body)
         print(s, 'ok' if s == 200 else d)
     elif cmd in ('activate', 'deactivate'):
