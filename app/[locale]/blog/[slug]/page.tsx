@@ -2,7 +2,6 @@
 import { getBlogPost, getAlternateLanguageSlug } from '../../../lib/blog';
 import BlogPost from '../../../components/blog/BlogPost';
 import { notFound } from 'next/navigation';
-import { OG_IMAGE_URL } from '../../../lib/ogImage';
 import { orgId, breadcrumbNode } from '../../../lib/schema';
 
 export async function generateMetadata(props: { params: Promise<{ locale: string, slug: string }> }) {
@@ -20,6 +19,8 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
         languages['x-default'] = languages['zh-TW'];
     }
 
+    const ogImage = `https://aiziwei.online/${params.locale}/blog/${encodeURI(post.slug)}/opengraph-image`;
+
     return {
         title: `${post.title} | ${isEn ? 'AI Zi Wei Dou Shu Blog' : '紫微斗數 AI 部落格'}`,
         description: post.excerpt,
@@ -30,11 +31,11 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
         openGraph: {
             type: 'article',
             url: `https://aiziwei.online/${params.locale}/blog/${post.slug}`,
-            images: [{ url: OG_IMAGE_URL, width: 1200, height: 630 }],
+            images: [{ url: ogImage, width: 1200, height: 630 }],
         },
         twitter: {
             card: 'summary_large_image',
-            images: [OG_IMAGE_URL],
+            images: [ogImage],
         },
     }
 }
