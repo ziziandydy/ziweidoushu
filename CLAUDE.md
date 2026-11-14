@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A bilingual (zh-TW / en) Zi Wei Dou Shu (紫微斗數) site at https://www.aiziwei.online: chart calculation following the 中州派 school, GPT-4o analysis and Q&A, ECPay payments, and a blog. It is deployed on Vercel; every push to `main` deploys to production.
+A bilingual (zh-TW / en) Zi Wei Dou Shu (紫微斗數) site at https://aiziwei.online (`www` redirects to it): chart calculation following the 中州派 school, GPT-4o analysis and Q&A, ECPay payments, and a blog. It is deployed on Vercel; every push to `main` deploys to production.
 
 ## Goals
 

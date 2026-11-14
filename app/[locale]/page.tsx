@@ -97,7 +97,7 @@ export default async function HomePage({ params }: Props) {
                 },
                 {
                     q: 'Who writes the articles on this website?',
-                    a: 'Articles are AI-assisted and human-supervised. They draw on Zhongzhou school theory, the solar terms, the lunar calendar and current events, are written in plain language, and list their sources at the end. "Wang Laoshi" is the site\'s editorial pen name.',
+                    a: 'Articles are published under "Wang Laoshi", the site\'s editorial pen name. They draw on Zhongzhou school theory, the solar terms, the lunar calendar and everyday life topics, are written in plain language, and list their sources at the end. The About page explains how they are written and reviewed.',
                 },
                 {
                     q: 'How accurate is the AI analysis?',
@@ -114,7 +114,7 @@ export default async function HomePage({ params }: Props) {
             ],
         },
         policy: {
-            text: 'Blog articles are AI-assisted and human-supervised, with sources listed at the end.',
+            text: 'How articles are written and where their sources come from:',
             about: 'About us',
             disclaimer: 'This service is for entertainment and cultural learning purposes only, and should not be used as the basis for important life decisions.',
         },
@@ -168,7 +168,7 @@ export default async function HomePage({ params }: Props) {
                 },
                 {
                     q: '網站的文章是由誰撰寫？',
-                    a: '本網站的文章由 AI 輔助撰寫、人工監督。內容結合中州派命理理論與當下節氣、農曆時日和時事話題，以白話文撰寫，文末附上引用來源。署名「王老師」是本站的編輯筆名。',
+                    a: '文章以本站的編輯筆名「王老師」發表，內容結合中州派命理理論與當下節氣、農曆時日和生活議題，以白話文撰寫，文末附上引用來源。寫作與審稿方式請見「關於本站」。',
                 },
                 {
                     q: 'AI 的分析準確嗎？',
@@ -185,7 +185,7 @@ export default async function HomePage({ params }: Props) {
             ],
         },
         policy: {
-            text: '部落格文章由 AI 輔助撰寫、人工監督，文末附引用來源。',
+            text: '文章的寫作方式與資料來源，請見',
             about: '關於本站',
             disclaimer: '本服務僅供娛樂和文化學習參考，不應作為重要人生決策的依據。',
         },

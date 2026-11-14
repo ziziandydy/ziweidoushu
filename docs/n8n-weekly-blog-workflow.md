@@ -219,7 +219,7 @@ User message（用 expression 帶入）：
 5. 文末依序加兩個區塊：
    ## 參考資料
    - [來源標題](連結)（selected_sources 每篇一行）
-   最後一行固定免責聲明：本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考。
+   最後一行固定免責聲明：本內容僅供娛樂和文化學習參考。
 6. 標題不得使用與近期已發文相似的句式。
 7. slug 用英文小寫與連字號（例：liuyue-career-transits-guide）。
 
@@ -261,7 +261,7 @@ if (!/## 參考資料/.test(a.content)) errors.push('缺少「## 參考資料」
 const linkCount = (a.content.match(/\[.+?\]\(https?:\/\/.+?\)/g) || []).length;
 if (linkCount < 2) errors.push(`參考連結不足：${linkCount} < 2`);
 
-if (!a.content.includes('本內容由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考')) {
+if (!a.content.includes('本內容僅供娛樂和文化學習參考')) {
   errors.push('缺少免責聲明');
 }
 

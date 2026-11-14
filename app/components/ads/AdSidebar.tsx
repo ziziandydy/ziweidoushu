@@ -1,10 +1,12 @@
 import React from 'react';
 import AdUnit from './AdUnit';
+import { ADS_ENABLED } from './config';
 
 // Desktop-only (xl+) fixed side-rail ads, unchanged from the pre-migration static
 // pages (blog post + analysis). Not a Better Ads Standards "large sticky ad" —
 // that standard targets full-width mobile stickies, not narrow desktop rails.
 export function AdSidebarLeft({ label }: { label: string }) {
+    if (!ADS_ENABLED) return null;
     return (
         <div className="fixed left-4 top-1/2 -translate-y-1/2 hidden xl:block w-40 h-96 z-10">
             <div className="h-full flex flex-col">
@@ -18,6 +20,7 @@ export function AdSidebarLeft({ label }: { label: string }) {
 }
 
 export function AdSidebarRight({ label }: { label: string }) {
+    if (!ADS_ENABLED) return null;
     return (
         <div className="fixed right-4 top-1/2 -translate-y-1/2 hidden xl:block w-40 h-96 z-10">
             <div className="h-full flex flex-col">

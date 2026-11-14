@@ -12,10 +12,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
         title: isEn
             ? 'Privacy Policy | AI Zi Wei Dou Shu'
-            : '隱私政策 - AI 紫微斗數 | 資料保護與隱私權說明',
+            : '隱私權政策 - AI 紫微斗數 | 資料保護與隱私權說明',
         description: isEn
             ? 'How AI Zi Wei Dou Shu collects, uses, and protects your personal data. Chart data is kept only for the browser session.'
-            : 'AI 紫微斗數的隱私政策說明，詳細說明我們如何收集、使用和保護您的個人資料。命盤數據僅在瀏覽器會話期間保留，重視用戶隱私權。',
+            : 'AI 紫微斗數的隱私權政策說明，詳細說明我們如何收集、使用和保護您的個人資料。命盤資料僅在瀏覽器會話期間保留，重視使用者隱私權。',
         openGraph: {
             type: 'website',
             url: `https://aiziwei.online/${locale}/privacy-policy`,
@@ -52,7 +52,7 @@ export default async function PrivacyPolicyPage({ params }: Props) {
 
                 <div className="surface p-8 space-y-8">
                     <div className="bg-ink-100 rounded-lg p-4">
-                        <p className="text-sm text-ink-700"><strong>Last updated:</strong> October 2024</p>
+                        <p className="text-sm text-ink-700"><strong>Last updated:</strong> November 2026</p>
                     </div>
 
                     <section>
@@ -130,7 +130,8 @@ export default async function PrivacyPolicyPage({ params }: Props) {
                             <li>Improve user experience</li>
                         </ul>
                         <h3 className="text-xl font-semibold text-ink-700 mb-3 mt-6">5.3 Managing cookies</h3>
-                        <p className="text-ink-700 leading-relaxed">You can manage cookies in your browser settings. Disabling some cookies may affect site functionality.</p>
+                        <p className="text-ink-700 leading-relaxed mb-4">You can manage cookies in your browser settings. Disabling some cookies may affect site functionality.</p>
+                        <p className="text-ink-700 leading-relaxed">Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this and other websites. You can opt out of personalized advertising in <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:text-brand-800 underline">Google Ads Settings</a>, or opt out of other vendors&apos; cookies at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:text-brand-800 underline">aboutads.info</a>.</p>
                     </section>
 
                     <section>
@@ -220,7 +221,7 @@ export default async function PrivacyPolicyPage({ params }: Props) {
     return (
         <main className="max-w-4xl mx-auto px-4 py-8">
             <div className="surface p-8 mb-8">
-                <h1 className="text-4xl font-bold text-ink-900 mb-4">隱私政策</h1>
+                <h1 className="text-4xl font-bold text-ink-900 mb-4">隱私權政策</h1>
                 <p className="text-ink-600">Privacy Policy</p>
                 <Link href={homeHref} className="link inline-flex items-center mt-4">
                     ← 返回首頁
@@ -229,37 +230,37 @@ export default async function PrivacyPolicyPage({ params }: Props) {
 
             <div className="surface p-8 space-y-8">
                 <div className="bg-ink-100 rounded-lg p-4">
-                    <p className="text-sm text-ink-700"><strong>最後更新日期：</strong>2024年10月</p>
+                    <p className="text-sm text-ink-700"><strong>最後更新日期：</strong>2026 年 11 月</p>
                 </div>
 
                 <section>
                     <h2 className="text-2xl font-bold text-ink-800 mb-4">1. 概述</h2>
-                    <p className="text-ink-700 leading-relaxed mb-4">歡迎使用紫微斗數命盤計算系統（以下簡稱「本服務」）。我們重視您的隱私權，並致力於保護您的個人信息。</p>
-                    <p className="text-ink-700 leading-relaxed">本隱私政策說明我們如何收集、使用、存儲和保護您的個人信息。使用本服務即表示您同意本政策的條款。</p>
+                    <p className="text-ink-700 leading-relaxed mb-4">歡迎使用紫微斗數命盤計算系統（以下簡稱「本服務」）。我們重視您的隱私權，並致力於保護您的個人資訊。</p>
+                    <p className="text-ink-700 leading-relaxed">本隱私權政策說明我們如何收集、使用、存儲和保護您的個人資訊。使用本服務即表示您同意本政策的條款。</p>
                 </section>
 
                 <section>
-                    <h2 className="text-2xl font-bold text-ink-800 mb-4">2. 我們收集的信息</h2>
-                    <h3 className="text-xl font-semibold text-ink-700 mb-3">2.1 您主動提供的信息</h3>
+                    <h2 className="text-2xl font-bold text-ink-800 mb-4">2. 我們收集的資訊</h2>
+                    <h3 className="text-xl font-semibold text-ink-700 mb-3">2.1 您主動提供的資訊</h3>
                     <ul className="list-disc list-inside text-ink-700 space-y-2 mb-4">
                         <li><strong>基本資料：</strong>姓名、性別、出生年月日時</li>
                         <li><strong>曆法偏好：</strong>農曆或西曆選擇</li>
                         <li><strong>問答內容：</strong>您向 AI 命理師提出的問題</li>
                     </ul>
-                    <h3 className="text-xl font-semibold text-ink-700 mb-3">2.2 自動收集的信息</h3>
+                    <h3 className="text-xl font-semibold text-ink-700 mb-3">2.2 自動收集的資訊</h3>
                     <ul className="list-disc list-inside text-ink-700 space-y-2">
-                        <li><strong>設備信息：</strong>瀏覽器類型、操作系統、設備類型</li>
-                        <li><strong>使用數據：</strong>訪問時間、頁面瀏覽、功能使用情況</li>
+                        <li><strong>裝置資訊：</strong>瀏覽器類型、操作系統、裝置類型</li>
+                        <li><strong>使用資料：</strong>訪問時間、頁面瀏覽、功能使用情況</li>
                         <li><strong>IP 地址：</strong>用於安全防護和服務優化</li>
                     </ul>
                 </section>
 
                 <section>
-                    <h2 className="text-2xl font-bold text-ink-800 mb-4">3. 信息使用目的</h2>
-                    <p className="text-ink-700 leading-relaxed mb-4">我們使用收集的信息用於以下目的：</p>
+                    <h2 className="text-2xl font-bold text-ink-800 mb-4">3. 資訊使用目的</h2>
+                    <p className="text-ink-700 leading-relaxed mb-4">我們使用收集的資訊用於以下目的：</p>
                     <ul className="list-disc list-inside text-ink-700 space-y-2">
                         <li><strong>提供服務：</strong>計算紫微斗數命盤、提供 AI 命理解析</li>
-                        <li><strong>改善體驗：</strong>優化用戶界面、提升服務品質</li>
+                        <li><strong>改善體驗：</strong>優化使用者界面、提升服務品質</li>
                         <li><strong>安全防護：</strong>防止濫用、保護系統安全</li>
                         <li><strong>技術支援：</strong>解決技術問題、提供客戶服務</li>
                     </ul>
@@ -269,18 +270,18 @@ export default async function PrivacyPolicyPage({ params }: Props) {
                     <h2 className="text-2xl font-bold text-ink-800 mb-4">4. 第三方服務</h2>
                     <h3 className="text-xl font-semibold text-ink-700 mb-3">4.1 Google 服務</h3>
                     <div className="bg-ink-100 rounded-lg p-4 mb-4">
-                        <p className="text-ink-700 text-sm"><strong>重要：</strong>本網站使用 Google 服務，包括 AdSense 和 Analytics。Google 可能會在您的瀏覽器中設置和讀取 cookies。</p>
+                        <p className="text-ink-700 text-sm"><strong>重要：</strong>本網站使用 Google 服務，包括 AdSense 和 Analytics。Google 可能會在您的瀏覽器中設定和讀取 cookies。</p>
                     </div>
                     <ul className="list-disc list-inside text-ink-700 space-y-2 mb-4">
-                        <li><strong>Google AdSense：</strong>顯示相關廣告，改善用戶體驗</li>
+                        <li><strong>Google AdSense：</strong>顯示相關廣告，改善使用者體驗</li>
                         <li><strong>Google Analytics：</strong>分析網站使用情況，優化服務</li>
-                        <li><strong>Google Tag Manager：</strong>管理追蹤代碼和標籤</li>
+                        <li><strong>Google Tag Manager：</strong>管理追蹤程式碼和標籤</li>
                     </ul>
-                    <p className="text-ink-700 leading-relaxed mb-4">您可以通過以下方式了解 Google 如何使用數據：</p>
+                    <p className="text-ink-700 leading-relaxed mb-4">您可以透過以下方式了解 Google 如何使用資料：</p>
                     <div className="bg-ink-100 p-4 rounded-lg">
-                        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:text-brand-800 underline">Google 隱私政策</a>
+                        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:text-brand-800 underline">Google 隱私權政策</a>
                         <br />
-                        <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:text-brand-800 underline">Google 如何使用合作夥伴網站或應用程式中的數據</a>
+                        <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:text-brand-800 underline">Google 如何使用合作夥伴網站或應用程式中的資料</a>
                     </div>
                     <h3 className="text-xl font-semibold text-ink-700 mb-3 mt-6">4.2 其他第三方服務</h3>
                     <ul className="list-disc list-inside text-ink-700 space-y-2">
@@ -295,37 +296,38 @@ export default async function PrivacyPolicyPage({ params }: Props) {
                     <h3 className="text-xl font-semibold text-ink-700 mb-3">5.1 我們使用的 Cookies</h3>
                     <ul className="list-disc list-inside text-ink-700 space-y-2 mb-4">
                         <li><strong>必要 Cookies：</strong>維持網站基本功能</li>
-                        <li><strong>偏好 Cookies：</strong>記住您的設置和偏好</li>
+                        <li><strong>偏好 Cookies：</strong>記住您的設定和偏好</li>
                         <li><strong>分析 Cookies：</strong>了解網站使用情況</li>
                         <li><strong>廣告 Cookies：</strong>顯示相關廣告</li>
                     </ul>
                     <h3 className="text-xl font-semibold text-ink-700 mb-3">5.2 第三方 Cookies</h3>
-                    <p className="text-ink-700 leading-relaxed mb-4">Google 和其他第三方服務提供商可能會在您的設備上設置 cookies。這些 cookies 用於：</p>
+                    <p className="text-ink-700 leading-relaxed mb-4">Google 和其他第三方服務提供商可能會在您的裝置上設定 cookies。這些 cookies 用於：</p>
                     <ul className="list-disc list-inside text-ink-700 space-y-2">
                         <li>顯示個性化廣告</li>
                         <li>分析網站流量</li>
-                        <li>改善用戶體驗</li>
+                        <li>改善使用者體驗</li>
                     </ul>
                     <h3 className="text-xl font-semibold text-ink-700 mb-3 mt-6">5.3 如何管理 Cookies</h3>
-                    <p className="text-ink-700 leading-relaxed">您可以通過瀏覽器設置管理 cookies。請注意，禁用某些 cookies 可能會影響網站功能。</p>
+                    <p className="text-ink-700 leading-relaxed mb-4">您可以透過瀏覽器設定管理 cookies。請注意，停用某些 cookies 可能會影響網站功能。</p>
+                    <p className="text-ink-700 leading-relaxed">包括 Google 在內的第三方廠商，會使用 cookies 依據您先前造訪本網站或其他網站的紀錄來放送廣告。您可以在 <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:text-brand-800 underline">Google 廣告設定</a>停用個人化廣告，或到 <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:text-brand-800 underline">aboutads.info</a> 停用其他廠商的廣告 cookies。</p>
                 </section>
 
                 <section>
-                    <h2 className="text-2xl font-bold text-ink-800 mb-4">6. 數據安全</h2>
-                    <p className="text-ink-700 leading-relaxed mb-4">我們採取以下措施保護您的數據：</p>
+                    <h2 className="text-2xl font-bold text-ink-800 mb-4">6. 資料安全</h2>
+                    <p className="text-ink-700 leading-relaxed mb-4">我們採取以下措施保護您的資料：</p>
                     <ul className="list-disc list-inside text-ink-700 space-y-2">
-                        <li><strong>加密傳輸：</strong>使用 HTTPS 保護數據傳輸</li>
-                        <li><strong>安全存儲：</strong>數據存儲在安全的伺服器上</li>
-                        <li><strong>訪問控制：</strong>限制數據訪問權限</li>
+                        <li><strong>加密傳輸：</strong>使用 HTTPS 保護資料傳輸</li>
+                        <li><strong>安全存儲：</strong>資料存儲在安全的伺服器上</li>
+                        <li><strong>訪問控制：</strong>限制資料訪問權限</li>
                         <li><strong>定期更新：</strong>保持安全措施的最新狀態</li>
                     </ul>
                 </section>
 
                 <section>
-                    <h2 className="text-2xl font-bold text-ink-800 mb-4">7. 數據保留</h2>
-                    <p className="text-ink-700 leading-relaxed mb-4">我們保留您的數據的時間：</p>
+                    <h2 className="text-2xl font-bold text-ink-800 mb-4">7. 資料保留</h2>
+                    <p className="text-ink-700 leading-relaxed mb-4">我們保留您的資料的時間：</p>
                     <ul className="list-disc list-inside text-ink-700 space-y-2">
-                        <li><strong>命盤數據：</strong>僅在瀏覽器會話期間保留</li>
+                        <li><strong>命盤資料：</strong>僅在瀏覽器會話期間保留</li>
                         <li><strong>問答記錄：</strong>最多保留 1 小時（用於連續對話）</li>
                         <li><strong>使用統計：</strong>匿名化後保留用於分析</li>
                     </ul>
@@ -333,37 +335,37 @@ export default async function PrivacyPolicyPage({ params }: Props) {
 
                 <section>
                     <h2 className="text-2xl font-bold text-ink-800 mb-4">8. 您的權利</h2>
-                    <p className="text-ink-700 leading-relaxed mb-4">您對個人數據享有以下權利：</p>
+                    <p className="text-ink-700 leading-relaxed mb-4">您對個人資料享有以下權利：</p>
                     <ul className="list-disc list-inside text-ink-700 space-y-2">
-                        <li><strong>訪問權：</strong>了解我們收集了哪些關於您的數據</li>
-                        <li><strong>更正權：</strong>更正不準確的個人數據</li>
-                        <li><strong>刪除權：</strong>要求刪除您的個人數據</li>
-                        <li><strong>限制權：</strong>限制我們處理您的數據</li>
-                        <li><strong>反對權：</strong>反對我們處理您的數據</li>
+                        <li><strong>訪問權：</strong>了解我們收集了哪些關於您的資料</li>
+                        <li><strong>更正權：</strong>更正不準確的個人資料</li>
+                        <li><strong>刪除權：</strong>要求刪除您的個人資料</li>
+                        <li><strong>限制權：</strong>限制我們處理您的資料</li>
+                        <li><strong>反對權：</strong>反對我們處理您的資料</li>
                     </ul>
                 </section>
 
                 <section>
                     <h2 className="text-2xl font-bold text-ink-800 mb-4">9. 兒童隱私保護</h2>
                     <div className="bg-orange-50 border-l-4 border-orange-400 p-4 mb-4">
-                        <p className="text-orange-800"><strong>重要聲明：</strong>本服務不針對 13 歲以下的兒童。我們不會故意收集 13 歲以下兒童的個人信息。</p>
+                        <p className="text-orange-800"><strong>重要聲明：</strong>本服務不針對 13 歲以下的兒童。我們不會故意收集 13 歲以下兒童的個人資訊。</p>
                     </div>
-                    <p className="text-ink-700 leading-relaxed">如果您是 13 歲以下兒童的家長或監護人，並發現您的孩子向我們提供了個人信息，請聯繫我們，我們將立即刪除這些信息。</p>
+                    <p className="text-ink-700 leading-relaxed">如果您是 13 歲以下兒童的家長或監護人，並發現您的孩子向我們提供了個人資訊，請聯絡我們，我們將立即刪除這些資訊。</p>
                 </section>
 
                 <section>
-                    <h2 className="text-2xl font-bold text-ink-800 mb-4">10. 國際數據傳輸</h2>
-                    <p className="text-ink-700 leading-relaxed">您的數據可能會被傳輸到您所在國家/地區以外的地方進行處理。我們確保所有國際數據傳輸都符合適用的數據保護法律。</p>
+                    <h2 className="text-2xl font-bold text-ink-800 mb-4">10. 國際資料傳輸</h2>
+                    <p className="text-ink-700 leading-relaxed">您的資料可能會被傳輸到您所在國家/地區以外的地方進行處理。我們確保所有國際資料傳輸都符合適用的資料保護法律。</p>
                 </section>
 
                 <section>
                     <h2 className="text-2xl font-bold text-ink-800 mb-4">11. 政策更新</h2>
-                    <p className="text-ink-700 leading-relaxed">我們可能會不時更新本隱私政策。重大變更將通過網站公告或電子郵件通知您。繼續使用本服務即表示您接受更新後的政策。</p>
+                    <p className="text-ink-700 leading-relaxed">我們可能會不時更新本隱私權政策。重大變更將透過網站公告或電子郵件通知您。繼續使用本服務即表示您接受更新後的政策。</p>
                 </section>
 
                 <section>
-                    <h2 className="text-2xl font-bold text-ink-800 mb-4">12. 聯繫我們</h2>
-                    <p className="text-ink-700 leading-relaxed mb-4">如果您對本隱私政策有任何疑問，請通過以下方式聯繫我們：</p>
+                    <h2 className="text-2xl font-bold text-ink-800 mb-4">12. 聯絡我們</h2>
+                    <p className="text-ink-700 leading-relaxed mb-4">如果您對本隱私權政策有任何疑問，請透過以下方式聯絡我們：</p>
                     <div className="bg-ink-50 p-4 rounded-lg">
                         <p className="text-ink-700">
                             <strong>網站：</strong> <a href="https://aiziwei.online/" className="text-brand-600 hover:text-brand-800" target="_blank" rel="noopener noreferrer">https://aiziwei.online/</a><br />

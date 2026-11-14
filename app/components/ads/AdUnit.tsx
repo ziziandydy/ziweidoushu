@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from 'react';
+import { ADS_ENABLED } from './config';
 
 declare global {
     interface Window {
@@ -9,6 +10,7 @@ declare global {
 }
 
 const AD_CLIENT = 'ca-pub-3240143153468832';
+
 
 interface AdUnitProps {
     slot: string;
@@ -35,7 +37,7 @@ export default function AdUnit({
     const pushed = useRef(false);
 
     useEffect(() => {
-        if (pushed.current) return;
+        if (!ADS_ENABLED || pushed.current) return;
         pushed.current = true;
         try {
             (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -43,6 +45,8 @@ export default function AdUnit({
             console.error('AdSense push failed:', error);
         }
     }, []);
+
+    if (!ADS_ENABLED) return null;
 
     return (
         <div className={wrapperClassName}>
