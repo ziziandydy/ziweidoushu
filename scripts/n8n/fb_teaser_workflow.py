@@ -69,7 +69,7 @@ const banned = ['準確率', '保證', '科學邏輯', '首先', '其次', '總�
 const hit = banned.filter(w => msg.includes(w));
 if (hit.length) errors.push('含禁用詞：' + hit.join('、'));
 if (errors.length) throw new Error('FB 預告文案未通過（第 ' + sd.fbTries[src.id] + ' 次，最多 3 次）：' + src.title + '｜' + errors.join('；'));
-msg += '\n\n（本文由 AI 輔助撰寫、經站方監督，僅供娛樂和文化學習參考。）';
+msg += '\n\n（本內容僅供娛樂和文化學習參考。）';
 const link = src.url + '?utm_source=facebook&utm_medium=social&utm_campaign=blog_teaser';
 return [{ json: { message: msg, link, title: src.title, id: src.id } }];
 """
