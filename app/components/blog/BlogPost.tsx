@@ -8,7 +8,15 @@ import { AdSidebarRight } from '../ads/AdSidebar';
 // Reading column: ~40 CJK characters wide, generous line height, ink text instead of the plugin's gray
 const PROSE = 'prose prose-lg max-w-none prose-headings:font-bold prose-headings:text-ink-900 prose-p:text-ink-800 prose-p:leading-[1.95] prose-li:text-ink-800 prose-strong:text-ink-900 prose-a:text-brand-600 prose-a:underline-offset-4 hover:prose-a:text-brand-700 prose-blockquote:border-brand-200 prose-blockquote:text-ink-600 prose-hr:border-ink-200';
 
-export default function BlogPost({ post, lang }: { post: any, lang: string }) {
+type PostLink = { slug: string; title: string; published_at?: Date | string; created_at?: Date | string };
+
+export default function BlogPost({ post, lang, related = [], newer = null, older = null }: {
+    post: any,
+    lang: string,
+    related?: PostLink[],
+    newer?: PostLink | null,
+    older?: PostLink | null
+}) {
     if (!post) notFound();
 
     // The pre-migration editor supported a `[TOC]` shortcode rendered client-side
@@ -31,11 +39,17 @@ export default function BlogPost({ post, lang }: { post: any, lang: string }) {
         backToBlog: '← Back to Blog',
         home: 'Home',
         blog: 'Blog',
+        related: 'Related reading',
+        newer: 'Newer',
+        older: 'Older',
         advertisement: 'Advertisement'
     } : {
         backToBlog: '← 返回部落格',
         home: '首頁',
         blog: '部落格',
+        related: '延伸閱讀',
+        newer: '下一篇',
+        older: '上一篇',
         advertisement: '廣告'
     };
 
@@ -64,9 +78,9 @@ export default function BlogPost({ post, lang }: { post: any, lang: string }) {
                     {post.tags && post.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2">
                             {post.tags.map((tag: string) => (
-                                <Link key={tag} href={`${basePath}?tag=${encodeURIComponent(tag)}`} className="rounded-md bg-ink-100 px-2.5 py-0.5 text-xs text-ink-600 hover:bg-ink-200 transition-colors whitespace-nowrap">
+                                <span key={tag} className="rounded-md bg-ink-100 px-2.5 py-0.5 text-xs text-ink-600 whitespace-nowrap">
                                     {tag}
-                                </Link>
+                                </span>
                             ))}
                         </div>
                     )}
@@ -93,6 +107,42 @@ export default function BlogPost({ post, lang }: { post: any, lang: string }) {
                             dangerouslySetInnerHTML={{ __html: secondHalfHtml }}
                         />
                     </>
+                )}
+
+                {related.length > 0 && (
+                    <section aria-labelledby="related-heading" className="mt-12">
+                        <h2 id="related-heading" className="text-2xl font-bold text-ink-900 mb-2">{t.related}</h2>
+                        {related.map(p => (
+                            <Link key={p.slug} prefetch={false} href={`${basePath}/${p.slug}`} className="group block border-t border-ink-200 py-4">
+                                <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                                    <span className="font-serif font-semibold text-lg leading-snug text-ink-900 group-hover:text-brand-700 transition-colors">{p.title}</span>
+                                    {(p.published_at || p.created_at) && (
+                                        <time dateTime={new Date((p.published_at || p.created_at) as any).toISOString()} className="text-sm text-ink-500 tabular-nums whitespace-nowrap">
+                                            {formatDate((p.published_at || p.created_at) as any)}
+                                        </time>
+                                    )}
+                                </div>
+                            </Link>
+                        ))}
+                        <div className="border-t border-ink-200" />
+                    </section>
+                )}
+
+                {(older || newer) && (
+                    <nav className="mt-8 flex flex-wrap justify-between gap-x-6 gap-y-4">
+                        {older ? (
+                            <Link prefetch={false} href={`${basePath}/${older.slug}`} className="group block max-w-3xl">
+                                <span className="text-sm text-ink-500">← {t.older}</span>
+                                <span className="block font-serif font-semibold text-lg leading-snug text-ink-900 group-hover:text-brand-700 transition-colors">{older.title}</span>
+                            </Link>
+                        ) : <span />}
+                        {newer && (
+                            <Link prefetch={false} href={`${basePath}/${newer.slug}`} className="group block max-w-3xl">
+                                <span className="text-sm text-ink-500">{t.newer} →</span>
+                                <span className="block font-serif font-semibold text-lg leading-snug text-ink-900 group-hover:text-brand-700 transition-colors">{newer.title}</span>
+                            </Link>
+                        )}
+                    </nav>
                 )}
 
                 <div className="mt-12">

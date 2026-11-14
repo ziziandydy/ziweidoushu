@@ -18,6 +18,8 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
     return {
         title: isEn ? 'AI Zi Wei Dou Shu Blog | Explore Destiny' : '紫微斗數 AI 部落格 | 探索命理智慧',
         description: isEn ? 'Explore destiny wisdom, daily fortune and star analysis' : '探索紫微斗數命理智慧，每日更新運勢與星曜解析',
+        // 標籤篩選頁只是列表的子集合，不進索引；連結仍可跟隨到文章
+        ...(searchParams.tag ? { robots: { index: false, follow: true } } : {}),
         openGraph: {
             type: 'website',
             url: `https://aiziwei.online/${params.locale}/blog${qs}`,

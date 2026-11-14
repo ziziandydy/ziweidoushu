@@ -1,5 +1,5 @@
 
-import { getBlogPost, getAlternateLanguageSlug } from '../../../lib/blog';
+import { getBlogPost, getAlternateLanguageSlug, getPostNeighbours } from '../../../lib/blog';
 import BlogPost from '../../../components/blog/BlogPost';
 import { notFound } from 'next/navigation';
 import { orgId, breadcrumbNode } from '../../../lib/schema';
@@ -48,6 +48,8 @@ export default async function LocalizedBlogPostPage(props: { params: Promise<{ l
         notFound();
     }
 
+    const neighbours = await getPostNeighbours(post);
+
     const isEn = params.locale === 'en';
     const blogPosting = {
         '@type': 'BlogPosting',
@@ -83,7 +85,7 @@ export default async function LocalizedBlogPostPage(props: { params: Promise<{ l
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
-            <BlogPost post={post} lang={params.locale} />
+            <BlogPost post={post} lang={params.locale} related={neighbours.related} newer={neighbours.newer} older={neighbours.older} />
         </>
     );
 }

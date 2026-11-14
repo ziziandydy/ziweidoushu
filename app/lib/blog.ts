@@ -135,3 +135,67 @@ export async function getAlternateLanguageSlug(post: BlogPost): Promise<{ locale
         return null;
     }
 }
+
+export type PostLink = { slug: string; title: string; published_at: Date; created_at: Date; excerpt?: string };
+
+// 首頁「最新文章」用；資料庫連不上時回傳空陣列，讓首頁照常產生
+export async function getLatestPosts(locale: string, limit = 3): Promise<PostLink[]> {
+    const language = locale === 'en' ? 'en' : 'zh-TW';
+    try {
+        const result = await sql`
+      SELECT slug, title, published_at, created_at, LEFT(content, 200) as excerpt
+      FROM blog_posts
+      WHERE status = 'published' AND (published_at IS NULL OR published_at <= NOW()) AND language = ${language}
+      ORDER BY published_at DESC
+      LIMIT ${limit}
+    `;
+        return result.rows as PostLink[];
+    } catch (error) {
+        console.error('Failed to fetch latest posts:', error);
+        return [];
+    }
+}
+
+// 文章頁底部的內部連結：共用標籤最多的幾篇，加上時間上的前後一篇。
+// 前後篇讓每篇文章至少被相鄰文章連到，不必只靠列表分頁被找到。
+export async function getPostNeighbours(post: BlogPost, limit = 4): Promise<{ related: PostLink[]; newer: PostLink | null; older: PostLink | null }> {
+    const tagsJson = JSON.stringify(Array.isArray(post.tags) ? post.tags : []);
+    try {
+        const [related, newer, older] = await Promise.all([
+            sql`
+        SELECT slug, title, published_at, created_at
+        FROM blog_posts p
+        WHERE status = 'published' AND (published_at IS NULL OR published_at <= NOW()) AND language = ${post.language} AND id <> ${post.id}
+        ORDER BY (
+          SELECT COUNT(*) FROM jsonb_array_elements_text(p.tags) AS t
+          WHERE t IN (SELECT jsonb_array_elements_text(${tagsJson}::jsonb))
+        ) DESC, published_at DESC
+        LIMIT ${limit}
+      `,
+            sql`
+        SELECT slug, title, published_at, created_at
+        FROM blog_posts
+        WHERE status = 'published' AND published_at <= NOW() AND language = ${post.language} AND id <> ${post.id}
+          AND published_at > (SELECT published_at FROM blog_posts WHERE id = ${post.id})
+        ORDER BY published_at ASC
+        LIMIT 1
+      `,
+            sql`
+        SELECT slug, title, published_at, created_at
+        FROM blog_posts
+        WHERE status = 'published' AND language = ${post.language} AND id <> ${post.id}
+          AND published_at < (SELECT published_at FROM blog_posts WHERE id = ${post.id})
+        ORDER BY published_at DESC
+        LIMIT 1
+      `,
+        ]);
+        return {
+            related: related.rows as PostLink[],
+            newer: (newer.rows[0] as PostLink) || null,
+            older: (older.rows[0] as PostLink) || null,
+        };
+    } catch (error) {
+        console.error('Failed to fetch post neighbours:', error);
+        return { related: [], newer: null, older: null };
+    }
+}

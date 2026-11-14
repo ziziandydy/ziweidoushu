@@ -5,6 +5,10 @@ import LatestPosts from '../components/home/LatestPosts';
 import type { Metadata } from 'next';
 import { OG_IMAGE_URL } from '../lib/ogImage';
 import { orgNode, faqNode } from '../lib/schema';
+import { getLatestPosts } from '../lib/blog';
+
+// 首頁仍是預先產生的頁面；每小時在背景重新產生一次，讓「最新文章」跟上新發布的文章
+export const revalidate = 3600;
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -43,6 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function HomePage({ params }: Props) {
     const { locale } = await params;
+    const latestPosts = await getLatestPosts(locale, 3);
     const isEn = locale === 'en';
     const analysisHref = `/${locale}/analysis`;
     const aboutHref = `/${locale}/about`;
@@ -269,7 +274,7 @@ export default async function HomePage({ params }: Props) {
                     </div>
                 </section>
 
-                <LatestPosts locale={locale} heading={t.latest.heading} allLabel={t.latest.all} />
+                <LatestPosts locale={locale} heading={t.latest.heading} allLabel={t.latest.all} posts={latestPosts} />
 
                 {/* About Zi Wei Dou Shu: existing copy, editorial layout */}
                 <section id="about" className="bg-white">

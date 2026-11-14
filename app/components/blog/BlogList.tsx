@@ -54,7 +54,6 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
     const featuredTags = lang === 'en' ? [] : FEATURED_TAGS_ZH.filter(tag => allTags.includes(tag));
     const topTags = featuredTags.length > 0 ? featuredTags : allTags.slice(0, VISIBLE_TAGS);
     const shownTags = currentTag && !topTags.includes(currentTag) ? [...topTags, currentTag] : topTags;
-    const moreTags = allTags.filter(tag => !shownTags.includes(tag));
 
     const chip = (active: boolean) =>
         `inline-block rounded-lg px-3.5 py-1.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 ${active
@@ -75,23 +74,11 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
                 <div className="flex flex-wrap items-center gap-2">
                     <Link href={basePath} className={chip(!currentTag)}>{t.allPosts}</Link>
                     {shownTags.map(tag => (
-                        <Link key={tag} href={`${basePath}?tag=${encodeURIComponent(tag)}`} className={chip(currentTag === tag)}>
+                        <Link key={tag} prefetch={false} href={`${basePath}?tag=${encodeURIComponent(tag)}`} className={chip(currentTag === tag)}>
                             {tag}
                         </Link>
                     ))}
                 </div>
-                {moreTags.length > 0 && (
-                    <details className="mt-3 group">
-                        <summary className="link cursor-pointer text-sm select-none list-none [&::-webkit-details-marker]:hidden">{t.allTopics}</summary>
-                        <div className="mt-3 flex flex-wrap gap-2">
-                            {moreTags.map(tag => (
-                                <Link key={tag} href={`${basePath}?tag=${encodeURIComponent(tag)}`} className={chip(false)}>
-                                    {tag}
-                                </Link>
-                            ))}
-                        </div>
-                    </details>
-                )}
             </nav>
 
             {posts.length === 0 ? (
@@ -150,7 +137,7 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
             {pagination.totalPages > 1 && (
                 <div className="flex justify-center items-center gap-4 mt-12">
                     {pagination.hasPrev ? (
-                        <Link href={`${basePath}?page=${pagination.currentPage - 1}${currentTag ? `&tag=${encodeURIComponent(currentTag)}` : ''}`} className={pageBtn}>
+                        <Link prefetch={false} href={`${basePath}?page=${pagination.currentPage - 1}${currentTag ? `&tag=${encodeURIComponent(currentTag)}` : ''}`} className={pageBtn}>
                             {t.prevPage}
                         </Link>
                     ) : (
@@ -162,7 +149,7 @@ export default function BlogList({ posts, pagination, lang, currentTag, allTags 
                         {lang === 'en' ? `${t.pageOf} ${pagination.currentPage} / ${pagination.totalPages}` : `${t.pageOf} ${pagination.currentPage} / ${pagination.totalPages} 頁`}
                     </span>
                     {pagination.hasNext ? (
-                        <Link href={`${basePath}?page=${pagination.currentPage + 1}${currentTag ? `&tag=${encodeURIComponent(currentTag)}` : ''}`} className={pageBtn}>
+                        <Link prefetch={false} href={`${basePath}?page=${pagination.currentPage + 1}${currentTag ? `&tag=${encodeURIComponent(currentTag)}` : ''}`} className={pageBtn}>
                             {t.nextPage}
                         </Link>
                     ) : (
